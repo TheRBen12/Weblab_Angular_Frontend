@@ -1,0 +1,8 @@
+<div class="card">
+  <h3>{{experiment.title}}</h3>
+  <img src="../public/{{experiment.title}}.png" alt="Kein Bild vorhanden!">
+  <p *ngIf="experiment.state == 'OPEN'">
+    Dieses Experiment ist für Sie freigeschaltet.
+    Wählen Sie es aus um zu den Versuchsexperimenten zu gelangen
+  </p>
+</div>

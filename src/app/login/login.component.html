@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="ms-3 container-fluid">
+    <a id="nav-title" class="navbar-brand">Weblab</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+<div id="login-container" class="container-sm mt-3 d-flex flex-column">
+  <div class="p-2">
+    <h1>Anmelden</h1>
+    <p class="mt-3">Bitte melden Sie sich zuerst an.</p>
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="loginRequest()"  class="p-2">
+    <div class="mb-3">
+      <label for="email" class="form-label">E-Mail Adresse</label>
+      <input formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">Benutzen Sie ihr E-Mail Adresse um sich anzumelden</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Anmelden</button>
+  </form>
+</div>
+
+
