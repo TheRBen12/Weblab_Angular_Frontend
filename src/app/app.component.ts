@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {RouterOutlet} from '@angular/router';
 import {NavigationComponent} from './navigation/navigation/navigation.component';
 import {WelcomeHelpModalComponent} from './welcome-help-modal/welcome-help-modal.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -7,6 +7,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
 import {HttpClient} from '@angular/common/http';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
+import {LoginService} from './services/login.service';
+import {User} from './models/user';
 
 
 @Component({
@@ -23,27 +25,19 @@ import {TooltipModule} from 'ngx-bootstrap/tooltip';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit{
-  title = 'Weblab';
-  closedModal = false;
-  http = inject(HttpClient)
-  constructor(private dialog: MatDialog) {
+  loginService = inject(LoginService);
+  constructor() {
+  }
 
-}
-  ngOnInit(){
-    if (sessionStorage.getItem('closedModal') == '' || sessionStorage.getItem('closedModal') == null){
-      this.openWelcomeHelpModal("Bevor Sie loslegen, hier einige Tipps", true)
+  ngOnInit(): void {
+    const currentUserString = localStorage.getItem('user');
+    if (currentUserString){
+      const user: User = JSON.parse(currentUserString);
+      this.loginService.refreshUser(user.email);
     }
+
   }
-  openWelcomeHelpModal(title: string, showFooter: boolean){
-    const dialogRef = this.dialog.open(WelcomeHelpModalComponent, {
-      disableClose: true,
-      data: {title: title, showFooter: showFooter}
-      }
-    );
-    dialogRef.afterClosed().subscribe(() => {
-      sessionStorage.setItem('closedModal', 'closed');
-    });
-  }
+
 }
 
 

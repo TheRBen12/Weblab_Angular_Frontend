@@ -4,7 +4,9 @@
   </div>
   <div class="container mt-3 ">
     <h1>{{title}}</h1>
-    <ul class="list-group"></ul>
+    <ul class="list-group">
+      <app-experiment [experiment]="experiment" *ngFor ="let experiment of experiments" ></app-experiment>
+    </ul>
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-<div class="p-3 mt-3 container">
+<div class="p-4 mt-3 container">
   <h3>{{data.title}}</h3>
   <div>
     <h5>Allgemeine Informationen</h5>
@@ -14,18 +14,19 @@
     <h5>Einstellungen</h5>
     <ul>
       <li>Unter "Einstellungen können Sie Standardeinstellungen aktivieren oder deaktivieren.
-        Diese Einstellungen können Ihnen helfen, die Durchführing der Experimente zu beschleunigen"</li>
+        Die Einstellungen helfen Ihnen, die Durchführing der Experimente zu beschleunigen."</li>
     </ul>
   </div>
   <h5>Hilfestellungen</h5>
   <ul>
-    <li>Unter “Hilfe” finden sie nützliche Infos und diverse Hilfestellungen, wenn Sie nicht mehr weiter wissen.</li>
-    <li>In den Hilfestellungen finden Sie praktische Tipps, wie Sie Navigieren und was Sie tun können um die Durchführung der Experimente zu beschleunigen.</li>
+    <li>Unter “Hilfe” finden sie nützliche Infos und Hilfestellungen.</li>
+    <li>In den Hilfestellungen finden Sie praktische Tipps,
+      wie Sie innerhlab der Webseite navigieren und wie Sie die Durchführung der Experimente beschleunigen können. </li>
   </ul>
   <div *ngIf="data.showFooter">
-    <strong>Diese Informationen können Sie jederzeit einblenden, klicken Sie dazu bloss den Button in der rechten unteren Ecke an.</strong>
+    <strong>Diese Informationen können Sie jederzeit einblenden, klicken Sie hierzu den Button in der rechten unteren Ecke an.</strong>
   </div>
-  <button (click)="closeModal()" class="mt-2 btn btn-secondary" mat-button [mat-dialog-close]="true">Schliessen</button>
+  <button (click)="closeModal()" class="mt-3 btn btn-secondary" [mat-dialog-close]="true">Schliessen</button>
 </div>
 
 
