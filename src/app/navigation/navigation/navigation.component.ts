@@ -1,5 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {Component, inject, signal} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import {LoginService} from '../../services/login.service';
 import {User} from '../../models/user';
 import {NgIf} from '@angular/common';
@@ -16,11 +16,15 @@ import {NgIf} from '@angular/common';
 })
 export class NavigationComponent {
   loginService = inject(LoginService);
+  router = inject(Router);
   currentUser: User | null
 
   constructor() {
     this.currentUser = this.loginService.getCurrentUser();
-
+  }
+  logout(){
+    this.loginService.logout();
+    this.router.navigateByUrl("/login");
   }
 
 }

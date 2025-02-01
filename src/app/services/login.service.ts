@@ -40,4 +40,10 @@ export class LoginService {
     }
     return null;
   }
+
+  logout(){
+    localStorage.clear();
+    this.currentUser.set(null);
+  }
+
 }

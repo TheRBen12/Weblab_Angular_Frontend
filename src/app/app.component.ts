@@ -5,10 +5,10 @@ import {WelcomeHelpModalComponent} from './welcome-help-modal/welcome-help-modal
 import {MatDialog} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
-import {HttpClient} from '@angular/common/http';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {LoginService} from './services/login.service';
 import {User} from './models/user';
+import {ToastrModule} from 'ngx-toastr';
 
 
 @Component({
@@ -18,7 +18,8 @@ import {User} from './models/user';
     NavigationComponent,
     WelcomeHelpModalComponent,
     MatIconModule, MatFabButton,
-    TooltipModule
+    TooltipModule,
+    ToastrModule
   ],
   standalone: true,
   templateUrl: './app.component.html',
