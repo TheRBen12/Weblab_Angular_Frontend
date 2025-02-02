@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {LoginService} from '../services/login.service';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,8 @@ export class LoginComponent {
     email: new FormControl(""),
   });
   loginService = inject(LoginService);
+  constructor(private toastr: ToastrService) {
+  }
 
   loginRequest() {
     const email = this.loginForm.value.email ? this.loginForm.value.email : "";
@@ -27,6 +30,7 @@ export class LoginComponent {
         localStorage.setItem('user', JSON.stringify(user));
         this.loginService.setUser(user);
         this.router.navigateByUrl("/");
+       this.toastr.success("Anmeldung erfolgreich")
       }
     })
   }

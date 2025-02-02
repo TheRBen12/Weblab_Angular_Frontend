@@ -24,7 +24,6 @@ export class NavigationComponent {
   }
   logout(){
     this.loginService.logout();
-    this.router.navigateByUrl("/login");
   }
 
 }
