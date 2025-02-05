@@ -1,9 +1,10 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {SettingService} from '../services/setting.service';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {UserSetting} from '../models/user-setting';
 import {LoginService} from '../services/login.service';
 import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -14,9 +15,10 @@ import {ToastrService} from 'ngx-toastr';
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })
-export class SettingsComponent {
-  constructor(private toastrService: ToastrService) {
+export class SettingsComponent implements OnInit {
+  constructor(private toastrService: ToastrService, private router: Router) {
   }
+
   accountService = inject(LoginService);
   settingsService = inject(SettingService);
   settingsForm = new FormGroup({
@@ -33,14 +35,33 @@ export class SettingsComponent {
       userId: this.accountService.currentUser()?.id
     }
     this.settingsService.saveSettings(userSetting).subscribe((settings) => {
-      if (settings){
-        this.toastrService.success("Ihre EInstellungen wurden erfokgreich gespeichert")
+      if (settings) {
+        this.toastrService.success("Ihre Einstellungen wurden erfolgreich gespeichert", "", {easeTime: 3000})
+        this.router.navigateByUrl("/");
       }
     }, error => {
-      if (error){
+      if (error) {
         this.toastrService.error("Ihre EInstellungen konnten leider nciht gespeichert werden. " +
           "Versuchen Sie es nocheinmal");
       }
     });
   }
+
+  ngOnInit(): void {
+    this.accountService.user$.subscribe((user) => {
+      this.fetchSettings(user?.id)
+    })
+
+  }
+
+  fetchSettings(userId: Number | undefined) {
+    this.settingsService.fetchLastSetting(userId).subscribe((setting) => {
+      this.settingsForm.patchValue({
+        progressiveVisualizationExperiment: setting.progressiveVisualizationExperiment,
+        progressiveVisualizationExperimentTest: setting.progressiveVisualizationExperimentTest,
+        autoStartNextExperiment: setting.autoStartNextExperiment,
+      });
+    })
+  }
+
 }

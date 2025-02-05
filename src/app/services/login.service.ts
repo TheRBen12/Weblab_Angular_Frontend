@@ -25,7 +25,6 @@ export class LoginService {
   refreshUser(email: any){
     return this.http.get<User>("https://localhost:7147/api/account/login", {params: {email: email}}).subscribe(
       user => {
-        debugger;
         if (user){
           this.setUser(user);
           console.log("user has been set");
