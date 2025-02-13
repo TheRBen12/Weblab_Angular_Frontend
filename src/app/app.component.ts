@@ -9,6 +9,8 @@ import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {LoginService} from './services/login.service';
 import {User} from './models/user';
 import {ToastrModule} from 'ngx-toastr';
+import {filter, switchMap} from 'rxjs';
+import {SettingService} from './services/setting.service';
 
 
 @Component({

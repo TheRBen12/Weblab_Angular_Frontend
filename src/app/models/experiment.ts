@@ -1,5 +1,5 @@
-export class Experiment {
-  title: string = "";
-  state: string = "";
-
+export interface Experiment {
+  name: string;
+  state: string;
+  position: Number
 }

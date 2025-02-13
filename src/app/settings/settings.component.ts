@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
     }
     this.settingsService.saveSettings(userSetting).subscribe((settings) => {
       if (settings) {
-        this.toastrService.success("Ihre Einstellungen wurden erfolgreich gespeichert", "", {easeTime: 3000})
+        this.toastrService.success("Ihre Einstellungen wurden gespeichert", "", {easeTime: 1000,})
         this.router.navigateByUrl("/");
       }
     }, error => {

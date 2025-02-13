@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {WelcomeHelpModalComponent} from '../welcome-help-modal/welcome-help-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NavigationComponent} from '../navigation/navigation/navigation.component';
 import {RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
+import {filter, switchMap} from 'rxjs';
+import {LoginService} from '../services/login.service';
+import {SettingService} from '../services/setting.service';
 
 @Component({
   selector: 'app-main',
@@ -18,18 +21,19 @@ import {MatFabButton} from '@angular/material/button';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
-export class MainComponent {
-  title = 'Weblab';
+export class MainComponent implements OnInit {
   closedModal = false;
 
   constructor(private dialog: MatDialog) {
   }
-  ngOnInit(){
-    if (sessionStorage.getItem('closedModal') == '' || sessionStorage.getItem('closedModal') == null){
+
+  ngOnInit() {
+    if (sessionStorage.getItem('closedModal') == '' || sessionStorage.getItem('closedModal') == null) {
       this.openWelcomeHelpModal("Bevor Sie loslegen, hier einige Tipps", true)
     }
   }
-  openWelcomeHelpModal(title: string, showFooter: boolean){
+
+  openWelcomeHelpModal(title: string, showFooter: boolean) {
     const dialogRef = this.dialog.open(WelcomeHelpModalComponent, {
         disableClose: true,
         data: {title: title, showFooter: showFooter}
