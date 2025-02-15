@@ -1,6 +1,6 @@
 export interface User {
   email: string,
-  id: Number,
+  id: number,
   group: string,
-  currentExperimentPos?: number
+  currentExperimentPos: number
 }
