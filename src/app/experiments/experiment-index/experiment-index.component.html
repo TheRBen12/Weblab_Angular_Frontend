@@ -5,9 +5,14 @@
   <div class="container mt-3 ">
     <h1>{{ title }}</h1>
     <ul class=" list-group">
-      <div class="row row-cols-3 p-2 d-flex flex-fill">
+      <div *ngIf="!currentUserSetting?.progressiveVisualizationExperiment; else hiddenExperimentList " class="row row-cols-3 p-2 d-flex flex-fill">
         <app-experiment [experiment]="experiment" *ngFor="let experiment of experiments"></app-experiment>
       </div>
+      <ng-template #hiddenExperimentList>
+        <div *ngFor="let experiment of experiments; index as i">
+          <app-experiment [experiment]="experiment" *ngIf="i <= accountService.currentUser()?.currentExperimentPos"></app-experiment>
+        </div>
+      </ng-template>
     </ul>
   </div>
 </div>

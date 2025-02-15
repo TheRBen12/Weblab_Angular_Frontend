@@ -1,8 +1,7 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, Observable, ReplaySubject} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 import {User} from '../models/user';
-import {J} from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: 'root'
