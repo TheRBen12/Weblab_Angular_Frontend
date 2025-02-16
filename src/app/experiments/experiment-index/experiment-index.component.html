@@ -1,19 +1,23 @@
 <div>
   <div class="sub-navigation d-flex align-items-center justify-content-center">
-    <app-search-bar></app-search-bar>
+    <app-search-bar (filteredElementsEvent)="setExperiments($event)" [elements]="experiments" ></app-search-bar>
   </div>
   <div class="container mt-3 ">
     <h1>{{ title }}</h1>
     <ul class=" list-group">
       <div *ngIf="!currentUserSetting?.progressiveVisualizationExperiment; else hiddenExperimentList" class="row row-cols-3 p-2 d-flex flex-fill">
-        <app-experiment [experiment]="experiment" *ngFor="let experiment of experiments"></app-experiment>
+        <app-experiment [experiment]="experiment" *ngFor="let experiment of filteredExperiments"></app-experiment>
       </div>
 
       <ng-template #hiddenExperimentList>
-        <div *ngFor="let experiment of experiments; index as i" class="row row-cols-3 p-2 d-flex flex-fill">
-          <app-experiment [experiment]="experiment" *ngIf="i <= (accountService.currentUser()?.currentExperimentPos ?? 0)"></app-experiment>
+        <div *ngFor="let experiment of filteredExperiments; index as i" class="row row-cols-3 p-2 d-flex flex-fill">
+          <app-experiment [experiment]="experiment" *ngIf="experiment.position <= (accountService.currentUser()?.currentExperimentPos ?? 0)"></app-experiment>
         </div>
       </ng-template>
+
+      <div *ngIf="filteredExperiments.length == 0">
+        <p>Ihre Suche ergab leider keine Treffer</p>
+      </div>
     </ul>
   </div>
 </div>

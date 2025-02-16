@@ -1,5 +1,5 @@
 
 <div id="search-bar-container" class="d-flex" role="search">
-    <input id="search-input-field" class="form-control" type="search" placeholder="Experiment suchen" aria-label="Search">
+    <input #filter (input)="filterResults(filter.value)" id="search-input-field" class="form-control" type="search" placeholder="Experiment suchen" aria-label="Search">
       <i id="search-icon"  class="fa fa-search"></i>
 </div>

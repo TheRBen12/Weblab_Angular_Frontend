@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {SearchBarComponent} from '../../search-bar/search-bar.component';
 import {ExperimentService} from '../../services/experiment.service';
 import {Experiment} from '../../models/experiment';
@@ -22,6 +22,7 @@ export class ExperimentIndexComponent implements OnInit {
   accountService = inject(LoginService);
   settingService = inject(SettingService);
   experiments: Experiment[] = [];
+  filteredExperiments: Experiment[] = []
   currentUserSetting?: UserSetting;
 
   ngOnInit(): void {
@@ -32,7 +33,9 @@ export class ExperimentIndexComponent implements OnInit {
   fetchExperiments() {
     this.experimentService.getExperiments().subscribe((experiments) => {
       this.experiments = this.sortExperimentsByPosition(experiments);
+      this.filteredExperiments = experiments;
     });
+
   }
 
   fetchCurrentUserSetting() {
@@ -41,6 +44,13 @@ export class ExperimentIndexComponent implements OnInit {
         this.settingService.fetchLastSetting(user.id))
     ).subscribe((setting) => {
       this.currentUserSetting = setting;
+
+      if (this.currentUserSetting?.progressiveVisualizationExperiment) {
+        this.experiments = this.experiments.filter((experiment) => {
+          const pos = this.accountService.currentUser()?.currentExperimentPos ?? 0;
+          return experiment.position <= pos;
+        });
+      }
     });
   }
 
@@ -51,4 +61,9 @@ export class ExperimentIndexComponent implements OnInit {
     return experiments;
   }
 
+  setExperiments($event: any[]) {
+    this.filteredExperiments = $event;
+    console.log(this.filteredExperiments);
+    console.log(this.experiments);
+  }
 }
