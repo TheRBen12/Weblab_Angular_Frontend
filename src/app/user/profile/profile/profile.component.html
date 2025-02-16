@@ -1,0 +1,28 @@
+<div class="container mt-3">
+    <div class="header d-flex flex-row">
+      <div class="capitalLetterCircle d-flex justify-content-center align-items-center">
+        <span id="capitalLetter">{{capitalLetter}}</span>
+      </div>
+      <div class="ms-3">
+        <div><strong>{{user?.name}} {{user?.prename}}</strong></div>
+        <span>Angemeldet</span>
+      </div>
+    </div>
+
+    <hr>
+    <div>
+      <h5>Profilinformationen</h5>
+      <hr>
+      <div>
+        <strong>Name: </strong>   <p>{{user?.name}} {{user?.prename}}</p>
+      </div>
+      <div>
+        <strong>E-Mail: </strong> <p>{{user?.email}} </p>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <button (click)="logout()"  class="btn btn-primary">Abmelden</button>
+    </div>
+</div>
+

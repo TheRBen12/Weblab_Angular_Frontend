@@ -1,7 +1,7 @@
 <div class="card p-3 mt-3" >
   <div class="container">
     <h3>{{ experiment.name }}</h3>
-    <img class="img-fluid" src="assets/images/{{experiment.name}}.png" alt="Kein Bild vorhanden!">
+    <img class="img-thumbnail rounded" src="assets/images/{{experiment.name}}.png" alt="Kein Bild vorhanden!">
     <p *ngIf="experiment.state == 'OPEN'">
       <strong>
         Dieses Experiment ist für Sie freigeschaltet.

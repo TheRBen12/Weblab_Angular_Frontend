@@ -23,7 +23,7 @@
           </li>
 
           <li *ngIf="currentUser" class="nav-item">
-            <a class="nav-link">{{currentUser?.email}}</a>
+            <a routerLink="/profile" class="nav-link">{{currentUser.email}}</a>
           </li>
         </ul>
       </div>

@@ -5,6 +5,7 @@ import {SettingsComponent} from './settings/settings.component';
 import {loginGuard} from './guards/login.guard';
 import {LoginComponent} from './login/login.component';
 import {MainComponent} from './main/main.component';
+import {ProfileComponent} from './user/profile/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,7 @@ export const routes: Routes = [
       {path: '', component: ExperimentIndexComponent},
       {path: 'help', component: HelpDescriptionComponent},
       {path: 'settings', component: SettingsComponent},
+      {path: 'profile', component: ProfileComponent}
     ]
   },
   {

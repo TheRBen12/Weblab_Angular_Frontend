@@ -3,4 +3,7 @@ export interface User {
   id: number,
   group: string,
   currentExperimentPos: number
+  name: string,
+  prename: string
+
 }
