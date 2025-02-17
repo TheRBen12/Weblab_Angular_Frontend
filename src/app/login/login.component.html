@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="ms-3 container-fluid">
-    <a class="nav-title navbar-brand" >Weblab</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="nav-title navbar-brand">Weblab</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
   </div>
@@ -13,14 +14,17 @@
     <p class="mt-3">Bitte melden Sie sich zuerst an.</p>
   </div>
 
-  <form [formGroup]="loginForm" (ngSubmit)="loginRequest()"  class="p-2">
+  <form novalidate [formGroup]="loginForm" (ngSubmit)="loginRequest()" class="p-2 was-validated need-validation">
     <div class="mb-3">
       <label for="email" class="form-label">E-Mail Adresse</label>
-      <input formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+      <input required formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+      <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+        <div class="form-error-message" *ngIf="email?.errors?.['required']">Bitte geben Sie eine E-Mail Adresse ein</div>
+        <div class="form-error-message"  *ngIf="email?.errors?.['email']">Das ist keine gültige E-Mail</div>
+      </div>
       <div id="emailHelp" class="form-text">Benutzen Sie ihr E-Mail Adresse um sich anzumelden</div>
     </div>
     <button type="submit" class="btn btn-primary">Anmelden</button>
   </form>
 </div>
-
 
