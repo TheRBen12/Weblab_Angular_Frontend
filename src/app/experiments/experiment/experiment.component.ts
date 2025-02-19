@@ -1,17 +1,19 @@
 import {Component, Input} from '@angular/core';
 import {Experiment} from '../../models/experiment';
-import {NgIf, NgOptimizedImage} from '@angular/common';
+import {NgIf, NgClass} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-experiment',
   imports: [
-    NgIf,
-    NgOptimizedImage
+    NgIf, NgClass, RouterLink
   ],
   standalone: true,
   templateUrl: './experiment.component.html',
   styleUrl: './experiment.component.css'
 })
 export class ExperimentComponent {
-  @Input() experiment: Experiment = {name: "", state: "", position: 0};
+  @Input() experiment: Experiment = {name: "", state: "", position: 0, id: 0};
+  @Input() currentUserPosition = 0;
+  @Input() isProgressiveVisualization: boolean = true;
 }

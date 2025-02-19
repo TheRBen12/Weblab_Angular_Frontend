@@ -6,6 +6,7 @@ import {loginGuard} from './guards/login.guard';
 import {LoginComponent} from './login/login.component';
 import {MainComponent} from './main/main.component';
 import {ProfileComponent} from './user/profile/profile/profile.component';
+import {ExperimentTestIndexComponent} from './experiment-tests/experiment-test-index/experiment-test-index.component';
 
 export const routes: Routes = [
   {
@@ -13,7 +14,10 @@ export const routes: Routes = [
       {path: '', component: ExperimentIndexComponent},
       {path: 'help', component: HelpDescriptionComponent},
       {path: 'settings', component: SettingsComponent},
-      {path: 'profile', component: ProfileComponent}
+      {path: 'profile', component: ProfileComponent},
+      {
+        path: 'tests/:expId', component: ExperimentTestIndexComponent,
+      },
     ]
   },
   {

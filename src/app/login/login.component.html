@@ -22,6 +22,13 @@
         <div class="form-error-message" *ngIf="email?.errors?.['required']">Bitte geben Sie eine E-Mail Adresse ein</div>
         <div class="form-error-message"  *ngIf="email?.errors?.['email']">Das ist keine gültige E-Mail</div>
       </div>
+      <div *ngIf="serverError">
+        <div class="alert-danger alert">Der Server konnte nicht erreicht werden.</div>
+      </div>
+      <div *ngIf="userIsUnauthorized">
+        <div class="alert-danger alert">Die Anmeldedaten sind nicht korrekt, versuchen Sie eine andere E-Mail Adresse</div>
+      </div>
+
       <div id="emailHelp" class="form-text">Benutzen Sie ihr E-Mail Adresse um sich anzumelden</div>
     </div>
     <button type="submit" class="btn btn-primary">Anmelden</button>

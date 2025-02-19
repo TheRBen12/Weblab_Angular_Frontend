@@ -4,21 +4,18 @@
   </div>
   <div class="container mt-3 ">
     <h1>{{ title }}</h1>
-    <ul class=" list-group">
-      <div *ngIf="!currentUserSetting?.progressiveVisualizationExperiment; else hiddenExperimentList" class="row row-cols-3 p-2 d-flex flex-fill">
-        <app-experiment [experiment]="experiment" *ngFor="let experiment of filteredExperiments"></app-experiment>
+    <p *ngIf="filteredExperiments.length > 0">Führen Sie die unten aufgelisteten Experiment durch.</p>
+      <div *ngIf="!currentUserSetting?.progressiveVisualizationExperiment; else hiddenExperimentList" class="row row-cols-3">
+        <app-experiment [isProgressiveVisualization]="currentUserSetting?.progressiveVisualizationExperiment ?? false" [currentUserPosition]="accountService.currentUser()?.currentExperimentPos ?? 0" [experiment]="experiment" *ngFor="let experiment of filteredExperiments"></app-experiment>
       </div>
-
       <ng-template #hiddenExperimentList>
         <div *ngFor="let experiment of filteredExperiments; index as i" class="row row-cols-3 p-2 d-flex flex-fill">
           <app-experiment [experiment]="experiment" *ngIf="experiment.position <= (accountService.currentUser()?.currentExperimentPos ?? 0)"></app-experiment>
         </div>
       </ng-template>
-
       <div *ngIf="filteredExperiments.length == 0">
         <p>Ihre Suche ergab leider keine Treffer</p>
       </div>
-    </ul>
   </div>
 </div>
 

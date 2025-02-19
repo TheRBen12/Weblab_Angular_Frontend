@@ -1,5 +1,6 @@
 export interface Experiment {
   name: string;
   state: string;
-  position: number
+  position: number;
+  id: number;
 }

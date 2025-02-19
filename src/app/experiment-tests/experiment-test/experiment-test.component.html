@@ -1,0 +1,22 @@
+<div class="card p-3 mt-3">
+  <div class="container">
+    <div class="test-header d-flex flex-column">
+      <h3>{{test.position + 1}}. Versuch</h3>
+      <h5 #textAttribute >{{ test.name }}</h5>
+    </div>
+    <p *ngIf="test.state == 'OPEN'" >
+      <strong><p>Dieser Versuch ist freigeschaltet</p></strong>
+    </p>
+    <hr>
+    <p #textAttribute> {{test.description}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li #textAttribute class="list-group-item"> <strong>Status:</strong> {{test.state}}</li>
+      <li class="list-group-item"><strong>geschätzte Durchführungszeit:</strong> {{test.estimatedExecutionTime}} Minuten</li>
+    </ul>
+    <div class="mt-3 d-flex justify-content-center">
+      <button class="btn btn-primary btn-lg">Zu den Versuchsdetails</button>
+    </div>
+</div>
+
+

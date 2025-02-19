@@ -1,4 +1,4 @@
-import {Component, inject, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {SearchBarComponent} from '../../search-bar/search-bar.component';
 import {ExperimentService} from '../../services/experiment.service';
 import {Experiment} from '../../models/experiment';
@@ -63,7 +63,5 @@ export class ExperimentIndexComponent implements OnInit {
 
   setExperiments($event: any[]) {
     this.filteredExperiments = $event;
-    console.log(this.filteredExperiments);
-    console.log(this.experiments);
   }
 }

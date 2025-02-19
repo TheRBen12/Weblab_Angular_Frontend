@@ -2,3 +2,9 @@ img{
   height: 150px;
   width: 200px;
 }
+.border-blue{
+  border: #297BE7 solid 2px;
+}
+.btn-to-exp-tests{
+  min-height: 30px
+}

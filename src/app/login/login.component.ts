@@ -3,20 +3,14 @@ import {LoginService} from '../services/login.service';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {NgClass, NgIf} from '@angular/common';
-import {MatError, MatFormField} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
+import {NgIf} from '@angular/common';
+
 
 @Component({
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
-    RouterLink,
     NgIf,
-    MatError,
-    MatFormField,
-    MatInput,
-    NgClass
   ],
   standalone: true,
   templateUrl: './login.component.html',
@@ -31,6 +25,9 @@ export class LoginComponent {
     ]),
   });
   loginService = inject(LoginService);
+  userIsUnauthorized: boolean = false;
+  serverError: boolean = false
+
   constructor(private toastr: ToastrService) {
   }
 
@@ -41,10 +38,17 @@ export class LoginComponent {
         localStorage.setItem('user', JSON.stringify(user));
         this.loginService.setUser(user);
         this.router.navigateByUrl("/");
-       this.toastr.success("Anmeldung erfolgreich")
+        this.toastr.success("Anmeldung erfolgreich")
+      }
+    }, (error) => {
+      if (error.status == 401) {
+        this.userIsUnauthorized = true;
+      } else {
+        this.serverError = true;
       }
     });
   }
+
   get email() {
     return this.loginForm.get('email');
   }

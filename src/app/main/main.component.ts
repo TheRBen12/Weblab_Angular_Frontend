@@ -8,6 +8,7 @@ import {MatFabButton} from '@angular/material/button';
 import {filter, switchMap} from 'rxjs';
 import {LoginService} from '../services/login.service';
 import {SettingService} from '../services/setting.service';
+import {TimeService} from '../services/time.service';
 
 @Component({
   selector: 'app-main',
@@ -23,11 +24,13 @@ import {SettingService} from '../services/setting.service';
 })
 export class MainComponent implements OnInit {
   closedModal = false;
+  timeService = inject(TimeService);
 
   constructor(private dialog: MatDialog) {
   }
 
   ngOnInit() {
+    this.timeService.startWelcomeModalTimer()
     if (sessionStorage.getItem('closedModal') == '' || sessionStorage.getItem('closedModal') == null) {
       this.openWelcomeHelpModal("Bevor Sie loslegen, hier einige Tipps", true)
     }
@@ -40,6 +43,7 @@ export class MainComponent implements OnInit {
       }
     );
     dialogRef.afterClosed().subscribe(() => {
+      this.timeService.stopWelcomeModalTimer();
       sessionStorage.setItem('closedModal', 'closed');
     });
   }
