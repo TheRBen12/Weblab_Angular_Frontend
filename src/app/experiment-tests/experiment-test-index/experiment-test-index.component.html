@@ -1,18 +1,30 @@
 <div>
   <div class="sub-navigation d-flex align-items-center justify-content-center">
-    <app-search-bar (inputTextEvent)="markText($event)" (filteredElementsEvent)="setExperiments($event)" [elements]="experimentTests" ></app-search-bar>
+    <app-search-bar (inputTextEvent)="markText($event)" (filteredElementsEvent)="setExperiments($event)"
+                    [elements]="experimentTests"></app-search-bar>
   </div>
   <div class="container mt-3 ">
-    <h1>{{ experiment?.name }}</h1>
-    <p *ngIf="filteredExperimentTests.length > 0" >Bitte führen Sie die unten aufgelisteten Versuche durch.</p>
-    <div *ngIf="filteredExperimentTests " class="row row-cols-3 ">
-      <div *ngFor="let test of filteredExperimentTests">
-        <app-experiment-test [markedText]="markedText"  [test]="test"></app-experiment-test>
+    <div class="body-header d-flex justify-content-between">
+      <div class="d-flex align-items-center">
+        <h1>{{ experiment?.name }}</h1>
+      </div>
+      <div>
+          <img src="assets/images/{{experiment?.name }} detail.png">
+        </div>
+    </div>
+    <hr>
+    <div>
+      <p *ngIf="filteredExperimentTests.length > 0">Bitte führen Sie die unten aufgelisteten Versuche durch.</p>
+      <div *ngIf="filteredExperimentTests " class="row row-cols-3 ">
+        <div *ngFor="let test of filteredExperimentTests">
+          <app-experiment-test [markedText]="markedText" [test]="test"></app-experiment-test>
+        </div>
+      </div>
+      <div *ngIf="filteredExperimentTests.length == 0">
+        <p>Ihre Suche ergab leider keine Treffer</p>
       </div>
     </div>
-    <div *ngIf="filteredExperimentTests.length == 0">
-      <p>Ihre Suche ergab leider keine Treffer</p>
     </div>
-  </div>
+
 </div>
 

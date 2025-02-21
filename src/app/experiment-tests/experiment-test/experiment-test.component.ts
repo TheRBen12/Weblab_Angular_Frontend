@@ -2,12 +2,14 @@ import {Component, ElementRef, Input, OnChanges, QueryList, SimpleChanges, ViewC
 import {ExperimentTest} from '../../models/experiment-test';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-experiment-test',
   imports: [
     NgIf,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   standalone: true,
   templateUrl: './experiment-test.component.html',
@@ -16,7 +18,8 @@ import {FormsModule} from '@angular/forms';
 export class ExperimentTestComponent implements OnChanges {
   @Input() test: ExperimentTest = {
     position: 1, name: "", description: "",
-    estimatedExecutionTime: 0, state: "", experiment: null
+    estimatedExecutionTime: 0, state: "", experiment: null,
+    id: 0, headDetailDescription: "", detailDescription: ""
   }
   @Input() markedText: string = "";
   @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;

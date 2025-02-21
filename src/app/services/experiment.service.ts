@@ -24,4 +24,8 @@ export class ExperimentService {
   getExperiment(experimentId: number): Observable<Experiment> {
     return this.http.get<Experiment>('https://localhost:7147/api/experiment/'+experimentId, {params: {experimentId: experimentId}});
   }
+
+  getExperimentTest(experimentTestId: number): Observable<ExperimentTest> {
+    return this.http.get<ExperimentTest>('https://localhost:7147/api/ExperimentTest/test', {params: {experimentTestId: experimentTestId}});
+  }
 }
