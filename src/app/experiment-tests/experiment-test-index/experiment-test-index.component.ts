@@ -1,5 +1,5 @@
 import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {switchMap} from 'rxjs';
 import {ExperimentTest} from '../../models/experiment-test';
 import {ExperimentService} from '../../services/experiment.service';
@@ -14,7 +14,8 @@ import {Experiment} from '../../models/experiment';
     NgForOf,
     NgIf,
     ExperimentTestComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    RouterLink
   ],
   standalone: true,
   templateUrl: './experiment-test-index.component.html',

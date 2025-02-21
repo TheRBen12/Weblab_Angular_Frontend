@@ -6,15 +6,19 @@
   <div class="container mt-3 ">
     <div class="body-header d-flex justify-content-between">
       <div class="d-flex align-items-center">
-        <h1>{{ experiment?.name }}</h1>
+        <div>
+          <h1>{{ experiment?.name }}</h1>
+          <div>
+            <p *ngIf="filteredExperimentTests.length > 0">Bitte führen Sie die unten aufgelisteten Versuche durch.</p>
+          </div>
+        </div>
       </div>
       <div>
-          <img src="assets/images/{{experiment?.name }} detail.png">
-        </div>
+        <img src="assets/images/{{experiment?.name }} detail.png">
+      </div>
     </div>
     <hr>
     <div>
-      <p *ngIf="filteredExperimentTests.length > 0">Bitte führen Sie die unten aufgelisteten Versuche durch.</p>
       <div *ngIf="filteredExperimentTests " class="row row-cols-3 ">
         <div *ngFor="let test of filteredExperimentTests">
           <app-experiment-test [markedText]="markedText" [test]="test"></app-experiment-test>
@@ -24,7 +28,8 @@
         <p>Ihre Suche ergab leider keine Treffer</p>
       </div>
     </div>
-    </div>
+    <button routerLink="/" class="mt-3 btn btn-secondary btn-lg">Zurück</button>
+  </div>
 
 </div>
 
