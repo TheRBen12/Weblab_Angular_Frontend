@@ -1,1 +1,14 @@
-<p>dynamic-load-recall-recognition works!</p>
+<div class="d-flex flex-row">
+  <div>
+    <app-experiment-test-instruction [instructions]="instructions"></app-experiment-test-instruction>
+  </div>
+  <div style="width: 100%">
+    <ng-container *ngIf="component">
+      <ng-container *ngComponentOutlet="component"></ng-container>
+    </ng-container>
+  </div>
+
+</div>
+
+
+

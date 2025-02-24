@@ -5,6 +5,7 @@ import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {LoginService} from './services/login.service';
 import {User} from './models/user';
 import {ToastrModule} from 'ngx-toastr';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 @Component({
@@ -13,7 +14,8 @@ import {ToastrModule} from 'ngx-toastr';
     RouterOutlet,
     MatIconModule,
     TooltipModule,
-    ToastrModule
+    ToastrModule,
+    MatExpansionModule
   ],
   standalone: true,
   templateUrl: './app.component.html',

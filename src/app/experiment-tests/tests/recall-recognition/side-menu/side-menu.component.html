@@ -1,0 +1,7 @@
+<div class=" flex-fill mt-5 container">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item menu-item" *ngFor="let category of productCategories; index as i">
+      <a (click)="emitCurrentRoute(category)"  class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" [ngClass]="{'strong-link' : currentRoute==category}" routerLink="{{categoryLinks[i]}}">{{category}}</a>
+    </li>
+  </ul>
+</div>
