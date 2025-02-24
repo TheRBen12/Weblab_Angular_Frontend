@@ -8,6 +8,7 @@ import {
 } from "../../../experiment-test-instruction/experiment-test-instruction.component";
 import {SideMenuComponent} from '../side-menu/side-menu.component';
 import {ProductComponent} from './product/product.component';
+import {ProductService} from '../../../../services/product.service';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -30,12 +31,12 @@ import {ProductComponent} from './product/product.component';
 export class RecallRecognitionPartOneComponent implements OnInit{
   public instructions: string[];
   public productCategories: string[] = ["Home", "Gaming", "IT und Multimedia", "Haushalt", "Garten", "Bücher", "Büro", "Wohnen"];
-  public favoriteCategories = ["Smartphones"]
-  public currentProductCategoryIndex = 0;
   categoryLinks: string[] = [];
   currentRoute: string = "";
   currentDate = Date.now();
   router = inject(Router);
+  productService = inject(ProductService);
+  dailyOfferProduct: any;
   constructor() {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia"]
 
@@ -53,9 +54,15 @@ export class RecallRecognitionPartOneComponent implements OnInit{
       }, {} as Record<string, string>);
       this.currentRoute = this.productCategories[0];
       this.categoryLinks = Object.values(links);
+      this.fetchDailyOffer();
   }
 
   setCurrentRoute($event: string) {
     this.currentRoute = $event;
+  }
+  fetchDailyOffer(){
+    this.productService.getDailyOfferProduct().subscribe((result) => {
+      this.dailyOfferProduct = result;
+    })
   }
 }

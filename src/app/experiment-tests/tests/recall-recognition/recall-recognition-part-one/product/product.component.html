@@ -1,1 +1,16 @@
-<p>product works!</p>
+<div class="card mt-3 ">
+  <div class="card-body">
+    <img class="card-img-top" src="assets/images/products/{{product.trademark}}.png">
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+
+    </li>
+
+        <li *ngFor="let property of specs; index as i" class="me-1 list-group-item">{{specs[i].value}}
+
+        </li>
+
+
+  </ul>
+</div>
