@@ -1,25 +1,17 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-product',
   imports: [
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './product.component.html',
   standalone: true,
   styleUrl: './product.component.css'
 })
-export class ProductComponent implements OnChanges {
+export class ProductComponent {
   @Input() product: any;
-  tradeMark: string = "";
-  specs:any = [];
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.product) {
-      this.specs = this.product.specifications;
-      console.log(this.product);
-    }
-  }
-
+  @Input() specifications: any[] = [];
 }

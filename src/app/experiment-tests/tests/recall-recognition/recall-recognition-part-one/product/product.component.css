@@ -1,0 +1,15 @@
+.product-type{
+  color: #007bc7;
+}
+.product-card{
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+}
+img{
+  max-height: 250px;
+}
+
+.product-card:hover {
+  background-color: #eaeaea;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Stärkerer Schatten für "Erhebung" */
+}

@@ -23,4 +23,8 @@ import {NgForOf} from '@angular/common';
 export class ExperimentTestInstructionComponent {
   @Input() instructions: string[] = [];
 
+  addInstruction(instruction: string){
+    this.instructions = this.instructions.concat(instruction)
+  }
+
 }

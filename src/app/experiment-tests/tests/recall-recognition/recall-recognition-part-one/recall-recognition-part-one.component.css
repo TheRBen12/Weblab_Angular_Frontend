@@ -3,7 +3,22 @@
 }
 
 .shop-header-img{
-  width: 700px;
+  width: 800px;
   max-height: 450px;
+}
+
+.main{
+  margin-left: 20px;
+}
+
+.category-box{
+  width: 150px; /* Breite der Box */
+  height: 100px; /* Höhe der Box */
+  background-color: lightgray; /* Hintergrundfarbe */
+  display: flex; /* Aktiviert Flexbox */
+  align-items: center; /* Vertikale Zentrierung */
+  justify-content: center; /* Horizontale Zentrierung */
+  text-align: center; /* Falls der Text mehrzeilig ist */
+  border-radius: 10px; /* Abgerundete Ecken */
 }
 
