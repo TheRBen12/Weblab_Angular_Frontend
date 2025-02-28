@@ -3,11 +3,13 @@ import {switchMap} from 'rxjs';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {ExperimentService} from '../../services/experiment.service';
 import {ExperimentTest} from '../../models/experiment-test';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-experiment-test-detail',
   imports: [
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   standalone: true,
   templateUrl: './experiment-test-detail.component.html',
@@ -18,7 +20,6 @@ export class ExperimentTestDetailComponent implements OnInit {
   experimentTestId: number = 0;
   experimentService = inject(ExperimentService);
   experimentTest?: ExperimentTest;
-  experimentRoute = "";
 
   ngOnInit(): void {
 

@@ -16,6 +16,9 @@ import {
 import {
   RecallRecognitionPartOneComponent
 } from './experiment-tests/tests/recall-recognition/recall-recognition-part-one/recall-recognition-part-one.component';
+import {
+  RecallRecognitionPartTwoComponent
+} from './experiment-tests/tests/recall-recognition/recall-recognition-part-two/recall-recognition-part-two.component';
 
 export const routes: Routes = [
   {
@@ -31,9 +34,22 @@ export const routes: Routes = [
       {
         path: 'test/execute', component: ExperimentTestExecutionComponent, children: [
 
-          {path: 'recall-recognition/0', component: RecallRecognitionPartOneComponent, children: [
-              {path: '', loadChildren: () => import('./experiment-tests/tests/recall-recognition/products-module/products.module').then(m => m.ProductsModule)}
-            ]}
+          {
+            path: 'recall-recognition/0', component: RecallRecognitionPartOneComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/recall-recognition/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
+          {
+            path: 'recall-recognition/1', component: RecallRecognitionPartTwoComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/recall-recognition/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          }
 
         ]
 

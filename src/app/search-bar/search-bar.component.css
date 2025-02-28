@@ -1,17 +1,17 @@
-#search-icon{
+.search-icon{
   position: relative;
   left: -3rem;
   top: 1rem;
   font-weight: bold;
   font-size: 20px;
 }
-#search-input-field{
+.search-input-field{
   position: relative;
   background: transparent;
   min-width: 350px;
   min-height: 50px;
 }
-#search-bar-container{
+.search-bar-container{
   margin: 0px 50px;
   padding: 20px;
   min-width: 200px;

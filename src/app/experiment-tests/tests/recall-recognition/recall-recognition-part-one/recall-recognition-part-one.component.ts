@@ -1,5 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {DatePipe, NgForOf} from '@angular/common';
+import {AfterContentInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
@@ -7,10 +6,12 @@ import {
   ExperimentTestInstructionComponent
 } from "../../../experiment-test-instruction/experiment-test-instruction.component";
 import {SideMenuComponent} from '../side-menu/side-menu.component';
-import {ProductComponent} from './product/product.component';
 import {ProductService} from '../../../../services/product.service';
 import {ProductType} from '../../../../models/product-category';
 import {routerLinks} from './routes';
+import {Subscription} from 'rxjs';
+import {RecallRecognitionExperimentTestService} from '../../../../services/recall-recognition-experiment-test.service';
+import {RouterService} from '../../../../services/router.service';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -20,20 +21,16 @@ import {routerLinks} from './routes';
     RouterOutlet,
     ExperimentTestInstructionComponent,
     SideMenuComponent,
-    ProductComponent,
-    DatePipe,
-    NgForOf
   ],
   templateUrl: './recall-recognition-part-one.component.html',
   standalone: true,
   styleUrl: './recall-recognition-part-one.component.css'
 })
-export class RecallRecognitionPartOneComponent implements OnInit {
+export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy, AfterContentInit {
   instructions: string[];
   productCategories: ProductType[] = [];
   categoryLinks: string[] = [];
   currentRoute: string = "Home";
-  currentDate = Date.now();
   router = inject(Router);
   productService = inject(ProductService);
   dailyOfferProduct: any;
@@ -41,89 +38,84 @@ export class RecallRecognitionPartOneComponent implements OnInit {
   parentCategory: string | null = null;
   parentRoute: string | null = null;
   currentType: ProductType | undefined;
-  targetRoutes = ["IT und Multimedia", "PC und Notebooks", "Notebook"]
-  favoriteCategories : string[] = ["Smartphone und Tablets", "Küche"];
+  currentInstructionStep: number = 0;
   routerLinks = routerLinks;
+  targetRoutes = ["IT und Multimedia", "PC und Notebooks", "Notebook"]
+  recallRecognitionService = inject(RecallRecognitionExperimentTestService);
+  productCategoryRouterLinksService = inject(RouterService);
+  updateMenuSubscription: Subscription = new Subscription();
 
-
-  constructor() {
-    this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia"]
+  constructor(private cdRef: ChangeDetectorRef) {
+    this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
+      "Finden Sie die Produktkategorie PC und Notebooks",
+      "Finden Sie die Produktkategorie Notebooks",
+      "Wählen Sie ein Notebook aus",
+      "Fügen Sie das Notebook dem Warenkorb hinzu"]
   }
 
   ngOnInit(): void {
+    this.updateMenuSubscription = this.recallRecognitionService.getSubject().subscribe((updateMenu) => {
+      if (updateMenu) {
+        this.fetchProductTypes("Home");
+        this.currentRoute = "Home";
+        this.currentInstructionStep++;
+        this.cdRef.detectChanges();
+      }
+    });
     this.fetchDailyOffer();
-    this.fetchProductTypes()
-  }
-
-  buildValueKeyPairForCategoryLinks() {
-    const links = this.productCategories.reduce((acc, category) => {
-      const slug = category.name
-        .toLowerCase()
-        .replace(/ü/g, 'ue') // Umlaute umwandeln
-        .replace(/ /g, '-')  // Leerzeichen durch Bindestriche ersetzen
-        .replace(/[^a-z-]/g, ''); // Alle nicht erlaubten Zeichen entfernen
-      acc[category.name] = `${slug}`;
-      return acc;
-    }, {} as Record<string, string>);
-    this.categoryLinks = Object.values(links);
+    this.fetchProductTypes(this.currentRoute);
   }
 
   setCurrentRoute($event: string) {
+    this.currentRoute = $event;
+    this.updateInstructions($event);
+    this.fetchProductTypes(this.currentRoute);
     if (this.currentType?.parentType?.name == $event) {
       this.currentType = this.currentType.parentType;
     } else {
       this.currentType = this.productCategories.find(type => type.name == $event);
     }
-    this.currentRoute = $event;
-    this.fetchProductTypes();
     if (this.currentType?.parentType) {
       this.parentCategory = this.currentType.parentType.name;
     } else {
       this.parentCategory = "Home";
     }
     this.parentRoute = this.routerLinks[this.parentCategory];
-    console.log(this.parentRoute);
-    if (this.targetRoutes.indexOf($event) != -1) {
-      this.updateInstructions($event);
-    }
-
   }
 
   updateInstructions(targetRoute: string) {
-    if (targetRoute == this.currentType?.parentType?.name) {
-      this.instructions.pop();
+    if (this.currentRoute == "Home") {
+      this.currentInstructionStep = 0;
+    } else if (this.currentType?.parentType && targetRoute == this.currentType?.parentType?.name &&
+      this.targetRoutes.indexOf(targetRoute) != -1) {
+      this.currentInstructionStep = this.currentInstructionStep - 1;
     } else {
-      switch (targetRoute) {
-        case "IT und Multimedia":
-          this.instructions = this.instructions.concat("Finden Sie die Produktkategorie PC und Notebooks");
-          break;
-        case "PC und Notebooks":
-          this.instructions = this.instructions.concat("Finden Sie die Produktkategorie Notebooks");
-          break;
-        case "Notebook":
-          this.instructions = this.instructions.concat("Wählen Sie ein Notebook aus, danach können Sie es in den Warenkorb legen." +
-            "Danach ist das Experiment beendet");
-          break;
-        default:
-          return;
+      if (this.targetRoutes.indexOf(targetRoute) != -1) {
+        this.currentInstructionStep = this.targetRoutes.indexOf(targetRoute) + 1;
       }
     }
-
   }
+
   fetchDailyOffer() {
     this.productService.getDailyOfferProduct().subscribe((result) => {
       this.dailyOfferProduct = result;
       this.specifications = this.dailyOfferProduct.specifications;
-    })
-  }
-
-  fetchProductTypes() {
-    this.productService.fetchSubCategoriesObjects(this.currentRoute).subscribe((categories) => {
-      this.productCategories = categories;
-      console.log("categories: ",this.productCategories);
-      this.buildValueKeyPairForCategoryLinks()
     });
   }
 
+  fetchProductTypes(currentRoute: string) {
+    this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
+      this.productCategories = categories;
+      this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
+    });
 
+  }
+
+  ngOnDestroy(): void {
+    this.updateMenuSubscription.unsubscribe();
+  }
+
+  ngAfterContentInit(): void {
+
+  }
 }

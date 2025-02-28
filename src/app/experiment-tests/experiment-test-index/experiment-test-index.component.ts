@@ -7,6 +7,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {ExperimentTestComponent} from '../experiment-test/experiment-test.component';
 import {SearchBarComponent} from '../../search-bar/search-bar.component';
 import {Experiment} from '../../models/experiment';
+import {FilterService} from '../../services/filter.service';
 
 @Component({
   selector: 'app-experiment-test-index',
@@ -24,6 +25,7 @@ import {Experiment} from '../../models/experiment';
 export class ExperimentTestIndexComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   experimentService = inject(ExperimentService);
+  filterService = inject(FilterService);
   experimentId: number = 0;
   experimentTests: ExperimentTest[] = [];
   filteredExperimentTests: ExperimentTest[] = [];
@@ -50,11 +52,8 @@ export class ExperimentTestIndexComponent implements OnInit {
     })
   }
 
-  setExperiments($event: any[]) {
-    this.filteredExperimentTests = $event;
-  }
-
-  markText($event: string) {
+  filterTestsAndMarkText($event: string) {
     this.markedText = $event;
+    this.filteredExperimentTests = this.filterService.filterExperimentTests($event, this.experimentTests);
   }
 }

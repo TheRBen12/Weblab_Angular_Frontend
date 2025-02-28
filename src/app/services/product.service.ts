@@ -15,6 +15,7 @@ export class ProductService {
   getDailyOfferProduct(): Observable<any> {
     return this.http.get("https://localhost:7147/api/product/daily-offer");
   }
+
   getProductsByCategory(category: string): Observable<any> {
     return this.http.get("https://localhost:7147/api/product", {params: {category: category}});
   }
@@ -26,5 +27,14 @@ export class ProductService {
 
   fetchTopSales(): Observable<any[]> {
     return this.http.get<any[]>("https://localhost:7147/api/product/top-sales");
+  }
+
+  getProductById(productId: number): Observable<any> {
+    return this.http.get<any>("https://localhost:7147/api/product/find", {params: {productId: productId}});
+  }
+
+  getAllProducts(): Observable<any[]>{
+    return this.http.get<any[]>("https://localhost:7147/api/product/all");
+
   }
 }

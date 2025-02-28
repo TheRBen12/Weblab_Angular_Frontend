@@ -19,8 +19,8 @@
             <p>{{experimentTest?.detailDescription}}</p>
           </div>
         </div>
-        <div class="col-6 d-flex align-items-center justify-content-center">
-          <img class="" src="assets/images/test-detail-img-1.png" alt="Kein Bild vorhanden!">
+        <div *ngIf="experimentTest" class="col-6 d-flex align-items-center justify-content-center">
+          <img src="assets/images/test-detail-img-{{experimentTest?.position}}.png" alt="Kein Bild vorhanden!">
         </div>
       </div>
 

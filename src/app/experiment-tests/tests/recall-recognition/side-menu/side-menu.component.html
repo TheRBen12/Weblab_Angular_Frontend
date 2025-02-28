@@ -15,7 +15,7 @@
       <a (click)="emitCurrentRoute('Home')"
          class="link-offset-2 link-offset-3-hover
          link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-         [ngClass]="{'strong-link' : currentRoute=='Home'}" routerLink="home">Home</a>
+         [ngClass]="{'strong-link' : currentRoute=='Home'}" routerLink="./">Home</a>
     </li>
     <li class="list-group-item menu-item" *ngFor="let category of productCategories; index as i">
       <a (click)="emitCurrentRoute(category.name)"

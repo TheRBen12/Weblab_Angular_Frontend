@@ -1,5 +1,8 @@
 <div class="container mt-3">
   <h1>{{title}}</h1>
+  <div>
+    <h4>{{products.length}} Produkte</h4>
+  </div>
   <div class="mt-3 row row-cols-3">
     <app-product [specifications]="product.specifications"  *ngFor="let product of products" [product]="product"></app-product>
   </div>

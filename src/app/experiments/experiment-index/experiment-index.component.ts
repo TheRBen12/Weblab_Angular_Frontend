@@ -8,6 +8,7 @@ import {SettingService} from '../../services/setting.service';
 import {LoginService} from '../../services/login.service';
 import {UserSetting} from '../../models/user-setting';
 import {filter, switchMap} from 'rxjs';
+import {FilterService} from '../../services/filter.service';
 
 @Component({
   selector: 'app-experiment-index',
@@ -21,9 +22,11 @@ export class ExperimentIndexComponent implements OnInit {
   experimentService = inject(ExperimentService);
   accountService = inject(LoginService);
   settingService = inject(SettingService);
+  filterService = inject(FilterService);
   experiments: Experiment[] = [];
   filteredExperiments: Experiment[] = []
   currentUserSetting?: UserSetting;
+  serverError: boolean = false;
 
   ngOnInit(): void {
     this.fetchExperiments();
@@ -34,6 +37,10 @@ export class ExperimentIndexComponent implements OnInit {
     this.experimentService.getExperiments().subscribe((experiments) => {
       this.experiments = this.sortExperimentsByPosition(experiments);
       this.filteredExperiments = experiments;
+    }, error => {
+      if (error){
+        this.serverError = true;
+      }
     });
 
   }
@@ -61,7 +68,8 @@ export class ExperimentIndexComponent implements OnInit {
     return experiments;
   }
 
-  setExperiments($event: any[]) {
-    this.filteredExperiments = $event;
+
+  filterExperiment($event: string) {
+    this.filteredExperiments = this.filterService.filterExperiments($event, this.experiments)
   }
 }

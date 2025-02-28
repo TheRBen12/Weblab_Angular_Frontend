@@ -1,6 +1,6 @@
 <div>
   <div class="sub-navigation d-flex align-items-center justify-content-center">
-    <app-search-bar (inputTextEvent)="markText($event)" (filteredElementsEvent)="setExperiments($event)"
+    <app-search-bar (inputTextEvent)="filterTestsAndMarkText($event)"
                     [elements]="experimentTests"></app-search-bar>
   </div>
   <div class="container mt-3 ">

@@ -10,6 +10,8 @@ import {ExperimentTest} from '../models/experiment-test';
 export class ExperimentService {
   http = inject(HttpClient);
 
+
+
   constructor() {
   }
 
@@ -27,5 +29,9 @@ export class ExperimentService {
 
   getExperimentTest(experimentTestId: number): Observable<ExperimentTest> {
     return this.http.get<ExperimentTest>('https://localhost:7147/api/ExperimentTest/test', {params: {experimentTestId: experimentTestId}});
+  }
+
+  saveExperimentTestExecution() {
+    
   }
 }

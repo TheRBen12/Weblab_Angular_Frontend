@@ -1,5 +1,16 @@
+<div  class="search-bar-container d-flex" role="search">
 
-<div id="search-bar-container" class="d-flex" role="search">
-    <input #filter (input)="filterResults(filter.value)" id="search-input-field" class="form-control" type="search" placeholder="Experiment suchen" aria-label="Search">
-      <i id="search-icon"  class="fa fa-search"></i>
+  <div *ngIf="!searchOnEnter; else filterOnEnter" class="input-group">
+    <input  #filter (input)="filterResults(filter.value)"
+            id="search-input-field" class="search-input-field form-control" type="search" placeholder="{{placeholder}}"
+            aria-label="Search">
+    <i class="search-icon fa fa-search"></i>
+  </div>
+
+  <ng-template #filterOnEnter>
+    <input (keyup.enter)="filterResults(filter.value)" *ngIf="searchOnEnter" #filter
+           class="search-input-field form-control" type="search"
+           placeholder="{{placeholder}}" aria-label="Search"> <i class="search-icon fa fa-search"></i>
+  </ng-template>
+
 </div>
