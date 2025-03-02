@@ -26,7 +26,7 @@ import {RouterService} from '../../../../services/router.service';
   standalone: true,
   styleUrl: './recall-recognition-part-one.component.css'
 })
-export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy, AfterContentInit {
+export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   instructions: string[];
   productCategories: ProductType[] = [];
   categoryLinks: string[] = [];
@@ -62,8 +62,21 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy, Aft
         this.cdRef.detectChanges();
       }
     });
-    this.fetchDailyOffer();
-    this.fetchProductTypes(this.currentRoute);
+    const l = this.router.url.split("/").length;
+    const link = this.router.url.split("/")[l-1];
+    const category = Object.keys(routerLinks).find(key => routerLinks[key] === link);
+    this.currentRoute = category? category: "Home";
+    if (category != "Home" && category != undefined){
+      this.productService.fetchSubCategoriesObjects("Home").subscribe((categories) => {
+        this.currentType = categories.find(type => type.name == category);
+        this.parentCategory = this.currentType?.parentType ? this.currentType.parentType.name : "Home";
+        this.parentRoute = this.routerLinks[this.parentCategory];
+      });
+    }
+
+      this.fetchDailyOffer();
+      this.fetchProductTypes(this.currentRoute);
+
   }
 
   setCurrentRoute($event: string) {
@@ -104,18 +117,13 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy, Aft
   }
 
   fetchProductTypes(currentRoute: string) {
-    this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
-      this.productCategories = categories;
-      this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
-    });
-
+      this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
+        this.productCategories = categories;
+        this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
+      });
   }
 
   ngOnDestroy(): void {
     this.updateMenuSubscription.unsubscribe();
-  }
-
-  ngAfterContentInit(): void {
-
   }
 }

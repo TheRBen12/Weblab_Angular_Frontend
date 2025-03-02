@@ -1,0 +1,9 @@
+<mat-card>
+  <h3>{{ product.name }} ({{ product.brand }})</h3>
+  <p>Preis: {{ product.price }}€</p>
+  <ul>
+    <li *ngFor="let spec of product.specifications | keyvalue">
+      {{ spec.key }}: {{ spec.value }}
+    </li>
+  </ul>
+</mat-card>

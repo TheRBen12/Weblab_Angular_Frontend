@@ -36,6 +36,5 @@ export class ProductComponent {
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
       });
     }
-
   }
 }
