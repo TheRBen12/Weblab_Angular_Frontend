@@ -83,13 +83,14 @@ export class FilterService {
   }
 
   filterBySomeProperty(products: any[], textInputs: string[]) {
+    const layouts = ["CH", "DE", "EN", "US"];
     return products.filter((product) => {
       const productPropertyValues = Object.values(product);
       const productPropertyKeyNames = Object.keys(product);
 
       return textInputs.some(text => {
         return productPropertyValues.some((value, index) => {
-          if (productPropertyKeyNames[index] != "specifications") {
+          if (productPropertyKeyNames[index] != "specifications" && layouts.indexOf(text) == -1) {
             return String(value).replaceAll(" ", "").toLowerCase().includes(text.replaceAll(" ", "").toLowerCase());
           }
           return false;
@@ -121,6 +122,7 @@ export class FilterService {
 
     if (filteredProductsByProperties.length == 0){
       filteredProductsByProperties = this.filterBySomeProperty(products, textInputs);
+
     }
 
     products.forEach((product) => {

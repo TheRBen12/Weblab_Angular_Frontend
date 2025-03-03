@@ -4,6 +4,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {ProductComponent} from '../product/product.component';
 import {FilterService} from '../../../../services/filter.service';
 import {Subscription} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,8 @@ export class HomeComponent implements OnInit{
   products: any[] = [];
   filteredProducts: any[] = [];
   filterSubscription: Subscription = new Subscription();
+  router = inject(Router);
+  markedText = "";
 
 
   ngOnInit(): void {
@@ -29,8 +32,14 @@ export class HomeComponent implements OnInit{
     this.productService.fetchTopSales().subscribe((products) => {
       this.topSales = products
     })
+
     this.filterSubscription = this.filterService.getSubject().subscribe((filterText) => {
       this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
+      this.markedText = filterText;
+      const route = this.router.url;
+      if (route.includes("recall-recognition/2")){
+
+      }
     });
 
   }

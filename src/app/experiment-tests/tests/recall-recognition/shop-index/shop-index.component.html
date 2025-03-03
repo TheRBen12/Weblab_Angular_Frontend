@@ -14,7 +14,7 @@
                   <h1>Tagesangebot</h1>
                 </div>
                 <div class="col">
-                  <div class="card w-50">
+                  <div class="card w-75">
                     <div class="p-1">
                       <span class="me-1 text-center"> {{ currentDate | date:'MMM' }}</span>
                       <span class="text-center fs-4 fw-bold ">{{ currentDate | date: 'd' }}</span>
@@ -23,8 +23,7 @@
                 </div>
               </div>
             <div class="row">
-              <app-product [routerLink]="'./show/product/'" [specifications]="specifications" [product]=dailyOfferProduct></app-product>
-
+              <app-product [textToMark]="' '"  [routerLink]="'./show/product/'" [specifications]="specifications" [product]=dailyOfferProduct></app-product>
             </div>
             </div>
         </div>

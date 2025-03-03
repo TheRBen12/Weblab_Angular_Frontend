@@ -10,7 +10,6 @@ import {ProductType} from '../../../../models/product-category';
 import {Subscription} from 'rxjs';
 import {RecallRecognitionExperimentTestService} from '../../../../services/recall-recognition-experiment-test.service';
 import {SideMenuComponent} from '../side-menu/side-menu.component';
-import {ProductIndexComponent} from '../product-index/product-index.component';
 import {FilterService} from '../../../../services/filter.service';
 
 @Component({
@@ -20,7 +19,6 @@ import {FilterService} from '../../../../services/filter.service';
     MatIcon,
     ExperimentTestInstructionComponent,
     SideMenuComponent,
-    ProductIndexComponent,
     RouterOutlet,
   ],
   templateUrl: './recall-recognition-part-two.component.html',
@@ -46,7 +44,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   filteredProducts: any[] = [];
 
   constructor(private cdRef: ChangeDetectorRef) {
-    this.instructions = ["Benutzen Sie das Suchfeld, um Notebooks mit Ihrem gewünschten Betriebssystem zu suchen."];
+    this.instructions = ["Benutzen Sie das Suchfeld, um ein Smartphone Ihrer Lieblingsmarke zu suchen.", "Wählen Sie ein Smartphone aus.", "Legen Sie das Smartphone in den Warenkorb. Danach ist das Experiment zu Ende"];
   }
 
   ngOnInit(): void {
@@ -91,6 +89,12 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
 
   filterProduct($event: string) {
     this.filteredProducts = this.filterService.filterProducts($event, this.products);
+    const foundKeyPad = this.filteredProducts.some((product) => product.type == "Smartphone");
+    if (foundKeyPad){
+      this.currentInstructionStep++;
+    }else{
+      this.currentInstructionStep = 0;
+    }
     this.filterService.dispatchFilterText($event)
   }
 }

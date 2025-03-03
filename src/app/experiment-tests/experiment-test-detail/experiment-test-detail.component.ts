@@ -19,7 +19,7 @@ export class ExperimentTestDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   experimentTestId: number = 0;
   experimentService = inject(ExperimentService);
-  experimentTest?: ExperimentTest;
+  experimentTest: ExperimentTest | undefined
 
   ngOnInit(): void {
 

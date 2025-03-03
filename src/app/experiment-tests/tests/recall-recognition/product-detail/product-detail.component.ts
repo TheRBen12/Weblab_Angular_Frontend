@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {switchMap} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProductService} from '../../../../services/product.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
@@ -20,11 +20,15 @@ import {ExperimentService} from '../../../../services/experiment.service';
 })
 export class ProductDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private router: Router = inject(Router);
   service = inject(RecallRecognitionExperimentTestService);
   productService = inject(ProductService);
   product: any
   specifications: any[] = [];
   experimentService = inject(ExperimentService);
+  targetProperties: {[key: string]: any } = {};
+
+
 
   constructor(private cdRef: ChangeDetectorRef) {
   }
@@ -47,6 +51,18 @@ export class ProductDetailComponent implements OnInit {
   finishExperimentTest(){
    // create a new instance of RecallRecognitionPartOneExecution
    this.experimentService.saveExperimentTestExecution();
+  }
+  defineTargetProperties(){
+    const l = this.router.url.split("/").length;
+    const experimentName = this.router.url.split("/")[l-2];
+    const experimentId =  this.router.url.split("/")[l-1];
+    const route = experimentName + "/"+experimentId;
+    switch (route) {
+      case "recall-recognition/0":
+        this.targetProperties["numberProducts"] = 1;
+
+    }
+
   }
 
 }

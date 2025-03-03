@@ -67,16 +67,15 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     const category = Object.keys(routerLinks).find(key => routerLinks[key] === link);
     this.currentRoute = category? category: "Home";
     if (category != "Home" && category != undefined){
-      this.productService.fetchSubCategoriesObjects("Home").subscribe((categories) => {
+      const parentRoute = localStorage.getItem("parentRoute")?? "";
+      this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
         this.currentType = categories.find(type => type.name == category);
         this.parentCategory = this.currentType?.parentType ? this.currentType.parentType.name : "Home";
         this.parentRoute = this.routerLinks[this.parentCategory];
       });
     }
-
       this.fetchDailyOffer();
       this.fetchProductTypes(this.currentRoute);
-
   }
 
   setCurrentRoute($event: string) {
@@ -94,6 +93,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
       this.parentCategory = "Home";
     }
     this.parentRoute = this.routerLinks[this.parentCategory];
+    localStorage.setItem("parentRoute", this.parentCategory);
   }
 
   updateInstructions(targetRoute: string) {

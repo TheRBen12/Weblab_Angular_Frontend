@@ -1,4 +1,55 @@
-<p>recall-recognition-part-three works!</p>
-<app-auto-complete>
+<div class="d-flex flex-row">
+  <div>
+    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
+                                     [instructions]="instructions">
+    </app-experiment-test-instruction>
+  </div>
+  <div>
+    <div class="container shadow">
+      <div class="row shadow">
+        <div class="col">
+          <div class="container mt-3">
+            <div class="row">
+              <div class="col-6">
+                <app-auto-complete [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
+                                   [placeholder]="'Produkte suchen'">
 
-</app-auto-complete>
+                </app-auto-complete>
+
+              </div>
+              <div class="col-4">
+                <button class="btn btn-primary">Anmelden</button>
+              </div>
+              <div class="col">
+                <div class="d-flex justify-content-end" role="search">
+                  <mat-icon class="me-3 shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                            fontIcon="shopping_cart"></mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="main mb-3">
+      <div class="row">
+        <div class="col-2">
+          <app-side-menu [categoryLinks]=categoryLinks
+                         [productCategories]="productCategories"
+                         [currentRoute]="currentRoute"
+                         [parentRoute]="parentRoute"
+                         [parentCategory]="parentCategory">
+          </app-side-menu>
+        </div>
+
+        <div class="col">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
