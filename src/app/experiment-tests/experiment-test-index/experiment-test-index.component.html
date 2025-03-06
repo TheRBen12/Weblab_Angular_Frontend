@@ -1,6 +1,6 @@
 <div>
   <div class="sub-navigation d-flex align-items-center justify-content-center">
-    <app-search-bar (inputTextEvent)="filterTestsAndMarkText($event)"
+    <app-search-bar [placeholder]="'Versuche suchen'"  (inputTextEvent)="filterTestsAndMarkText($event)"
                     [elements]="experimentTests"></app-search-bar>
   </div>
   <div class="container mt-3 ">
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div>
-        <img class="img-thumbnail img-detail" src="assets/images/{{experiment?.name }} detail.png">
+        <img class="img-thumbnail img-detail" src="assets/images/{{experiment?.name }}.png">
       </div>
     </div>
     <hr>

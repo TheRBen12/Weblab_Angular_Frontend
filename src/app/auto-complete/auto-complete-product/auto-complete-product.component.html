@@ -1,4 +1,4 @@
-<div class=" mt-3 w-100">
+<div class=" p-3 w-100">
     <div class="row">
       <div class="col-3">
         <img src="assets/images/products/{{product.trademark}}-{{product.type}}.png">
@@ -6,16 +6,16 @@
       <div class="col">
         <div class="container">
             <div class="col">
-              <span class="price-tag fw-bold">{{ product.price }}</span>
+              <span #textAttribute class="price-tag fw-bold">{{ product.price }}</span>
             </div>
             <div class="col">
-              <span class="fw-bold me-2">{{ product.trademark }}</span> <span>{{product.name}}</span>
+              <span #textAttribute class="fw-bold me-2">{{ product.trademark }} {{product.name}}</span>
             </div>
 
           <div class="row">
             <div class="col">
               <span *ngFor="let specification of product.specifications; index as i" class="me-1">
-                <span>{{ specification.value }} </span>
+                <span #textAttribute>{{ specification.value }} </span>
                 <span *ngIf="i < 2 && i < product.specifications.length-1">,</span>
               </span>
             </div>

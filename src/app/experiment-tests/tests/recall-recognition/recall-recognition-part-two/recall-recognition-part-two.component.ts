@@ -8,8 +8,8 @@ import {
 import {ProductService} from '../../../../services/product.service';
 import {ProductType} from '../../../../models/product-category';
 import {Subscription} from 'rxjs';
-import {RecallRecognitionExperimentTestService} from '../../../../services/recall-recognition-experiment-test.service';
-import {SideMenuComponent} from '../side-menu/side-menu.component';
+import {SideMenuService} from '../../../../services/side-menu.service';
+import {SideMenuComponent} from '../../side-menu/side-menu.component';
 import {FilterService} from '../../../../services/filter.service';
 
 @Component({
@@ -39,12 +39,13 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   parentRoute: string | null = null;
   currentInstructionStep: number = 0;
   updateMenuSubscription: Subscription = new Subscription();
-  recallRecognitionService = inject(RecallRecognitionExperimentTestService);
+  recallRecognitionService = inject(SideMenuService);
   products: any[] = [];
   filteredProducts: any[] = [];
 
   constructor(private cdRef: ChangeDetectorRef) {
-    this.instructions = ["Benutzen Sie das Suchfeld, um ein Smartphone Ihrer Lieblingsmarke zu suchen.", "Wählen Sie ein Smartphone aus.", "Legen Sie das Smartphone in den Warenkorb. Danach ist das Experiment zu Ende"];
+    this.instructions = ["Benutzen Sie das Suchfeld, um ein Smartphone Ihrer Lieblingsmarke zu suchen.",
+      "Wählen Sie ein Smartphone aus.", "Legen Sie das Smartphone in den Warenkorb. Danach ist das Experiment zu Ende"];
   }
 
   ngOnInit(): void {

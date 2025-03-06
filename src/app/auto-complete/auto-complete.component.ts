@@ -2,7 +2,7 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {FilterService} from '../services/filter.service';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import {map, Observable, startWith} from 'rxjs';
+import {map, Observable, switchMap, tap} from 'rxjs';
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
 import {AsyncPipe} from '@angular/common';
 import {MatInput} from '@angular/material/input';
@@ -16,7 +16,6 @@ import {AutoCompleteProductComponent} from './auto-complete-product/auto-complet
     ReactiveFormsModule,
     MatAutocomplete,
     MatOption,
-    AsyncPipe,
     MatInput,
     MatLabel,
     AutoCompleteProductComponent
@@ -26,25 +25,33 @@ import {AutoCompleteProductComponent} from './auto-complete-product/auto-complet
   styleUrl: './auto-complete.component.css'
 })
 export class AutoCompleteComponent implements OnInit {
-  filteredProducts: any[] = [];
   @Input() products: any[] = [];
   @Output() onInputEventEmitter: EventEmitter<string> = new EventEmitter<string>();
   @Input() placeholder: string = "";
+  textToMark: string = "";
   filterService = inject(FilterService);
   myControl = new FormControl('');
-  filteredOptions: Observable<any[]> = new Observable<any[]>()
+  filteredOptions: any[] = [];
 
-  emitFilterText(text: string) {
+  emitFilterText(text: string, event: Event) {
+    event.preventDefault();
+    this.textToMark = text;
     this.onInputEventEmitter.emit(text);
+  }
+  setTextToMark(text: string){
+    this.textToMark = text;
   }
 
   ngOnInit(): void {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(""),
-      map(value => (value ?? "")),
+    this.myControl.valueChanges.pipe(
+      map(value => value || ""),
       map((value: string) => {
-        const a = this.filterService.filterProducts(value, this.products);
-        return a;
-      }));
+         this.filteredOptions = this.filterService.filterProducts(value, this.products);
+         return value;
+      })
+    ).subscribe((value: string) => {
+      this.textToMark = value;
+    });
+
   }
 }

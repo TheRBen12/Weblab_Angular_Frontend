@@ -7,3 +7,6 @@
 .mat-form-field {
   background-color: white;
 }
+.autocomplete-form{
+  min-width: 175px;
+}

@@ -1,16 +1,16 @@
-import {AfterContentInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {
   ExperimentTestInstructionComponent
 } from "../../../experiment-test-instruction/experiment-test-instruction.component";
-import {SideMenuComponent} from '../side-menu/side-menu.component';
+import {SideMenuComponent} from '../../side-menu/side-menu.component';
 import {ProductService} from '../../../../services/product.service';
 import {ProductType} from '../../../../models/product-category';
-import {routerLinks} from './routes';
+import {routerLinks} from '../../routes';
 import {Subscription} from 'rxjs';
-import {RecallRecognitionExperimentTestService} from '../../../../services/recall-recognition-experiment-test.service';
+import {SideMenuService} from '../../../../services/side-menu.service';
 import {RouterService} from '../../../../services/router.service';
 
 @Component({
@@ -41,7 +41,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   currentInstructionStep: number = 0;
   routerLinks = routerLinks;
   targetRoutes = ["IT und Multimedia", "PC und Notebooks", "Notebook"]
-  recallRecognitionService = inject(RecallRecognitionExperimentTestService);
+  menuService = inject(SideMenuService);
   productCategoryRouterLinksService = inject(RouterService);
   updateMenuSubscription: Subscription = new Subscription();
 
@@ -54,7 +54,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.updateMenuSubscription = this.recallRecognitionService.getSubject().subscribe((updateMenu) => {
+    this.updateMenuSubscription = this.menuService.getSubject().subscribe((updateMenu) => {
       if (updateMenu) {
         this.fetchProductTypes("Home");
         this.currentRoute = "Home";
@@ -62,19 +62,15 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
       }
     });
-    const l = this.router.url.split("/").length;
-    const link = this.router.url.split("/")[l-1];
-    const category = Object.keys(routerLinks).find(key => routerLinks[key] === link);
-    this.currentRoute = category? category: "Home";
-    if (category != "Home" && category != undefined){
+    this.currentRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
+    if (this.currentRoute != "Home"){
       const parentRoute = localStorage.getItem("parentRoute")?? "";
       this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
-        this.currentType = categories.find(type => type.name == category);
+        this.currentType = categories.find(type => type.name == this.currentRoute);
         this.parentCategory = this.currentType?.parentType ? this.currentType.parentType.name : "Home";
         this.parentRoute = this.routerLinks[this.parentCategory];
       });
     }
-      this.fetchDailyOffer();
       this.fetchProductTypes(this.currentRoute);
   }
 
@@ -109,12 +105,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchDailyOffer() {
-    this.productService.getDailyOfferProduct().subscribe((result) => {
-      this.dailyOfferProduct = result;
-      this.specifications = this.dailyOfferProduct.specifications;
-    });
-  }
 
   fetchProductTypes(currentRoute: string) {
       this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
@@ -125,5 +115,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.updateMenuSubscription.unsubscribe();
+    localStorage.removeItem("parentRoute")
   }
 }

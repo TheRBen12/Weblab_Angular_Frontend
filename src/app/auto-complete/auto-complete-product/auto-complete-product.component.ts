@@ -1,12 +1,18 @@
-import {Component, Input} from '@angular/core';
-import {KeyValuePipe, NgForOf, NgIf} from '@angular/common';
-import {MatCard} from '@angular/material/card';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  QueryList,
+  SimpleChanges,
+  ViewChildren
+} from '@angular/core';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-auto-complete-product',
   imports: [
-    KeyValuePipe,
-    MatCard,
     NgForOf,
     NgIf
   ],
@@ -14,6 +20,40 @@ import {MatCard} from '@angular/material/card';
   standalone: true,
   styleUrl: './auto-complete-product.component.css'
 })
-export class AutoCompleteProductComponent {
+export class AutoCompleteProductComponent implements OnChanges, AfterViewInit{
   @Input() product: any
+  @Input() textToMark: string = "";
+  @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const textToMark = changes["textToMark"]?.currentValue
+    setTimeout(() => {
+      console.log("Delayed for 1 second.");
+    }, 2000);
+
+    if (textToMark != undefined && textToMark != "" && this.textAttributes) {
+      this.textAttributes.forEach((attr) => {
+        if (!attr.nativeElement.dataset.originalText) {
+          attr.nativeElement.dataset.originalText = attr.nativeElement.innerText;
+        }
+
+        const originalText = attr.nativeElement.dataset.originalText;
+        const regex = new RegExp(`(${textToMark})`, "gi");
+        attr.nativeElement.innerHTML = originalText.replace(regex, `<mark>$1</mark>`);
+      });
+
+    } else {
+      this.textAttributes?.forEach((attr) => {
+        if (attr.nativeElement.dataset.originalText) {
+          attr.nativeElement.innerHTML = attr.nativeElement.dataset.originalText;
+        }
+      });
+    }
+  }
+
+  ngAfterViewInit(): void {
+
+  }
+
 }

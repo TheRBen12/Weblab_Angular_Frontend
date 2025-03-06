@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ProductType} from '../models/product-category';
+import {routerLinks} from '../experiment-tests/tests/routes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouterService {
+  productCategoryLinks = routerLinks
 
   constructor() { }
 
@@ -21,4 +23,10 @@ export class RouterService {
     }, {} as Record<string, string>);
     return  Object.values(links);
   }
+  rebuildCurrentRoute(urlSegments: string[]){
+    const link = urlSegments[urlSegments.length-1];
+    let category = Object.keys(routerLinks).find(key => routerLinks[key] === link);
+    return category ? category : "Home";
+  }
+
 }

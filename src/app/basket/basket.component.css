@@ -1,0 +1,12 @@
+.basket{
+  background-color: #FFFAF6;
+  min-height: 100vh;
+}
+
+.remove-btn{
+  max-height: 30px;
+  max-width: 30px;
+}
+.remove-icon{
+  position: relative;
+}

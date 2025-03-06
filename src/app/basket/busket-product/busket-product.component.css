@@ -1,0 +1,15 @@
+button{
+  max-height: 30px;
+  max-width: 30px;
+}
+.remove-icon{
+  position: relative;
+}
+
+img{
+  height: 120px;
+  width: 150px;
+}
+.basket-product-card{
+  max-width: 250px;
+}

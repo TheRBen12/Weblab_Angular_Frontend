@@ -22,6 +22,7 @@ import {
 import {
   RecallRecognitionPartThreeComponent
 } from './experiment-tests/tests/recall-recognition/recall-recognition-part-three/recall-recognition-part-three.component';
+import {HicksLawComponent} from './experiment-tests/tests/hicks-law/hicks-law.component';
 
 export const routes: Routes = [
   {
@@ -41,7 +42,7 @@ export const routes: Routes = [
             path: 'recall-recognition/0', component: RecallRecognitionPartOneComponent, children: [
               {
                 path: '',
-                loadChildren: () => import('./experiment-tests/tests/recall-recognition/products-module/products.module').then(m => m.ProductsModule)
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
               }
             ]
           },
@@ -49,7 +50,7 @@ export const routes: Routes = [
             path: 'recall-recognition/1', component: RecallRecognitionPartTwoComponent, children: [
               {
                 path: '',
-                loadChildren: () => import('./experiment-tests/tests/recall-recognition/products-module/products.module').then(m => m.ProductsModule)
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
               }
             ]
           },
@@ -57,7 +58,15 @@ export const routes: Routes = [
             path: 'recall-recognition/2', component: RecallRecognitionPartThreeComponent, children: [
               {
                 path: '',
-                loadChildren: () => import('./experiment-tests/tests/recall-recognition/products-module/products.module').then(m => m.ProductsModule)
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
+          {
+            path: 'hicks-law/:testId', component: HicksLawComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
               }
             ]
           }

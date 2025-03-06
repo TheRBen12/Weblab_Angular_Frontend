@@ -1,7 +1,6 @@
 <div class="d-flex flex-row">
   <div>
-    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
-                                     [instructions]="instructions"></app-experiment-test-instruction>
+    <app-experiment-test-instruction  [target]="targetRouteInstruction" [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"></app-experiment-test-instruction>
   </div>
   <div style="width: 100%">
     <nav class="navbar navbar-expand-lg shadow">
@@ -11,8 +10,7 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <app-search-bar [searchOnEnter]="true" (inputTextEvent)="filterProduct($event)"
-                        [placeholder]="'Produkte suchen'"></app-search-bar>
+        <app-search-bar [placeholder]="'Produkte suchen'" ></app-search-bar>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -27,22 +25,32 @@
       </div>
     </nav>
 
+
+
     <div class="main mb-3">
       <div class="row">
         <div class="col-2">
-          <app-side-menu [categoryLinks]=categoryLinks
+          <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
                          [productCategories]="productCategories"
                          [currentRoute]="currentRoute"
                          [parentRoute]="parentRoute"
-                         [parentCategory]="parentCategory">
+                         [parentCategory]="parentCategory"
+         >
           </app-side-menu>
         </div>
 
         <div class="col">
           <router-outlet></router-outlet>
         </div>
+        <div *ngIf="!productService.basketIsEmpty()" class="col-3 me-3">
+          <div class="container-md">
+            <app-basket (checkoutEventEmitter)="finishExperiment($event)"  [basket] = basket></app-basket>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
 </div>
+
 

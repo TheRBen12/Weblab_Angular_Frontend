@@ -133,7 +133,7 @@ export class FilterService {
         productPropertyValues.filter((value, index) => {
           if (productPropertyKeyNames[index] != "specifications") {
             const toAdd = String(value).replaceAll(" ", "").toLowerCase().includes(text.replaceAll(" ", "").toLowerCase());
-            if (productPropertyKeyNames[index] == "name" && toAdd){
+            if (productPropertyKeyNames[index] == "name" && toAdd && text.length > 1){
               nameProperties.push(text)
             }
             return toAdd;
@@ -209,6 +209,9 @@ export class FilterService {
 
   dispatchFilterText($event: string) {
     this.filterSubject.next($event)
+  }
+
+  markFilterText(){
 
   }
 

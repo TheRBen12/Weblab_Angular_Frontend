@@ -1,0 +1,24 @@
+<div *ngIf="!isHidden" class="basket mt-5 container">
+  <div class="p-3 d-flex justify-content-between">
+    <div>
+      <h4>Warenkorb</h4>
+      <div>
+        <p>{{basket.length}} Produkte im Warenkorb</p>
+      </div>
+    </div>
+
+    <button mat-fab class="remove-btn">
+      <mat-icon (click)="hideBasket()" fontIcon="close"></mat-icon>
+    </button>
+  </div>
+  <hr>
+  <ul>
+    <div class="d-flex flex-wrap gap-4 mb-4 justify-content-center" *ngFor="let product of basket; index as i">
+      <app-busket-product (removeProductEventEmitter) = removeProduct($event) [product]="product"></app-busket-product>
+    </div>
+  </ul>
+  <div class="d-flex justify-content-center">
+    <button class="flex-fill btn btn-primary flex-grow-1">Zur Kasse</button>
+  </div>
+
+</div>

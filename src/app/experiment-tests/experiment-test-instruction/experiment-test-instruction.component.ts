@@ -25,5 +25,7 @@ import {NgForOf, NgIf, SlicePipe} from '@angular/common';
 export class ExperimentTestInstructionComponent {
   @Input() instructions: string[] = [];
   @Input() currentInstructionStep: number = 0;
+  @Input() target: string = "";
+
 
 }

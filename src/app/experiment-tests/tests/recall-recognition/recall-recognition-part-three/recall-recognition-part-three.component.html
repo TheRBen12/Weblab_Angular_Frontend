@@ -1,38 +1,39 @@
 <div class="d-flex flex-row">
-  <div>
-    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
-                                     [instructions]="instructions">
-    </app-experiment-test-instruction>
+  <div class="instruction-container shadow col-4">
+      <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
+                                       [instructions]="instructions">
+      </app-experiment-test-instruction>
+
   </div>
   <div>
     <div class="container shadow">
       <div class="row shadow">
         <div class="col">
           <div class="container mt-3">
-            <div class="row">
-              <div class="col-6">
+            <div class="d-flex">
+              <div class="col-7 flex-fill">
                 <app-auto-complete [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
                                    [placeholder]="'Produkte suchen'">
 
                 </app-auto-complete>
-
               </div>
-              <div class="col-4">
-                <button class="btn btn-primary">Anmelden</button>
-              </div>
-              <div class="col">
-                <div class="d-flex justify-content-end" role="search">
-                  <mat-icon class="me-3 shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
-                            fontIcon="shopping_cart"></mat-icon>
+              <div class="d-flex justify-content-end align-items-center">
+                <div class="me-3">
+                  <button class=" btn btn-primary">Anmelden</button>
                 </div>
+                <div class="">
+                  <div class=" align-items-center" role="search">
+                    <mat-icon class="me-3 shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                              fontIcon="shopping_cart"></mat-icon>
+                  </div>
+              </div>
+
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
 
     <div class="main mb-3">
       <div class="row">
@@ -45,7 +46,7 @@
           </app-side-menu>
         </div>
 
-        <div class="col">
+        <div class="col me-3">
           <router-outlet></router-outlet>
         </div>
       </div>

@@ -1,15 +1,19 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ProductType} from '../models/product-category';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   http = inject(HttpClient);
+  foodCategories: string[] = ["Teigwaren", "Penne", "Spaghetti", "Spiral-Nudeln", "Tomaten", "Brot", "Zwiebeln"];
+  basketSubscription: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  constructor() {
+
+  constructor(private toastr: ToastrService) {
   }
 
   getDailyOfferProduct(): Observable<any> {
@@ -33,8 +37,42 @@ export class ProductService {
     return this.http.get<any>("https://localhost:7147/api/product/find", {params: {productId: productId}});
   }
 
-  getAllProducts(): Observable<any[]>{
+  getAllProducts(): Observable<any[]> {
     return this.http.get<any[]>("https://localhost:7147/api/product/all");
+  }
 
+  isFoodProduct(productType: string) {
+    return this.foodCategories.indexOf(productType) != -1;
+
+  }
+  addToBasket(product: any) {
+    let cart = JSON.parse(localStorage.getItem("cart") ?? "[]") || []; // Falls `null`, nutze leeres Array
+    if (!cart.find((productInBasket: any) => productInBasket.id == product.id)){
+      cart.push(product);
+    }else{
+      this.toastr.info("Sie können jedes Produkt nur einmal in den Warenkorb legen");
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    this.basketSubscription.next(cart);
+  }
+
+  basketIsEmpty() {
+    const cart = JSON.parse(localStorage.getItem("cart") ?? "[]") || []; // Falls `null`, nutze leeres Array
+    return cart.length == 0;
+  }
+  getBasketSubscription(){
+    return this.basketSubscription.asObservable();
+  }
+   getBasket() {
+     const cart = JSON.parse(localStorage.getItem("cart") ?? "[]") || []; // Falls `null`, nutze leeres Array
+     this.basketSubscription.next(cart);
+  }
+
+  removeProductFromBusket(product: any) {
+    let cart = JSON.parse(localStorage.getItem("cart") ?? "[]") || []; // Falls `null`, nutze leeres Array
+    cart = cart.filter((productInBusket: any) => productInBusket.id != product.id)
+    localStorage.setItem("cart", JSON.stringify(cart));
+    this.basketSubscription.next(cart);
   }
 }

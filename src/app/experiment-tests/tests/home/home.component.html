@@ -1,0 +1,20 @@
+
+<div class="container mt-3">
+  <h1>Top Angebote</h1>
+  <div>
+    <h4>{{topSales.length}} Produkte</h4>
+  </div>
+
+  <div *ngIf="topSales.length > 0 " class="mt-3 row row-cols-3">
+    <app-product [specifications]="product.specifications"  *ngFor="let product of topSales" [product]="product"></app-product>
+  </div>
+  <div *ngIf="filteredProducts.length > 0">
+    <hr>
+    <h1>Suchergebnisse</h1>
+    <h4>{{filteredProducts.length}} Produkte gefunden</h4>
+  </div>
+  <div *ngIf="filteredProducts.length > 0" class="mt-3 row row-cols-3">
+      <app-product [textToMark] = markedText [specifications]="product.specifications"  *ngFor="let product of filteredProducts" [product]="product"></app-product>
+  </div>
+
+</div>
