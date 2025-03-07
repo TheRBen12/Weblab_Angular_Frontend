@@ -14,6 +14,7 @@ import {SideMenuService} from '../../../../services/side-menu.service';
 import {RouterService} from '../../../../services/router.service';
 import {BasketComponent} from '../../../../basket/basket.component';
 import {NgIf} from '@angular/common';
+import {MatFabButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -25,6 +26,7 @@ import {NgIf} from '@angular/common';
     SideMenuComponent,
     BasketComponent,
     NgIf,
+    MatFabButton,
   ],
   templateUrl: './recall-recognition-part-one.component.html',
   standalone: true,
@@ -48,6 +50,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   menuService = inject(SideMenuService);
   productCategoryRouterLinksService = inject(RouterService);
   updateMenuSubscription: Subscription = new Subscription();
+  basketIsHidden = true;
 
   constructor(private cdRef: ChangeDetectorRef) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
@@ -84,6 +87,10 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
       });
     }
       this.fetchProductTypes(this.currentRoute);
+  }
+  openBasket(){
+    debugger;
+    this.basketIsHidden = !this.basketIsHidden;
   }
 
   setCurrentRoute($event: string) {

@@ -24,10 +24,10 @@ export class BasketComponent implements OnInit{
   products: any[] = [];
   productService = inject(ProductService);
   @Input() basket: any[] = [];
-  isHidden = false;
+  @Input() isHidden = true;
   @Output() checkoutEventEmitter: EventEmitter<number> = new EventEmitter<number>();
   hideBasket(){
-    this.isHidden = true;
+    this.isHidden = !this.isHidden;
   }
 
   ngOnInit(): void {
