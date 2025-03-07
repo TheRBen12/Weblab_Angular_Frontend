@@ -19,11 +19,10 @@ export class ExperimentTestDetailComponent implements OnInit {
   experimentTestId: number = 0;
   experimentService = inject(ExperimentService);
   experimentTest: ExperimentTest | undefined
-  experimentRoutes = experimentTestRoutes;
   experimentTestUrl: string = "";
 
   ngOnInit(): void {
-
+    localStorage.removeItem("cart");
     this.route.paramMap.pipe(
       switchMap(params => {
         this.experimentTestId = Number(params.get('testId'));

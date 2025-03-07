@@ -11,6 +11,9 @@
           </div>
         </mat-expansion-panel-header>
         <ul class="list-group list-group-flush">
+          <div>
+            <p class="fw-bold">{{target}}</p>
+          </div>
           <li *ngFor="let instruction of instructions|slice:0:currentInstructionStep+1; index as i;">
             <p *ngIf="i <= currentInstructionStep">{{ i + 1 }}. {{ instruction }} </p>
           </li>

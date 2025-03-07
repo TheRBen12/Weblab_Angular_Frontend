@@ -23,6 +23,7 @@ import {
   RecallRecognitionPartThreeComponent
 } from './experiment-tests/tests/recall-recognition/recall-recognition-part-three/recall-recognition-part-three.component';
 import {HicksLawComponent} from './experiment-tests/tests/hicks-law/hicks-law.component';
+import {ErrorCorrectionComponent} from './experiment-tests/tests/error-correction/error-correction.component';
 
 export const routes: Routes = [
   {
@@ -39,7 +40,7 @@ export const routes: Routes = [
         path: 'test/execute', component: ExperimentTestExecutionComponent, children: [
 
           {
-            path: 'recall-recognition/0', component: RecallRecognitionPartOneComponent, children: [
+            path: 'recall-recognition/1', component: RecallRecognitionPartOneComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -47,7 +48,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'recall-recognition/1', component: RecallRecognitionPartTwoComponent, children: [
+            path: 'recall-recognition/2', component: RecallRecognitionPartTwoComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -55,7 +56,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'recall-recognition/2', component: RecallRecognitionPartThreeComponent, children: [
+            path: 'recall-recognition/3', component: RecallRecognitionPartThreeComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -69,6 +70,14 @@ export const routes: Routes = [
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
               }
             ]
+          },
+          {
+            path: "error-correction/:testId", component: ErrorCorrectionComponent, children: [
+
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/error-correction/email-module/email.module').then(m => m.EmailModule)
+              }]
           }
 
         ]

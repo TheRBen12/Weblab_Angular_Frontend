@@ -116,6 +116,8 @@ export class FilterService {
         filteredProducts = this.filterBySpecification(filteredProductsByProperties, textInputs);
         if (filteredProducts.length > 0){
           return filteredProducts
+        }else{
+          return filteredProductsByProperties;
         }
       }
     }
@@ -211,8 +213,5 @@ export class FilterService {
     this.filterSubject.next($event)
   }
 
-  markFilterText(){
-
-  }
 
 }

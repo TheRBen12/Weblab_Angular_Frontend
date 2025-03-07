@@ -34,6 +34,7 @@ export class ExperimentTestIndexComponent implements OnInit {
 
 
   ngOnInit() {
+    localStorage.removeItem("cart");
     this.route.paramMap.pipe(
       switchMap(params => {
         this.experimentId = Number(params.get('expId'));

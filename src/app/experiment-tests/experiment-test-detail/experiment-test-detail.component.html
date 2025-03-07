@@ -6,7 +6,7 @@
     <div class="card-body">
       <div class="row p-3" >
         <div class="col-6">
-          <div>
+          <div class="mb-2">
             <h4>Versuchsbeschreibung</h4>
             <span class="card-text">{{experimentTest?.name}}</span>
           </div>
@@ -20,14 +20,14 @@
           </div>
         </div>
         <div class="col-6 d-flex align-items-center justify-content-center">
-          <img src="assets/images/test-detail-img-{{experimentTest?.position}}.png" alt="Kein Bild vorhanden!">
+          <img src="assets/images/{{experimentTest?.experiment?.name}}.png" alt="Kein Bild vorhanden!">
         </div>
       </div>
 
     </div>
   </div>
   <div class="d-flex flex-row justify-content-between">
-    <button routerLink="/test/execute/{{experimentTestUrl}}/{{experimentTest?.position}}" class="btn btn-success btn-lg">Versuch starten</button>
+    <button routerLink="/test/execute/{{experimentTestUrl}}/{{experimentTest?.id}}" class="btn btn-success btn-lg">Versuch starten</button>
     <button routerLink="/tests/{{experimentTest?.experiment?.id}}" class="btn btn-secondary btn-lg">Zurück</button>
   </div>
 

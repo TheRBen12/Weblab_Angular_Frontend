@@ -12,6 +12,8 @@ import {routerLinks} from '../../routes';
 import {Subscription} from 'rxjs';
 import {SideMenuService} from '../../../../services/side-menu.service';
 import {RouterService} from '../../../../services/router.service';
+import {BasketComponent} from '../../../../basket/basket.component';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -21,6 +23,8 @@ import {RouterService} from '../../../../services/router.service';
     RouterOutlet,
     ExperimentTestInstructionComponent,
     SideMenuComponent,
+    BasketComponent,
+    NgIf,
   ],
   templateUrl: './recall-recognition-part-one.component.html',
   standalone: true,
@@ -33,7 +37,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   currentRoute: string = "Home";
   router = inject(Router);
   productService = inject(ProductService);
-  dailyOfferProduct: any;
+  basket: any[] = [];
   specifications: any[] = [];
   parentCategory: string | null = null;
   parentRoute: string | null = null;
@@ -50,10 +54,18 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
       "Finden Sie die Produktkategorie PC und Notebooks",
       "Finden Sie die Produktkategorie Notebooks",
       "Wählen Sie ein Notebook aus",
-      "Fügen Sie das Notebook dem Warenkorb hinzu"]
+      "Fügen Sie das Notebook dem Warenkorb hinzu", "Gehen Sie zur Kasse"];
   }
 
   ngOnInit(): void {
+    this.productService.getBasketSubscription().subscribe((basket) => {
+      this.basket = basket;
+      if (this.basket.length > 0){
+        this.currentInstructionStep = this.instructions.length - 1;
+      }else{
+        this.currentInstructionStep --;
+      }
+    });
     this.updateMenuSubscription = this.menuService.getSubject().subscribe((updateMenu) => {
       if (updateMenu) {
         this.fetchProductTypes("Home");
@@ -116,5 +128,9 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.updateMenuSubscription.unsubscribe();
     localStorage.removeItem("parentRoute")
+  }
+
+  finishExperiment($event: number) {
+
   }
 }

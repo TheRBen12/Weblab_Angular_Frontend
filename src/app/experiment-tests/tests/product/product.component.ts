@@ -38,17 +38,17 @@ export class ProductComponent {
       this.activatedRoute.url.subscribe(url => {
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
       });
-    } else if (urlSegments[l - 1] == "1" && this.product.type == "Smartphone") {
+    } else if (urlSegments[l - 1] == "2" && this.product.type == "Smartphone") {
       this.activatedRoute.url.subscribe(url => {
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
       });
     }
-    else if (urlSegments[l - 1] == "2" && this.product.type == "Keypad") {
+    else if (urlSegments[l - 1] == "3" && this.product.type == "Keypad") {
       this.activatedRoute.url.subscribe(url => {
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
       });
     }
-    else if (urlSegments[l-1] == "lebensmittel" && urlSegments[l-2] == "0"){
+    else if (urlSegments[l-1] == "lebensmittel" && urlSegments[l-3] == "hicks-law"){
       if (this.productService.isFoodProduct(this.product.type)){
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
       }

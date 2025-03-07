@@ -34,13 +34,17 @@
                          [productCategories]="productCategories"
                          [currentRoute]="currentRoute"
                          [parentRoute]="parentRoute"
-                         [parentCategory]="parentCategory">
+                         [parentCategory]="parentCategory" (routeEvent)="updateInstructions()" >
           </app-side-menu>
         </div>
 
         <div class="col">
           <router-outlet></router-outlet>
         </div>
+        <div *ngIf="!productService.basketIsEmpty()" class="col-3 me-3">
+          <div class="container-md">
+            <app-basket (checkoutEventEmitter)="finishExperiment($event)"  [basket] = basket></app-basket>
+          </div>
       </div>
     </div>
   </div>

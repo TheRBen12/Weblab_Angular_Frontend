@@ -1,0 +1,14 @@
+<div class="shadow email-menu-container p-3">
+
+  <button (click)="toggleMenu()" mat-button [matMenuTriggerFor]="emailMenu">
+    <mat-icon *ngIf="!menuToggled" fontIcon="chevron_right" class="mat-icon-rtl-mirror"></mat-icon>
+    <h5>Ordner</h5>
+    <mat-icon *ngIf="menuToggled" fontIcon="expand_more" class="mat-icon-rtl-mirror"></mat-icon>
+  </button>
+  <mat-menu class="menu-list w-100" #emailMenu="matMenu">
+    <button mat-menu-item><p class="fw-bold">Posteingang</p></button>
+    <button mat-menu-item>Gesendete Elemente</button>
+    <button mat-menu-item>Gelöschte Elemente</button>
+    <button mat-menu-item>Archiv</button>
+  </mat-menu>
+</div>

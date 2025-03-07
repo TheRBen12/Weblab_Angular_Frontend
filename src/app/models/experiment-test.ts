@@ -10,4 +10,5 @@ export interface ExperimentTest {
   experiment: Experiment|null;
   detailDescription: string;
   headDetailDescription: string;
+  goalInstruction: string;
 }

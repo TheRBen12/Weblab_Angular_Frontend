@@ -19,8 +19,8 @@
     </div>
     <hr>
     <div>
-      <div *ngIf="filteredExperimentTests " class="row row-cols-3 ">
-        <div *ngFor="let test of filteredExperimentTests">
+      <div *ngIf="filteredExperimentTests " class="row row-cols-3 d-flex flex-wrap flex-fill">
+        <div class="flex-grow-1" *ngFor="let test of filteredExperimentTests">
           <app-experiment-test [markedText]="markedText" [test]="test"></app-experiment-test>
         </div>
       </div>

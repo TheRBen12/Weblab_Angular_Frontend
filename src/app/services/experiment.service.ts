@@ -31,7 +31,4 @@ export class ExperimentService {
     return this.http.get<ExperimentTest>('https://localhost:7147/api/ExperimentTest/test', {params: {experimentTestId: experimentTestId}});
   }
 
-  saveExperimentTestExecution() {
-    
-  }
 }

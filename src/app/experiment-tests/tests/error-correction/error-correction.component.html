@@ -1,0 +1,16 @@
+<div class="d-flex flex-row">
+    <div class="col-3">
+      <app-experiment-test-instruction [target]="targetInstruction" [currentInstructionStep]="currentInstructionStep"
+                                       [instructions]="instructions"></app-experiment-test-instruction>
+    </div>
+    <div class="col-2">
+      <app-email-menu></app-email-menu>
+    </div>
+    <div class="col">
+      <router-outlet></router-outlet>
+    </div>
+
+</div>
+
+
+
