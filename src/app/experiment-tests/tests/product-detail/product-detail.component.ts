@@ -51,17 +51,5 @@ export class ProductDetailComponent implements OnInit {
   addProductToBasket(){
    this.productService.addToBasket(this.product);
   }
-  defineTargetProperties(){
-    const l = this.router.url.split("/").length;
-    const experimentName = this.router.url.split("/")[l-2];
-    const experimentId =  this.router.url.split("/")[l-1];
-    const route = experimentName + "/"+experimentId;
-    switch (route) {
-      case "recall-recognition/0":
-        this.targetProperties["numberProducts"] = 1;
-
-    }
-
-  }
 
 }

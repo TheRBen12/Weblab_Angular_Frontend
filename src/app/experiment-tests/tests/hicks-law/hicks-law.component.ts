@@ -7,7 +7,7 @@ import {SearchBarComponent} from '../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {ProductType} from '../../../models/product-category';
 import {ProductService} from '../../../services/product.service';
-import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {RouterService} from '../../../services/router.service';
 import {routerLinks} from '../routes';
 import {Subscription} from 'rxjs';
@@ -15,6 +15,7 @@ import {SideMenuService} from '../../../services/side-menu.service';
 import {BasketComponent} from '../../../basket/basket.component';
 import {NgIf} from '@angular/common';
 import {ExperimentService} from '../../../services/experiment.service';
+import {FilterService} from '../../../services/filter.service';
 
 @Component({
   selector: 'app-hicks-law',
@@ -31,15 +32,15 @@ import {ExperimentService} from '../../../services/experiment.service';
   standalone: true,
   styleUrl: './hicks-law.component.css'
 })
-export class HicksLawComponent implements OnInit{
+export class HicksLawComponent implements OnInit {
   productService = inject(ProductService);
   productCategoryRouterLinksService = inject(RouterService);
   experimentService: ExperimentService = inject(ExperimentService);
+  filterService = inject(FilterService);
   menuService: SideMenuService = inject(SideMenuService);
   router = inject(Router);
   currentInstructionStep: number = 0;
   instructions: string[] = [];
-  targetInstruction: string = ""
   currentRoute: string = "Home";
   productCategories: ProductType[] = [];
   currentType: ProductType | undefined;
@@ -50,29 +51,40 @@ export class HicksLawComponent implements OnInit{
   updateMenuSubscription: Subscription = new Subscription();
   targetRoutes = ["Lebensmittel"]
   basket: any[] = [];
+  searchBarDisabled = true;
+  experimentId: number | null = null;
+  targetInstruction: string = "";
+  productLimit: number = 0;
+  categoryLimit: number = 0;
+
 
   constructor(private cdRef: ChangeDetectorRef) {
-    this.instructions = ["Finden Sie die Produktkategorie Lebensmittel","Wählen Sie ein Lebensmittel aus.",
+    this.instructions = ["Finden Sie die Produktkategorie Lebensmittel", "Wählen Sie ein Lebensmittel aus.",
       "Fügen Sie das Lebensmittel dem Warenkrob hinzu"];
   }
 
   ngOnInit(): void {
     const urlSegments = this.router.url.split("/");
-    const experimentId = Number(urlSegments[urlSegments.length-1]);
-    if (experimentId && urlSegments[urlSegments.length - 2] == "hicks-law"){
-      this.fetchExperimentTest(experimentId);
-    }
+    const id = urlSegments.indexOf("hicks-law")
 
+    const expId = Number(urlSegments[id + 1]);
+    if (expId) {
+      this.experimentId = expId;
+      this.fetchExperimentTest(this.experimentId);
+    }
+    if (this.experimentId == 6) {
+      this.searchBarDisabled = false;
+    }
 
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((products) => {
-      if (products.length > this.basket.length){
+      if (products.length > this.basket.length) {
         this.currentInstructionStep = 0;
-      }else if (this.basket.length > products.length){
+      } else if (this.basket.length > products.length) {
         this.currentInstructionStep = 1;
       }
       this.basket = products;
-      if (this.basket.length >= 3){
+      if (this.basket.length >= 3) {
         this.instructions.push("Gehen Sie zur Kasse");
         this.currentInstructionStep = 3;
       }
@@ -80,62 +92,71 @@ export class HicksLawComponent implements OnInit{
 
     this.updateMenuSubscription = this.menuService.getSubject().subscribe((updateMenu) => {
       if (updateMenu) {
-        this.fetchProductTypes("Home");
+        this.fetchProductTypes("Home", this.categoryLimit);
         this.currentRoute = "Home";
         this.currentInstructionStep = 2;
       }
     });
 
     this.currentRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
-    if (this.currentRoute != "Home"){
-      const parentRoute = localStorage.getItem("parentRoute")?? "";
+    if (this.currentRoute != "Home") {
+      const parentRoute = localStorage.getItem("parentRoute") ?? "";
       this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
         this.currentType = categories.find(type => type.name == this.currentRoute);
         this.parentCategory = this.currentType?.parentType ? this.currentType.parentType.name : "Home";
         this.parentRoute = this.routes[this.parentCategory];
       });
     }
-    this.fetchProductTypes(this.currentRoute);
-    this.cdRef.detectChanges();
 
+    this.cdRef.detectChanges();
   }
 
-  setCurrentRoute(route: string){
+  setCurrentRoute(route: string) {
     this.currentRoute = route;
-    this.fetchProductTypes(route);
-    if (this.parentCategory == route){
+    this.fetchProductTypes(route, this.categoryLimit);
+    if (this.parentCategory == route) {
       this.currentType = this.currentType?.parentType;
-    }else{
+    } else {
       this.currentType = this.productCategories.find(category => route);
     }
-    if (!this.currentType){
+    if (!this.currentType) {
       this.parentCategory = "Home";
       this.parentRoute = this.routes["Home"]
-    }else{
-      this.parentCategory = this.currentType.parentType? this.currentType.parentType.name: "Home";
+    } else {
+      this.parentCategory = this.currentType.parentType ? this.currentType.parentType.name : "Home";
       this.parentRoute = this.routes[this.parentCategory]
     }
     localStorage.setItem("parentRoute", this.parentCategory);
     this.updateInstructions(this.currentRoute);
 
   }
-  updateInstructions(currentRoute: string){
-    if (this.targetRoutes.indexOf(currentRoute) != -1){
+
+  updateInstructions(currentRoute: string) {
+    if (this.targetRoutes.indexOf(currentRoute) != -1) {
       this.currentInstructionStep = 1;
-      if (this.currentInstructionStep > 1){
+      if (this.currentInstructionStep > 1) {
         this.currentInstructionStep = 2;
-      };
+      }
+      ;
     }
   }
-  fetchProductTypes(currentRoute: string) {
+
+  fetchProductTypes(currentRoute: string, categoryLimit: number) {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
+      this.cutProductCategoryList();
       this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
     });
   }
 
+  cutProductCategoryList() {
+    this.productCategories = this.productCategories.filter((c, index) => {
+      return index < this.categoryLimit || c.name == "Lebensmittel";
+    });
+  }
+
   finishExperiment(productNumberInBasket: number) {
-    if (productNumberInBasket >= 3){
+    if (productNumberInBasket >= 3) {
       // finish experiment
     }
   }
@@ -143,7 +164,15 @@ export class HicksLawComponent implements OnInit{
   private fetchExperimentTest(experimentId: number) {
     this.experimentService.getExperimentTest(experimentId).subscribe((experiment) => {
       this.targetInstruction = experiment.goalInstruction;
-    })
+      this.productLimit = Number(JSON.parse(experiment.configuration)['productLimit']);
+      this.categoryLimit = Number(JSON.parse(experiment.configuration)['categoryLimit']);
+      this.fetchProductTypes(this.currentRoute, this.categoryLimit);
+      this.cdRef.detectChanges();
+    });
 
+  }
+
+  filterProduct($event: string) {
+    this.filterService.dispatchFilterText($event);
   }
 }

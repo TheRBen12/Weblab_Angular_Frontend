@@ -25,7 +25,6 @@ import {MatFabButton} from '@angular/material/button';
     ExperimentTestInstructionComponent,
     SideMenuComponent,
     BasketComponent,
-    NgIf,
     MatFabButton,
   ],
   templateUrl: './recall-recognition-part-one.component.html',
@@ -89,7 +88,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
       this.fetchProductTypes(this.currentRoute);
   }
   openBasket(){
-    debugger;
     this.basketIsHidden = !this.basketIsHidden;
   }
 

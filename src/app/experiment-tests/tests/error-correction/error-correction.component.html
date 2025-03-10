@@ -1,9 +1,12 @@
-<div class="d-flex flex-row">
+<div class="d-flex">
     <div class="col-3">
       <app-experiment-test-instruction [target]="targetInstruction" [currentInstructionStep]="currentInstructionStep"
                                        [instructions]="instructions"></app-experiment-test-instruction>
+      <div *ngIf="mailWasDeleted" class="mt-3 me-3 ms-3 ">
+        <input autofocus #input (input)="checkInput(input.value)"  class="form-control" placeholder="Wann wurde die gelöschte E-Mail erhalten?">
+      </div>
     </div>
-    <div class="col-2">
+    <div class="col-1">
       <app-email-menu></app-email-menu>
     </div>
     <div class="col">

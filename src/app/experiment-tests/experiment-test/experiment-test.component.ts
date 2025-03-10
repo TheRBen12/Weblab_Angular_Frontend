@@ -19,7 +19,8 @@ export class ExperimentTestComponent implements OnChanges {
   @Input() test: ExperimentTest = {
     position: 1, name: "", description: "",
     estimatedExecutionTime: 0, state: "", experiment: null,
-    id: 0, headDetailDescription: "", detailDescription: "", goalInstruction: ""
+    id: 0, headDetailDescription: "", detailDescription: "", goalInstruction: "",
+    configuration: {},
   }
   @Input() markedText: string = "";
   @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;

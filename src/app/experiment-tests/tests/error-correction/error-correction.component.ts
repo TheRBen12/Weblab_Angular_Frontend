@@ -1,29 +1,21 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
-import {BasketComponent} from '../../../basket/basket.component';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
-import {MatIcon} from '@angular/material/icon';
 import {NgIf} from '@angular/common';
-import {SearchBarComponent} from '../../../search-bar/search-bar.component';
-import {SideMenuComponent} from '../side-menu/side-menu.component';
 import {EmailMenuComponent} from './email-menu/email-menu.component';
 import {ExperimentService} from '../../../services/experiment.service';
-import {EmailIndexComponent} from './email-index/email-index.component';
+import {EmailService} from '../../../services/email.service';
+import {Email} from '../../../models/email';
 
 @Component({
   selector: 'app-error-correction',
   imports: [
     RouterOutlet,
-    BasketComponent,
     ExperimentTestInstructionComponent,
-    MatIcon,
-    NgIf,
-    SearchBarComponent,
-    SideMenuComponent,
     EmailMenuComponent,
-    EmailIndexComponent
+    NgIf,
   ],
   templateUrl: './error-correction.component.html',
   standalone: true,
@@ -32,14 +24,24 @@ import {EmailIndexComponent} from './email-index/email-index.component';
 export class ErrorCorrectionComponent implements OnInit {
   router: Router = inject(Router);
   experimentService = inject(ExperimentService);
+  emailService = inject(EmailService);
   emailToDelete: number = 0;
   instructions: string[] = [];
   currentInstructionStep = 0;
   targetInstruction: string = "";
+  mailWasDeleted = false;
+  deletedMail: Email|null = null;
   ngOnInit(): void {
+    this.emailService.getDeletedMailSubscripition().subscribe((email) => {
+      if (email){
+        this.deletedMail = email;
+        this.mailWasDeleted = true;
+        this.currentInstructionStep++;
+      }
+    });
 
     this.emailToDelete = Math.floor(Math.random() * 10) + 1;
-    this.instructions = ["Löschen Sie die " + this.emailToDelete + ". " + "E-Mail", "Schreiben Sie in das Eingabefeld, wann die gelöscjte E-Mail erhalten worden ist. " +
+    this.instructions = ["Löschen Sie die " + this.emailToDelete + ". " + "E-Mail", "Geben Sie in das Eingabefeld ein, wann die gelöschte E-Mail erhalten worden ist. " +
     "Tipp: Das Datum wann die E-Mail erhalten wurde befindet sich am rechten Rand der E-Mails"];
 
     const urlSegments = this.router.url.split("/");
@@ -50,6 +52,13 @@ export class ErrorCorrectionComponent implements OnInit {
 
   private fetchExperimentTest(experimentId: number) {
     this.experimentService.getExperimentTest(experimentId).subscribe((experimentTest) => this.targetInstruction = experimentTest.goalInstruction)
+
+  }
+
+  checkInput(value: string) {
+    if (this.deletedMail && this.deletedMail.date == value){
+      console.log("korrekt")
+    }
 
   }
 }

@@ -10,7 +10,6 @@ import {BusketProductComponent} from './busket-product/busket-product.component'
   selector: 'app-basket',
   imports: [
     NgForOf,
-    ProductComponent,
     MatIcon,
     NgIf,
     MatFabButton,

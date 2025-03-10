@@ -1,5 +1,5 @@
 import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProductService} from '../../../services/product.service';
 import {ProductComponent} from '../product/product.component';
 import {NgForOf} from '@angular/common';
@@ -21,6 +21,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
   productService = inject(ProductService);
   filterService = inject(FilterService);
   @Input() products: any[] = [];
+  filteredProducts: any[] = [];
+  router = inject(Router);
+
   filterSubscription: Subscription = new Subscription();
   @Input() category: string = "";
 
@@ -31,6 +34,18 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.fetchAllProducts();
+    const urlSegments = this.router.url.split("/");
+    let isHicksLawExperiment = false;
+    if (urlSegments.indexOf("hicks-law") != -1){
+      isHicksLawExperiment = true;
+    }
+    this.filterService.getSubject().subscribe((filterText) => {
+      if (isHicksLawExperiment && filterText == ""){
+        this.filteredProducts = this.products;
+      }else{
+        this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
+      }
+    })
 
     if (this.category != 'all') {
       this.route.url.subscribe((url) => {
@@ -68,8 +83,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
   }
 
   fetchProductsByCategory() {
-    this.productService.getProductsByCategory(this.category).subscribe((result) => {
-      this.products = result;
+    this.productService.getProductsByCategory(this.category).subscribe((products) => {
+      this.products = products;
+      this.filteredProducts = this.products;
     }, error => {
       this.products = [];
     });

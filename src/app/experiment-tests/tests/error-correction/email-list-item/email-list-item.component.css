@@ -1,0 +1,13 @@
+.capitalLetterCircle{
+  border-radius: 50%;
+  background-color: #DDD1FD;
+  min-width: 50px;
+  max-height: 50px;
+}
+span{
+  color: #6C3AE8;
+}
+
+.email-body{
+  color: black;
+}

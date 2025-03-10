@@ -65,8 +65,8 @@ export class FilterService {
         spec = spec.value.replaceAll(" ", "").toLowerCase();
         textInputs = textInputs.map((text) => {
           return text.replaceAll(" ", "").toLowerCase();
-        } )
-        if (textInputs.indexOf(spec) != -1){
+        })
+        if (textInputs.indexOf(spec) != -1) {
           textInputs = textInputs.filter(text => text != spec);
         }
       });
@@ -97,6 +97,7 @@ export class FilterService {
         });
       })
     });
+
   }
 
   filterProducts(text: string, products: any[]): any[] {
@@ -104,39 +105,42 @@ export class FilterService {
     if (!text || text == "") {
       return filteredProducts;
     }
-    const textInputs = text.split(" ");
-    const nameProperties: string[] = [];
+    let textInputs = text.split(" ");
+    let nameProperties: string[] = [];
 
     let filteredProductsByProperties = this.filterByAllProperty(products, textInputs);
-    if (filteredProductsByProperties.length > 0){
+    if (filteredProductsByProperties.length > 0) {
       filteredProducts = this.filterByAllSpecification(filteredProductsByProperties, textInputs);
-      if (filteredProducts.length > 0){
+      if (filteredProducts.length > 0) {
         return filteredProducts;
-      }else{
+      } else {
         filteredProducts = this.filterBySpecification(filteredProductsByProperties, textInputs);
-        if (filteredProducts.length > 0){
+        if (filteredProducts.length > 0) {
           return filteredProducts
-        }else{
+        } else {
           return filteredProductsByProperties;
         }
       }
     }
 
-    if (filteredProductsByProperties.length == 0){
+    if (filteredProductsByProperties.length == 0) {
       filteredProductsByProperties = this.filterBySomeProperty(products, textInputs);
 
     }
 
+    let properties : any[] = []
     products.forEach((product) => {
       const productPropertyValues = Object.values(product);
       const productPropertyKeyNames = Object.keys(product);
-
       textInputs.forEach((text) => {
         productPropertyValues.filter((value, index) => {
-          if (productPropertyKeyNames[index] != "specifications") {
+          if (productPropertyKeyNames[index] != "specifications" && productPropertyKeyNames[index] != "id") {
             const toAdd = String(value).replaceAll(" ", "").toLowerCase().includes(text.replaceAll(" ", "").toLowerCase());
-            if (productPropertyKeyNames[index] == "name" && toAdd && text.length > 1){
+            if (productPropertyKeyNames[index] == "name" && toAdd && text.length > 1) {
               nameProperties.push(text)
+            }
+            if (toAdd){
+              properties.push(text);
             }
             return toAdd;
           }
@@ -146,36 +150,42 @@ export class FilterService {
     });
 
 
-    if (nameProperties.length > 0){
+    const idx = textInputs.indexOf("GB");
+    if (idx != -1) {
+      const number = parseInt(textInputs.at(idx - 1) || "");
+      nameProperties = nameProperties.filter(name => name != String(number))
+    }
+    if (nameProperties.length > 0) {
       let filteredProductsByName = this.filterByName(filteredProductsByProperties, nameProperties);
-      if (filteredProductsByName.length > 0){
+      if (filteredProductsByName.length > 0) {
         filteredProducts = filteredProductsByName;
-         if (this.filterBySpecification(filteredProductsByName, textInputs).length > 0){
-           filteredProducts = this.filterBySpecification(filteredProductsByName, textInputs);
-           return filteredProducts;
-        }else{
-           return filteredProductsByName;
-         }
+        if (this.filterBySpecification(filteredProductsByName, textInputs).length > 0) {
+          filteredProducts = this.filterBySpecification(filteredProductsByName, textInputs);
+          return filteredProducts;
+        } else {
+          return filteredProductsByName;
+        }
       }
     }
+    textInputs = textInputs.filter(text => properties.indexOf(text) == -1);
 
     let filteredProductsBySpecification = this.filterByAllSpecification(filteredProductsByProperties, textInputs);
 
-    if (filteredProductsBySpecification.length > 0){
+    if (filteredProductsBySpecification.length > 0) {
       filteredProducts = filteredProductsBySpecification;
-    }else{
+    } else {
       filteredProductsBySpecification = this.filterByAllSpecification(products, textInputs);
-      if (filteredProductsBySpecification.length > 0){
+      if (filteredProductsBySpecification.length > 0) {
         filteredProducts = filteredProductsBySpecification;
-      }else{
+      } else {
         filteredProductsBySpecification = this.filterBySpecification(filteredProductsByProperties, textInputs);
-        if (filteredProductsBySpecification.length > 0){
+        if (filteredProductsBySpecification.length > 0) {
           filteredProducts = filteredProductsBySpecification;
-        }else{
+        } else {
           filteredProductsBySpecification = this.filterBySpecification(products, textInputs);
-          if (filteredProductsBySpecification.length > 0){
+          if (filteredProductsBySpecification.length > 0) {
             filteredProducts = filteredProductsBySpecification;
-          }else{
+          } else {
             filteredProducts = filteredProductsByProperties;
           }
         }

@@ -1,13 +1,30 @@
-<div class="d-flex flex-row container">
+
   <div class="row">
     <div class="col">
-      <ul class="list-group">
-        <li class="list-group-item">E-Mail</li>
+      <ul class="list-group scrollable-list">
+        <li class="list-group-item">
+          <h5>{{title}}</h5>
+        </li>
+
+        <div class="p-3" *ngIf="fetchedMails.length == 0">
+          <h5>Keine Elemente vorhanden</h5>
+        </div>
+        <a routerLink="./email/{{email.id}}" *ngFor="let email of fetchedMails" class="list-group-item list-group-item-action">
+          <app-email-list-item [isDeleted]="isDeleted()" (deleteEmailEventEmitter)="deleteEmail($event)"  [email] = email></app-email-list-item>
+        </a>
       </ul>
     </div>
-    <div class="col shadow">
+    <ng-template #infoMessageSelectEmail>
+
+      <div class="col text-center mt-3">
+        <p class="fw-bold">Wählen Sie ein zu lesendes Element aus</p>
+        <p>Sie haben noch kein Element zum lesen ausgewählt</p>
+      </div>
+
+    </ng-template>
+    <div *ngIf="selectedEmail; else infoMessageSelectEmail" class="col shadow">
       <router-outlet></router-outlet>
     </div>
   </div>
-</div>
+
 

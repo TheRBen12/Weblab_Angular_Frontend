@@ -5,6 +5,8 @@ import {ProductIndexComponent} from '../product-index/product-index.component';
 import {ProductDetailComponent} from '../product-detail/product-detail.component';
 import {ShopIndexComponent} from '../shop-index/shop-index.component';
 import {HomeComponent} from '../home/home.component';
+import {redirectGuardGuard} from '../../../guards/redirect-guard.guard';
+
 
 
 const routes: Routes = [
@@ -18,7 +20,8 @@ const routes: Routes = [
       {path: 'peripherie', component: ProductIndexComponent, title: "Peripherie"},
       {path: 'keypad', component: ProductIndexComponent, title: "Tastaturen"},
       {path: 'lebensmittel', component: ProductIndexComponent, title: "Lebensmittel"},
-      {path: 'pc', component: ProductIndexComponent, title: "PC"}
+      {path: 'pc', component: ProductIndexComponent, title: "PC"},
+      {path: '**', canActivate: [redirectGuardGuard], component: ProductIndexComponent }
 
     ]
   },

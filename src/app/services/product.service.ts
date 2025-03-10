@@ -9,7 +9,7 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class ProductService {
   http = inject(HttpClient);
-  foodCategories: string[] = ["Teigwaren", "Penne", "Spaghetti", "Spiral-Nudeln", "Tomaten", "Brot", "Zwiebeln"];
+  foodCategories: string[] = ["Teigwaren", "Penne", "Spaghetti", "Spiral-Nudeln", "Tomaten", "Brot", "Zwiebeln", "Schokolade"];
   basketSubscription: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
 
@@ -52,7 +52,6 @@ export class ProductService {
     }else{
       this.toastr.info("Sie können jedes Produkt nur einmal in den Warenkorb legen");
     }
-
     localStorage.setItem("cart", JSON.stringify(cart));
     this.basketSubscription.next(cart);
   }

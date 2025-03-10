@@ -17,6 +17,7 @@ export class SearchBarComponent {
   @Output() filteredElementsEvent = new EventEmitter<any[]>;
   @Input() placeholder: string = "";
   @Input() searchOnEnter: boolean = false;
+  @Input() disabled: boolean = true;
 
 
   filterResults(text: string) {

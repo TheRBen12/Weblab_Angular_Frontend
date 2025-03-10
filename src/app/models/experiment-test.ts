@@ -11,4 +11,5 @@ export interface ExperimentTest {
   detailDescription: string;
   headDetailDescription: string;
   goalInstruction: string;
+  configuration: any,
 }
