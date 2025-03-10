@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {NgForOf, NgIf} from '@angular/common';
-import {EmailListItemComponent} from '../email-list-item/email-list-item.component';
+import {EmailListItemComponent} from '../../email-list-item/email-list-item.component';
 import {Email} from '../../../../models/email';
 import {EmailService} from '../../../../services/email.service';
 import {LoginService} from '../../../../services/login.service';
@@ -26,14 +26,11 @@ export class EmailIndexComponent implements OnInit {
   router = inject(Router);
   emailService = inject(EmailService);
   userService: LoginService = inject(LoginService);
-  mails: Email[] = [];
   fetchedMails: Email[] = [];
   selectedEmail: Email | null = null;
   snackBar = inject(MatSnackBar);
   stack: Email[] = [];
   lastDeletedMailIndex: number = 0;
-  private snackBarRef: any;
-  mailWasDeleted: boolean = false;
 
   constructor() {
     this.title = this.route.snapshot.title;

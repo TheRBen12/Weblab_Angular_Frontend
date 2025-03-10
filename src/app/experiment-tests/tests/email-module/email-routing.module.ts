@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {EmailIndexComponent} from '../email-index/email-index.component';
-import {EmailDetailComponent} from '../email-detail/email-detail.component';
+import {EmailIndexComponent} from '../error-correction/email-index/email-index.component';
+import {EmailDetailComponent} from '../error-correction/email-detail/email-detail.component';
 
 
 const routes: Routes = [

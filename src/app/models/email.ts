@@ -1,5 +1,5 @@
 export interface Email {
-  deletedAt: number;
+  deletedAt?: number;
   id: number;
   sender: string,
   date: string,

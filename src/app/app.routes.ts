@@ -24,6 +24,7 @@ import {
 } from './experiment-tests/tests/recall-recognition/recall-recognition-part-three/recall-recognition-part-three.component';
 import {HicksLawComponent} from './experiment-tests/tests/hicks-law/hicks-law.component';
 import {ErrorCorrectionComponent} from './experiment-tests/tests/error-correction/error-correction.component';
+import {RestorffEffectComponent} from './experiment-tests/tests/restorff-effect/restorff-effect.component';
 
 export const routes: Routes = [
   {
@@ -76,9 +77,12 @@ export const routes: Routes = [
 
               {
                 path: '',
-                loadChildren: () => import('./experiment-tests/tests/error-correction/email-module/email.module').then(m => m.EmailModule)
+                loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)
               }]
-          }
+          },
+          {path: 'restorff-effect/:testId', component: RestorffEffectComponent, children: [
+              {path: '',  loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)}
+            ]}
 
         ]
 

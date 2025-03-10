@@ -5,23 +5,27 @@ import {MatIcon} from '@angular/material/icon';
 import {NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-email-list-item',
+  selector: 'app-restorff-email-list-item',
   imports: [
     MatFabButton,
     MatIcon,
     NgIf
   ],
-  templateUrl: './email-list-item.component.html',
+  templateUrl: './restorff-email-list-item.component.html',
   standalone: true,
-  styleUrl: './email-list-item.component.css'
+  styleUrl: './restorff-email-list-item.component.css'
 })
-export class EmailListItemComponent implements OnInit{
+export class RestorffEmailListItemComponent implements OnInit{
+
   @Input() email: Email|undefined
   @Output() deleteEmailEventEmitter: EventEmitter<Email> = new EventEmitter<Email>();
   capitalLetter = "";
   @Input() isDeleted!: boolean;
+  @Input() coloredDeleteButton: boolean = false;
+
 
   ngOnInit(): void {
+    console.log(this.coloredDeleteButton);
     this.capitalLetter = this.email?.sender[0] ?? "";
   }
   delete(){

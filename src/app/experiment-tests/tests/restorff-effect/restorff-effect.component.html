@@ -1,0 +1,27 @@
+<div class="d-flex">
+  <div class="col-3">
+    <app-experiment-test-instruction [target]="experimentTest?.goalInstruction?? ''"
+                                     [currentInstructionStep]="currentInstructionStep"
+                                     [instructions]="instructions"></app-experiment-test-instruction>
+  </div>
+  <div class="col-1">
+    <app-email-menu></app-email-menu>
+  </div>
+  <div class="row">
+    <div class="col">
+      <ul class="list-group scrollable-list">
+        <li class="list-group-item">
+          <h5>Posteingang</h5>
+        </li>
+
+        <a [ngClass]="{'email-with-border' : i==lastAddedEmailIndex && configuration['coloredEmailBorder'] == true && mails.length > 3}"
+           *ngFor="let email of mails.slice(0, mails.length); index as i" class="list-group-item list-group-item-action">
+          <app-restorff-email-list-item [coloredDeleteButton] = "configuration['coloredDeleteButton']" (deleteEmailEventEmitter)="deleteEmail($event)"
+                                        [email]=email></app-restorff-email-list-item>
+        </a>
+      </ul>
+    </div>
+
+  </div>
+
+</div>

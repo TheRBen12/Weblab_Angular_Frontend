@@ -4,7 +4,7 @@ import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
 import {NgIf} from '@angular/common';
-import {EmailMenuComponent} from './email-menu/email-menu.component';
+import {EmailMenuComponent} from '../email-menu/email-menu.component';
 import {ExperimentService} from '../../../services/experiment.service';
 import {EmailService} from '../../../services/email.service';
 import {Email} from '../../../models/email';

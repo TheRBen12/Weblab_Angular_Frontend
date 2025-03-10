@@ -1,0 +1,23 @@
+
+
+.remove-icon-container{
+  background-color: #F5F5F5;
+  min-width: 40px;
+}
+mat-icon{
+  color:  #8F8E8E;
+  font-size: 25px;
+}
+
+.capitalLetterCircle{
+  border-radius: 50%;
+  background-color: #DDD1FD;
+  min-width: 50px;
+  max-height: 50px;
+}
+span{
+  color: #6C3AE8;
+}
+.email-text{
+  color: #8F8E8E;;
+}

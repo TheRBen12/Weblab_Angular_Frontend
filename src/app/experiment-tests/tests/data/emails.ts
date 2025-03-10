@@ -1,4 +1,4 @@
-import {Email} from '../../../../models/email';
+import {Email} from '../../../models/email';
 
 export const deletedEmails: Email[] = [];
 export const emails: Email[] = [
