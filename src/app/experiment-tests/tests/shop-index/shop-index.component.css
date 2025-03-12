@@ -11,5 +11,9 @@
 }
 .shop-header-img{
   width: 650px;
-  max-height: 400px;
+  max-height: 550px;
+}
+
+.daily-product-container{
+  max-height: 600px;
 }

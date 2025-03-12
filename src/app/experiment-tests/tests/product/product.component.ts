@@ -1,8 +1,7 @@
 import {Component, ElementRef, inject, Input, OnChanges, QueryList, SimpleChanges, ViewChildren} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ExperimentService} from '../../../services/experiment.service';
-import {RouterService} from '../../../services/router.service';
+
 import {ProductService} from '../../../services/product.service';
 
 @Component({
@@ -33,7 +32,7 @@ export class ProductComponent {
   navigate() {
     const l = this.router.url.split("/").length;
     const urlSegments = this.router.url.split("/");
-    const parentRoute = this.activatedRoute.parent;
+    const parentRoute = this.activatedRoute.parent?.parent;
     if ((urlSegments[l - 1] == "notebook" && this.product.type == "Notebook")) {
       this.activatedRoute.url.subscribe(url => {
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
@@ -53,7 +52,16 @@ export class ProductComponent {
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
       }
     }
+
+    else if (urlSegments[l-1] == "kaffeemaschine" && urlSegments[l-3] == "mental-model"){
+      if (this.product.type == "Kaffeemaschine"){
+        this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
+      }
+    }
   }
+
+
+
 
 
 }

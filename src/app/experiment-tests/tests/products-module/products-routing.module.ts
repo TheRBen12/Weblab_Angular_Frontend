@@ -21,7 +21,9 @@ const routes: Routes = [
       {path: 'keypad', component: ProductIndexComponent, title: "Tastaturen"},
       {path: 'lebensmittel', component: ProductIndexComponent, title: "Lebensmittel"},
       {path: 'pc', component: ProductIndexComponent, title: "PC"},
-      {path: '**', canActivate: [redirectGuardGuard], component: ProductIndexComponent }
+      {path: 'haushalt', component: ProductIndexComponent, title: "Haushalt"},
+      {path: 'kaffeemaschine', component: ProductIndexComponent, title: "Kaffemaschinen"},
+
 
     ]
   },

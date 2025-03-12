@@ -9,4 +9,5 @@ export const routerLinks: {[key: string]: string } = {
   "Peripherie": "peripherie",
   "Küche": "kitchen",
   "Lebensmittel": "lebensmittel",
+  "Haushalt": "haushalt"
 }
