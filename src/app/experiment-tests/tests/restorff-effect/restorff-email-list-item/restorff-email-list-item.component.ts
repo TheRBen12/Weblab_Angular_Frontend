@@ -1,13 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Email} from '../../../../models/email';
-import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-restorff-email-list-item',
   imports: [
-    MatFabButton,
     MatIcon,
     NgIf
   ],

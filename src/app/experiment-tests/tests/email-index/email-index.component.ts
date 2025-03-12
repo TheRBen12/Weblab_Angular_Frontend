@@ -1,11 +1,13 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
-import {NgForOf, NgIf} from '@angular/common';
-import {EmailListItemComponent} from '../../email-list-item/email-list-item.component';
-import {Email} from '../../../../models/email';
-import {EmailService} from '../../../../services/email.service';
-import {LoginService} from '../../../../services/login.service';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {EmailListItemComponent} from '../email-list-item/email-list-item.component';
+import {Email} from '../../../models/email';
+import {EmailService} from '../../../services/email.service';
+import {LoginService} from '../../../services/login.service';
 import {MatSnackBar, MatSnackBarRef, TextOnlySnackBar} from '@angular/material/snack-bar';
+import {SnackbarComponent} from '../../../snackbar/snackbar.component';
+import {timeout} from 'rxjs';
 
 @Component({
   selector: 'app-email-index',
@@ -14,7 +16,9 @@ import {MatSnackBar, MatSnackBarRef, TextOnlySnackBar} from '@angular/material/s
     NgForOf,
     EmailListItemComponent,
     RouterLink,
-    NgIf
+    NgIf,
+    SnackbarComponent,
+    NgClass
   ],
   templateUrl: './email-index.component.html',
   standalone: true,
@@ -31,18 +35,24 @@ export class EmailIndexComponent implements OnInit {
   snackBar = inject(MatSnackBar);
   stack: Email[] = [];
   lastDeletedMailIndex: number = 0;
+  emailsToDisable: Email[] = [];
+
+  @ViewChild('container', {static: true}) container!: ElementRef;
+  snackBarNumber: number = 0;
+  oldSnackBarNumber: number = 0;
+
+
 
   constructor() {
     this.title = this.route.snapshot.title;
   }
 
   ngOnInit(): void {
-
     this.snackBar._openedSnackBarRef?.afterDismissed().subscribe(event => this.stack = [])
     const urlSegments = this.router.url.split("/");
-    if(urlSegments[urlSegments.length - 1] == "deletedItems"){
+    if (urlSegments[urlSegments.length - 1] == "deletedItems") {
       this.fetchDeletedEmails();
-    }else{
+    } else {
       this.fetchMails();
     }
 
@@ -60,7 +70,13 @@ export class EmailIndexComponent implements OnInit {
       }
       return mail.id != deletedMail.id
     });
-    this.openSnackBar("Gelöscht", "Rückgängig");
+    if (this.router.url.split("/").indexOf("fitts-law") != -1) {
+      this.openRandomSnackbar()
+      this.disableMail(deletedMail);
+    } else {
+      this.openSnackBar("Gelöscht", "Rückgängig");
+    }
+
     // visualize input field
 
   }
@@ -74,7 +90,23 @@ export class EmailIndexComponent implements OnInit {
   fetchMails() {
     this.emailService.getMails().subscribe((mails) => {
       this.fetchedMails = mails;
+      if (this.router.url.split("/").indexOf("fitts-law") != -1) {
+        this.fetchedMails = this.fetchedMails.slice(0, 9);
+      }
     });
+  }
+
+  openRandomSnackbar() {
+    if (this.oldSnackBarNumber > 0){
+      this.snackBarNumber = this.oldSnackBarNumber+=1;
+    }else{
+      this.snackBarNumber++;
+    }
+
+    this.oldSnackBarNumber = this.snackBarNumber;
+    const timeout = setTimeout(() => {
+      this.snackBarNumber = 0;
+    }, 2000)
   }
 
 
@@ -95,8 +127,16 @@ export class EmailIndexComponent implements OnInit {
     })
   }
 
-  private undoDeletingMail() {
+   undoDeletingMail() {
     this.fetchedMails.splice(this.lastDeletedMailIndex, 0, this.stack[this.stack.length - 1]);
     this.stack.pop();
+  }
+
+  private disableMail(deletedMail: Email) {
+    this.emailsToDisable.push(deletedMail);
+  }
+  disable(email: Email){
+    return this.emailsToDisable.indexOf(email) != -1;
+
   }
 }

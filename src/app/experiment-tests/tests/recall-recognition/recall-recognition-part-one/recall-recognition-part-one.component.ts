@@ -13,7 +13,6 @@ import {Subscription} from 'rxjs';
 import {SideMenuService} from '../../../../services/side-menu.service';
 import {RouterService} from '../../../../services/router.service';
 import {BasketComponent} from '../../../../basket/basket.component';
-import {NgIf} from '@angular/common';
 import {MatFabButton} from '@angular/material/button';
 
 @Component({

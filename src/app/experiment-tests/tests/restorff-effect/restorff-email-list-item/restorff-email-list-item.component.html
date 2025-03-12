@@ -35,19 +35,20 @@
         <mat-icon >send</mat-icon>
       </div>
     </div>
-    <div *ngIf="!coloredDeleteButton; else coloredBtn" (click)="delete()" class="me-1 d-flex align-items-center remove-icon-container h-100 justify-content-center">
-      <div>
+
+    <div (click)="delete()" class="me-1 d-flex align-items-center remove-icon-container h-100 justify-content-center">
+      <div *ngIf="!coloredDeleteButton" >
         <mat-icon >delete</mat-icon>
       </div>
+      <div *ngIf="coloredDeleteButton">
+        <button class="btn btn-primary">
+          <i class="fa fa-trash" ></i>
+        </button>
+      </div>
     </div>
-    <ng-template #coloredBtn>
-      <button mat-fab (click)="delete()" class="me-1 d-flex align-items-center remove-icon-container h-100 justify-content-center">
-          <mat-icon >delete</mat-icon>
-      </button>
-    </ng-template>
     <div  class="d-flex align-items-center remove-icon-container h-100 justify-content-center">
       <div>
-        <mat-icon >archive</mat-icon>
+        <mat-icon >edit</mat-icon>
       </div>
     </div>
 

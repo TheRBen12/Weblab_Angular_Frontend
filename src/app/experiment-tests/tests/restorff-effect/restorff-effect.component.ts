@@ -4,14 +4,12 @@ import {EmailMenuComponent} from '../email-menu/email-menu.component';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {NgClass, NgForOf} from '@angular/common';
+import {Router} from '@angular/router';
 import {ExperimentTest} from '../../../models/experiment-test';
 import {EmailService} from '../../../services/email.service';
 import {ExperimentService} from '../../../services/experiment.service';
-import {EmailListItemComponent} from '../email-list-item/email-list-item.component';
 import {RestorffEmailListItemComponent} from './restorff-email-list-item/restorff-email-list-item.component';
-import {TimeInterval} from 'rxjs/internal/operators/timeInterval';
 
 const emails: Email[] = [
   {
@@ -76,11 +74,7 @@ const emails: Email[] = [
   imports: [
     EmailMenuComponent,
     ExperimentTestInstructionComponent,
-    NgIf,
-    RouterOutlet,
-    EmailListItemComponent,
     NgForOf,
-    RouterLink,
     RestorffEmailListItemComponent,
     NgClass
   ],
@@ -153,7 +147,6 @@ export class RestorffEffectComponent implements OnInit {
   }
 
   deleteEmail($event: Email) {
-    debugger;
     if (this.emailData.find((mail) => mail.id == $event.id)){
       this.mails = this.mails.filter(mail => mail.id != $event.id);
     }

@@ -1,0 +1,14 @@
+<div [ngClass]="{'random-snackbar-lg' : largeBtn }" class="random-snackbar d-flex align-items-center">
+  <div class="container">
+    <div class="d-flex flex-row ">
+      <div class="mt-2 p-1 d-flex justify-content-start align-items-center">
+        <span class="text-center">Gelöscht!</span>
+      </div>
+      <div class=" mt-2 p-1 d-flex justify-content-end align-items-center w-100">
+        <button (click)="emitUndo()"  [ngClass]="largeBtn ? 'btn-lg btn btn-secondary snackbar-action-container-lg' : 'btn-secondary btn snackbar-action-container'" class="">
+          <span class="p-2" >Rückgängig</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

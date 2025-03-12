@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {EmailIndexComponent} from '../error-correction/email-index/email-index.component';
+import {EmailIndexComponent} from '../email-index/email-index.component';
 import {EmailDetailComponent} from '../error-correction/email-detail/email-detail.component';
 
 

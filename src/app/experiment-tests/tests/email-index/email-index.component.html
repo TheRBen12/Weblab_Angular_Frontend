@@ -1,0 +1,74 @@
+
+  <div class="row">
+    <div class="col">
+      <ul class="list-group scrollable-list">
+        <li class="list-group-item">
+          <h5>{{title}}</h5>
+        </li>
+
+        <div class="p-3" *ngIf="fetchedMails.length == 0">
+          <h5>Keine Elemente vorhanden</h5>
+        </div>
+        <a [ngClass]="{'disabled': disable(email)}" routerLink="./email/{{email.id}}" *ngFor="let email of fetchedMails" class="list-group-item list-group-item-action">
+          <app-email-list-item [isDeleted]="isDeleted()" (deleteEmailEventEmitter)="deleteEmail($event)"  [email] = email></app-email-list-item>
+        </a>
+      </ul>
+    </div>
+
+    <div #container class="rand-container col text-center mt-3 h-100 w-100">
+
+
+    </div>
+
+
+    <div *ngIf="selectedEmail" class="col shadow">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+
+  <div *ngIf="snackBarNumber == 3" class="snackbar-3 fade-in">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()" ></app-snackbar>
+  </div>
+
+  <div *ngIf="snackBarNumber==4" class="snackbar-4 fade-in ">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()" [largeBtn]="true"></app-snackbar>
+  </div>
+
+  <div *ngIf="snackBarNumber == 2" class="snackbar-2 fade-in">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()"></app-snackbar>
+  </div>
+
+
+  <div *ngIf="snackBarNumber==1" class="snackbar-1 fade-in">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()" [largeBtn] = true></app-snackbar>
+  </div>
+
+
+
+  <div *ngIf="snackBarNumber == 5" class="snackbar-5 fade-in">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()"></app-snackbar>
+  </div>
+
+  <div  *ngIf="snackBarNumber == 6" class="snackbar-6">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()" ></app-snackbar>
+  </div>
+
+
+  <div style="height: 450px" *ngIf="snackBarNumber==7" class="snackbar-7 ">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()" [largeBtn]=" true"></app-snackbar>
+  </div>
+
+
+
+  <div  *ngIf="snackBarNumber == 8" class="snackbar-8">
+    <app-snackbar (undoEventEmitter)="undoDeletingMail()" ></app-snackbar>
+  </div>
+
+  <div  *ngIf="snackBarNumber == 9" class="snackbar-9">
+    <app-snackbar [largeBtn]="true" (undoEventEmitter)="undoDeletingMail()" ></app-snackbar>
+  </div>
+
+
+
+

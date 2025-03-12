@@ -1,0 +1,28 @@
+.random-snackbar {
+  background-color: #5C5C5C;
+  color: white;
+  min-height: 55px;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+p{
+  color: white ;
+}
+
+.snackbar-action-container:hover{
+  display:block;
+  border-radius: 40%;
+  background-color: #9A9A9A;
+}
+
+
+.random-snackbar-lg {
+  background-color: #5C5C5C;
+  color: white;
+  min-height: 80px;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+
+}

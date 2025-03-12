@@ -1,6 +1,0 @@
-.scrollable-list {
-  max-height: 100vh; /* Maximale Höhe setzen */
-  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
-  border: 1px solid #ccc; /* Optional: Rahmen zur besseren Sichtbarkeit */
-  padding: 10px;
-}

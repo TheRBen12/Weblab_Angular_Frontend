@@ -1,3 +1,5 @@
 .instruction-container{
   min-height: 100vh;
+  border-right: solid 2px black;
+  border-right: solid;
 }

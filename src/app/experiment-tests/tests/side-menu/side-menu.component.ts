@@ -16,7 +16,7 @@ import {ProductType} from '../../../models/product-category';
   styleUrl: './side-menu.component.css'
 })
 export class SideMenuComponent {
-  @Input() currentRoute: string = "";
+  @Input() currentRoute: string|null = "";
   @Input() parentRoute: string|null = null;
   @Input() parentCategory: string|null = null;
 

@@ -10,7 +10,10 @@
       <div class="row shadow">
         <div class="col">
           <div class="container mt-3">
-            <div class="d-flex">
+            <div class="d-flex align-items-center">
+              <div class="col">
+                <h2 class="me-4">WeblabShop</h2>
+              </div>
               <div class="col-7 flex-fill">
                 <app-auto-complete [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
                                    [placeholder]="'Produkte suchen'">

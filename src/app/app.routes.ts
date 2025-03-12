@@ -25,6 +25,10 @@ import {
 import {HicksLawComponent} from './experiment-tests/tests/hicks-law/hicks-law.component';
 import {ErrorCorrectionComponent} from './experiment-tests/tests/error-correction/error-correction.component';
 import {RestorffEffectComponent} from './experiment-tests/tests/restorff-effect/restorff-effect.component';
+import {FittsLawComponent} from './experiment-tests/tests/fitts-law/fitts-law.component';
+import {
+  MentalModelLeftSideNavigationComponent
+} from './experiment-tests/tests/mental-model-left-side-navigation/mental-model-left-side-navigation.component';
 
 export const routes: Routes = [
   {
@@ -80,9 +84,31 @@ export const routes: Routes = [
                 loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)
               }]
           },
-          {path: 'restorff-effect/:testId', component: RestorffEffectComponent, children: [
-              {path: '',  loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)}
-            ]}
+          {
+            path: 'restorff-effect/:testId', component: RestorffEffectComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)
+              }
+            ]
+          },
+          {
+            path: 'fitts-law/:testId', component: FittsLawComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)
+              }
+            ]
+          },
+
+          {
+            path: 'mental-model/12', component: MentalModelLeftSideNavigationComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
 
         ]
 

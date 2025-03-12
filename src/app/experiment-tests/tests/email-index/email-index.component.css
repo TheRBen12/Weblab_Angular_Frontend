@@ -1,0 +1,114 @@
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  border: 1px solid #ccc; /* Optional: Rahmen zur besseren Sichtbarkeit */
+  padding: 10px;
+}
+.rand-container{
+  width: 100%;
+  height: 100%;
+}
+.inner{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+
+.snackbar{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.snackbar-4{
+  width: 300px;
+  position: fixed;
+  right: 0;
+  top: 600px
+}
+
+.snackbar-1{
+  width: 300px;
+  position: fixed;
+  left: 0;
+  top: 350px
+}
+
+.snackbar-2{
+  width: 300px;
+  position: fixed;
+  right: 0;
+  top: 350px
+}
+
+.snackbar-3{
+  position: fixed;
+  bottom: 0px;
+  right: 200px;
+  width:  300px;
+}
+
+.snackbar-5{
+  position: fixed;
+  top: 150px;
+  right: 100px;
+  width:  300px;
+}
+
+.snackbar-6{
+  position: fixed;
+  top: 400px;
+  right: 200px;
+  width:  300px;
+  height: 300px;
+}
+
+
+.snackbar-7{
+  position: fixed;
+  top: 600px;
+  left: 170px;
+  width:  300px;
+}
+
+
+.snackbar-8{
+  position: fixed;
+  top: 750px;
+  left: 50px;
+  width:  350px;
+}
+
+
+
+.snackbar-9{
+  position: fixed;
+  top: 650px;
+  left: 0;
+  width:  350px;
+}
+
+
+.show {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.fade-in {
+  transition: opacity 3s;
+  opacity: 1;
+}
+
+
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    background-color: #E0E0E0;
+  }
+
+
+
+
+
