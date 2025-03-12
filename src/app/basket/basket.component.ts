@@ -1,7 +1,6 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {ProductService} from '../services/product.service';
 import {NgForOf, NgIf} from '@angular/common';
-import {ProductComponent} from '../experiment-tests/tests/product/product.component';
 import {MatIcon} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
 import {BusketProductComponent} from './busket-product/busket-product.component';
@@ -25,8 +24,10 @@ export class BasketComponent implements OnInit{
   @Input() basket: any[] = [];
   @Input() isHidden = true;
   @Output() checkoutEventEmitter: EventEmitter<number> = new EventEmitter<number>();
+  @Output() hidenEventEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   hideBasket(){
     this.isHidden = !this.isHidden;
+    this.hidenEventEmitter.emit(this.isHidden);
   }
 
   ngOnInit(): void {

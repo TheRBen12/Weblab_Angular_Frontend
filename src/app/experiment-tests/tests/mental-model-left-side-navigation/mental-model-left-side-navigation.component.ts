@@ -14,6 +14,7 @@ import {RouterService} from '../../../services/router.service';
 import {routerLinks} from '../routes';
 import {AutoCompleteComponent} from '../../../auto-complete/auto-complete.component';
 import {FilterService} from '../../../services/filter.service';
+import {hide} from '@popperjs/core';
 
 
 @Component({
@@ -58,7 +59,8 @@ export class MentalModelLeftSideNavigationComponent implements OnInit{
     this.fetchProductTypes(this.currentRoute);
   }
   openBasket(){
-
+    this.basketIsHidden = !this.basketIsHidden;
+    console.log(this.basketIsHidden);
   }
 
   finishExperiment($event: number) {
@@ -107,4 +109,10 @@ export class MentalModelLeftSideNavigationComponent implements OnInit{
       this.categoryLinks = this.routerService.buildValueKeyPairForCategoryLinks(this.productCategories);
     });
   }
+
+  hideBasket($event: boolean) {
+    this.basketIsHidden = $event;
+  }
+
+  protected readonly hide = hide;
 }

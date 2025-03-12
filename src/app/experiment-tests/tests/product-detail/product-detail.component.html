@@ -5,13 +5,14 @@
         <h1 class="fw-bold p-2">{{ product?.trademark }}</h1>
         <h1 class="fw-light p-2">{{ product?.name }}</h1>
       </div>
-    </div>
-    <div *ngIf="specifications.length > 0">
+      <div *ngIf="specifications.length > 0">
       <span *ngFor="let specification of specifications; index as i" class="me-1">
         <span *ngIf="i < 3 && i < specifications.length">{{ specification.value }} </span> <span
         *ngIf="i < 2 && i < specifications.length-1">,</span>
       </span>
+      </div>
     </div>
+
     <div>
       <p class="fw-bold">{{ product?.price }}-.</p>
     </div>

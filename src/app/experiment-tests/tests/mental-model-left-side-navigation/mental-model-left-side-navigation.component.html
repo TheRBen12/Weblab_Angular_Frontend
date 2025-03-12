@@ -28,7 +28,11 @@
       <div class="col-2 me-3">
         <div class="container-md">
           <app-basket [isHidden]=basketIsHidden (checkoutEventEmitter)="finishExperiment($event)"
-                      [basket]=basket></app-basket>
+                      [basket]=basket
+                      (hidenEventEmitter) = hideBasket($event)
+          >
+
+          </app-basket>
         </div>
       </div>
     </div>
@@ -53,11 +57,11 @@
             <div class="">
               <button class=" btn btn-primary">Anmelden</button>
             </div>
-            <div>
+            <button mat-fab (click)="openBasket()" >
               <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
                         fontIcon="shopping_cart">
               </mat-icon>
-            </div>
+            </button>
           </div>
         </div>
       </div>

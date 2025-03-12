@@ -43,6 +43,7 @@ export class ExperimentTestIndexComponent implements OnInit {
       })
     ).subscribe(tests => {
       this.experimentTests = tests;
+      this.experimentTests = this.sortExperimentTestsByPosition(this.experimentTests)
       this.filteredExperimentTests = this.experimentTests;
     });
   }
@@ -51,6 +52,13 @@ export class ExperimentTestIndexComponent implements OnInit {
     this.experimentService.getExperiment(this.experimentId).subscribe((experiment) => {
       this.experiment = experiment;
     })
+  }
+
+  sortExperimentTestsByPosition(experiments: ExperimentTest[]) {
+    experiments = experiments.sort((exp1, exp2) => {
+      return Number(exp1.position) - Number(exp2.position);
+    });
+    return experiments;
   }
 
   filterTestsAndMarkText($event: string) {

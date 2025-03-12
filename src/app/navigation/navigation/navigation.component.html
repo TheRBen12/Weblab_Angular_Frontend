@@ -7,23 +7,23 @@
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item ">
-          <a routerLink="/" class="nav-link nav-item-robot">Experimente</a>
+          <a [ngClass]="{'active-link': currentLink == 'Experimente'}" (click)="setCurrentLink('Experimente')" routerLink="/" class="nav-link active nav-item-robot">Experimente</a>
         </li>
         <li class="nav-item ms-3">
-          <a routerLink="/settings" class="nav-link nav-item-robot ">Einstellungen</a>
+          <a [ngClass]="{'active-link': currentLink == 'Einstellungen'}" (click)="setCurrentLink('Einstellungen')" routerLink="/settings" class="nav-link active nav-item-robot ">Einstellungen</a>
         </li>
         <li class="nav-item ms-3">
-          <a  routerLink="/help" class="nav-link nav-item-robot">Hilfe</a>
+          <a [ngClass]="{'active-link': currentLink == 'Hilfe'}"  (click)="setCurrentLink('Hilfe')" routerLink="/help" class="nav-link active nav-item-robot">Hilfe</a>
         </li>
       </ul>
       <div class="d-flex justify-content-between" >
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a routerLink="/login" (click)="logout()" class="nav-link ms-2">Abmelden</a>
+            <a routerLink="/login" (click)="logout()" class="nav-link active ms-2">Abmelden</a>
           </li>
 
           <li *ngIf="currentUser" class="nav-item">
-            <a routerLink="/profile" class="nav-link">{{currentUser.email}}</a>
+            <a [ngClass]="{'active-link': currentLink == 'Profil'}" (click)="setCurrentLink('Profil')"  routerLink="/profile" class="active nav-link">{{currentUser.email}}</a>
           </li>
         </ul>
       </div>

@@ -1,26 +1,24 @@
 <div class="basket-product-card container-md card flex-wrap gap-4">
   <div class="d-flex justify-content-between">
-    <div class="card-body flex-grow-0">
-      <a>
+    <div class="card-body ">
         <img *ngIf="product" class="img-fluid card-img-top"
              src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
         <p class="mt-2">
           <span class="product-type">{{ product?.type }}</span>
         </p>
-      </a>
+        <hr>
+      <div>{{ product?.trademark }} <span class="fw-bold">{{ product?.name }}</span></div>
+        <hr>
+      <div class="fw-bold">
+          <span>{{ product?.price }}-.</span>
+      </div>
     </div>
+    <hr>
     <button class="mt-2 remove-icon" (click)="removeProduct(product)" mat-fab>
       <mat-icon fontIcon="delete"></mat-icon>
     </button>
   </div>
-  <ul class="list-group list-group-flush">
-    <li  class="list-group-item fw-bold">{{ product?.trademark }} {{ product?.name }}</li>
-    <li class="fw-bold list-group-item">
-      <div>
-        <span>{{ product?.price }}-.</span>
-      </div>
-    </li>
-  </ul>
+
 </div>
 
 

@@ -42,7 +42,6 @@ export class ExperimentIndexComponent implements OnInit {
         this.serverError = true;
       }
     });
-
   }
 
   fetchCurrentUserSetting() {
