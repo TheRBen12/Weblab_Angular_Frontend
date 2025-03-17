@@ -1,0 +1,178 @@
+<div class="d-flex flex-row">
+  <div class="menu-icon">
+    <div class="col-1 ms-3 mt-5 d-flex justify-content-center">
+      <button (click)="toggleInstructions()"  mat-fab>
+        <mat-icon>menu_book</mat-icon>
+      </button>
+    </div>
+  </div>
+
+    <div *ngIf="showInstructions" class="outer-instruction-container col-2">
+      <app-experiment-test-instruction [target]="experimentTest?.goalInstruction?? ''" [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"></app-experiment-test-instruction>
+
+    <div class="d-flex justify-content-center align-items-center">
+      <button class="btn btn-lg btn-success">Versuch abschliessen</button>
+    </div>
+
+    </div>
+
+
+
+  <div style="width: 100%">
+    <div class="container-fluid">
+      <div class="row">
+        <div [ngClass]="{'disabled': !isSelected('navbarTop') }"  (click)="selectElement('navbarTop', $event)"  class="  nav navbar navbar-expand-md shadow w-100">
+          <h2 class="col-sm-2 p-2">Weblab Shop</h2>
+          <div (click)="selectElement('searchBarTop', $event)"  [ngClass]="{'disabled': !isSelected('searchBarTop') }" class="disabled col-sm-3">
+            <app-search-bar [placeholder]="'Standardsuchfunktion'"  ></app-search-bar>
+          </div>
+
+          <div (click)="selectElement('autoCompleteTop', $event)" [ngClass]="{'disabled': !isSelected('autoCompleteTop') }" class="ms-3 me-4 w-75">
+            <app-auto-complete [products]="products" class="products"
+                               [placeholder]="'Suchfunktion mit Autovervollständigung'">
+
+            </app-auto-complete>
+          </div>
+
+          <div class="me-3 ms-3">
+            <button class=" btn btn-primary">Anmelden</button>
+          </div>
+          <div (click)="selectElement('shoppingCartTopLeft', $event)"  [ngClass]="{'disabled': !isSelected('shoppingCartTopLeft') }" class="ms-3">
+            <button mat-fab>
+              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                        fontIcon="shopping_cart">
+              </mat-icon>
+            </button>
+          </div>
+
+
+          <div class="w-100 me-3 d-flex justify-content-end ">
+            <div (click)="selectElement('shoppingCartTopRight', $event)" [ngClass]="{'disabled': !isSelected('shoppingCartTopRight') }">
+              <button mat-fab>
+                <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                          fontIcon="shopping_cart">
+                </mat-icon>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div (click)="selectElement('mega-drop-down', $event)"  [ngClass]="{'disabled': !isSelected('mega-drop-down') }" class="row">
+        <div>
+          <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul  class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li   class="nav-item" *ngFor="let category of parentProductCategories; index as i">
+                    <a [ngClass]="{'fw-bold': i == 0}"  class=" link-offset-2 link-offset-3-hover fw-bold
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link">{{category}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+          <div class="mt-2 w-100 container-fluid mega-drop-down">
+              <div class="row">
+                <div class="w-100 container-fluid mega-drop-down">
+                  <div class="row">
+                    <div class="col-md-auto">
+                      <ul class="list-group-flush list-group">
+                        <div class="list-group-item w-100 ">
+                          <div>
+                            <h5 class="mb-1 p-1">Kategorien</h5>
+                          </div>
+                        </div>
+                        <li class="list-group-item list-group-item-action" *ngFor="let category of dummyCategories; index as i">
+                          <a class="link-offset-2 link-offset-3-hover fw-bold
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
+                          >{{ category }}</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-md-auto">
+                      <ul class="grid-list list-group-flush list-group">
+                        <div class="list-group-item w-100 ">
+                          <div>
+                            <h5 class="mb-1 p-1">Beliebte Kategorien </h5>
+                          </div>
+                        </div>
+                        <li class="list-group-item list-group-item-action">
+                          <a class="link-offset-2 link-offset-3-hover fw-bold link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link">Smartphone und Tablets</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div [ngClass]="{'disabled': !isSelected('sideMenuLeft')}" (click)="selectElement('sideMenuLeft', $event)"  class="col-3">
+          <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
+                         [productCategories]="productCategories"
+                         [currentRoute]="currentRoute"
+                         [parentRoute]="parentRoute"
+                         [parentCategory]="parentCategory">
+          </app-side-menu>
+        </div>
+
+        <div class="col-5 scrollable-list">
+          <router-outlet></router-outlet>
+        </div>
+
+        <div (click)="selectElement('sideMenuRight', $event)"  [ngClass]="{'disabled': !isSelected('sideMenuRight')}"  class="col-3 ">
+          <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
+                         [productCategories]="productCategories"
+                         [currentRoute]="currentRoute"
+                         [parentRoute]="parentRoute"
+                         [parentCategory]="parentCategory">
+          </app-side-menu>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bottom-nav d-flex shadow w-100">
+      <div (click)="selectElement('navBarBottom', $event)"  [ngClass]="{'disabled': !isSelected('navBarBottom')}" class=" nav navbar d-flex justify-content-space-between navbar-expand-md shadow w-100 me-2">
+        <h2 class="p-2">Weblab Shop</h2>
+        <div (click)="selectElement('searchBarBottom', $event)"  [ngClass]="{'disabled': !isSelected('searchBarBottom')}"  class="col-sm-2">
+          <app-search-bar (click)="selectElement('searchBarBottom', $event)"  [placeholder]="'Standardsuchfunktion'" ></app-search-bar>
+        </div>
+        <div (click)="selectElement('autoCompleteBottom', $event)"  [ngClass]="{'disabled': !isSelected('autoCompleteBottom')}" class="ms-3 me-4 w-25 col-sm-3">
+          <app-auto-complete  [products]="products" class="products"
+                             [placeholder]="'Suchfunktion mit Autovervollständigung'">
+
+          </app-auto-complete>
+        </div>
+
+        <div class="me-3 ms-3">
+          <button class=" btn btn-primary">Anmelden</button>
+        </div>
+        <div (click)="selectElement('shoppingCartBottomLeft', $event)" [ngClass]="{'disabled': !isSelected('shoppingCartBottomLeft')}" class="ms-3">
+          <button mat-fab >
+            <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                      fontIcon="shopping_cart">
+            </mat-icon>
+          </button>
+        </div>
+
+        <div class="right-side-shopping-cart">
+          <div (click)="selectElement('shoppingCartBottomRight', $event)"  [ngClass]="{'disabled': !isSelected('shoppingCartBottomRight')} ">
+            <button mat-fab (click)="selectElement('shoppingCartBottomRight', $event)">
+              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                        fontIcon="shopping_cart">
+              </mat-icon>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

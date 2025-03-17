@@ -43,4 +43,5 @@ export class BasketComponent implements OnInit{
   checkOut(){
     this.checkoutEventEmitter.emit(this.basket.length);
   }
+
 }

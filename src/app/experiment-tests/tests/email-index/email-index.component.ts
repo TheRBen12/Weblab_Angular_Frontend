@@ -5,9 +5,16 @@ import {EmailListItemComponent} from '../email-list-item/email-list-item.compone
 import {Email} from '../../../models/email';
 import {EmailService} from '../../../services/email.service';
 import {LoginService} from '../../../services/login.service';
-import {MatSnackBar, MatSnackBarRef, TextOnlySnackBar} from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarRef,
+  MatSnackBarVerticalPosition,
+  TextOnlySnackBar
+} from '@angular/material/snack-bar';
 import {SnackbarComponent} from '../../../snackbar/snackbar.component';
 import {timeout} from 'rxjs';
+import {ExperimentService} from '../../../services/experiment.service';
 
 @Component({
   selector: 'app-email-index',
@@ -30,12 +37,15 @@ export class EmailIndexComponent implements OnInit {
   router = inject(Router);
   emailService = inject(EmailService);
   userService: LoginService = inject(LoginService);
+  snackBar = inject(MatSnackBar);
+  experimentService: ExperimentService = inject(ExperimentService);
   fetchedMails: Email[] = [];
   selectedEmail: Email | null = null;
-  snackBar = inject(MatSnackBar);
   stack: Email[] = [];
   lastDeletedMailIndex: number = 0;
   emailsToDisable: Email[] = [];
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
 
   @ViewChild('container', {static: true}) container!: ElementRef;
   snackBarNumber: number = 0;
@@ -48,8 +58,15 @@ export class EmailIndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.snackBar._openedSnackBarRef?.afterDismissed().subscribe(event => this.stack = [])
     const urlSegments = this.router.url.split("/");
+    this.experimentService.getExperimentTest(urlSegments.indexOf("error-correction") + 1).subscribe((test) => {
+      if (test.configuration['horizontalPosition'] && test.configuration['verticalPosition']){
+          this.verticalPosition = test.configuration["verticalPosition"];
+          this.horizontalPosition = test.configuration["horizontalPosition"];
+      }
+    });
     if (urlSegments[urlSegments.length - 1] == "deletedItems") {
       this.fetchDeletedEmails();
     } else {
@@ -116,7 +133,7 @@ export class EmailIndexComponent implements OnInit {
   }
 
   openSnackBar(message: string, action: string) {
-    const snackBarRef: MatSnackBarRef<TextOnlySnackBar> = this.snackBar.open(message, action, {duration: 6000});
+    const snackBarRef: MatSnackBarRef<TextOnlySnackBar> = this.snackBar.open(message, action, {duration: 6000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition});
     snackBarRef.onAction().subscribe((event) => {
       this.undoDeletingMail();
     });

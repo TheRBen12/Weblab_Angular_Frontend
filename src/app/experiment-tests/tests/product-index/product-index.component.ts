@@ -2,15 +2,18 @@ import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProductService} from '../../../services/product.service';
 import {ProductComponent} from '../product/product.component';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {FilterService} from '../../../services/filter.service';
+import {FilterSelectDropdownComponent} from '../../../filter-select-dropdown/filter-select-dropdown.component';
 
 @Component({
   selector: 'app-product-index',
   imports: [
     ProductComponent,
-    NgForOf
+    NgForOf,
+    NgIf,
+    FilterSelectDropdownComponent,
   ],
   templateUrl: './product-index.component.html',
   standalone: true,
@@ -23,6 +26,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
   @Input() products: any[] = [];
   filteredProducts: any[] = [];
   router = inject(Router);
+  showFilterResultTitle: boolean = false;
+  productProperties: string[] = []
+  specifications: string[] = [];
 
   filterSubscription: Subscription = new Subscription();
   @Input() category: string = "";
@@ -34,6 +40,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.fetchAllProducts();
+
     const urlSegments = this.router.url.split("/");
     let isHicksLawExperiment = false;
     if (urlSegments.indexOf("hicks-law") != -1){
@@ -44,8 +51,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
         this.filteredProducts = this.products;
       }else{
         this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
+        this.showFilterResultTitle = this.filteredProducts.length > 0;
       }
-    })
+    });
 
     if (this.category != 'all') {
       this.route.url.subscribe((url) => {
@@ -84,8 +92,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
 
   fetchProductsByCategory() {
     this.productService.getProductsByCategory(this.category).subscribe((products) => {
-      this.products = products;
-      this.filteredProducts = this.products;
+      this.filteredProducts = products;
+      this.productProperties = Object.keys(this.filteredProducts[0]).filter(key => key != "id" && key != "name" && key != "specifications");
+      this.createSpecificationValueList();
     }, error => {
       this.products = [];
     });
@@ -94,4 +103,29 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.filterSubscription.unsubscribe();
   }
+
+  private createSpecificationValueList() {
+    const productSpecifications = this.filteredProducts[0].specifications;
+    productSpecifications.forEach((spec: any) => {
+      this.specifications.push(spec.name);
+    });
+    this.specifications = this.specifications.concat()
+  }
+
+  getPropertyValues(property: string) {
+    const values: any[] = [];
+    if (property){
+      this.filteredProducts.forEach((product: any) => {
+        const value = product[property];
+        if (value && values.indexOf(value) == -1){
+          values.push(value);
+        }
+      });
+    }
+
+    return values;
+  }
+
+
+
 }

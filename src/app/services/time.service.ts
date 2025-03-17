@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {TimeInterval} from 'rxjs/internal/operators/timeInterval';
+import {BehaviorSubject} from 'rxjs';
+import {D} from '@angular/cdk/keycodes';
+import {ExperimentNavigationTime} from '../models/experiment-navigation-time';
 
 @Injectable({
   providedIn: 'root'
@@ -7,29 +10,44 @@ import {TimeInterval} from 'rxjs/internal/operators/timeInterval';
 export class TimeService {
   timeToReadWelcomeModal = 0;
   welcomeModalTimer = 0;
+  experimentNavigationTimeSubscription: BehaviorSubject<ExperimentNavigationTime|null> = new BehaviorSubject<any>(null);
+
   constructor() {
 
   }
 
+  getExperimentNavigationTimeSubscription() {
+    return this.experimentNavigationTimeSubscription.asObservable();
+  }
+  updateExperimentNavigationTime(navTime: ExperimentNavigationTime){
+    this.experimentNavigationTimeSubscription.next(navTime);
+  }
 
-  saveTimeToReadWelcomeModal(){
+  saveTimeToReadWelcomeModal() {
 
   }
 
-  startWelcomeModalTimer(){
+  startWelcomeModalTimer() {
     this.welcomeModalTimer = setInterval(() => {
-      this.timeToReadWelcomeModal ++;
+      this.timeToReadWelcomeModal++;
     }, 1000);
 
   }
 
-  stopTimer(){
+  stopTimer() {
 
+  }
+
+  getTimeToReadWelcomeModal(){
+    return this.timeToReadWelcomeModal;
   }
 
   stopWelcomeModalTimer() {
     clearInterval(this.welcomeModalTimer);
-  console.log(this.timeToReadWelcomeModal);
+    console.log(this.timeToReadWelcomeModal);
   }
 
+  saveNavigationTime(timeData: ExperimentNavigationTime) {
+
+  }
 }

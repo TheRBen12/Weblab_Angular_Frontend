@@ -1,5 +1,4 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {SearchBarComponent} from '../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {RouterOutlet} from '@angular/router';
 import {SideMenuComponent} from '../side-menu/side-menu.component';
@@ -14,13 +13,11 @@ import {RouterService} from '../../../services/router.service';
 import {routerLinks} from '../routes';
 import {AutoCompleteComponent} from '../../../auto-complete/auto-complete.component';
 import {FilterService} from '../../../services/filter.service';
-import {hide} from '@popperjs/core';
 
 
 @Component({
   selector: 'app-mental-model-left-side-navigation',
   imports: [
-    SearchBarComponent,
     MatIcon,
     RouterOutlet,
     SideMenuComponent,
@@ -113,6 +110,4 @@ export class MentalModelLeftSideNavigationComponent implements OnInit{
   hideBasket($event: boolean) {
     this.basketIsHidden = $event;
   }
-
-  protected readonly hide = hide;
 }

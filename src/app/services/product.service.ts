@@ -74,4 +74,8 @@ export class ProductService {
     localStorage.setItem("cart", JSON.stringify(cart));
     this.basketSubscription.next(cart);
   }
+
+  getAllSubcategoriesByParentCategory(category: string) {
+    return this.http.get<ProductType[]>("https://localhost:7147/api/product/all/subcategories", {params: {category: category}});
+  }
 }

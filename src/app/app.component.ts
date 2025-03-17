@@ -8,6 +8,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {MatExpansionModule} from '@angular/material/expansion';
 
 
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -15,7 +16,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatIconModule,
     TooltipModule,
     ToastrModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   standalone: true,
   templateUrl: './app.component.html',

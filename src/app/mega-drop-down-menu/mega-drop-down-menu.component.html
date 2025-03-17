@@ -1,0 +1,47 @@
+<div class="w-100 container-fluid mega-drop-down">
+  <div class="row">
+  <div class="col-md-auto">
+      <ul class="grid-list list-group-flush list-group">
+        <div class="list-group-item w-100 ">
+          <div>
+            <h5 class="mb-1">Kategorien</h5>
+          </div>
+          <div *ngIf="productCategories.length == 0">
+            <p> Es sind keine Produkt zu dieser Kategorie verfügbar</p>
+          </div>
+        </div>
+        <li class="list-group-item list-group-item-action" *ngFor="let category of productCategories; index as i">
+          <a (click)="emitCategoryLink(category.name)"
+             class="link-offset-2 link-offset-3-hover fw-bold
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
+             [ngClass]="{'strong-link' : currentCategory==category.name}"
+             routerLink="{{categoryLinks[i]}}">{{ category.name }}</a>
+        </li>
+      </ul>
+  </div>
+
+    <div class="col">
+      <ul class="grid-list list-group-flush list-group">
+        <div class="list-group-item w-100 ">
+          <div>
+            <h5 class="mb-1">Beliebte Kategorien </h5>
+          </div>
+
+        </div>
+        <li class="list-group-item list-group-item-action">
+          <a (click)="emitCategoryLink('Smartphones und Tablets')"
+             class="link-offset-2 link-offset-3-hover fw-bold
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
+             routerLink="smartphones-und-tablets">Smartphone und Tablets</a>
+        </li>
+      </ul>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+

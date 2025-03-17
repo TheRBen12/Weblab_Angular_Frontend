@@ -1,20 +1,15 @@
 <div class="d-flex flex-row">
-  <div class="flex-column instruction-container border-end border-3">
-    <div class="d-flex flex-row">
+  <div class="instruction-container col-3 border-end border-3">
       <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
                                        [instructions]="instructions"></app-experiment-test-instruction>
-    </div>
   </div>
 
   <div class="main w-100">
     <div class="row">
-
-      <div class="col">
-        <div class="">
+      <div class="col-9">
           <div class="scrollable-list">
             <router-outlet></router-outlet>
           </div>
-        </div>
       </div>
       <div class="col-2">
         <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
@@ -54,7 +49,7 @@
 
         <div class="col-md-auto">
           <div class="d-flex gap-4 flex-row flex-fill align-items-start">
-            <div class="">
+            <div >
               <button class=" btn btn-primary">Anmelden</button>
             </div>
             <button mat-fab (click)="openBasket()" >

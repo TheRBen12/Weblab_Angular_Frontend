@@ -11,7 +11,6 @@ export class ExperimentService {
   http = inject(HttpClient);
 
 
-
   constructor() {
   }
 
@@ -31,4 +30,28 @@ export class ExperimentService {
     return this.http.get<ExperimentTest>('https://localhost:7147/api/ExperimentTest/test', {params: {experimentTestId: experimentTestId}});
   }
 
+
+  setLastFinishedExperimentTest(id: number){
+    const data: any = {experimentId: id, finishedAt: new Date()}
+    localStorage.setItem('lastFinishedExperimentTest', JSON.stringify(data));
+  }
+
+  getLastFinishedExperimentTest(){
+    const data = localStorage.getItem("lastFinishedExperimentTest")
+    if (data){
+      return JSON.parse(data);
+    }
+    return null;
+
+  }
+
+
+  getLastStartedExperiment(id: number){
+    return localStorage.getItem('lastSelectedExperimentTest');
+  }
+
+  setNextStartedExperimentTest(experiment: any) {
+    const data: any = {experimentId: experiment.id, startedAt: experiment.startedAt}
+    localStorage.setItem('lastStartedExperimentTest', JSON.stringify(data));
+  }
 }

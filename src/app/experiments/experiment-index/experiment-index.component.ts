@@ -9,6 +9,11 @@ import {LoginService} from '../../services/login.service';
 import {UserSetting} from '../../models/user-setting';
 import {filter, switchMap} from 'rxjs';
 import {FilterService} from '../../services/filter.service';
+import {ExperimentNavigationTime} from '../../models/experiment-navigation-time';
+import {D} from '@angular/cdk/keycodes';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TimeService} from '../../services/time.service';
+import {UserBehaviour} from '../../models/user-behaviour';
 
 @Component({
   selector: 'app-experiment-index',
@@ -23,14 +28,28 @@ export class ExperimentIndexComponent implements OnInit {
   accountService = inject(LoginService);
   settingService = inject(SettingService);
   filterService = inject(FilterService);
+  timeService: TimeService = inject(TimeService);
   experiments: Experiment[] = [];
   filteredExperiments: Experiment[] = []
   currentUserSetting?: UserSetting;
   serverError: boolean = false;
+  router: Router = inject(Router);
+  userBehaviour: UserBehaviour|null = null;
+
+  constructor() {
+  }
 
   ngOnInit(): void {
+
+    if (!localStorage.getItem('reachedSiteAt')){
+      localStorage.setItem("reachedSiteAt", String(new Date()));
+    }
     this.fetchExperiments();
     this.fetchCurrentUserSetting();
+  }
+
+
+  updateUserBehaviour(){
   }
 
   fetchExperiments() {

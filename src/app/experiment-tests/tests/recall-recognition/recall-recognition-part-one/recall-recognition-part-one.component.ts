@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {Router, RouterOutlet} from '@angular/router';
+import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {
@@ -37,6 +37,8 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   currentRoute: string = "Home";
   router = inject(Router);
   productService = inject(ProductService);
+  productCategoryRouterLinksService = inject(RouterService);
+
   basket: any[] = [];
   specifications: any[] = [];
   parentCategory: string | null = null;
@@ -46,11 +48,11 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   routerLinks = routerLinks;
   targetRoutes = ["IT und Multimedia", "PC und Notebooks", "Notebook"]
   menuService = inject(SideMenuService);
-  productCategoryRouterLinksService = inject(RouterService);
   updateMenuSubscription: Subscription = new Subscription();
   basketIsHidden = true;
+  experimentTestId: number = -1;
 
-  constructor(private cdRef: ChangeDetectorRef) {
+  constructor(private cdRef: ChangeDetectorRef, private route: ActivatedRoute) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
       "Finden Sie die Produktkategorie PC und Notebooks",
       "Finden Sie die Produktkategorie Notebooks",
@@ -59,12 +61,16 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
+    console.log(this.experimentTestId);
+
+    this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0){
         this.currentInstructionStep = this.instructions.length - 1;
       }else{
-        this.currentInstructionStep --;
+        this.currentInstructionStep = this.currentInstructionStep <= 0 ? 0: this.currentInstructionStep-1;
       }
     });
     this.updateMenuSubscription = this.menuService.getSubject().subscribe((updateMenu) => {
@@ -134,7 +140,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     localStorage.removeItem("parentRoute")
   }
 
-  finishExperiment($event: number) {
-
+  finishExperiment() {
+    this.router.navigateByUrl("/",{state: {toExperimentId: this.experimentTestId}})
   }
 }

@@ -1,0 +1,71 @@
+<div class="d-flex flex-row">
+  <div class="col-3">
+    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
+                                     [instructions]="instructions"></app-experiment-test-instruction>
+  </div>
+
+  <div style="width: 100%">
+    <div class="container-fluid border-bottom">
+      <div (mouseenter)="hideSubMenu()"  class="row shadow">
+        <div class="col-md-auto d-flex align-items-center">
+          <h2 class="ms-3">Weblab</h2>
+        </div>
+        <div class="col-md-auto">
+          <app-search-bar (inputTextEvent)="filterProducts($event)"  [searchOnEnter]="true" [disabled]="false" [placeholder]="'Produkte suchen'"></app-search-bar>
+        </div>
+        <div class="d-flex align-items-center col-md-auto">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button class="btn btn-primary">Anmelden</button>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-auto d-flex align-items-center" role="search">
+          <button (click)="openBasket()" mat-fab class="me-4 d-flex justify-content-center align-items-center">
+            <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                      fontIcon="shopping_cart">
+
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+      <div  class="row">
+        <nav (mouseleave)="hideSubMenu()"  class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul  class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li (mouseenter)="showSubMenu(category.name)"  class="nav-item" *ngFor="let category of parentProductCategories; index as i">
+                  <a (click)="setCurrentRoute(category.name)"
+                     class=" link-offset-2 link-offset-3-hover fw-bold
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
+                     [ngClass]="{'strong-link' :  currentType?.name ==category.name}"
+                     routerLink="{{categoryLinks[i]}}">{{ category.name }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="navbar submenu" [ngClass]="{'menu-open': showSubNavMenu}"  (mouseenter)="showSubMenu(currentRoute)" (mouseleave)="hideSubMenu()" [@hoverState] = "showSubNavMenu ? 'open' : 'closed' " >
+          <app-mega-drop-down-menu (routeEvent)="setCurrentRoute($event)"  [currentCategory]="currentRoute" ></app-mega-drop-down-menu>
+        </div>
+
+        <div>
+        </div>
+      </div>
+      <div class="row main mb-3 scrollable-list">
+          <div class="col-lg-auto">
+            <router-outlet></router-outlet>
+          </div>
+          <div class="col-2 me-3">
+            <div >
+              <app-basket [isHidden]=basketIsHidden (checkoutEventEmitter)="finishExperiment($event)"
+                          [basket]=basket></app-basket>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

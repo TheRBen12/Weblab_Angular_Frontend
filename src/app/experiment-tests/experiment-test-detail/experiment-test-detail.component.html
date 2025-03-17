@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="d-flex flex-row justify-content-between">
-    <button routerLink="/test/execute/{{experimentTestUrl}}/{{experimentTest?.id}}" class="btn btn-success btn-lg">Versuch starten</button>
+    <button (click)="setLastStartedExperiment()"  routerLink="/test/execute/{{experimentTestUrl}}/{{experimentTest?.id}}" class="btn btn-success btn-lg">Versuch starten</button>
     <button routerLink="/tests/{{experimentTest?.experiment?.id}}" class="btn btn-secondary btn-lg">Zurück</button>
   </div>
 

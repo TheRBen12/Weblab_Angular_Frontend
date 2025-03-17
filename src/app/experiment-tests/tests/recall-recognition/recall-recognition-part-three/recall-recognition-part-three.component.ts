@@ -13,6 +13,7 @@ import {FilterService} from '../../../../services/filter.service';
 import {Observable, Subscription} from 'rxjs';
 import {SideMenuService} from '../../../../services/side-menu.service';
 import {FormControl} from '@angular/forms';
+import {BasketComponent} from '../../../../basket/basket.component';
 
 @Component({
   selector: 'app-recall-recognition-part-three',
@@ -21,7 +22,8 @@ import {FormControl} from '@angular/forms';
     ExperimentTestInstructionComponent,
     MatIcon,
     RouterOutlet,
-    SideMenuComponent
+    SideMenuComponent,
+    BasketComponent
   ],
   templateUrl: './recall-recognition-part-three.component.html',
   standalone: true,
@@ -39,6 +41,8 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   filterService = inject(FilterService);
   productService = inject(ProductService);
   router = inject(Router);
+  basketIsHidden: boolean = true;
+  basket: any[] = [];
 
   constructor() {
     this.instructions = ["Benutzen Sie das Suchfeld, um Tastaturen mit Ihrem gewünschten Tastaturlayout " +
@@ -65,8 +69,11 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
       const route = this.router.url;
-      this.categoryLinks = new Array(this.productCategories.length).fill("/test/execute/recall-recognition/2");
+      this.categoryLinks = new Array(this.productCategories.length).fill("/test/execute/recall-recognition/3");
     });
   }
 
+  finishExperiment($event: number) {
+    
+  }
 }

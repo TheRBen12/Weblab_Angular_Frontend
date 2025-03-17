@@ -1,0 +1,19 @@
+.mega-drop-down{
+  z-index: 1000;
+  position: absolute;
+  display: block;
+  background-color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.flex-list {
+  display: flex;
+  flex-wrap: wrap; /* Elemente umbrechen */
+  gap: 10px; /* Abstand zwischen den Elementen */
+}
+
+
+.flex-list li:nth-child(3n + 1) {
+  clear: left; /* Neue Spalte nach jedem dritten Element starten */
+}

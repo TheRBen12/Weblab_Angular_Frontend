@@ -2,7 +2,6 @@
   color: #297BE7;
 }
 
-
 .main{
   margin-left: 20px;
 }
@@ -17,4 +16,11 @@
   text-align: center; /* Falls der Text mehrzeilig ist */
   border-radius: 10px; /* Abgerundete Ecken */
 }
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
+}
+
 

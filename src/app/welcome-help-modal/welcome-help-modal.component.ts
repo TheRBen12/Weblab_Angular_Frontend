@@ -15,9 +15,12 @@ import {NgIf} from '@angular/common';
 })
 export class WelcomeHelpModalComponent {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {title: string, showFooter: boolean}) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {title: string, showFooter: boolean, userGroup: string, currentTipIndex: number}) {
   }
   closeModal(){
     sessionStorage.setItem('closedModal', 'closed');
+  }
+  increaseTipIndex(){
+    this.data.currentTipIndex = this.data.currentTipIndex + 1;
   }
 }

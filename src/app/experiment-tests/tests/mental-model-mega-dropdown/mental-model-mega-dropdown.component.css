@@ -1,0 +1,20 @@
+nav{
+  max-height: 70px;
+}
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
+}
+
+.submenu{
+  pointer-events: none;
+}
+
+.menu-open{
+  pointer-events: all;
+}
+
+
+
+

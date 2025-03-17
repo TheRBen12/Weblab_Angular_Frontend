@@ -8,7 +8,7 @@
 .search-input-field{
   position: relative;
   background: transparent;
-  min-width: 350px;
+  min-width: 175px;
   min-height: 50px;
 }
 .search-bar-container{

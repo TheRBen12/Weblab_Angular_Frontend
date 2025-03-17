@@ -29,6 +29,12 @@ import {FittsLawComponent} from './experiment-tests/tests/fitts-law/fitts-law.co
 import {
   MentalModelLeftSideNavigationComponent
 } from './experiment-tests/tests/mental-model-left-side-navigation/mental-model-left-side-navigation.component';
+import {
+  MentalModelMegaDropdownComponent
+} from './experiment-tests/tests/mental-model-mega-dropdown/mental-model-mega-dropdown.component';
+import {
+  MentalModelCreateInterfaceComponent
+} from './experiment-tests/tests/mental-model-create-interface/mental-model-create-interface.component';
 
 export const routes: Routes = [
   {
@@ -110,8 +116,35 @@ export const routes: Routes = [
             ]
           },
 
-        ]
+          {
+            path: 'mental-model/13', component: MentalModelLeftSideNavigationComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
 
+          {
+            path: 'mental-model/14', component: MentalModelMegaDropdownComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
+
+
+          {
+            path: 'mental-model/16', component: MentalModelCreateInterfaceComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
+
+        ]
       }
     ]
   },

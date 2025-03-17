@@ -10,10 +10,10 @@
           <a [ngClass]="{'active-link': currentLink == 'Experimente'}" (click)="setCurrentLink('Experimente')" routerLink="/" class="nav-link active nav-item-robot">Experimente</a>
         </li>
         <li class="nav-item ms-3">
-          <a [ngClass]="{'active-link': currentLink == 'Einstellungen'}" (click)="setCurrentLink('Einstellungen')" routerLink="/settings" class="nav-link active nav-item-robot ">Einstellungen</a>
+          <a [ngClass]="{'active-link': currentLink == 'Einstellungen'}" (click)="updateUserSettingBehaviour()" routerLink="/settings" class="nav-link active nav-item-robot ">Einstellungen</a>
         </li>
         <li class="nav-item ms-3">
-          <a [ngClass]="{'active-link': currentLink == 'Hilfe'}"  (click)="setCurrentLink('Hilfe')" routerLink="/help" class="nav-link active nav-item-robot">Hilfe</a>
+          <a [ngClass]="{'active-link': currentLink == 'Hilfe'}"  (click)="updateUserHelpBehaviour()" routerLink="/help" class="nav-link active nav-item-robot">Hilfe</a>
         </li>
       </ul>
       <div class="d-flex justify-content-between" >

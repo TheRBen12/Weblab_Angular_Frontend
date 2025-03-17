@@ -1,0 +1,51 @@
+.disabled {
+  pointer-events: auto;
+  opacity: 0.5;
+  border :#3887EF solid 1px ;
+}
+
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0px -6px 20px rgba(0, 0, 0, 0.8); /* Starker Schatten */
+  z-index: 1000;
+}
+
+
+
+.right-side-shopping-cart{
+  margin-left: 18%;
+}
+
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
+}
+
+.outer-instruction-container {
+  display: block;
+  z-index: 1000;
+
+}
+
+.menu-icon {
+  display: none;
+}
+
+/* Ab 1400px: Container ausblenden, Icon anzeigen */
+@media (max-width: 1600px) {
+  .outer-instruction-container {
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+    cursor: pointer;
+  }
+}
+

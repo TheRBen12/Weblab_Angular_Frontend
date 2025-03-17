@@ -13,7 +13,7 @@ import {RouterLink} from '@angular/router';
   styleUrl: './experiment.component.css'
 })
 export class ExperimentComponent {
-  @Input() experiment: Experiment = {name: "", state: "", position: 0, id: 0};
+  @Input() experiment: Experiment = {name: "", state: "", position: 0, id: 0, numberExperimentTest: 0};
   @Input() currentUserPosition = 0;
   @Input() isProgressiveVisualization: boolean = true;
 }

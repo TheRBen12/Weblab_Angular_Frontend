@@ -5,7 +5,7 @@ import {
   MatExpansionPanelDescription,
   MatExpansionPanelTitle
 } from '@angular/material/expansion';
-import {NgForOf, NgIf, SlicePipe} from '@angular/common';
+import {NgForOf, SlicePipe} from '@angular/common';
 
 @Component({
   selector: 'app-experiment-test-instruction',
@@ -15,7 +15,6 @@ import {NgForOf, NgIf, SlicePipe} from '@angular/common';
     MatExpansionPanelDescription,
     MatExpansionModule,
     NgForOf,
-    NgIf,
     SlicePipe
   ],
   templateUrl: './experiment-test-instruction.component.html',

@@ -1,32 +1,44 @@
 <div class="p-4 mt-3 container">
   <h3>{{data.title}}</h3>
-  <div>
+  <div *ngIf="data.currentTipIndex == 0">
     <h5>Allgemeine Informationen</h5>
     <ul>
       <li>Unter "Experimente" finden Sie alle Experimente.</li>
       <li>Haben Sie ein Experiment angecklickt, gelangen Sie zu den Versuchsexperimenten. </li>
       <li>Wenn Sie einen Versuch ausgewählt haben, dann werden Sie zu der Versuchsbeschreibung weiter navigiert.</li>
       <li>Lesen Sie die Versuchsbeschreibung aufmerksam durch und starten Sie anschliessend den Versuch.</li>
-      <li>Sie können jeden Versuch zu jeder Zeit abbrechen.</li>
       <li>Wenn Sie die Durchfühurung der Experimente abbrechen wollen, dann informieren Sie bitte den Versuchsleiter.
         <strong>Beenden Sie die Durchführung der Experiemnte nicht, bevor sie den Versuchsleiter informiert haben!</strong></li>
     </ul>
+  </div>
+  <div *ngIf="data.currentTipIndex == 1">
     <h5>Einstellungen</h5>
     <ul>
       <li>Unter "Einstellungen können Sie Standardeinstellungen aktivieren oder deaktivieren.
-        Die Einstellungen helfen Ihnen, die Durchführing der Experimente zu beschleunigen."</li>
+        Die Einstellungen können Ihnen helfen, die Durchführung der Experimente zu beschleunigen."
+      </li>
+      <li>In den Einstellungen können Sie unter anderem festlegen, wie die Schnittstelle die Experiment visualisiert.</li>
     </ul>
   </div>
-  <h5>Hilfestellungen</h5>
-  <ul>
-    <li>Unter “Hilfe” finden sie nützliche Infos und Hilfestellungen.</li>
-    <li>In den Hilfestellungen finden Sie praktische Tipps,
-      wie Sie innerhlab der Webseite navigieren und wie Sie die Durchführung der Experimente beschleunigen können. </li>
-  </ul>
+  <div *ngIf="data.currentTipIndex == 2">
+    <h5>Hilfestellungen</h5>
+    <ul>
+      <li>Unter “Hilfe” finden sie nützliche Infos und Hilfestellungen.</li>
+      <li>In den Hilfestellungen wird beschrieben,
+        wie Sie innerhlab der Webseite navigieren, welche Einstellungsmöglichkeiten Sie haben und wie Sie die Durchführung der Experimente beschleunigen können. </li>
+    </ul>
+  </div>
+
   <div *ngIf="data.showFooter">
     <strong>Diese Informationen können Sie jederzeit einblenden, klicken Sie hierzu den Button in der rechten unteren Ecke an.</strong>
   </div>
-  <button (click)="closeModal()" class="mt-3 btn btn-secondary" [mat-dialog-close]="true">Schliessen</button>
+
+<div class="mt-3">
+  <button [disabled]=" ( data.currentTipIndex >= 2) " (click)="increaseTipIndex()" class="me-3 btn btn-primary">Nächster Tipp</button>
+  <button [disabled]=" ( data.userGroup != 'A' && data.currentTipIndex < 2) "  (click)="closeModal()" class="btn btn-secondary" [mat-dialog-close]="true">Schliessen</button>
+</div>
+
+
 </div>
 
 

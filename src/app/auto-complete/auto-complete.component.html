@@ -1,19 +1,22 @@
-<form class="autocomplete-form">
-  <mat-form-field appearance="outline" class="auto-complete-input">
-    <mat-label>{{ placeholder }}</mat-label>
-    <input #input (keydown.enter)="emitFilterText(input.value, $event)" type="text"
-           placeholder="{{placeholder}}"
-           matInput
-           [formControl]="myControl"
-           [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      @for (option of filteredOptions; track option) {
-        <mat-option [value]="option.trademark + ' - ' + option.name">
-          <app-auto-complete-product [textToMark]="textToMark"  [product]="option"></app-auto-complete-product>
-        </mat-option>
-      }
-    </mat-autocomplete>
-  </mat-form-field>
-</form>
+
+  <div class="p-2 autocomplete-form search-bar-container">
+    <mat-form-field appearance="outline" class="auto-complete-input">
+      <mat-label>{{ placeholder }}</mat-label>
+      <input #input (keydown.enter)="emitFilterText(input.value, $event)" type="text"
+             placeholder="{{placeholder}}"
+             matInput
+             [formControl]="myControl"
+             [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (option of filteredOptions; track option) {
+          <mat-option [value]="option.trademark + ' - ' + option.name">
+            <app-auto-complete-product [textToMark]="textToMark"  [product]="option"></app-auto-complete-product>
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+
 
 

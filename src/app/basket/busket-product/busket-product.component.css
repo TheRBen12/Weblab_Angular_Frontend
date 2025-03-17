@@ -7,9 +7,13 @@ button{
 }
 
 img{
-  height: 80px;
-  width: 150px;
+  height: 65px;
+  width: 120px;
 }
 .basket-product-card{
   max-width: 200px;
+  border-bottom: 2px solid black;
+}
+span{
+  font-size: 12px;
 }

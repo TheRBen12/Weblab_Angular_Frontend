@@ -1,24 +1,20 @@
-<div class="basket-product-card container-md card flex-wrap gap-4">
-  <div class="d-flex justify-content-between">
-    <div class="card-body ">
-        <img *ngIf="product" class="img-fluid card-img-top"
-             src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
-        <p class="mt-2">
-          <span class="product-type">{{ product?.type }}</span>
-        </p>
-        <hr>
-      <div>{{ product?.trademark }} <span class="fw-bold">{{ product?.name }}</span></div>
-        <hr>
-      <div class="fw-bold">
-          <span>{{ product?.price }}-.</span>
-      </div>
-    </div>
-    <hr>
-    <button class="mt-2 remove-icon" (click)="removeProduct(product)" mat-fab>
-      <mat-icon fontIcon="delete"></mat-icon>
-    </button>
-  </div>
+<div class="basket-product-card container-md ">
+  <div class="d-flex flex-row gap-3 ">
+    <div class="d-flex justify-content-between">
+      <img *ngIf="product" class="img-fluid"
+           src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
 
+    </div>
+    <div>
+      <span class="fw-bold">{{product.trademark}} </span> <span>{{product.name}}</span>
+    </div>
+    <div>
+      <button mat-fab>      <mat-icon fontIcon="delete" (click)="removeProduct(product)">delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="mt-2 d-flex justify-content-end"><span class="fw-bold">{{product.price}}-.</span></div>
 </div>
+
 
 
