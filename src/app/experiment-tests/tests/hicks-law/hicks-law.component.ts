@@ -145,6 +145,10 @@ export class HicksLawComponent implements OnInit {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
       this.cutProductCategoryList();
+      if (this.currentRoute == "Lebensmittel"){
+        this.categoryLinks.filter(type => type == "lebensmittel");
+        this.productCategories = [];
+      }
       this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
     });
   }

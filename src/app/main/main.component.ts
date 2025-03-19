@@ -67,7 +67,6 @@ export class MainComponent implements OnInit {
         numberClickedOnHelp: 0,
         numberClickedOnSettings: 0
       };
-      debugger;
       this.loginService.createUserBehaviour(userBehaviour).subscribe((userBehaviour) => {
         this.userBehaviour = userBehaviour;
         this.loginService.emitUserBehaviour(userBehaviour);

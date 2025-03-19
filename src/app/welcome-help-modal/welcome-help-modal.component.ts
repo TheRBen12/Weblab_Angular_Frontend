@@ -23,4 +23,9 @@ export class WelcomeHelpModalComponent {
   increaseTipIndex(){
     this.data.currentTipIndex = this.data.currentTipIndex + 1;
   }
+
+  decreaseTipIndex() {
+    this.data.currentTipIndex = this.data.currentTipIndex - 1;
+
+  }
 }

@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Experiment} from '../models/experiment';
 import {ExperimentTest} from '../models/experiment-test';
+import {ExperimentTestExecution} from '../models/experiment-test-execution';
+import {RecallRecognitionExperimentExecution} from '../models/recall-recognition-experiment-execution';
 
 @Injectable({
   providedIn: 'root'
@@ -53,5 +55,20 @@ export class ExperimentService {
   setNextStartedExperimentTest(experiment: any) {
     const data: any = {experimentId: experiment.id, startedAt: experiment.startedAt}
     localStorage.setItem('lastStartedExperimentTest', JSON.stringify(data));
+  }
+
+  saveExperimentExecution(newExecution: ExperimentTestExecution): Observable<ExperimentTestExecution> {
+    return this.http.post<ExperimentTestExecution>('https://localhost:7147/api/ExperimentTest/execution/new', newExecution);
+  }
+
+
+  getExperimentExecutionInProcess(userId: number, testId: number): Observable<ExperimentTestExecution> {
+    return this.http.get<ExperimentTestExecution>('https://localhost:7147/api/ExperimentTest/execution/find', {params: {userId: userId, testId: testId, state: "INPROCESS"}});
+
+  }
+
+  saveRecallRecognitionExecution(recallRecognitionExecution: RecallRecognitionExperimentExecution) {
+    return this.http.post<RecallRecognitionExperimentExecution>('https://localhost:7147/api/RecallRecognitionExperiment/new', recallRecognitionExecution);
+
   }
 }

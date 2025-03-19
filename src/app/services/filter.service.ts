@@ -29,27 +29,42 @@ export class FilterService {
     return products.filter((product) => {
       const productSpecifications = product.specifications;
       return textInputs.some(text => {
-        return productSpecifications.some((specification: any) =>
-          String(specification.value)
-            .replaceAll(" ", "")
-            .toLowerCase()
-            .includes(text.replaceAll(" ", "").toLowerCase())
-        );
+        if (text == "OS") {
+          return this.splitAndFilterBySpecification(productSpecifications, text);
+        }else{
+          return productSpecifications.some((specification: any) =>
+            String(specification.value)
+              .replaceAll(" ", "")
+              .toLowerCase()
+              .includes(text.replaceAll(" ", "").toLowerCase())
+          );
+        }
+
       });
     });
   }
 
+  splitAndFilterBySpecification(specifications: any, text: string) {
+    return specifications.some((spec: any) => spec.split(" ").indexOf(text)) != -1;
+  }
+
 
   filterByAllSpecification(products: any[], textInputs: string[]) {
+    console.log(textInputs);
     return products.filter((product) => {
       const productSpecifications = product.specifications;
       return textInputs.every(text => {
-        return productSpecifications.some((specification: any) =>
-          String(specification.value)
-            .replaceAll(" ", "")
-            .toLowerCase()
-            .includes(text.replaceAll(" ", "").toLowerCase())
-        );
+        if (text == "OS") {
+          console.log(text);
+          return this.splitAndFilterBySpecification(productSpecifications, text);
+        }else {
+          return productSpecifications.some((specification: any) =>
+            String(specification.value)
+              .replaceAll(" ", "")
+              .toLowerCase()
+              .includes(text.replaceAll(" ", "").toLowerCase())
+          );
+        }
       });
     });
   }
@@ -128,7 +143,7 @@ export class FilterService {
 
     }
 
-    let properties : any[] = []
+    let properties: any[] = []
     products.forEach((product) => {
       const productPropertyValues = Object.values(product);
       const productPropertyKeyNames = Object.keys(product);
@@ -138,10 +153,12 @@ export class FilterService {
             const toAdd = String(value).replaceAll(" ", "").toLowerCase().includes(text.replaceAll(" ", "").toLowerCase());
             if (productPropertyKeyNames[index] == "name" && toAdd && text.length > 1) {
               nameProperties.push(text)
+            }else{
+              if (toAdd) {
+                properties.push(text);
+              }
             }
-            if (toAdd){
-              properties.push(text);
-            }
+
             return toAdd;
           }
           return false;

@@ -35,6 +35,9 @@ import {
 import {
   MentalModelCreateInterfaceComponent
 } from './experiment-tests/tests/mental-model-create-interface/mental-model-create-interface.component';
+import {
+  RecallRecognitionPartFourComponent
+} from './experiment-tests/tests/recall-recognition/recall-recognition-part-four/recall-recognition-part-four.component';
 
 export const routes: Routes = [
   {
@@ -68,6 +71,15 @@ export const routes: Routes = [
           },
           {
             path: 'recall-recognition/3', component: RecallRecognitionPartThreeComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
+
+          {
+            path: 'recall-recognition/17', component: RecallRecognitionPartFourComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)

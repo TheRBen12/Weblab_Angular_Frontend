@@ -23,4 +23,17 @@
   padding: 10px;
 }
 
+.progress-bar-circle{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(222, 214, 214, 0.7); /* Schwarzer Hintergrund mit 50% Transparenz */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; ;
+}
+
 

@@ -1,1 +1,63 @@
-<p>recall-recognition-part-four works!</p>
+<div class="d-flex flex-row">
+  <div class="col-2">
+    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
+                                     [instructions]="instructions"></app-experiment-test-instruction>
+    <div class="d-flex justify-content-center align-items-center">
+      <button (click)="cancelExperiment()" class="btn btn-danger btn-lg">Versuch beenden</button>
+    </div>
+  </div>
+
+  <div style="width: 100%">
+    <nav class="navbar navbar-expand-lg shadow">
+      <div class="container-fluid">
+        <a class="navbar-brand">WebLab Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <app-search-bar (click)="setClickedOnSearchBar()"  [disabled]="false" [placeholder]="'Produkte suchen'"></app-search-bar>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button class="btn btn-primary">Anmelden</button>
+            </li>
+          </ul>
+          <div class="d-flex" role="search">
+            <button (click)="openBasket()" mat-fab class="me-4 d-flex justify-content-center align-items-center">
+              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                        fontIcon="shopping_cart">
+
+              </mat-icon>
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main mb-3">
+      <div class="row">
+        <div class="col-2">
+          <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
+                         [productCategories]="productCategories"
+                         [currentRoute]="currentRoute"
+                         [parentRoute]="parentRoute"
+                         [parentCategory]="parentCategory"
+                         [showCurrentLink]="false">
+          </app-side-menu>
+        </div>
+
+        <div class="col-sm-7 scrollable-list responsive-list-layout">
+          <router-outlet></router-outlet>
+        </div>
+        <div class="col-sm-3 ">
+          <div class="container-md">
+            <app-basket [isHidden]=basketIsHidden (checkoutEventEmitter)="finishExperiment($event)"
+                        [basket]=basket></app-basket>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

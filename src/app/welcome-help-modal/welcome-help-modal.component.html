@@ -34,8 +34,10 @@
   </div>
 
 <div class="mt-3">
-  <button [disabled]=" ( data.currentTipIndex >= 2) " (click)="increaseTipIndex()" class="me-3 btn btn-primary">Nächster Tipp</button>
+  <button [disabled]=" ( data.currentTipIndex >= 2) " (click)="increaseTipIndex()" class="me-2 btn btn-primary">Nächster Tipp</button>
+  <button [disabled]=" ( data.currentTipIndex <= 0) " (click)="decreaseTipIndex()" class="me-3 btn btn-primary">Zurück</button>
   <button [disabled]=" ( data.userGroup != 'A' && data.currentTipIndex < 2) "  (click)="closeModal()" class="btn btn-secondary" [mat-dialog-close]="true">Schliessen</button>
+
 </div>
 
 

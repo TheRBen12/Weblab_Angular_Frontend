@@ -7,8 +7,10 @@
          link-underline-opacity-75-hover">{{ parentCategory }}
       </a>
     </li>
-    <li *ngIf="currentRoute != 'Home' " class="fw-bold list-group-item link-underline-primary">
-      {{ currentRoute }}
+    <li [ngClass]="{'string-link': showCurrentLink }" *ngIf="currentRoute != 'Home' " class=" list-group-item">
+      <div class="fw-bold" *ngIf="showCurrentLink">{{currentRoute}}</div>
+        <a class="link-offset-2 link-offset-3-hover
+         link-underline link-underline-opacity-0 link-underline-opacity-75-hover" *ngIf="!showCurrentLink">{{ currentRoute }}</a>
     </li>
 
     <li *ngIf="currentRoute == 'Home'" class="list-group-item menu-item">
@@ -19,9 +21,7 @@
     </li>
     <li class="list-group-item menu-item" *ngFor="let category of productCategories; index as i">
       <a (click)="emitCurrentRoute(category.name)"
-         class="link-offset-2 link-offset-3-hover
-         link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-         [ngClass]="{'strong-link' : currentRoute==category.name}"
+         class=" link-offset-3-hover link-underline  link-underline-opacity-75-hover"
          routerLink="{{categoryLinks[i]}}">{{ category.name }}</a>
     </li>
   </ul>

@@ -16,7 +16,7 @@
       <app-busket-product (removeProductEventEmitter) = removeProduct($event) [product]="product"></app-busket-product>
     </div>
   <div *ngIf="basket.length > 0" class="d-flex justify-content-center">
-    <button class="flex-fill btn btn-primary flex-grow-1">Zur Kasse</button>
+    <button (click)="checkoutEventEmitter.emit(1)"  class="flex-fill btn btn-primary flex-grow-1">Zur Kasse</button>
   </div>
 
 </div>

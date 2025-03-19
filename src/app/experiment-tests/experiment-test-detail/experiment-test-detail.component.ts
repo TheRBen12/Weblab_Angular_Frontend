@@ -10,6 +10,7 @@ import {TimeService} from '../../services/time.service';
 import {LoginService} from '../../services/login.service';
 import {SettingService} from '../../services/setting.service';
 import {UserSetting} from '../../models/user-setting';
+import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 
 @Component({
   selector: 'app-experiment-test-detail',
@@ -74,6 +75,20 @@ export class ExperimentTestDetailComponent implements OnInit {
       toExperimentId: this.experimentTestId
     }
     this.timeService.saveNavigationTime(navigationTime);
+
+    this.saveExperimentExecution();
+
   }
 
+  private saveExperimentExecution() {
+    const newExecution: ExperimentTestExecution = {
+      userId: this.userService.currentUser()?.id,
+      experimentTestId: this.experimentTestId,
+      startedExecutionAt: new Date(),
+      state: "INPROCESS",
+    }
+    this.experimentService.saveExperimentExecution(newExecution).subscribe((execution) => {
+      console.log(execution);
+    });
+  }
 }
