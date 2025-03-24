@@ -4,6 +4,7 @@ import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatFabButton} from '@angular/material/button';
 import {NgIf} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-side-navigation',
@@ -15,7 +16,8 @@ import {NgIf} from '@angular/common';
     MatButton,
     MatDrawer,
     MatFabButton,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './side-navigation.component.html',
   standalone: true,

@@ -20,7 +20,7 @@ button{
   background-color: #404040
 }
 
-h1{
+h2{
   color: white;
 }
 
@@ -34,4 +34,8 @@ h1{
 
 .draw-container{
   background-color: #404040;
+}
+
+a{
+  color: white;
 }

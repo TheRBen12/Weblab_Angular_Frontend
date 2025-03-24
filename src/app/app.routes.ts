@@ -39,7 +39,6 @@ import {
   RecallRecognitionPartFourComponent
 } from './experiment-tests/tests/recall-recognition/recall-recognition-part-four/recall-recognition-part-four.component';
 import {FeedbackPartOneComponent} from './experiment-tests/tests/feedback-part-one/feedback-part-one.component';
-import {NavigationComponent} from './navigation/navigation/navigation.component';
 import {NavigationSelectComponent} from './navigation-select/navigation-select.component';
 
 export const routes: Routes = [

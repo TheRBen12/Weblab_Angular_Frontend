@@ -1,27 +1,22 @@
 <div *ngIf="!serverError; else errorMessage">
-  <div class="sub-navigation d-flex align-items-center justify-content-center">
+  <div [ngClass]="{'bottom': navigationSetting?.sideNavigationSearchbarBottom, 'sub-navigation d-flex align-items-center justify-content-center': !navigationSetting?.sideNavigationSearchbarBottom}"  class="sub-navigation d-flex align-items-center justify-content-center">
     <app-search-bar [placeholder]="'Experiment suchen'" (click)="updateUserBehaviour()"  [disabled]="false" (inputTextEvent)="filterExperiment($event)" [elements]="experiments" ></app-search-bar>
   </div>
   <div class="container mt-3 ">
-    <div class="d-flex justify-content-between">
+    <div class="p-1 d-flex justify-content-between">
       <h1>{{ title }}</h1>
       <div *ngIf="finishedExperiments">
         <p *ngIf="finishedExecutions.length == 0">
-          Sie haben noch keine Experiment durchgeführt
+          Sie haben noch keine Experiment abgeschlossen
         </p>
         <p *ngIf="finishedExecutions.length > 0">Sie haben {{finishedExperiments.length}} Experiment abgeschlossen</p>
       </div>
     </div>
-      <h5 class="mt-2 ">{{experiments.length}} Experimente</h5>
-    <p *ngIf="filteredExperiments.length > 0">Führen Sie die unten aufgelisteten Experiment durch.</p>
-      <div  class="row row-cols-3">
-        <app-experiment [isProgressiveVisualization]="currentUserSetting?.progressiveVisualizationExperiment ?? false" [currentUserPosition]="accountService.currentUser()?.currentExperimentPos ?? 0" [experiment]="experiment" *ngFor="let experiment of filteredExperiments"></app-experiment>
+      <h5 class="p-1 mt-2 ">{{filteredExperiments.length}} Experimente angezeigt</h5>
+    <p class="p-1" *ngIf="filteredExperiments.length > 0">Führen Sie die unten aufgelisteten Experiment durch.</p>
+      <div class="row row-cols-3 mb-2">
+        <app-experiment class="mb-2" [isProgressiveVisualization]="currentUserSetting?.progressiveVisualizationExperiment ?? false" [currentUserPosition]="accountService.currentUser()?.currentExperimentPos ?? 0" [experiment]="experiment" *ngFor="let experiment of filteredExperiments"></app-experiment>
       </div>
-      <ng-template #hiddenExperimentList>
-        <div *ngFor="let experiment of filteredExperiments; index as i" class="row row-cols-3 ">
-          <app-experiment [finishedExecutions] = "finishedExecutions"  [experiment]="experiment" *ngIf="experiment.position <= (accountService.currentUser()?.currentExperimentPos ?? 0)"></app-experiment>
-        </div>
-      </ng-template>
       <div *ngIf="filteredExperiments.length == 0">
         <p>Ihre Suche ergab leider keine Treffer</p>
       </div>

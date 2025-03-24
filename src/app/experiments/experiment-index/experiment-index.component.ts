@@ -3,7 +3,7 @@ import {SearchBarComponent} from '../../search-bar/search-bar.component';
 import {ExperimentService} from '../../services/experiment.service';
 import {Experiment} from '../../models/experiment';
 import {ExperimentComponent} from '../experiment/experiment.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {SettingService} from '../../services/setting.service';
 import {LoginService} from '../../services/login.service';
 import {UserSetting} from '../../models/user-setting';
@@ -11,10 +11,11 @@ import {filter, switchMap} from 'rxjs';
 import {FilterService} from '../../services/filter.service';
 import {Router} from '@angular/router';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
+import {NavigationSetting} from '../../models/navigation-setting';
 
 @Component({
   selector: 'app-experiment-index',
-  imports: [SearchBarComponent, ExperimentComponent, NgForOf, NgIf],
+  imports: [SearchBarComponent, ExperimentComponent, NgForOf, NgIf, NgClass],
   standalone: true,
   templateUrl: './experiment-index.component.html',
   styleUrl: './experiment-index.component.css'
@@ -32,12 +33,16 @@ export class ExperimentIndexComponent implements OnInit {
   finishedExperiments: Experiment[] | null = [];
   finishedExecutions: ExperimentTestExecution[] = [];
   numberFinishedTestsForExperiments: number[] = [];
+  protected navigationSetting!: NavigationSetting;
 
   constructor(public readonly accountService: LoginService, private cdrf: ChangeDetectorRef) {
 
     effect(() => {
       const userId = this.accountService.currentUser()?.id;
       if (userId) {
+        this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
+          this.navigationSetting = setting;
+        })
         this.fetchFinishedExecutions(userId, "FINISHED").subscribe((executions) => {
           if (executions.length > 0) {
             this.finishedExecutions = executions;
@@ -97,7 +102,6 @@ export class ExperimentIndexComponent implements OnInit {
                 const finishedExperiments = this.finishedExperiments?.map(exp => exp.id);
                 return finishedExperiments?.indexOf(exp.id) == -1;
               });
-              debugger;
               // Find experiment with minimal position
               const expPosValues = nonFinishedExperiments.reduce((min, exp, index) =>
                   exp.position < min.value.position ? {value: exp, index} : min

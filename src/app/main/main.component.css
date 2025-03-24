@@ -3,3 +3,20 @@
   right: 50px;
   bottom: 50px
 }
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+}
+
+
+.main-header{
+  background-color: #404040
+}
+
+
+.right-side-header-item{
+  a{
+    color: white;
+  }
+  font-size: 20px;
+}

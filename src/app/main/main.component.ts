@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {WelcomeHelpModalComponent} from '../welcome-help-modal/welcome-help-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NavigationComponent} from '../navigation/navigation/navigation.component';
@@ -8,6 +8,12 @@ import {MatFabButton} from '@angular/material/button';
 import {LoginService} from '../services/login.service';
 import {TimeService} from '../services/time.service';
 import {UserBehaviour} from '../models/user-behaviour';
+import {SettingService} from '../services/setting.service';
+import {NavigationSetting} from '../models/navigation-setting';
+import {NgIf} from '@angular/common';
+import {SideNavigationComponent} from '../side-navigation/side-navigation.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {SearchBarComponent} from '../search-bar/search-bar.component';
 
 @Component({
   selector: 'app-main',
@@ -15,7 +21,12 @@ import {UserBehaviour} from '../models/user-behaviour';
     NavigationComponent,
     RouterOutlet,
     MatIcon,
-    MatFabButton
+    MatFabButton,
+    NgIf,
+    SideNavigationComponent,
+    MatRadioButton,
+    MatRadioGroup,
+    SearchBarComponent
   ],
   standalone: true,
   templateUrl: './main.component.html',
@@ -26,13 +37,29 @@ export class MainComponent implements OnInit {
   timeService = inject(TimeService);
   loginService: LoginService = inject(LoginService);
   userBehaviour: UserBehaviour | null = null;
+  settingService: SettingService = inject(SettingService);
+  protected navigationSetting!: NavigationSetting;
 
   constructor(private dialog: MatDialog) {
+
+    effect(() => {
+      const userId = this.loginService.currentUser()?.id;
+      if (userId) {
+        this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
+          this.navigationSetting = setting;
+        })
+
+      }
+    });
   }
 
   ngOnInit() {
-    if (this.loginService.currentUser()?.id) {
 
+    const userId = this.loginService.currentUser()?.id
+    if (userId) {
+      this.settingService.fetchNavigationSetting(userId).subscribe((navigationSetting) => {
+        this.navigationSetting = navigationSetting
+      });
       this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
         this.userBehaviour = userBehaviour;
       });
