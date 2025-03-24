@@ -1,34 +1,55 @@
-import {Component, ElementRef, Input, OnChanges, QueryList, SimpleChanges, ViewChildren} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  QueryList,
+  SimpleChanges,
+  ViewChildren
+} from '@angular/core';
 import {ExperimentTest} from '../../models/experiment-test';
-import {NgIf} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
+import {MatIcon} from '@angular/material/icon';
+import {ExperimentTestExecution} from '../../models/experiment-test-execution';
+import {LoginService} from '../../services/login.service';
 
 @Component({
   selector: 'app-experiment-test',
   imports: [
     NgIf,
     FormsModule,
-    RouterLink
+    RouterLink,
+    NgClass,
+    MatIcon
   ],
   standalone: true,
   templateUrl: './experiment-test.component.html',
   styleUrl: './experiment-test.component.css'
 })
-export class ExperimentTestComponent implements OnChanges {
+export class ExperimentTestComponent implements OnChanges, OnInit {
   @Input() test: ExperimentTest = {
     position: 1, name: "", description: "",
     estimatedExecutionTime: 0, state: "", experiment: null,
     id: 0, headDetailDescription: "", detailDescription: "", goalInstruction: "",
     configuration: {},
   }
+  @Input() completed: boolean = false;
   @Input() markedText: string = "";
   @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;
+  @Input() finishedExecutions: { [key: number]: boolean } = {};
+  userService: LoginService = inject(LoginService);
+  @Input() state: string = 'Freigeschaltet';
+
 
   ngOnChanges(changes: SimpleChanges): void {
-    const textToMark = changes["markedText"].currentValue
 
-    if (textToMark != "" && this.textAttributes) {
+    const textToMark = changes["markedText"]?.currentValue
+
+    if (textToMark != "" && this.textAttributes && textToMark != undefined) {
       this.textAttributes.forEach((attr) => {
         if (!attr.nativeElement.dataset.originalText) {
           attr.nativeElement.dataset.originalText = attr.nativeElement.innerText;
@@ -47,4 +68,13 @@ export class ExperimentTestComponent implements OnChanges {
       });
     }
   }
+
+  ngOnInit(): void {
+    if (this.completed){
+      this.state = 'Abgeschlossen';
+    }
+
+  }
+
+
 }

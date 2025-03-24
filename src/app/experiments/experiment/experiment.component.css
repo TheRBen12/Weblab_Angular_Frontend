@@ -8,3 +8,17 @@ img{
 .btn-to-exp-tests{
   min-height: 30px
 }
+
+.completed-experiment{
+    border: #14AE5C 2px solid;
+}
+
+.check-icon{
+  color: #14AE5C;
+  width: 40px;
+}
+
+.large-text{
+  font-size: 20px;
+  font-weight: bold;
+}

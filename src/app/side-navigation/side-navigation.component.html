@@ -1,0 +1,37 @@
+
+<div class="side-menu-container">
+  <div class="ms-3 d-flex flex-row gap-3">
+    <button mat-fab>
+      <mat-icon (click)="drawer.toggle()" class="menu-icon">menu</mat-icon>
+    </button>
+    <h1 class="p-2">Weblab</h1>
+  </div>
+
+    <mat-drawer-container class="h-100 draw-container">
+
+      <mat-drawer #drawer class="mt-3 side-menu" mode="side">
+
+        <div>
+          <ul class="list-group list-group-flush">
+            <div class="menu-item p-4">Experimente</div>
+            <div class="menu-item p-4">Einstellungen</div>
+            <div class="menu-item p-4">Hilfe</div>
+            <div class="menu-item p-4">Mein Fortschritt</div>
+          </ul>
+        </div>
+        <div class="border-bottom"></div>
+        <div *ngIf="showLogoutAndProfile">
+          <div class="mt-3 menu-item p-4">Profil</div>
+          <div class="menu-item p-4">Abmelden</div>
+
+
+        </div>
+
+      </mat-drawer>
+
+
+    </mat-drawer-container>
+
+</div>
+
+

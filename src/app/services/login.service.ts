@@ -29,6 +29,7 @@ export class LoginService {
       user => {
         if (user){
           this.setUser(user);
+          console.log(user);
         }
       }
     );
@@ -47,8 +48,8 @@ export class LoginService {
   }
 
   logout(){
-
     localStorage.clear();
+    sessionStorage.clear();
     const finishedAt = new Date();
     const user = this.currentUser();
     if (user){

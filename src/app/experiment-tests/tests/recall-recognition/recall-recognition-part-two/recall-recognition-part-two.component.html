@@ -3,7 +3,7 @@
     <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
                                      [instructions]="instructions"></app-experiment-test-instruction>
   </div>
-  <div style="width: 100%">
+  <div (click)="increaseClicks()" style="width: 100%">
     <nav class="navbar navbar-expand-lg shadow">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">WebLab Shop</a>
@@ -11,7 +11,8 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <app-search-bar [disabled]="false" [searchOnEnter]="true" (inputTextEvent)="filterProduct($event)"
+        <app-search-bar (click)="setSearchBarUsedToTrue()" [disabled]="false" [searchOnEnter]="true"
+                        (inputTextEvent)="filterProduct($event)"
                         [placeholder]="'Produkte suchen'"></app-search-bar>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -20,8 +21,13 @@
             </li>
           </ul>
           <div class="d-flex" role="search">
-            <mat-icon class="me-3 shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
-                      fontIcon="shopping_cart"></mat-icon>
+            <button (click)="toggleBasket()" mat-fab class="me-4 d-flex justify-content-center align-items-center">
+              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                        fontIcon="shopping_cart">
+
+              </mat-icon>
+            </button>
+
           </div>
         </div>
       </div>
@@ -29,12 +35,12 @@
 
     <div class="main mb-3">
       <div class="row">
-        <div class="col-2">
+        <div (click)="increaseFailedClicks()" class="col-2">
           <app-side-menu [categoryLinks]=categoryLinks
                          [productCategories]="productCategories"
                          [currentRoute]="currentRoute"
                          [parentRoute]="parentRoute"
-                         [parentCategory]="parentCategory" (routeEvent)="updateInstructions()" >
+                         [parentCategory]="parentCategory" (routeEvent)="updateInstructions()">
           </app-side-menu>
         </div>
 
@@ -43,10 +49,24 @@
         </div>
         <div *ngIf="!productService.basketIsEmpty()" class="col-3 me-3">
           <div class="container-md">
-            <app-basket (checkoutEventEmitter)="finishExperiment($event)"  [basket] = basket></app-basket>
+            <app-basket [isHidden]="showBasket" (hidenEventEmitter)="toggleBasket()"
+                        (checkoutEventEmitter)="finishExperiment($event)" [basket]=basket></app-basket>
           </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>

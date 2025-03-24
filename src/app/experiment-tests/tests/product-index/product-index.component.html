@@ -22,7 +22,7 @@
   <div>
     <h4>{{filteredProducts.length}} Produkte</h4>
   </div>
-  <div class="mt-3 row row-cols-md-3 responsive-product-index-list">
+  <div id="productList" class="mt-3 row row-cols-md-3 responsive-product-index-list">
     <app-product [specifications]="product.specifications"  *ngFor="let product of filteredProducts" [product]="product"></app-product>
   </div>
 </div>

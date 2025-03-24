@@ -5,7 +5,7 @@
       </app-experiment-test-instruction>
 
   </div>
-  <div class="w-100">
+  <div (click)="increaseNumberClicks()"  class="w-100">
     <div class="container-fluid shadow">
       <div class="row shadow">
         <div class="col">
@@ -14,8 +14,8 @@
               <div class="col">
                 <h2 class="me-4">WeblabShop</h2>
               </div>
-              <div class="col-7 flex-fill">
-                <app-auto-complete [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
+              <div (click)="clickedOnSearchBar = true"  class="col-7 flex-fill">
+                <app-auto-complete (onInputClearedEventEmitter)="this.increaseNumberUsedSearchBar()"  (onSelectEventEmitter)="showProduct($event)"  [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
                                    [placeholder]="'Produkte suchen'">
 
                 </app-auto-complete>
@@ -40,7 +40,7 @@
 
     <div class="main mb-3">
       <div class="row">
-        <div class="col-2">
+        <div (click)="increaseFailedClicks($event)"  class="col-2">
           <app-side-menu [categoryLinks]=categoryLinks
                          [productCategories]="productCategories"
                          [currentRoute]="currentRoute"
@@ -49,7 +49,7 @@
           </app-side-menu>
         </div>
 
-        <div class="col me-3">
+        <div (click)="increaseFailedClicks($event)" class="col me-3">
           <router-outlet></router-outlet>
         </div>
         <div class="col-3 me-3">
@@ -62,4 +62,18 @@
     </div>
   </div>
 </div>
+
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>
+
 

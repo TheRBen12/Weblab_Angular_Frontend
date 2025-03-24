@@ -1,8 +1,15 @@
 <div class="basket-product-card container-md ">
   <div class="d-flex flex-row gap-3 ">
     <div class="d-flex justify-content-between">
-      <img *ngIf="product" class="img-fluid"
-           src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
+
+      <div *ngIf="product?.type != 'Gemuese' && product?.type != 'Wurzelgemuese'; else gemuese">
+        <img *ngIf="product" class="img-fluid"
+             src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
+      </div>
+      <ng-template #gemuese>
+        <img class="img-fluid"
+             src="assets/images/products/{{product?.name}}.png">
+      </ng-template>
 
     </div>
     <div>

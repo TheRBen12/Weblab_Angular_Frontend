@@ -6,6 +6,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {FilterService} from '../../../services/filter.service';
 import {FilterSelectDropdownComponent} from '../../../filter-select-dropdown/filter-select-dropdown.component';
+import {ExperimentService} from '../../../services/experiment.service';
 
 @Component({
   selector: 'app-product-index',
@@ -19,16 +20,18 @@ import {FilterSelectDropdownComponent} from '../../../filter-select-dropdown/fil
   standalone: true,
   styleUrl: './product-index.component.css'
 })
-export class ProductIndexComponent implements OnInit, OnDestroy{
+export class ProductIndexComponent implements OnInit, OnDestroy {
   title: string | undefined = "";
   productService = inject(ProductService);
   filterService = inject(FilterService);
+  experimentService: ExperimentService = inject(ExperimentService);
   @Input() products: any[] = [];
   filteredProducts: any[] = [];
   router = inject(Router);
   showFilterResultTitle: boolean = false;
   productProperties: string[] = []
   specifications: string[] = [];
+  productLimit: number | null = null;
 
   filterSubscription: Subscription = new Subscription();
   @Input() category: string = "";
@@ -39,17 +42,20 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.fetchAllProducts();
+
+    this.fetchAllProducts().subscribe((products) => {
+      this.products = products;
+    });
 
     const urlSegments = this.router.url.split("/");
     let isHicksLawExperiment = false;
-    if (urlSegments.indexOf("hicks-law") != -1){
+    if (urlSegments.indexOf("hicks-law") != -1) {
       isHicksLawExperiment = true;
     }
     this.filterService.getSubject().subscribe((filterText) => {
-      if (isHicksLawExperiment && filterText == ""){
+      if (isHicksLawExperiment && filterText == "") {
         this.filteredProducts = this.products;
-      }else{
+      } else {
         this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
         this.showFilterResultTitle = this.filteredProducts.length > 0;
       }
@@ -76,23 +82,30 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
         }
 
         this.fetchProductsByCategory()
+
+        this.productService.getProductLimitSubscription().subscribe((limit) => {
+          if (limit) {
+            this.productLimit = limit;
+            this.fetchProductsByCategory();
+          }
+        });
+
       });
-    }else {
+    } else {
       this.title = "Gesamtsortiment";
     }
-
-
   }
 
+
   fetchAllProducts() {
-    this.productService.getAllProducts().subscribe((products) => {
-      this.products = products
-    });
+    return this.productService.getAllProducts();
   }
 
   fetchProductsByCategory() {
     this.productService.getProductsByCategory(this.category).subscribe((products) => {
-      this.filteredProducts = products;
+
+        this.filteredProducts = products.slice(0, this.productLimit?? products.length + 1);
+
       this.productProperties = Object.keys(this.filteredProducts[0]).filter(key => key != "id" && key != "name" && key != "specifications");
       this.createSpecificationValueList();
     }, error => {
@@ -114,10 +127,10 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
 
   getPropertyValues(property: string) {
     const values: any[] = [];
-    if (property){
+    if (property) {
       this.filteredProducts.forEach((product: any) => {
         const value = product[property];
-        if (value && values.indexOf(value) == -1){
+        if (value && values.indexOf(value) == -1) {
           values.push(value);
         }
       });
@@ -126,6 +139,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy{
     return values;
   }
 
-
-
+  private updateProductList(limit: number) {
+    this.filteredProducts = this.filteredProducts.slice(0, limit + 1);
+  }
 }

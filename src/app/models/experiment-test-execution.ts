@@ -1,3 +1,5 @@
+import {ExperimentTest} from './experiment-test';
+
 export interface ExperimentTestExecution {
 
   id?: number;
@@ -7,5 +9,8 @@ export interface ExperimentTestExecution {
   finishedExecutionAt?: Date,
   executionTime?: number;
   state: string;
+  experimentTest?: ExperimentTest;
+  openedDescAt: Date;
+  timeReadingDescription: number;
 
 }

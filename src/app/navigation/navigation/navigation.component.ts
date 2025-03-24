@@ -1,4 +1,4 @@
-import {Component, inject, numberAttribute, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, Input, numberAttribute, OnInit, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {LoginService} from '../../services/login.service';
 import {User} from '../../models/user';
@@ -22,11 +22,19 @@ export class NavigationComponent implements OnInit {
   router = inject(Router);
   currentUser: User | null
   currentLink: string = "Experimente"
-  private userBehaviour: UserBehaviour | null = null;
-
+  userBehaviour!: UserBehaviour | null;
 
   constructor() {
     this.currentUser = this.loginService.getCurrentUser();
+
+    effect(() => {
+      const userId = this.loginService.currentUser()?.id;
+      if (userId) {
+        this.loginService.getUserBehaviour(userId).subscribe((userBehaviour) => {
+          this.userBehaviour = userBehaviour;
+        })
+      }
+    });
   }
 
   logout() {
@@ -49,14 +57,15 @@ export class NavigationComponent implements OnInit {
         numberClickedOnHelp: 1,
         user: this.currentUser?.id,
         welcomeModalTipIndex: 0,
-        numberClickedOnSettings: 0
+        numberClickedOnSettings: 0,
+        numberClickedOnHint: 0,
+        lastUpdatedAt: new Date(),
       };
       this.loginService.createUserBehaviour(userBehaviour).subscribe((userBehaviour) => {
         this.userBehaviour = userBehaviour;
       });
     }
   }
-
 
   updateUserSettingBehaviour() {
     this.currentLink = 'Einstellungen';
@@ -70,12 +79,13 @@ export class NavigationComponent implements OnInit {
         numberClickedOnSettings: 1,
         user: this.currentUser?.id,
         welcomeModalTipIndex: 0,
-        numberClickedOnHelp: 0
+        numberClickedOnHelp: 0,
+        numberClickedOnHint: 0,
+        lastUpdatedAt: new Date(),
       };
       this.loginService.createUserBehaviour(userBehaviour);
     }
   }
-
 
   updateUserBehaviour(userBehaviour: UserBehaviour) {
     this.loginService.updateUserBehaviour(userBehaviour).subscribe((user) => {
@@ -88,18 +98,8 @@ export class NavigationComponent implements OnInit {
       if (userBehaviour) {
         this.userBehaviour = userBehaviour;
       }
-    })
-    if (this.currentUser) {
-      this.fetchUserBehaviour(this.currentUser.id)
-    }
-
-  }
-
-  fetchUserBehaviour(userId: number) {
-    this.loginService.getUserBehaviour(userId).subscribe((userBehaviour) => {
-      this.userBehaviour = userBehaviour;
     });
-  }
 
+  }
 
 }

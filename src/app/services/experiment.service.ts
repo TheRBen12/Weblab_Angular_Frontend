@@ -5,6 +5,7 @@ import {Experiment} from '../models/experiment';
 import {ExperimentTest} from '../models/experiment-test';
 import {ExperimentTestExecution} from '../models/experiment-test-execution';
 import {RecallRecognitionExperimentExecution} from '../models/recall-recognition-experiment-execution';
+import {HicksLawExperimentExecution} from '../models/hicks-law-experiment-execution';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class ExperimentService {
   }
 
   getExperiment(experimentId: number): Observable<Experiment> {
-    return this.http.get<Experiment>('https://localhost:7147/api/experiment/'+experimentId, {params: {experimentId: experimentId}});
+    return this.http.get<Experiment>('https://localhost:7147/api/experiment/' + experimentId, {params: {experimentId: experimentId}});
   }
 
   getExperimentTest(experimentTestId: number): Observable<ExperimentTest> {
@@ -33,14 +34,14 @@ export class ExperimentService {
   }
 
 
-  setLastFinishedExperimentTest(id: number){
+  setLastFinishedExperimentTest(id: number) {
     const data: any = {experimentId: id, finishedAt: new Date()}
     localStorage.setItem('lastFinishedExperimentTest', JSON.stringify(data));
   }
 
-  getLastFinishedExperimentTest(){
+  getLastFinishedExperimentTest() {
     const data = localStorage.getItem("lastFinishedExperimentTest")
-    if (data){
+    if (data) {
       return JSON.parse(data);
     }
     return null;
@@ -48,7 +49,7 @@ export class ExperimentService {
   }
 
 
-  getLastStartedExperiment(id: number){
+  getLastStartedExperiment(id: number) {
     return localStorage.getItem('lastSelectedExperimentTest');
   }
 
@@ -62,13 +63,44 @@ export class ExperimentService {
   }
 
 
-  getExperimentExecutionInProcess(userId: number, testId: number): Observable<ExperimentTestExecution> {
-    return this.http.get<ExperimentTestExecution>('https://localhost:7147/api/ExperimentTest/execution/find', {params: {userId: userId, testId: testId, state: "INPROCESS"}});
+  getExperimentExecutionByStateAndTest(userId: number, testId: number, state: string): Observable<ExperimentTestExecution> {
+    return this.http.get<ExperimentTestExecution>('https://localhost:7147/api/ExperimentTest/execution/find', {
+      params: {
+        userId: userId,
+        testId: testId,
+        state: state
+      }
+    });
 
   }
 
+  getExperimentExecutionByState(userId: number, state: string): Observable<ExperimentTestExecution[]> {
+    return this.http.get<ExperimentTestExecution[]>('https://localhost:7147/api/ExperimentTest/execution/find/state', {
+      params: {
+        userId: userId,
+        state: state
+      }
+    });
+  }
+
+
   saveRecallRecognitionExecution(recallRecognitionExecution: RecallRecognitionExperimentExecution) {
     return this.http.post<RecallRecognitionExperimentExecution>('https://localhost:7147/api/RecallRecognitionExperiment/new', recallRecognitionExecution);
+
+  }
+
+  getExperimentExecutionByTestAndState(testId: number, state: string): Observable<ExperimentTestExecution[]> {
+    return this.http.get<ExperimentTestExecution[]>('https://localhost:7147/api/ExperimentTest/execution/find/test', {
+      params: {
+        testId: testId,
+        state: state
+      }
+    });
+
+  }
+
+  saveHicksLawExperimentExecution(hicksLawExecution: HicksLawExperimentExecution): Observable<HicksLawExperimentExecution> {
+    return this.http.post<HicksLawExperimentExecution>('https://localhost:7147/api/RecallRecognitionExperiment/new', hicksLawExecution);
 
   }
 }

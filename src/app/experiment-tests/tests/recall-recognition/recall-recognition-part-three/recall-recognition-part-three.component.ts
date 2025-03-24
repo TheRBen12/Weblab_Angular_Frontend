@@ -1,10 +1,10 @@
-import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit, signal} from '@angular/core';
 import {AutoCompleteComponent} from '../../../../auto-complete/auto-complete.component';
 import {
   ExperimentTestInstructionComponent
 } from "../../../experiment-test-instruction/experiment-test-instruction.component";
 import {MatIcon} from "@angular/material/icon";
-import {Router, RouterOutlet} from "@angular/router";
+import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
 import {SearchBarComponent} from "../../../../search-bar/search-bar.component";
 import {SideMenuComponent} from "../../side-menu/side-menu.component";
 import {ProductType} from '../../../../models/product-category';
@@ -14,6 +14,14 @@ import {Observable, Subscription} from 'rxjs';
 import {SideMenuService} from '../../../../services/side-menu.service';
 import {FormControl} from '@angular/forms';
 import {BasketComponent} from '../../../../basket/basket.component';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {NgIf} from '@angular/common';
+import {RecallRecognitionExperimentExecution} from '../../../../models/recall-recognition-experiment-execution';
+import {LoginService} from '../../../../services/login.service';
+import {ExperimentService} from '../../../../services/experiment.service';
+import {ExperimentTestExecution} from '../../../../models/experiment-test-execution';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-recall-recognition-part-three',
@@ -23,7 +31,11 @@ import {BasketComponent} from '../../../../basket/basket.component';
     MatIcon,
     RouterOutlet,
     SideMenuComponent,
-    BasketComponent
+    BasketComponent,
+    MatCard,
+    MatCardContent,
+    MatProgressSpinner,
+    NgIf
   ],
   templateUrl: './recall-recognition-part-three.component.html',
   standalone: true,
@@ -41,12 +53,21 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   filterService = inject(FilterService);
   productService = inject(ProductService);
   router = inject(Router);
+  userService: LoginService = inject(LoginService);
+  experimentService: ExperimentService = inject(ExperimentService);
   basketIsHidden: boolean = true;
   basket: any[] = [];
+  loading: boolean = false;
+  experimentTestId: number = 0;
+  currentExecution: ExperimentTestExecution | null = null;
+  failedClicks: number = 0;
+  numberClicks: number = 0;
+  clickedOnSearchBar: boolean = false;
+  numberUsedSearchBar: number = 0;
 
-  constructor() {
+  constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
     this.instructions = ["Benutzen Sie das Suchfeld, um Tastaturen mit Ihrem gewünschten Tastaturlayout " +
-    "und Ihrer bevorzugten peripheren Verbindungsart zu suchen."];
+    "und Ihrer bevorzugten peripheren Verbindungsart und Signalübertragun zu suchen."];
 
   }
 
@@ -61,8 +82,19 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.productService.getBasket();
+    this.productService.getBasketSubscription().subscribe((basket) => {
+      if (basket.length == 1){
+        this.failedClicks --;
+      }
+      this.basket = basket
+    });
+
     this.fetchAllProducts();
     this.fetchProductTypes("Home");
+    const urlSegments = this.router.url.split("/");
+    const index = urlSegments.indexOf("recall-recognition") + 1;
+    this.experimentTestId = Number(urlSegments[index]);
   }
 
   fetchProductTypes(currentRoute: string) {
@@ -74,6 +106,57 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   }
 
   finishExperiment($event: number) {
-    
+    const id = this.userService.currentUser()?.id
+    if (id) {
+      this.loading = true;
+      this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
+        this.currentExecution = exec;
+        const recallRecognitionExecution: RecallRecognitionExperimentExecution = {
+          categoryLinkClickDates: JSON.stringify({}),
+          experimentTestId: this.experimentTestId,
+          failedClicks: this.failedClicks,
+          state: "FINISHED",
+          userId: this.userService.currentUser()?.id,
+          finishedExecutionAt: new Date(),
+          experimentTestExecutionId: this.currentExecution?.id,
+          numberClicks: this.numberClicks,
+          clickedOnSearchBar: this.clickedOnSearchBar,
+          numberUsedSearchBar: this.numberUsedSearchBar,
+        };
+        this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigateByUrl("/")
+            this.toasterService.success("Vielen Dank! Sie haben das Experiment erfolgreich abgeschlossen");
+          }, 2000);
+
+        });
+      });
+    }
+  }
+
+
+  private fetchExecutionInProcess(userId: number, testId: number) {
+    return this.experimentService.getExperimentExecutionByStateAndTest(userId, testId, "INPROCESS");
+  }
+
+  showProduct($event: number) {
+    const childRoute = this.activatedRoute.firstChild;
+    this.numberUsedSearchBar++;
+    this.router.navigate(['./show/product/' + $event], {relativeTo: childRoute});
+
+  }
+
+  increaseNumberClicks() {
+    this.numberClicks++;
+  }
+
+  increaseFailedClicks(event: Event){
+    console.log(event.currentTarget?.toString());
+    this.failedClicks++;
+  }
+
+  increaseNumberUsedSearchBar() {
+    this.numberUsedSearchBar++;
   }
 }

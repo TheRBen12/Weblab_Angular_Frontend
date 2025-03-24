@@ -28,23 +28,29 @@ export class SettingsComponent implements OnInit {
   });
 
   saveSettings(): void {
-    const userSetting: UserSetting = {
-      progressiveVisualizationExperiment: this.settingsForm.get('progressiveVisualizationExperiment')?.value,
-      progressiveVisualizationExperimentTest: this.settingsForm.get("progressiveVisualizationExperimentTest")?.value,
-      autoStartNextExperiment: this.settingsForm.get('autoStartNextExperiment')?.value,
-      userId: this.accountService.currentUser()?.id
+    const userID = this.accountService.currentUser()?.id;
+    if (userID){
+      const userSetting: UserSetting = {
+        progressiveVisualizationExperiment: this.settingsForm.get('progressiveVisualizationExperiment')?.value,
+        progressiveVisualizationExperimentTest: this.settingsForm.get("progressiveVisualizationExperimentTest")?.value,
+        autoStartNextExperiment: this.settingsForm.get('autoStartNextExperiment')?.value,
+        userID: userID,
+      }
+
+      this.settingsService.saveSettings(userSetting).subscribe((settings) => {
+        if (settings) {
+          this.toastrService.success("Ihre Einstellungen wurden gespeichert", "", {easeTime: 1000,})
+          this.router.navigateByUrl("/");
+        }
+      }, error => {
+        if (error) {
+          this.toastrService.error("Ihre EInstellungen konnten leider nciht gespeichert werden. " +
+            "Versuchen Sie es nocheinmal");
+        }
+      });
     }
-    this.settingsService.saveSettings(userSetting).subscribe((settings) => {
-      if (settings) {
-        this.toastrService.success("Ihre Einstellungen wurden gespeichert", "", {easeTime: 1000,})
-        this.router.navigateByUrl("/");
-      }
-    }, error => {
-      if (error) {
-        this.toastrService.error("Ihre EInstellungen konnten leider nciht gespeichert werden. " +
-          "Versuchen Sie es nocheinmal");
-      }
-    });
+
+
   }
 
   ngOnInit(): void {

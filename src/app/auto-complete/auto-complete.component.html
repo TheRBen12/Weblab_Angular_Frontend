@@ -9,7 +9,7 @@
              [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete">
         @for (option of filteredOptions; track option) {
-          <mat-option [value]="option.trademark + ' - ' + option.name">
+          <mat-option (click)="emitSelection(option.id)"  [value]="option.trademark + ' - ' + option.name">
             <app-auto-complete-product [textToMark]="textToMark"  [product]="option"></app-auto-complete-product>
           </mat-option>
         }

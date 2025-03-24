@@ -37,7 +37,7 @@ export class LoginComponent {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
         this.loginService.setUser(user);
-        this.router.navigateByUrl("/");
+        this.router.navigateByUrl("/navigation-select");
         this.toastr.success("Anmeldung erfolgreich")
       }
     }, (error) => {

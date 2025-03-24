@@ -50,12 +50,10 @@ export class FilterService {
 
 
   filterByAllSpecification(products: any[], textInputs: string[]) {
-    console.log(textInputs);
     return products.filter((product) => {
       const productSpecifications = product.specifications;
       return textInputs.every(text => {
         if (text == "OS") {
-          console.log(text);
           return this.splitAndFilterBySpecification(productSpecifications, text);
         }else {
           return productSpecifications.some((specification: any) =>
@@ -230,7 +228,7 @@ export class FilterService {
     }
     return tests.filter(
       element => {
-        return element?.name.toLowerCase().includes(text.toLowerCase()) ||
+        return (element.estimatedExecutionTime.toString() + " Minuten").toLowerCase().includes(text.toLowerCase()) || element?.name.toLowerCase().includes(text.toLowerCase()) ||
           element.description?.toLowerCase().includes(text.toLowerCase()) ||
           element.state?.toLowerCase().includes(text.toLowerCase()) || String(element.estimatedExecutionTime).toLowerCase().includes(text.toLowerCase());
       });

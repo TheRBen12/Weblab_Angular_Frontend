@@ -23,7 +23,6 @@ export class RestorffEmailListItemComponent implements OnInit{
 
 
   ngOnInit(): void {
-    console.log(this.coloredDeleteButton);
     this.capitalLetter = this.email?.sender[0] ?? "";
   }
   delete(){

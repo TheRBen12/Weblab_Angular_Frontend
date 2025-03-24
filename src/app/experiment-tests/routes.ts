@@ -4,5 +4,6 @@ export const experimentTestRoutes: { [key: string]: string } = {
   "Fehlertoleranz": "error-correction",
   "Restorff Effekt": "restorff-effect",
   "Gesetz von Fitt": "fitts-law",
-  "Mentales Modell": "mental-model"
+  "Mentales Modell": "mental-model",
+  "Feedback": "feedback"
 }

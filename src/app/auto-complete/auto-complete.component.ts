@@ -27,6 +27,9 @@ import {AutoCompleteProductComponent} from './auto-complete-product/auto-complet
 export class AutoCompleteComponent implements OnInit {
   @Input() products: any[] = [];
   @Output() onInputEventEmitter: EventEmitter<string> = new EventEmitter<string>();
+  @Output() onSelectEventEmitter: EventEmitter<number> = new EventEmitter<number>()
+  @Output() onInputClearedEventEmitter: EventEmitter<any> = new EventEmitter<any>();
+
   @Input() placeholder: string = "";
   textToMark: string = "";
   filterService = inject(FilterService);
@@ -50,8 +53,15 @@ export class AutoCompleteComponent implements OnInit {
          return value;
       })
     ).subscribe((value: string) => {
+      if (value == ""){
+        this.onInputClearedEventEmitter.emit();
+      }
       this.textToMark = value;
     });
 
+  }
+
+  emitSelection(productId: number) {
+    this.onSelectEventEmitter.emit(productId)
   }
 }

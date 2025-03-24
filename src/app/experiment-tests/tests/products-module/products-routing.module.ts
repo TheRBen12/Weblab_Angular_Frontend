@@ -23,7 +23,8 @@ const routes: Routes = [
       {path: 'pc', component: ProductIndexComponent, title: "PC"},
       {path: 'haushalt', component: ProductIndexComponent, title: "Haushalt"},
       {path: 'kaffeemaschine', component: ProductIndexComponent, title: "Kaffemaschinen"},
-
+      {path: 'gemuese', component: ProductIndexComponent, title: "Gemüse"},
+      {path: 'wurzelgemuese', component: ProductIndexComponent, title: "Wurzelgemüse"},
 
     ]
   },

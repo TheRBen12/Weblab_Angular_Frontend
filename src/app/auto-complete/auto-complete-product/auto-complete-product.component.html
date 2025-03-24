@@ -14,7 +14,7 @@
 
           <div class="row">
             <div class="col">
-              <span *ngFor="let specification of product.specifications; index as i" class="me-1">
+              <span *ngFor="let specification of product.specifications.slice(0,2); index as i" class="me-1">
                 <span #textAttribute>{{ specification.value }} </span>
                 <span *ngIf="i < 2 && i < product.specifications.length-1">,</span>
               </span>

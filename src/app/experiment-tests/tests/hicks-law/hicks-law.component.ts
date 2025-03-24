@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit, signal} from '@angular/core';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
@@ -16,6 +16,11 @@ import {BasketComponent} from '../../../basket/basket.component';
 import {NgIf} from '@angular/common';
 import {ExperimentService} from '../../../services/experiment.service';
 import {FilterService} from '../../../services/filter.service';
+import {LoginService} from '../../../services/login.service';
+import {HicksLawExperimentExecution} from '../../../models/hicks-law-experiment-execution';
+import {ToastrService} from 'ngx-toastr';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-hicks-law',
@@ -26,7 +31,10 @@ import {FilterService} from '../../../services/filter.service';
     MatIcon,
     RouterOutlet,
     BasketComponent,
-    NgIf
+    NgIf,
+    MatCard,
+    MatCardContent,
+    MatProgressSpinner
   ],
   templateUrl: './hicks-law.component.html',
   standalone: true,
@@ -39,6 +47,7 @@ export class HicksLawComponent implements OnInit {
   filterService = inject(FilterService);
   menuService: SideMenuService = inject(SideMenuService);
   router = inject(Router);
+  userService: LoginService = inject(LoginService);
   currentInstructionStep: number = 0;
   instructions: string[] = [];
   currentRoute: string = "Home";
@@ -56,9 +65,16 @@ export class HicksLawComponent implements OnInit {
   targetInstruction: string = "";
   productLimit: number = 0;
   categoryLimit: number = 0;
+  clickedRoutes: { [key: string]: string } = {};
+  numberClickedSearchBar: number = 0;
+  clickedOnFilters: boolean = false;
+  selectedProducts: { [key: number]: Date | null } = {0: null, 1: null, 2: null}
+  protected loading: boolean = false;
+  private failedClicks: number = 0;
+  private numberClicks: number = 0;
 
 
-  constructor(private cdRef: ChangeDetectorRef) {
+  constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie Lebensmittel", "Wählen Sie ein Lebensmittel aus.",
       "Fügen Sie das Lebensmittel dem Warenkrob hinzu"];
   }
@@ -79,6 +95,7 @@ export class HicksLawComponent implements OnInit {
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((products) => {
       if (products.length > this.basket.length) {
+        this.selectedProducts[products.length] = new Date();
         this.currentInstructionStep = 0;
       } else if (this.basket.length > products.length) {
         this.currentInstructionStep = 1;
@@ -92,7 +109,7 @@ export class HicksLawComponent implements OnInit {
 
     this.updateMenuSubscription = this.menuService.getSubject().subscribe((updateMenu) => {
       if (updateMenu) {
-        this.fetchProductTypes("Home", this.categoryLimit);
+        this.fetchProductTypes("Home");
         this.currentRoute = "Home";
         this.currentInstructionStep = 2;
       }
@@ -112,8 +129,9 @@ export class HicksLawComponent implements OnInit {
   }
 
   setCurrentRoute(route: string) {
+    this.clickedRoutes[route] = new Date().toISOString();
     this.currentRoute = route;
-    this.fetchProductTypes(route, this.categoryLimit);
+    this.fetchProductTypes(route);
     if (this.parentCategory == route) {
       this.currentType = this.currentType?.parentType;
     } else {
@@ -141,11 +159,11 @@ export class HicksLawComponent implements OnInit {
     }
   }
 
-  fetchProductTypes(currentRoute: string, categoryLimit: number) {
+  fetchProductTypes(currentRoute: string) {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
       this.cutProductCategoryList();
-      if (this.currentRoute == "Lebensmittel"){
+      if (this.currentRoute == "Lebensmittel") {
         this.categoryLinks.filter(type => type == "lebensmittel");
         this.productCategories = [];
       }
@@ -160,8 +178,41 @@ export class HicksLawComponent implements OnInit {
   }
 
   finishExperiment(productNumberInBasket: number) {
+
     if (productNumberInBasket >= 3) {
-      // finish experiment
+
+
+    }
+
+    const id = this.userService.currentUser()?.id
+    if (id) {
+      this.loading = true;
+      this.fetchExecutionInProcess(id, this.experimentId).subscribe((exec) => {
+        const hicksLawExecution: HicksLawExperimentExecution = {
+          productLimit: this.productLimit,
+          categoryLimit: this.categoryLimit,
+          categoryLinkClickDates: this.clickedRoutes,
+          numberClickedOnSearchBar: this.numberClickedSearchBar,
+          clickedOnFilters: this.clickedOnFilters,
+          firstChoiceAt: this.selectedProducts[0],
+          secondChoiceAt: this.selectedProducts[1],
+          thirdChoiceAt: this.selectedProducts[2],
+          experimentTestExecution: exec,
+          failedClicks: this.failedClicks,
+          numberClicks: this.numberClicks,
+
+        }
+
+        this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigateByUrl("/")
+            this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen");
+          }, 2000);
+        });
+
+      });
+
     }
   }
 
@@ -169,8 +220,9 @@ export class HicksLawComponent implements OnInit {
     this.experimentService.getExperimentTest(experimentId).subscribe((experiment) => {
       this.targetInstruction = experiment.goalInstruction;
       this.productLimit = Number(JSON.parse(experiment.configuration)['productLimit']);
+      this.productService.updateProductLimit(this.productLimit);
       this.categoryLimit = Number(JSON.parse(experiment.configuration)['categoryLimit']);
-      this.fetchProductTypes(this.currentRoute, this.categoryLimit);
+      this.fetchProductTypes(this.currentRoute);
       this.cdRef.detectChanges();
     });
 
@@ -178,5 +230,18 @@ export class HicksLawComponent implements OnInit {
 
   filterProduct($event: string) {
     this.filterService.dispatchFilterText($event);
+  }
+
+  updateSearchBarClickBehaviour() {
+    this.failedClicks++;
+    this.numberClickedSearchBar++;
+  }
+
+  private fetchExecutionInProcess(id: number, experimentTestId: any) {
+    return this.experimentService.getExperimentExecutionByStateAndTest(id, experimentTestId, "INPROCESS");
+  }
+
+  increaseNumberClicks() {
+    this.numberClicks++;
   }
 }

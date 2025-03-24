@@ -1,15 +1,28 @@
 <div class=" card link-underline-opacity-0 mt-3 mb-3 product-card ">
   <div (click)="navigate()" class="card-body flex-grow-0">
     <a>
-      <img *ngIf="product" class="img-fluid card-img-top"
-           src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
-      <p class="mt-2">
-        <span #textAttribute class="product-type">{{ product?.type }}</span>
-      </p>
+      <div *ngIf="product?.type != 'Gemuese' && product?.type != 'Wurzelgemuese'; else gemuese">
+        <img class="img-fluid card-img-top"
+             src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
+        <p class="mt-2">
+          <span #textAttribute class="product-type">{{ product?.type }}</span>
+        </p>
+      </div>
+
+      <ng-template #gemuese>
+        <img class="img-fluid card-img-top"
+             src="assets/images/products/{{product?.name}}.png">
+        <p class="mt-2">
+          <span #textAttribute class="product-type">{{ product?.name }}</span>
+        </p>
+      </ng-template>
+
     </a>
+
+
   </div>
-  <ul class="list-group list-group-flush">
-    <li  #textAttribute class="list-group-item fw-bold">{{ product?.trademark }} {{ product?.name }}</li>
+  <ul (click)="navigate()" class="list-group list-group-flush">
+    <li  #textAttribute class="list-group-item"><span class="fw-bold">{{ product?.trademark }} </span> <span>{{ product?.name }}</span></li>
     <li *ngIf="specifications.length > 0" class="list-group-item">
       <span *ngFor="let specification of specifications; index as i" class="me-1">
         <span  *ngIf="i < 3 && i < specifications.length">{{ specification.value }} </span> <span

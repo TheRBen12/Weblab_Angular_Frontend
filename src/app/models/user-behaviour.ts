@@ -1,6 +1,4 @@
 export interface UserBehaviour {
-
-
   id?: number;
   clickedOnHelp?: boolean;
   numberClickedOnHelp: number;
@@ -11,6 +9,7 @@ export interface UserBehaviour {
   timeReadingWelcomeModal?: number
   welcomeModalTipIndex?: number;
   clickedOnHint?: boolean;
-
+  numberClickedOnHint: number;
+  lastUpdatedAt: Date,
 
 }

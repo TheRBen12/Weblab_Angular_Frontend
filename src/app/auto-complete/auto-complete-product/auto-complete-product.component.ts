@@ -29,7 +29,6 @@ export class AutoCompleteProductComponent implements OnChanges, AfterViewInit{
   ngOnChanges(changes: SimpleChanges): void {
     const textToMark = changes["textToMark"]?.currentValue
     setTimeout(() => {
-      console.log("Delayed for 1 second.");
     }, 2000);
 
     if (textToMark != undefined && textToMark != "" && this.textAttributes) {

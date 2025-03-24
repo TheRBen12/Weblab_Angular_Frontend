@@ -1,21 +1,30 @@
-<div class="card p-3 mt-3">
+<div [ngClass]="{'completed-test': completed}"  class="card p-3 mt-3">
   <div class="container">
     <div class="test-header d-flex flex-column">
-      <h3>{{test.position + 1}}. Versuch</h3>
-      <h5 #textAttribute >{{ test.name }}</h5>
+      <div class="d-flex justify-content-between">
+        <h3 #textAttribute>{{test.position + 1}}. Versuch</h3>
+        <span class="check-icon">
+          <mat-icon  *ngIf="completed">check</mat-icon>
+        </span>
+      </div>
+
+      <h5 #textAttribute>{{ test.name }}</h5>
     </div>
-    <p *ngIf="test.state == 'OPEN'" >
+    <p class="mt-2" *ngIf="state == 'Freigeschaltet'" >
       <strong><p>Dieser Versuch ist freigeschaltet</p></strong>
     </p>
     <hr>
     <p #textAttribute> {{test.description}}</p>
     </div>
     <ul class="list-group list-group-flush">
-      <li #textAttribute class="list-group-item"> <strong>Status:</strong> {{test.state}}</li>
-      <li class="list-group-item"><strong>geschätzte Durchführungszeit:</strong> {{test.estimatedExecutionTime}} Minuten</li>
+      <li class="list-group-item"> <strong>Status: </strong>
+
+        <span #textAttribute> {{state}}</span></li>
+      <li class="list-group-item"><strong>geschätzte Durchführungszeit:</strong> <span #textAttribute> {{test.estimatedExecutionTime}} Minuten </span></li>
     </ul>
+  <hr>
     <div class="mt-3 d-flex justify-content-center">
-      <button routerLink="/tests/detail/{{test.id}}" class="btn btn-primary btn-lg">Zu den Versuchsdetails</button>
+      <button routerLink="/tests/detail/{{test.id}}" class="btn btn-primary btn-lg"> Zu den Versuchsdetails</button>
     </div>
 </div>
 

@@ -1,6 +1,6 @@
 <div>
   <div class="sub-navigation d-flex align-items-center justify-content-center">
-    <app-search-bar [placeholder]="'Versuche suchen'"  (inputTextEvent)="filterTestsAndMarkText($event)"
+    <app-search-bar [disabled]="false" [placeholder]="'Versuche suchen'"  (inputTextEvent)="filterTestsAndMarkText($event)"
                     [elements]="experimentTests"></app-search-bar>
   </div>
   <div class="container mt-3 ">
@@ -19,17 +19,23 @@
     </div>
     <hr>
     <div>
-      <div *ngIf="filteredExperimentTests " class="row row-cols-3 d-flex flex-wrap flex-fill">
-        <div class="flex-grow-1" *ngFor="let test of filteredExperimentTests">
-          <app-experiment-test [markedText]="markedText" [test]="test"></app-experiment-test>
+      <div>
+        <p class="fw-bold">{{experimentTests.length}} Versuche</p>
+        <p>{{finishedExecutions.length}} Versuche von {{experimentTests.length}} Versuchen abgeschlossen.</p>
+      </div>
+      <div class="test-container">
+        <div *ngIf="filteredExperimentTests " class=" flex-row row ">
+          <div *ngFor="let test of filteredExperimentTests">
+            <app-experiment-test [state] = "testCompletedKeyValues[test.id] ? 'Abgeschlossen' : 'Freigeschaltet'" [completed]="testCompletedKeyValues[test.id]" [markedText]="markedText" [test]="test"></app-experiment-test>
+          </div>
         </div>
       </div>
+
       <div *ngIf="filteredExperimentTests.length == 0">
         <p>Ihre Suche ergab leider keine Treffer</p>
       </div>
     </div>
-    <button routerLink="/" class="mt-3 btn btn-secondary btn-lg">Zurück</button>
+    <button routerLink="/" class="mt-3 mb-3 btn btn-secondary btn-lg">Zurück</button>
   </div>
-
 </div>
 

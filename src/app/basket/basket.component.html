@@ -12,7 +12,7 @@
     </button>
   </div>
   <hr>
-    <div class="d-flex mb-4 justify-content-center" *ngFor="let product of basket; index as i">
+    <div class="d-flex mb-4 " *ngFor="let product of basket; index as i">
       <app-busket-product (removeProductEventEmitter) = removeProduct($event) [product]="product"></app-busket-product>
     </div>
   <div *ngIf="basket.length > 0" class="d-flex justify-content-center">

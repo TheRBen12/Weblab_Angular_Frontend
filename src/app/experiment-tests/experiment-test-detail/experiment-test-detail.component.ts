@@ -22,7 +22,7 @@ import {ExperimentTestExecution} from '../../models/experiment-test-execution';
   styleUrl: './experiment-test-detail.component.css'
 })
 export class ExperimentTestDetailComponent implements OnInit {
-  private readonly route = inject(ActivatedRoute);
+  route = inject(ActivatedRoute);
   experimentService = inject(ExperimentService);
   timeService: TimeService = inject(TimeService);
   userService: LoginService = inject(LoginService);
@@ -30,9 +30,18 @@ export class ExperimentTestDetailComponent implements OnInit {
   experimentTestId: number = 0;
   experimentTest: ExperimentTest | undefined
   experimentTestUrl: string = "";
-  private userSetting: UserSetting | null = null;
+  userSetting: UserSetting | null = null;
+  openedTestDescAt: Date = new Date();
+  timeReadingDescription: number = 0;
+  timer: any
 
   ngOnInit(): void {
+    this.timer = setInterval(() => {
+      this.timeReadingDescription ++
+    }, 1000);
+
+
+    this.openedTestDescAt = new Date();
     localStorage.removeItem("cart");
     this.route.paramMap.pipe(
       switchMap(params => {
@@ -81,7 +90,10 @@ export class ExperimentTestDetailComponent implements OnInit {
   }
 
   private saveExperimentExecution() {
+    clearInterval(this.timer);
     const newExecution: ExperimentTestExecution = {
+      timeReadingDescription: this.timeReadingDescription,
+      openedDescAt: this.openedTestDescAt,
       userId: this.userService.currentUser()?.id,
       experimentTestId: this.experimentTestId,
       startedExecutionAt: new Date(),

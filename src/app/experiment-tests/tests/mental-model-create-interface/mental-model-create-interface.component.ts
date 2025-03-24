@@ -1,13 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {BasketComponent} from '../../../basket/basket.component';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {MegaDropDownMenuComponent} from '../../../mega-drop-down-menu/mega-drop-down-menu.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../search-bar/search-bar.component';
 import {ProductService} from '../../../services/product.service';
 import {RouterService} from '../../../services/router.service';
@@ -22,17 +20,14 @@ import {ExperimentTest} from '../../../models/experiment-test';
 @Component({
   selector: 'app-mental-model-create-interface',
   imports: [
-    BasketComponent,
     ExperimentTestInstructionComponent,
     MatFabButton,
     MatIcon,
-    MegaDropDownMenuComponent,
     NgForOf,
     RouterOutlet,
     SearchBarComponent,
     NgClass,
     SideMenuComponent,
-    RouterLink,
     AutoCompleteComponent,
     NgIf,
   ],

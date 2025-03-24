@@ -35,7 +35,14 @@ export class HomeComponent implements OnInit{
 
     this.filterSubscription = this.filterService.getSubject().subscribe((filterText) => {
       this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
+      this.jumpToProductList();
     });
+  }
 
+  private jumpToProductList() {
+    const element = document.getElementById('productList');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

@@ -57,7 +57,6 @@ export class MentalModelLeftSideNavigationComponent implements OnInit{
   }
   openBasket(){
     this.basketIsHidden = !this.basketIsHidden;
-    console.log(this.basketIsHidden);
   }
 
   finishExperiment($event: number) {

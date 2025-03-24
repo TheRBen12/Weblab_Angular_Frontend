@@ -1,0 +1,37 @@
+.menu-icon{
+  font-size: 25px;
+  width: 30px;
+  color: white;
+  font-weight: bold;
+}
+
+.side-menu-container{
+  background-color: #404040;
+  height: 100vh;
+}
+
+
+span{
+  font-size: 30px;
+  pointer-events: auto;
+}
+
+button{
+  background-color: #404040
+}
+
+h1{
+  color: white;
+}
+
+.side-menu{
+  background-color: #404040;
+}
+.menu-item{
+  color: white;
+  font-size: 20px;
+}
+
+.draw-container{
+  background-color: #404040;
+}

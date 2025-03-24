@@ -11,6 +11,7 @@ export class ProductService {
   http = inject(HttpClient);
   foodCategories: string[] = ["Teigwaren", "Penne", "Spaghetti", "Spiral-Nudeln", "Tomaten", "Brot", "Zwiebeln", "Schokolade"];
   basketSubscription: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  private productLimitSubscription: BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null);
 
 
   constructor(private toastr: ToastrService) {
@@ -77,5 +78,13 @@ export class ProductService {
 
   getAllSubcategoriesByParentCategory(category: string) {
     return this.http.get<ProductType[]>("https://localhost:7147/api/product/all/subcategories", {params: {category: category}});
+  }
+
+  updateProductLimit(productLimit: number) {
+    this.productLimitSubscription.next(productLimit);
+  }
+
+  getProductLimitSubscription() {
+    return this.productLimitSubscription.asObservable();
   }
 }

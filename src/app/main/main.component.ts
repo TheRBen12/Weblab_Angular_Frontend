@@ -5,9 +5,7 @@ import {NavigationComponent} from '../navigation/navigation/navigation.component
 import {RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
-import {filter, switchMap} from 'rxjs';
 import {LoginService} from '../services/login.service';
-import {SettingService} from '../services/setting.service';
 import {TimeService} from '../services/time.service';
 import {UserBehaviour} from '../models/user-behaviour';
 
@@ -34,15 +32,18 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     if (this.loginService.currentUser()?.id) {
-      this.loginService.getUserBehaviour(this.loginService.currentUser()?.id).subscribe((userBehaviour) => {
+
+      this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
         this.userBehaviour = userBehaviour;
       });
+
     }
 
     if (sessionStorage.getItem('closedModal') == '' || sessionStorage.getItem('closedModal') == null) {
       this.openWelcomeHelpModal("Bevor Sie loslegen, hier einige Tipps", true)
       this.timeService.startWelcomeModalTimer()
     }
+
   }
 
   openWelcomeHelpModal(title: string, showFooter: boolean) {
@@ -59,18 +60,31 @@ export class MainComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.timeService.stopWelcomeModalTimer();
       sessionStorage.setItem('closedModal', 'closed');
-      const userBehaviour: UserBehaviour = {
-        timeReadingWelcomeModal: this.timeService.getTimeToReadWelcomeModal(),
-        welcomeModalTipIndex: dialogRef.componentInstance.data.currentTipIndex,
-        user: this.loginService.currentUser()?.id,
-        clickedOnHint: false,
-        numberClickedOnHelp: 0,
-        numberClickedOnSettings: 0
-      };
-      this.loginService.createUserBehaviour(userBehaviour).subscribe((userBehaviour) => {
-        this.userBehaviour = userBehaviour;
-        this.loginService.emitUserBehaviour(userBehaviour);
-      });
+      if (!this.userBehaviour){
+        const userBehaviour: UserBehaviour = {
+          timeReadingWelcomeModal: this.timeService.getTimeToReadWelcomeModal(),
+          welcomeModalTipIndex: dialogRef.componentInstance.data.currentTipIndex,
+          user: this.loginService.currentUser()?.id,
+          clickedOnHint: false,
+          numberClickedOnHelp: 0,
+          numberClickedOnSettings: 0,
+          numberClickedOnHint: 0,
+          lastUpdatedAt: new Date(),
+        };
+        this.loginService.createUserBehaviour(userBehaviour).subscribe((userBehaviour) => {
+          this.userBehaviour = userBehaviour;
+          this.loginService.emitUserBehaviour(userBehaviour);
+        });
+      }else{
+        if (this.userBehaviour){
+          this.userBehaviour.numberClickedOnHint = this.userBehaviour.numberClickedOnHint + 1 ;
+          this.userBehaviour.clickedOnHint = true;
+        }
+
+        this.loginService.updateUserBehaviour(this.userBehaviour).subscribe((behaviour) => {
+          this.userBehaviour = behaviour;
+        });
+      }
     });
   }
 }

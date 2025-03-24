@@ -1,0 +1,21 @@
+.completed-test{
+  border: #14AE5C 2px solid;
+}
+
+.check-icon{
+  color: #14AE5C;
+  width: 40px;
+}
+
+mat-icon{
+  font-size: 30px;
+  margin-right: 5%;
+}
+
+
+li{
+  font-size: 18px;
+}
+p{
+  font-size: 18px;
+}

@@ -44,7 +44,6 @@ export class TimeService {
 
   stopWelcomeModalTimer() {
     clearInterval(this.welcomeModalTimer);
-    console.log(this.timeToReadWelcomeModal);
   }
 
   saveNavigationTime(timeData: ExperimentNavigationTime) {

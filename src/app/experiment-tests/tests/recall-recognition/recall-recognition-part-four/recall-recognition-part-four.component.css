@@ -1,0 +1,33 @@
+.progress-bar-circle{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(222, 214, 214, 0.7); /* Schwarzer Hintergrund mit 50% Transparenz */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; ;
+}
+
+.main{
+  margin-left: 20px;
+}
+
+.category-box{
+  width: 150px; /* Breite der Box */
+  height: 100px; /* Höhe der Box */
+  background-color: lightgray; /* Hintergrundfarbe */
+  display: flex; /* Aktiviert Flexbox */
+  align-items: center; /* Vertikale Zentrierung */
+  justify-content: center; /* Horizontale Zentrierung */
+  text-align: center; /* Falls der Text mehrzeilig ist */
+  border-radius: 10px; /* Abgerundete Ecken */
+}
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
+}

@@ -182,12 +182,9 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   finishExperiment($event: number) {
-
-
     const id = this.userService.currentUser()?.id
     if (id){
       this.loading = true;
-
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
         this.currentExecution = exec;
         const recallRecognitionExecution: RecallRecognitionExperimentExecution = {
@@ -214,7 +211,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   private fetchExecutionInProcess(userId: number, testId: number) {
-    return this.experimentService.getExperimentExecutionInProcess(userId, testId);
+    return this.experimentService.getExperimentExecutionByStateAndTest(userId, testId, "INPROCESS");
   }
 
   setClickedOnSearchBar() {

@@ -1,3 +1,11 @@
 img{
   max-width: 500px;
 }
+
+.head-description{
+  font-size: 18px;
+}
+
+.text-description{
+  font-size: 17px;
+}

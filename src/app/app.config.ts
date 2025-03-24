@@ -7,6 +7,7 @@ import {provideHttpClient} from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {provideToastr} from 'ngx-toastr';
 import {provideAnimations} from '@angular/platform-browser/animations';
+import {provideNativeDateAdapter} from '@angular/material/core';
 
 
 
@@ -17,5 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(), provideAnimationsAsync(),
     provideToastr(),
     provideAnimations(),
+    provideNativeDateAdapter()
   ]
 };
