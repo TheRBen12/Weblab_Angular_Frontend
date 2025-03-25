@@ -1,7 +1,7 @@
 
   <div [ngClass]="{'hidden': navigationSelectionIndex != 0 , 'd-flex flex-row': navigationSelectionIndex==0}" [@selectedState] = "navigationSelectionIndex==0 ? 'open' : 'closed' " >
     <div class="col-2">
-      <app-side-navigation></app-side-navigation>
+      <app-side-navigation [showMenuContent] = "navigationSelectionIndex==0"></app-side-navigation>
     </div>
     <div class="col">
       <div class="top-header w-100 d-flex justify-content-center">

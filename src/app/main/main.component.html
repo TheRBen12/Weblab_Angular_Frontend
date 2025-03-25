@@ -27,9 +27,8 @@
 </div>
 
 
-
 <div *ngIf="navigationSetting?.sideNavigationUserInformationTop">
-  <div  class="d-flex">
+  <div class="d-flex">
     <div class="col-2">
       <app-side-navigation [showLogoutAndProfile]="false"></app-side-navigation>
     </div>
@@ -40,18 +39,16 @@
             <a (click)="loginService.logout()" class="ms-2">Abmelden</a>
           </div>
           <div class="p-3 right-side-header-item fw-bold ">
-            <a class="">Benutzer</a>
+            <a class="">{{loginService.currentUser()?.email}}</a>
           </div>
         </div>
       </div>
       <div class="top-header w-100 d-flex justify-content-center">
         <div class="d-flex justify-content-center w-100 scrollable-list">
-         <router-outlet></router-outlet>
+          <router-outlet></router-outlet>
         </div>
       </div>
-
     </div>
-
   </div>
 </div>
 
