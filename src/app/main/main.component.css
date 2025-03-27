@@ -1,7 +1,7 @@
 .fab{
   position: fixed;
   right: 50px;
-  bottom: 50px
+  bottom: 120px
 }
 .scrollable-list {
   max-height: 100vh; /* Maximale Höhe setzen */

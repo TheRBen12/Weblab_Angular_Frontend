@@ -6,14 +6,33 @@
         <input autofocus #input (input)="checkInput(input.value)"  class="form-control" placeholder="Wann wurde die gelöschte E-Mail erhalten?">
       </div>
     </div>
-    <div class="col-1">
-      <app-email-menu></app-email-menu>
+  <div (click)="increaseNumberClicks($event)" >
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-auto">
+          <app-email-menu (onMenuItemSelected) = updateClickBehaviour($event) ></app-email-menu>
+        </div>
+        <div class="col-8">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
     </div>
-    <div class="col">
-      <router-outlet></router-outlet>
-    </div>
-
+  </div>
 </div>
+
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>
+
 
 
 

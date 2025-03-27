@@ -2,7 +2,7 @@
   <div class="col-3">
     <app-experiment-test-instruction  [target]="targetInstruction" [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"></app-experiment-test-instruction>
   </div>
-  <div (click)="increaseNumberClicks()"  style="width: 100%">
+  <div (click)="increaseNumberClicks($event)"  style="width: 100%">
     <nav class="navbar navbar-expand-lg shadow">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">WebLab Shop</a>
@@ -42,7 +42,7 @@
           </app-side-menu>
         </div>
 
-        <div class="col">
+        <div class="col scrollable-list">
           <router-outlet></router-outlet>
         </div>
         <div *ngIf="!productService.basketIsEmpty()" class="col-3 me-3">

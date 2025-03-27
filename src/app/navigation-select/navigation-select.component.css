@@ -2,11 +2,7 @@
   background-color: #F1F1F1;
 }
 
-.bottom-navigation{
-  position: fixed;
-  bottom: 0;
-  background-color: #F1F1F1;
-}
+
 .right-side-header-item{
   a{
     color: white;
@@ -48,5 +44,7 @@
 
 .main-header{
   background-color: #404040
-
+}
+.progress-title{
+  color: white;
 }

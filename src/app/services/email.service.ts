@@ -9,7 +9,8 @@ import {User} from '../models/user';
 })
 export class EmailService {
   http: HttpClient = inject(HttpClient);
-  deletedMailSubscription = new BehaviorSubject<Email | null>(null);
+  deletedMailSubscription = new BehaviorSubject<{mail: Email, position: number} | null>(null);
+  undoEventSubscription: BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null)
 
   constructor() {
   }
@@ -30,7 +31,14 @@ export class EmailService {
   getDeletedMailSubscripition() {
     return this.deletedMailSubscription.asObservable();
   }
-  emitMailDeleted(email: Email){
-    this.deletedMailSubscription.next(email);
+  emitMailDeleted(data: any){
+    this.deletedMailSubscription.next(data);
+  }
+
+  emitUndoEvent(emailIndex: number){
+    this.undoEventSubscription.next(emailIndex);
+  }
+  getUndoEventSubscription() {
+    return this.undoEventSubscription.asObservable();
   }
 }

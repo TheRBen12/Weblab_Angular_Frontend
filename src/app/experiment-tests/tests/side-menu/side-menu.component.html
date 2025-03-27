@@ -7,10 +7,11 @@
          link-underline-opacity-75-hover">{{ parentCategory }}
       </a>
     </li>
-    <li [ngClass]="{'string-link': showCurrentLink }" *ngIf="currentRoute != 'Home' " class=" list-group-item">
-      <div class="fw-bold" *ngIf="showCurrentLink">{{currentRoute}}</div>
+    <li *ngIf="currentRoute != 'Home' " class=" list-group-item">
+      <div [ngClass]="{'strong-link': showCurrentLink }" class="fw-bold" *ngIf="showCurrentLink">{{currentRoute}}</div>
         <a class="link-offset-2 link-offset-3-hover
-         link-underline link-underline-opacity-0 link-underline-opacity-75-hover" *ngIf="!showCurrentLink">{{ currentRoute }}</a>
+         link-underline link-underline-opacity-0 link-underline-opacity-75-hover" *ngIf="!showCurrentLink">{{ currentRoute }}
+        </a>
     </li>
 
     <li *ngIf="currentRoute == 'Home'" class="list-group-item menu-item">

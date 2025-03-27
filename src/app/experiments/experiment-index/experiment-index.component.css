@@ -1,14 +1,12 @@
-.sub-navigation{
-  background-color: #F4F4F4;
-  min-height: 75px;
-}
+
 
 .bottom{
   position: fixed;
   bottom: 0;
-  background-color: #F1F1F1;
+  background-color: #DBDBDB;
   z-index: 1000;
   width: 100%;
   display: flex;
   justify-content: center;
 }
+

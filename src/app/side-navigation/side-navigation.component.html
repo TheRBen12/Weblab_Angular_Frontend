@@ -12,18 +12,25 @@
       <div>
         <ul class="list-group list-group-flush">
           <div class="menu-item p-4">
-            <a routerLink="/">Experiment</a></div>
+            <a (click)="setCurrentRoute('Experimente')"  [ngClass]="{'active-link': currentRoute == 'Experimente'}"  routerLink="/">Experimente</a></div>
           <div class="menu-item p-4">
-            <a routerLink="/settings">Einstellungen</a>
+            <a (click)="setCurrentRoute('Einstellungen')"  [ngClass]="{'active-link': currentRoute == 'Einstellungen'}"  routerLink="/settings">Einstellungen</a>
           </div>
-          <div class="menu-item p-4">Hilfe</div>
+          <div class="menu-item p-4">
+            <a (click)="setCurrentRoute('Hilfe')"  [ngClass]="{'active-link': currentRoute == 'Hilfe'}"  routerLink="/help" class="nav-link active nav-item-robot">Hilfe</a>
+          </div>
           <div class="menu-item p-4">Mein Fortschritt</div>
         </ul>
       </div>
       <div class="border-bottom"></div>
       <div *ngIf="showLogoutAndProfile">
-        <div class="mt-3 menu-item p-4">Profil</div>
-        <div class="menu-item p-4">Abmelden</div>
+        <div class="mt-3 menu-item p-4">
+          <a (click)="setCurrentRoute('Profil')"  [ngClass]="{'active-link': currentRoute == 'Profil'}"  routerLink="/profile" *ngIf="currentUser?.email">{{currentUser?.email??'Profil'}}</a>
+          <a *ngIf="!currentUser?.email">Profil</a>
+        </div>
+        <div (click)="logout()" class="menu-item p-4">
+          <a routerLink="/login" (click)="logout()" >Abmelden</a>
+        </div>
 
 
       </div>

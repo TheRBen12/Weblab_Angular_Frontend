@@ -12,3 +12,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-style: italic;
   font-size: 30px;
 }
+
+
+
+.bottom{
+  position: fixed;
+  bottom: 0;
+  background-color: #F1F1F1;
+  z-index: 1000;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sub-navigation{
+  background-color: #DBDBDB;
+}

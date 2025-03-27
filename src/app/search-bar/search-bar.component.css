@@ -10,6 +10,7 @@
   background: transparent;
   min-width: 175px;
   min-height: 50px;
+  border: solid 1px #3887EF;
 }
 .search-bar-container{
   margin: 0px 50px;

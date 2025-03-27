@@ -1,5 +1,13 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+  RouterEvent,
+  RouterOutlet,
+  RoutesRecognized
+} from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {
@@ -9,7 +17,7 @@ import {SideMenuComponent} from '../../side-menu/side-menu.component';
 import {ProductService} from '../../../../services/product.service';
 import {ProductType} from '../../../../models/product-category';
 import {routerLinks} from '../../routes';
-import {Subscription} from 'rxjs';
+import {filter, Subscription} from 'rxjs';
 import {SideMenuService} from '../../../../services/side-menu.service';
 import {RouterService} from '../../../../services/router.service';
 import {BasketComponent} from '../../../../basket/basket.component';
@@ -67,7 +75,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   experimentTestId: number = 0;
   clickedRoutes: { [key: string]: string } = {};
   failedClicks: number = 0;
-  private currentExecution: ExperimentTestExecution|null = null;
+  private currentExecution: ExperimentTestExecution | null = null;
   private numberClicks: number = 0;
   loading: boolean = false;
   private clickedOnSearchBar: boolean = false;
@@ -81,9 +89,10 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
     const id = this.userService.currentUser()?.id
-    if (id){
+    if (id) {
       this.fetchExecutionInProcess(id, this.experimentTestId);
     }
     this.productService.getBasket();
@@ -103,27 +112,91 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
       }
     });
-    this.currentRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
-    if (this.currentRoute != "Home") {
-      const parentRoute = localStorage.getItem("parentRoute") ?? "";
-      this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
-        this.currentType = categories.find(type => type.name == this.currentRoute);
-        this.parentCategory = this.currentType?.parentType ? this.currentType.parentType.name : "Home";
-        this.parentRoute = this.routerLinks[this.parentCategory];
-      });
-    }
-    this.fetchProductTypes(this.currentRoute);
 
+
+    let oldRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
+
+    this.rebuildRoute(oldRoute);
+    let newRoute;
+
+
+    let isPopState = false;
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationStart && event.navigationTrigger == 'popstate')))
+      .subscribe((event) => {
+        isPopState = true;
+        oldRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
+      });
+
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+
+        newRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
+        if (isPopState && (this.currentType?.parentType?.name == newRoute || newRoute == "Home")) {
+          this.backWardNavigation(oldRoute);
+        } else {
+          if (isPopState) {
+            this.forwardNavigation(newRoute);
+          }
+        }
+      });
+
+    isPopState = false;
+
+    this.fetchProductTypes(this.currentRoute);
     const clickedRoutes = localStorage.getItem('clickedRoutes')
-    if (clickedRoutes){
+    if (clickedRoutes) {
       this.clickedRoutes = JSON.parse(clickedRoutes);
     }
-
     const clicks = Number(localStorage.getItem('numberClicks'));
-    if (clicks){
+    if (clicks) {
       this.numberClicks = clicks;
     }
+  }
 
+
+  backWardNavigation(oldRoute: string) {
+    if (oldRoute != "Home") {
+      const parentRoute = localStorage.getItem("parentRoute") ?? "";
+      this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
+        this.productCategories = categories;
+        this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
+        this.currentType = categories.find(type => type.name == oldRoute)?.parentType;
+        this.parentCategory = this.setParentCategory();
+        this.currentRoute = this.currentType?.name ?? 'Home';
+        this.parentRoute = this.routerLinks[this.parentCategory]
+        localStorage.setItem("parentRoute", this.parentCategory);
+      });
+    }
+  }
+
+  forwardNavigation(newRoute: string) {
+    this.currentType = this.productCategories.find(type => type.name == newRoute);
+    this.parentCategory = this.setParentCategory();
+    this.currentRoute = this.currentType?.name ?? 'Home';
+    this.parentRoute = this.routerLinks[this.parentCategory]
+    localStorage.setItem("parentRoute", this.parentCategory);
+    this.fetchProductTypes(this.currentRoute);
+  }
+
+  setParentCategory(){
+    return this.currentType?.parentType ? this.currentType.parentType.name : "Home";
+
+  }
+
+  rebuildRoute(oldRoute: string,) {
+    if (oldRoute != "Home") {
+      const parentRoute = localStorage.getItem('parentRoute') ?? "Home";
+      this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
+        this.productCategories = categories;
+        this.currentType = categories.find(type => type.name == oldRoute)
+        this.parentCategory = this.currentType?.parentType ? this.currentType.parentType.name : "Home";
+        this.currentRoute = this.currentType?.name ?? 'Home';
+        this.fetchProductTypes(this.currentRoute);
+        this.parentRoute = this.routerLinks[this.parentCategory]
+      });
+    }
   }
 
   openBasket() {
@@ -166,7 +239,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     }
   }
 
-
   fetchProductTypes(currentRoute: string) {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
@@ -183,7 +255,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
 
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
-    if (id){
+    if (id) {
       this.loading = true;
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
         this.currentExecution = exec;
@@ -203,9 +275,9 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.router.navigateByUrl("/")
             this.toastrService.success("Sie haben das Experiment erfolgreich abgeschlossen");
-            }, 2000);
+          }, 2000);
 
-        } );
+        });
       });
     }
   }
@@ -224,7 +296,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   increaseClicks() {
-    this.numberClicks ++;
+    this.numberClicks++;
     localStorage.setItem('numberClicks', String(this.numberClicks));
 
   }

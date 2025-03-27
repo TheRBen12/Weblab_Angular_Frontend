@@ -8,27 +8,27 @@
     <div class="container">
       <div>
         <div>
-          <span>{{email?.sender}}</span>
+          <span class="text">{{email?.sender}}</span>
         </div>
        <div>
-         <span class="fw-bold">{{email?.subject}}</span>
+         <span [ngClass]="{'blue-text': coloredMark }" class="fw-bold">{{email?.subject}}</span>
        </div>
       </div>
 
     </div>
     <div class="container mt-3">
       <div>
-        <span class="email-body">{{email?.body?.substr(0, 15)}}</span><span>...</span>
+        <span class="text email-body">{{email?.body?.substr(0, 15)}}</span><span>...</span>
       </div>
     </div>
   </div>
 
   <div>
-    <p>{{email?.date}}</p>
+    <p class="text">{{email?.date}}</p>
   </div>
 
 
-  <div *ngIf="!isDeleted" class="d-flex justify-content-end align-items-center w-100">
+  <div *ngIf="!isDeleted" class="ms-3 d-flex justify-content-end align-items-center w-100">
     <button (click)="delete()"  mat-fab aria-label="Example icon button with a delete icon">
       <mat-icon >delete</mat-icon>
     </button>

@@ -6,6 +6,7 @@ import {ExperimentTest} from '../models/experiment-test';
 import {ExperimentTestExecution} from '../models/experiment-test-execution';
 import {RecallRecognitionExperimentExecution} from '../models/recall-recognition-experiment-execution';
 import {HicksLawExperimentExecution} from '../models/hicks-law-experiment-execution';
+import {ErrorCorrectionExperimentExecution} from '../models/ErrorCorrectionExperimentExecution';
 
 @Injectable({
   providedIn: 'root'
@@ -100,7 +101,12 @@ export class ExperimentService {
   }
 
   saveHicksLawExperimentExecution(hicksLawExecution: HicksLawExperimentExecution): Observable<HicksLawExperimentExecution> {
-    return this.http.post<HicksLawExperimentExecution>('https://localhost:7147/api/RecallRecognitionExperiment/new', hicksLawExecution);
+    return this.http.post<HicksLawExperimentExecution>('https://localhost:7147/api/HicksLawExperiment/new', hicksLawExecution);
+
+  }
+
+  saveErrorCorrectionExperiment(execution: ErrorCorrectionExperimentExecution): Observable<ErrorCorrectionExperimentExecution> {
+    return this.http.post<ErrorCorrectionExperimentExecution>('https://localhost:7147/api/ErrorCorrectionExperiment/new', execution);
 
   }
 }

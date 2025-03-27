@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {EmailListItemComponent} from '../email-list-item/email-list-item.component';
@@ -13,7 +13,7 @@ import {
   TextOnlySnackBar
 } from '@angular/material/snack-bar';
 import {SnackbarComponent} from '../../../snackbar/snackbar.component';
-import {timeout} from 'rxjs';
+
 import {ExperimentService} from '../../../services/experiment.service';
 
 @Component({
@@ -42,12 +42,13 @@ export class EmailIndexComponent implements OnInit {
   fetchedMails: Email[] = [];
   selectedEmail: Email | null = null;
   stack: Email[] = [];
-  lastDeletedMailIndex: number = 0;
+  lastDeletedMailIndex: number = -1;
   emailsToDisable: Email[] = [];
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  coloredMark: boolean = false;
+  deletedMailId: number = -1;
 
-  @ViewChild('container', {static: true}) container!: ElementRef;
   snackBarNumber: number = 0;
   oldSnackBarNumber: number = 0;
 
@@ -58,13 +59,18 @@ export class EmailIndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.snackBar._openedSnackBarRef?.afterDismissed().subscribe(event => this.stack = [])
     const urlSegments = this.router.url.split("/");
-    this.experimentService.getExperimentTest(urlSegments.indexOf("error-correction") + 1).subscribe((test) => {
-      if (test.configuration['horizontalPosition'] && test.configuration['verticalPosition']){
-          this.verticalPosition = test.configuration["verticalPosition"];
-          this.horizontalPosition = test.configuration["horizontalPosition"];
+    const index = urlSegments.indexOf("error-correction") + 1
+    const expTestId = Number(urlSegments[index]);
+    this.experimentService.getExperimentTest(expTestId).subscribe((test) => {
+      const config = JSON.parse(test.configuration);
+      if (config['horizontalPosition'] && config['verticalPosition']){
+          this.verticalPosition = config["verticalPosition"];
+          this.horizontalPosition = config["horizontalPosition"];
+      }
+      if (config["colorConfig"] == "coloredMark"){
+        this.coloredMark = true;
       }
     });
     if (urlSegments[urlSegments.length - 1] == "deletedItems") {
@@ -76,13 +82,14 @@ export class EmailIndexComponent implements OnInit {
   }
 
 
-  deleteEmail(deletedMail: Email) {
-    this.emailService.emitMailDeleted(deletedMail);
+  deleteEmail(deletedMail: Email, pos: number) {
+    this.emailService.emitMailDeleted({mail: deletedMail, position: pos });
     deletedMail.user = this.userService.currentUser()?.id ?? 0;
     deletedMail.deletedAt = Date.now();
     this.stack.push(deletedMail);
     this.fetchedMails = this.fetchedMails.filter((mail, index) => {
       if (mail.id == deletedMail.id) {
+        this.deletedMailId = deletedMail.id;
         this.lastDeletedMailIndex = index;
       }
       return mail.id != deletedMail.id
@@ -93,8 +100,6 @@ export class EmailIndexComponent implements OnInit {
     } else {
       this.openSnackBar("Gelöscht", "Rückgängig");
     }
-
-    // visualize input field
 
   }
 
@@ -139,12 +144,14 @@ export class EmailIndexComponent implements OnInit {
     });
     snackBarRef.afterDismissed().subscribe((event) => {
       if (this.stack.length > 0) {
-        this.emailService.saveDeletedEmail(this.stack[this.stack.length - 1]).subscribe()
+        const email = this.stack[this.stack.length -1];
+        this.emailService.saveDeletedEmail(email).subscribe()
       }
     })
   }
 
    undoDeletingMail() {
+    this.emailService.emitUndoEvent(this.lastDeletedMailIndex);
     this.fetchedMails.splice(this.lastDeletedMailIndex, 0, this.stack[this.stack.length - 1]);
     this.stack.pop();
   }

@@ -1,0 +1,9 @@
+.progress-title{
+  color: white;
+}
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
+}

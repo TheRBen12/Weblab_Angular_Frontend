@@ -17,6 +17,8 @@ const routes: Routes = [
       {path: 'pc-und-notebooks', component: ProductIndexComponent, title: "PC und Notebooks"},
       {path: 'notebook', component: ProductIndexComponent, title: "Notebooks"},
       {path: 'smartphones-und-tablets', component: ProductIndexComponent, title: "Smartphone und Tablets"},
+      {path: 'smartphone', component: ProductIndexComponent, title: "Smartphone"},
+      {path: 'wohnen', component: ProductIndexComponent, title: "Wohnen"},
       {path: 'peripherie', component: ProductIndexComponent, title: "Peripherie"},
       {path: 'keypad', component: ProductIndexComponent, title: "Tastaturen"},
       {path: 'lebensmittel', component: ProductIndexComponent, title: "Lebensmittel"},

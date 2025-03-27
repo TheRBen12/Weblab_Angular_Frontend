@@ -47,11 +47,7 @@ export class ProductComponent {
         this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
       });
     }
-    else if (urlSegments[l-1] == "lebensmittel" && urlSegments[l-3] == "hicks-law"){
-      if (this.productService.isFoodProduct(this.product.type)){
-        this.router.navigate(['show/product/' + this.product.id], {relativeTo: parentRoute});
-      }
-    }
+
 
     else if (urlSegments[l-1] == "kaffeemaschine" && urlSegments[l-3] == "mental-model"){
       if (this.product.type == "Kaffeemaschine"){

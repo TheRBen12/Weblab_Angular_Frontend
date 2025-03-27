@@ -5,9 +5,12 @@ export const routerLinks: {[key: string]: string } = {
   "PC": "pc",
   "Notebook": "notebook",
   "Smartphones und Tablets": "smartphones-und-tablets",
+  "Smartphone": "smartphone",
   "Keypad": "keypad",
   "Peripherie": "peripherie",
+  "Gemuese": "gemuese",
   "Küche": "kitchen",
   "Lebensmittel": "lebensmittel",
-  "Haushalt": "haushalt"
+  "Haushalt": "haushalt",
+  "Wohnen": "wohnen"
 }

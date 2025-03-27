@@ -30,6 +30,9 @@ h2{
 .menu-item{
   color: white;
   font-size: 20px;
+a{
+  color: white;
+}
 }
 
 .draw-container{
@@ -39,3 +42,8 @@ h2{
 a{
   color: white;
 }
+
+.active-link{
+  border-bottom: white solid 2px;
+}
+

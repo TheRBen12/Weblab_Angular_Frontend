@@ -1,5 +1,5 @@
 <div>
-  <div class="sub-navigation d-flex align-items-center justify-content-center">
+  <div [ngClass]="navigationConfig?.sideNavigationSearchbarBottom ? 'bottom d-flex align-items-center justify-content-center': 'sub-navigation d-flex align-items-center justify-content-center'" class="sub-navigation">
     <app-search-bar [disabled]="false" [placeholder]="'Versuche suchen'"  (inputTextEvent)="filterTestsAndMarkText($event)"
                     [elements]="experimentTests"></app-search-bar>
   </div>

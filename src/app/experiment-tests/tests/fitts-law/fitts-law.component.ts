@@ -54,8 +54,11 @@ export class FittsLawComponent implements OnInit {
   ngOnInit(): void {
     this.instructions = ["Löschen Sie alle E-Mails in der Liste. Versuche Sie jedes Mal das Löschen danch rückgängig zu machen."];
     this.emailToDelete = Math.floor(Math.random() * 6) + 1;
-    this.emailService.getDeletedMailSubscripition().subscribe((email) => {
-      this.deletedEmail = email;
+    this.emailService.getDeletedMailSubscripition().subscribe((data) => {
+      if (data){
+        this.deletedEmail = data.mail;
+      }
+
     })
     this.emailData = emails;
     this.fetchExperimentTest()

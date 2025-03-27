@@ -4,12 +4,11 @@ import {SearchBarComponent} from '../search-bar/search-bar.component';
 import {NgClass, NgIf} from '@angular/common';
 import {NavigationComponent} from '../navigation/navigation/navigation.component';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {FormsModule} from '@angular/forms';
 import {NavigationSetting} from '../models/navigation-setting';
 import {SettingService} from '../services/setting.service';
-import {timeout} from 'rxjs';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
@@ -31,7 +30,6 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     SearchBarComponent,
     NgIf,
     NavigationComponent,
-    RouterLink,
     MatRadioButton,
     MatRadioGroup,
     FormsModule,
@@ -44,7 +42,7 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
   standalone: true,
   styleUrl: './navigation-select.component.css'
 })
-export class NavigationSelectComponent implements OnInit{
+export class NavigationSelectComponent implements OnInit {
   navigationSelectionIndex: number = 2;
   settingService: SettingService = inject(SettingService);
   router = inject(Router);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -15,10 +15,16 @@ import {RouterLink} from '@angular/router';
 })
 export class EmailMenuComponent {
   menuToggled: boolean = false;
+  @Output() onMenuItemSelected = new EventEmitter<string>();
   toggleMenu(){
     this.menuToggled = !this.menuToggled;
   }
   navigate(){
 
   }
+
+  emitOnDeletedItemsSelected(value: string){
+    this.onMenuItemSelected.emit(value);
+  }
+
 }

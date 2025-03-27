@@ -4,10 +4,15 @@
   min-width: 50px;
   max-height: 50px;
 }
-span{
-  color: #6C3AE8;
+.text{
+  color: black;
 }
 
 .email-body{
   color: black;
+}
+
+
+.blue-text{
+  color: #189086;
 }

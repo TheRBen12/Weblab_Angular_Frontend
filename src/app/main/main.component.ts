@@ -13,7 +13,6 @@ import {NavigationSetting} from '../models/navigation-setting';
 import {NgIf} from '@angular/common';
 import {SideNavigationComponent} from '../side-navigation/side-navigation.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {SearchBarComponent} from '../search-bar/search-bar.component';
 
 @Component({
   selector: 'app-main',
@@ -26,7 +25,6 @@ import {SearchBarComponent} from '../search-bar/search-bar.component';
     SideNavigationComponent,
     MatRadioButton,
     MatRadioGroup,
-    SearchBarComponent
   ],
   standalone: true,
   templateUrl: './main.component.html',

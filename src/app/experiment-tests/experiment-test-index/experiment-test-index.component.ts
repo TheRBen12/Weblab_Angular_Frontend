@@ -3,7 +3,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {switchMap} from 'rxjs';
 import {ExperimentTest} from '../../models/experiment-test';
 import {ExperimentService} from '../../services/experiment.service';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {ExperimentTestComponent} from '../experiment-test/experiment-test.component';
 import {SearchBarComponent} from '../../search-bar/search-bar.component';
 import {Experiment} from '../../models/experiment';
@@ -11,7 +11,7 @@ import {FilterService} from '../../services/filter.service';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 import {LoginService} from '../../services/login.service';
 import {SettingService} from '../../services/setting.service';
-import {UserSetting} from '../../models/user-setting';
+import {NavigationSetting} from '../../models/navigation-setting';
 
 @Component({
   selector: 'app-experiment-test-index',
@@ -20,7 +20,8 @@ import {UserSetting} from '../../models/user-setting';
     NgIf,
     ExperimentTestComponent,
     SearchBarComponent,
-    RouterLink
+    RouterLink,
+    NgClass
   ],
   standalone: true,
   templateUrl: './experiment-test-index.component.html',
@@ -39,10 +40,10 @@ export class ExperimentTestIndexComponent implements OnInit {
   markedText: string = "";
   finishedExecutions: ExperimentTestExecution[] = [];
   testCompletedKeyValues: { [key: number]: boolean } = {};
+  protected navigationConfig: NavigationSetting|null = null;
 
 
   ngOnInit() {
-
     localStorage.removeItem("cart");
     this.route.paramMap.pipe(
       switchMap(params => {
@@ -57,6 +58,7 @@ export class ExperimentTestIndexComponent implements OnInit {
       const userId = this.userService.currentUser()?.id
       if (userId) {
         this.fetchExecutions(userId);
+        this.fetchNavigationConfig(userId);
       }
     });
 
@@ -125,5 +127,11 @@ export class ExperimentTestIndexComponent implements OnInit {
     });
     this.filteredExperimentTests =  tests.concat(finishedTests.concat([testWithMinPosition]))
     this.experimentTests = this.filteredExperimentTests;
+  }
+
+  private fetchNavigationConfig(userId: number) {
+    this.settingService.fetchNavigationSetting(userId).subscribe((navigationConfig) => {
+      this.navigationConfig = navigationConfig;
+    })
   }
 }

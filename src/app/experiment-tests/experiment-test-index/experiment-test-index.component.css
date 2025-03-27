@@ -1,7 +1,4 @@
-.sub-navigation{
-  background-color: #F4F4F4;
-  min-height: 75px;
-}
+
 .img-detail{
   max-height: 345.719px;
   max-width: 340px;
@@ -11,3 +8,4 @@
   display: flex;
   flex-flow: row wrap;
 }
+
