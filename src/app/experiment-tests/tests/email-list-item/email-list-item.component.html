@@ -29,7 +29,7 @@
 
 
   <div *ngIf="!isDeleted" class="ms-3 d-flex justify-content-end align-items-center w-100">
-    <button (click)="delete()"  mat-fab aria-label="Example icon button with a delete icon">
+    <button mat-fab class="delete-btn" (click)="delete()" >
       <mat-icon >delete</mat-icon>
     </button>
   </div>

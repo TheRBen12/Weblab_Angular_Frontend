@@ -11,7 +11,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div (click)="updateSearchBarClickBehaviour()" >
-          <app-search-bar (inputTextEvent)="filterProduct($event)" [disabled]="searchBarDisabled" [searchOnEnter]="false" [placeholder]="'Produkte suchen'" ></app-search-bar>
+          <app-search-bar (inputTextEvent)="filterProduct($event)" [disabled]="searchBarDisabled" [searchOnEnter]="true" [placeholder]="'Produkte suchen'" ></app-search-bar>
         </div>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">

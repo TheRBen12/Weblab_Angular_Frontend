@@ -11,6 +11,8 @@ export class TimeService {
   timeToReadWelcomeModal = 0;
   welcomeModalTimer = 0;
   experimentNavigationTimeSubscription: BehaviorSubject<ExperimentNavigationTime|null> = new BehaviorSubject<any>(null);
+  intervall: any
+  time: number = 0;
 
   constructor() {
 
@@ -35,7 +37,11 @@ export class TimeService {
   }
 
   stopTimer() {
+    clearInterval(this.intervall);
+  }
 
+  getCurrentTime(){
+    return this.time;
   }
 
   getTimeToReadWelcomeModal(){
@@ -48,5 +54,11 @@ export class TimeService {
 
   saveNavigationTime(timeData: ExperimentNavigationTime) {
 
+  }
+
+  startTimer() {
+    this.intervall = setInterval(() => {
+      this.time++;
+    }, 1000)
   }
 }

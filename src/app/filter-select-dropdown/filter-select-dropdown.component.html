@@ -1,10 +1,28 @@
-<h4>Basic mat-select</h4>
-<mat-form-field>
-  <mat-label>{{title}}</mat-label>
-  <mat-select>
-    @for (value of values; track value) {
-      <mat-option [value]="value">{{value}}</mat-option>
-    }
-  </mat-select>
-</mat-form-field>
+<div *ngIf="title != 'Preis'; else priceSlider">
+  <mat-form-field>
+    <mat-label>{{ title }}</mat-label>
+    <mat-select>
+      @for (value of values; track value) {
+        <mat-option (click)="filterProductsByProperty(title, value)" [value]="value">{{ value }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<ng-template #priceSlider>
+    <mat-label>{{ title }}</mat-label>
+        <div>
+          <div class="d-flex flex-wrap flex-row gap-5">
+            <div>Min CHF {{ sliderMin.value }}</div>
+            <div>{{ sliderMax.value }} Max CHF</div>
+          </div>
+
+          <mat-slider style="min-width: 200px" min="0" max="2699"
+          [step]="1">
+            <input value="0" matSliderStartThumb #sliderMin>
+            <input value="2600" matSliderEndThumb #sliderMax>
+          </mat-slider>
+        </div>
+        <button (click)="filterByPrice(sliderMin.value, sliderMax.value)"  class="btn btn-primary">Übernehmen</button>
+</ng-template>
 

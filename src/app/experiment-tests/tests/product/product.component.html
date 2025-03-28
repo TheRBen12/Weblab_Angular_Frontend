@@ -1,7 +1,7 @@
 <div class=" card link-underline-opacity-0 mt-3 mb-3 product-card ">
   <div (click)="navigate()" class="card-body flex-grow-0">
     <a>
-      <div *ngIf="product?.type != 'Gemuese' && product?.type != 'Wurzelgemuese'; else gemuese">
+      <div *ngIf="product?.type != 'Gemuese' && product?.type != 'Wurzelgemuese' &&  product?.type != 'Getreide und Hülsenfrüchte'; else gemuese">
         <img class="img-fluid card-img-top"
              src="assets/images/products/{{product?.trademark}}-{{product?.type}}.png">
         <p class="mt-2">

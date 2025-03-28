@@ -23,8 +23,6 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
     MatFabButton,
     NgIf,
     SideNavigationComponent,
-    MatRadioButton,
-    MatRadioGroup,
   ],
   standalone: true,
   templateUrl: './main.component.html',

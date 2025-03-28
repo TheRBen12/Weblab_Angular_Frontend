@@ -1,21 +1,33 @@
-<div class="container mt-3">
+
+<div class="container mt-3 p-2">
 <div class="row">
-  <div class="mt-3 container">
-    <div class="row">
-      <div class="d-flex flex-row gap-4">
-        <app-filter-select-dropdown [values]="getPropertyValues(property)" *ngFor="let property of productProperties" [title]="property" ></app-filter-select-dropdown>
+  <mat-card [ngClass]="{'disabled': filterDisabled}" class="mt-3 scrollable-list">
+    <div class="mt-3 container p-2">
+    <h3>Produkte Filtern</h3>
+      <div class="row">
+        <div class="d-flex flex-row gap-4 mb-2 ">
+          <app-filter-select-dropdown (onFilterEventEmitter)="filterProductsByProperty($event.propertyName, $event.value)" [values]="getPropertyValues(property)" *ngFor="let property of productProperties" [title]="property" ></app-filter-select-dropdown>
+        </div>
+      </div>
+      <div *ngIf="specifications.length > 0" class="row row-cols-3" >
+        <ng-container *ngFor="let spec of specifications">
+          <div class="col-sm-auto">
+            <app-filter-select-dropdown
+              (onFilterEventEmitter)="filterProductsBySpecifications($event.propertyName, $event.value)"
+              [values]="getSpecificationValues(spec)"
+              [title]="spec">
+            </app-filter-select-dropdown>
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-5">
+        <app-filter-select-dropdown  (onFilterPriceEventEmitter)="filterByPrice($event.min, $event.max)" [title]="'Preis'"></app-filter-select-dropdown>
       </div>
     </div>
-    <div class="row">
-
-    </div>
-  </div>
+  </mat-card>
 </div>
 
-
-  <div></div>
-
-  <h1 *ngIf="!showFilterResultTitle; else filteredResultTitle">{{title}}</h1>
+  <h1 class="mt-4" *ngIf="!showFilterResultTitle; else filteredResultTitle">{{title}}</h1>
   <ng-template #filteredResultTitle>
     <h1>Suchergebnisse</h1>
   </ng-template>

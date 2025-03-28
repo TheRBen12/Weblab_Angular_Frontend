@@ -298,6 +298,5 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   increaseClicks() {
     this.numberClicks++;
     localStorage.setItem('numberClicks', String(this.numberClicks));
-
   }
 }

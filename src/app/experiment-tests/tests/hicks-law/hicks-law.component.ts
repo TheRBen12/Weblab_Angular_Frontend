@@ -21,6 +21,7 @@ import {HicksLawExperimentExecution} from '../../../models/hicks-law-experiment-
 import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {TimeService} from '../../../services/time.service';
 
 @Component({
   selector: 'app-hicks-law',
@@ -48,6 +49,7 @@ export class HicksLawComponent implements OnInit {
   menuService: SideMenuService = inject(SideMenuService);
   router = inject(Router);
   userService: LoginService = inject(LoginService);
+  timerService = inject(TimeService);
   currentInstructionStep: number = 0;
   instructions: string[] = [];
   currentRoute: string = "Home";
@@ -73,6 +75,7 @@ export class HicksLawComponent implements OnInit {
   private failedClicks: number = 0;
   private numberClicks: number = 0;
   private firstClick: string|null = null;
+  private timeToClickFirstCategoryLink: number = 0;
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -81,6 +84,9 @@ export class HicksLawComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.timerService.startTimer();
+
+
     const urlSegments = this.router.url.split("/");
     const id = urlSegments.indexOf("hicks-law")
 
@@ -135,6 +141,10 @@ export class HicksLawComponent implements OnInit {
   }
 
   setCurrentRoute(route: string) {
+    if (Object.values(this.clickedRoutes).length == 0){
+      this.timeToClickFirstCategoryLink = this.timerService.getCurrentTime();
+      this.timerService.stopTimer();
+    }
     if (this.clickedRoutes[route]){
       this.clickedRoutes[route] += " " + new Date().toISOString();
     }else{
@@ -166,7 +176,6 @@ export class HicksLawComponent implements OnInit {
       if (this.currentInstructionStep > 1) {
         this.currentInstructionStep = 2;
       }
-      ;
     }
   }
 
@@ -206,7 +215,8 @@ export class HicksLawComponent implements OnInit {
           finishedExecutionAt: new Date(),
           failedClicks: this.failedClicks,
           numberClicks: this.numberClicks,
-          firstClick: this.firstClick
+          firstClick: this.firstClick,
+          timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink
         }
 
         this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {
