@@ -1,7 +1,7 @@
 .fab{
   position: fixed;
   right: 50px;
-  bottom: 120px
+  bottom: 80px
 }
 .scrollable-list {
   max-height: 100vh; /* Maximale Höhe setzen */
@@ -19,4 +19,58 @@
     color: white;
   }
   font-size: 20px;
+}
+
+
+.top-left{
+  position: fixed;
+  right: 50px;
+  top: 75px
+}
+
+
+.menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.menu-container {
+  position: absolute;
+  top: 100%; /* Direkt unter dem Button */
+  left: 0;
+  background: white;
+  width: 250px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 10; /* Damit es über anderen Elementen liegt */
+}
+
+.menu-content {
+  padding: 15px;
+}
+
+.menu-content a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.menu-content a:hover {
+  text-decoration: underline;
+}
+
+/* Darunterliegender Inhalt */
+.content {
+  margin-top: 50px;
+  padding: 20px;
+  background: #f1f1f1;
 }

@@ -34,6 +34,7 @@ export class FilterSelectDropdownComponent {
   @Output() onFilterPriceEventEmitter = new EventEmitter<{ min: number, max: number }>
 
   filterProductsByProperty(propertyName: string, value: string) {
+    debugger;
     this.onFilterEventEmitter.emit({propertyName: propertyName, value: value});
   }
 

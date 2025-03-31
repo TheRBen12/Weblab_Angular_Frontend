@@ -11,6 +11,7 @@ import {NavigationSetting} from '../models/navigation-setting';
 import {SettingService} from '../services/setting.service';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MegaDropDownNavigationComponent} from '../mega-drop-down-navigation/mega-drop-down-navigation.component';
 
 @Component({
 
@@ -36,7 +37,8 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     NgClass,
     MatCard,
     MatCardContent,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MegaDropDownNavigationComponent
   ],
   templateUrl: './navigation-select.component.html',
   standalone: true,
@@ -58,6 +60,7 @@ export class NavigationSelectComponent implements OnInit {
       sideNavigationSearchbarBottom: this.navigationSelectionIndex == 1,
       sideNavigationSearchBarTop: this.navigationSelectionIndex == 0,
       sideNavigationUserInformationTop: this.navigationSelectionIndex == 3,
+      megaDropDown: this.navigationSelectionIndex == 4,
       userId: history.state.userId,
     };
     this.settingService.saveNavigationSettings(navigationSetting).subscribe((settings) => {

@@ -65,7 +65,10 @@ export class ExperimentComponent {
   }
 
   private experimentIsCompleted(executions: ExperimentTestExecution[]) {
-      return executions.filter(execution => execution.experimentTest?.experiment?.id == this.experiment.id).length == this.experiment.numberExperimentTest;
+    executions = executions.filter(execution => execution.experimentTest?.experiment?.id == this.experiment.id);
+    let executionTestIds = executions.map(exec => exec.experimentTest?.id);
+    executionTestIds = Array.from(new Set(executionTestIds));
+    return executionTestIds.length == this.experiment.numberExperimentTest;
 
   }
 

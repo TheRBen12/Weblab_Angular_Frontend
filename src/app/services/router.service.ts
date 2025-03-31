@@ -24,6 +24,13 @@ export class RouterService {
     return this.lastKnownRoute;
   }
 
+  getExperimentTestIdByUrl(url: string, experimentName: string){
+    const urlSegments = url.split("/");
+    const index = urlSegments.indexOf(experimentName);
+    return Number(urlSegments[index + 1]);
+
+  }
+
 
   buildValueKeyPairForCategoryLinks(productCategories: ProductType[]) {
     const links = productCategories.reduce((acc, category) => {
@@ -41,6 +48,15 @@ export class RouterService {
     const link = urlSegments[urlSegments.length-1];
     let category = Object.keys(routerLinks).find(key => routerLinks[key] === link);
     return category ? category : "Home";
+  }
+
+
+  rebuildParentRoute(route: string, categories: ProductType[]){
+    const currentType = categories.find((category) => category.name == route)
+    const parentCategory = currentType?.parentType?.name ?? "Home";
+    const parentRoute = this.productCategoryLinks[parentCategory];
+    localStorage.setItem('parentRoute', parentCategory);
+    return {parentCategory: parentCategory, parentRoute: parentRoute}
   }
 
 

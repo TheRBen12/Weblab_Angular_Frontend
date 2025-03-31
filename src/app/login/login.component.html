@@ -17,7 +17,7 @@
   <form novalidate [formGroup]="loginForm" (ngSubmit)="loginRequest()" class="p-2 was-validated need-validation">
     <div class="mb-3">
       <label for="email" class="form-label">E-Mail Adresse</label>
-      <input required formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+      <input (keydown.enter)="loginRequest()"  required formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
       <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
         <div class="form-error-message" *ngIf="email?.errors?.['required']">Bitte geben Sie eine E-Mail Adresse ein</div>
         <div class="form-error-message"  *ngIf="email?.errors?.['email']">Das ist keine gültige E-Mail</div>

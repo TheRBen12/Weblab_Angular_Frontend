@@ -1,5 +1,5 @@
 <div *ngIf="!serverError; else errorMessage">
-  <div [ngClass]="{'bottom': navigationSetting.sideNavigationSearchbarBottom, 'sub-navigation d-flex align-items-center justify-content-center': !navigationSetting.sideNavigationSearchbarBottom}">
+  <div [ngClass]="{'bottom': navigationSetting?.sideNavigationSearchbarBottom, 'sub-navigation d-flex align-items-center justify-content-center': !navigationSetting?.sideNavigationSearchbarBottom}">
     <app-search-bar [placeholder]="'Experiment suchen'" (click)="updateUserBehaviour()"  [disabled]="false" (inputTextEvent)="filterExperiment($event)" [elements]="experiments" ></app-search-bar>
   </div>
   <div class="container mt-3 ">

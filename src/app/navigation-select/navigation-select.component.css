@@ -2,7 +2,6 @@
   background-color: #F1F1F1;
 }
 
-
 .right-side-header-item{
   a{
     color: white;
@@ -25,6 +24,7 @@
 }
 
 .visible {
+  max-height: 100vh;
   display: block;
 }
 
@@ -47,4 +47,8 @@
 }
 .progress-title{
   color: white;
+}
+
+.no-pointer-events{
+  pointer-events: none;
 }

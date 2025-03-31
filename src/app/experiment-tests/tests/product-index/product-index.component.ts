@@ -83,6 +83,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
         if (this.category == "pc-und-notebooks") {
           this.category = "PC und Notebooks"
         }
+        if (this.category == "pc"){
+          this.category = "PC";
+        }
 
         if (this.category.split("-").length < 2) {
           const capital = this.category.charAt(0);
@@ -165,6 +168,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   }
 
   filterProductsByProperty(propertyName: string, value: string) {
+    this.productService.updatedFilterUsedSubscription(propertyName);
     if (propertyName == "Marke" || propertyName == "Kategorie") {
       this.filteredProducts = this.filteredProducts.filter(product => product.trademark == value || product.type == value);
     }
@@ -172,6 +176,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   }
 
   filterProductsBySpecifications(propertyName: string, value: string) {
+    this.productService.updatedFilterUsedSubscription(propertyName);
     this.filteredProducts = this.filteredProducts.filter((product) => {
       const specification = product.specifications.find((spec: any) => spec.propertyName == propertyName);
       if (specification) {
@@ -185,6 +190,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
 
 
   filterByPrice(min: number, max: number) {
+    this.productService.updatedFilterUsedSubscription("Preis");
     this.filteredProducts = this.filteredProducts.filter(product => (product.price >= min && product.price <= max));
   }
 

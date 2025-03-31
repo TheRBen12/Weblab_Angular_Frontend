@@ -37,7 +37,13 @@ export class LoginComponent {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
         this.loginService.setUser(user);
-        this.router.navigateByUrl("/navigation-select", {state: {userId: user.id}});
+        if (user.group == "A" || user.group == "B"){
+          this.router.navigateByUrl("/navigation-select", {state: {userId: user.id}});
+        }else{
+          this.router.navigateByUrl("/");
+        }
+
+
         this.toastr.success("Anmeldung erfolgreich")
       }
     }, (error) => {

@@ -1,18 +1,18 @@
 <div class="d-flex flex-row">
   <div class="instruction-container col-3 border-end border-3">
-      <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
-                                       [instructions]="instructions"></app-experiment-test-instruction>
+      <app-experiment-test-instruction  [product]="{Kategorie: 'Notebook', Arbeitspeicher: '8 GB', Marke: 'Apple', Tastaturlayout: 'Schweiz'}" [currentInstructionStep]="currentInstructionStep"
+                                        [instructions]="!showHelpInstructions ? instructions : helpInstructions"></app-experiment-test-instruction>
   </div>
 
-  <div class="main w-100">
+  <div (click)="updateClickBehaviour($event)"  class="main w-100">
     <div class="row">
-      <div class="col-9">
+      <div class="col-lg-8">
           <div class="scrollable-list">
             <router-outlet></router-outlet>
           </div>
       </div>
       <div class="col-2">
-        <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
+        <app-side-menu (routeEvent)="updateInstructions($event)" [categoryLinks]=categoryLinks
                        [productCategories]="productCategories"
                        [currentRoute]="currentRoute"
                        [parentRoute]="parentRoute"
@@ -22,9 +22,8 @@
 
       <div class="col-2 me-3">
         <div class="container-md">
-          <app-basket [isHidden]=basketIsHidden (checkoutEventEmitter)="finishExperiment($event)"
+          <app-basket [isHidden]=!showBasket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"
                       [basket]=basket
-                      (hidenEventEmitter) = hideBasket($event)
           >
 
           </app-basket>
@@ -41,7 +40,7 @@
         </div>
 
         <div class="col-3 mt-3">
-          <app-auto-complete [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
+          <app-auto-complete (onSelectEventEmitter)="updateSearchBarBehaviour()" (click)="updateSearchBarBehaviour()"  [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
                              [placeholder]="'Produkte suchen'">
 
           </app-auto-complete>
@@ -52,7 +51,7 @@
             <div >
               <button class=" btn btn-primary">Anmelden</button>
             </div>
-            <button mat-fab (click)="openBasket()" >
+            <button mat-fab (click)="toggleBasket()" >
               <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
                         fontIcon="shopping_cart">
               </mat-icon>
@@ -65,3 +64,15 @@
 </div>
 
 
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>

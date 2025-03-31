@@ -5,7 +5,7 @@ import {
   MatExpansionPanelDescription,
   MatExpansionPanelTitle
 } from '@angular/material/expansion';
-import {NgForOf, SlicePipe} from '@angular/common';
+import {NgForOf, NgIf, SlicePipe} from '@angular/common';
 
 @Component({
   selector: 'app-experiment-test-instruction',
@@ -15,7 +15,8 @@ import {NgForOf, SlicePipe} from '@angular/common';
     MatExpansionPanelDescription,
     MatExpansionModule,
     NgForOf,
-    SlicePipe
+    SlicePipe,
+    NgIf
   ],
   templateUrl: './experiment-test-instruction.component.html',
   standalone: true,
@@ -25,6 +26,8 @@ export class ExperimentTestInstructionComponent {
   @Input() instructions: string[] = [];
   @Input() currentInstructionStep: number = 0;
   @Input() target: string = "";
+  @Input() product: any|null = null;
 
 
+  protected readonly Object = Object;
 }

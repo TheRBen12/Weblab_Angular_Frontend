@@ -15,7 +15,7 @@ import {CommonModule} from '@angular/common';
   standalone: true,
   styleUrl: './mega-drop-down-menu.component.css'
 })
-export class MegaDropDownMenuComponent implements OnInit, OnChanges{
+export class MegaDropDownMenuComponent implements OnChanges{
   @Input() currentCategory: string|undefined = undefined;
   @Input() dummyCategories: string[] = [];
 
@@ -27,22 +27,15 @@ export class MegaDropDownMenuComponent implements OnInit, OnChanges{
   categoryLinks: string[] = [];
 
 
-  ngOnInit(): void {
-
-
-  }
-
   emitCategoryLink(link: string) {
     this.routeEvent.emit(link)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(this.currentCategory && this.currentCategory != "Home"){
-
       this.productService.getAllSubcategoriesByParentCategory(this.currentCategory).subscribe((types) => {
        this.productCategories = types;
         this.categoryLinks = this.routerService.buildValueKeyPairForCategoryLinks(this.productCategories);
-
       });
 
     }

@@ -5,113 +5,145 @@
 
   <div class="mt-3 container-fluid">
     <h1>Wohin geht die Reise</h1>
-    <form [formGroup]="form" (ngSubmit)="submitForm()"  class="mt-3 ">
-      <div class="mb-3">
-        <label for="location" class="form-label">Reiseziel</label>
-        <input formControlName="location" class="form-control" id="location" type="text" placeholder="Wohin">
-      </div>
-      <div *ngIf="location?.invalid && (location?.touched)">
-        <div class="form-error-message" *ngIf="location?.errors?.['required']">Bitte geben Sie einen gültigen Ort ein</div>
-      </div>
 
-      <div class="mb-3 mt-3 d-flex flex-row gap-3">
-        <mat-form-field id="arrive">
-          <mat-label>Ankunftsdatum</mat-label>
-          <input formControlName="arrival" matInput [matDatepicker]="pickerArrive">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="pickerArrive"></mat-datepicker-toggle>
-          <mat-datepicker #pickerArrive></mat-datepicker>
-        </mat-form-field>
 
+    <form *ngIf="!splitForm" [formGroup]="form" (ngSubmit)="submitForm()"  class="mt-3 ">
+
+      <div>
         <div class="mb-3">
-          <mat-form-field id="departure">
-            <mat-label>Abbreisedatum</mat-label>
-            <input formControlName="departure" matInput [matDatepicker]="pickerDeparture">
+          <label for="location" class="form-label">Reiseziel</label>
+          <input formControlName="location" class="form-control" id="location" type="text" placeholder="Wohin">
+        </div>
+        <div *ngIf="location?.invalid && (location?.touched)">
+          <div class="form-error-message" *ngIf="location?.errors?.['required']">Bitte geben Sie einen gültigen Ort ein</div>
+        </div>
+
+        <div class="mb-3 mt-3 d-flex flex-row gap-3">
+          <mat-form-field id="arrive">
+            <mat-label>Ankunftsdatum</mat-label>
+            <input formControlName="arrival" matInput [matDatepicker]="pickerArrive">
             <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="pickerDeparture"></mat-datepicker-toggle>
-            <mat-datepicker #pickerDeparture></mat-datepicker>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerArrive"></mat-datepicker-toggle>
+            <mat-datepicker #pickerArrive></mat-datepicker>
+          </mat-form-field>
+
+          <div class="mb-3">
+            <mat-form-field id="departure">
+              <mat-label>Abbreisedatum</mat-label>
+              <input formControlName="departure" matInput [matDatepicker]="pickerDeparture">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="pickerDeparture"></mat-datepicker-toggle>
+              <mat-datepicker #pickerDeparture></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div *ngIf="form.errors?.['dateOrderInvalid']">
+          <div class="form-error-message">
+            Das Abreisedatum muss nach dem Ankunftsdatum liegen!
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <div class="col-3">
+            <label class="me-3" for="numberRooms">Anzahl Zimmer</label>
+          </div>
+          <mat-form-field id="numberRooms" floatLabel="always">
+            <mat-label>Anzahl</mat-label>
+            <input formControlName="numberRooms" matInput type="number" placeholder="0"/>
+            <span matTextSuffix></span>
           </mat-form-field>
         </div>
-      </div>
-      <div *ngIf="form.errors?.['dateOrderInvalid']">
-        <div class="form-error-message">
-          Das Abreisedatum muss nach dem Ankunftsdatum liegen!
+        <div *ngIf="numberRooms?.invalid && numberRooms?.touched">
+          <div class="form-error-message" *ngIf="numberRooms?.errors?.['min']">Sie müssen mindestens ein Zimmer buchen</div>
+          <div class="form-error-message" *ngIf="numberRooms?.errors?.['required']">Sie müssen mindestens eine Zimmer buchen</div>
         </div>
       </div>
 
-      <h3 class="mt-3">Ihre Kontaktangaben</h3>
-      <div class="">
-        <label for="email" class="form-label">E-Mail</label>
-        <input formControlName="email" type="email" class="form-control" id="email">
-      </div>
-      <div *ngIf="email?.invalid && (email?.touched)">
-        <div class="form-error-message" *ngIf="email?.errors?.['email']">Bitte geben Sie einen gültige E-Mail ein</div>
-        <div class="form-error-message" *ngIf="email?.errors?.['required']">Bitte geben Sie eine E-Mail ein</div>
-      </div>
 
-      <div class="mt-3">
-        <label for="name" class="form-label">Vorname</label>
-        <input formControlName="name" type="text" class="form-control" id="name">
-      </div>
-      <div *ngIf="name?.invalid && (name?.touched)">
-        <div class="form-error-message" *ngIf="name?.errors?.['required']">Bitte geben Sie Ihren Vornamen ein</div>
-      </div>
+      <div >
+        <h3 class="mt-3">Ihre Kontaktangaben</h3>
+        <div class="">
+          <label for="email" class="form-label">E-Mail</label>
+          <input formControlName="email" type="email" class="form-control" id="email">
+        </div>
+        <div *ngIf="email?.invalid && (email?.touched)">
+          <div class="form-error-message" *ngIf="email?.errors?.['email']">Bitte geben Sie einen gültige E-Mail ein</div>
+          <div class="form-error-message" *ngIf="email?.errors?.['required']">Bitte geben Sie eine E-Mail ein</div>
+        </div>
 
-
-      <div class="mt-3">
-        <label for="firstName" class="form-label">Nachname</label>
-        <input formControlName="firstName" type="text" class="form-control" id="firstName">
-      </div>
-      <div *ngIf="firstName?.invalid && (name?.touched)">
-        <div class="form-error-message" *ngIf="firstName?.errors?.['required']">Bitte geben Sie einen Nachnamen ein</div>
-      </div>
+        <div class="mt-3">
+          <label for="name" class="form-label">Vorname</label>
+          <input formControlName="name" type="text" class="form-control" id="name">
+        </div>
+        <div *ngIf="name?.invalid && (name?.touched)">
+          <div class="form-error-message" *ngIf="name?.errors?.['required']">Bitte geben Sie Ihren Vornamen ein</div>
+        </div>
 
 
-      <h3 class="mt-3">Ihre Address Angaben</h3>
-      <div>
-        <label for="street" class="form-label">Strasse und Hausnummer</label>
-        <input formControlName="street" type="text" class="form-control" id="street">
-      </div>
-
-      <div *ngIf="street?.invalid && (street?.touched)">
-        <div class="form-error-message" *ngIf="street?.errors?.['pattern']">Ungültiges Format</div>
-        <div class="form-error-message" *ngIf="street?.errors?.['pattern']"> Achten Sie auf die Eingabe einer Hausnummer</div>
-        <div class="form-error-message" *ngIf="street?.errors?.['required']"> Geben Sie Ihre Strasse und Hausnummer ein</div>
+        <div class="mt-3">
+          <label for="firstName" class="form-label">Nachname</label>
+          <input formControlName="firstName" type="text" class="form-control" id="firstName">
+        </div>
+        <div *ngIf="firstName?.invalid && (name?.touched)">
+          <div class="form-error-message" *ngIf="firstName?.errors?.['required']">Bitte geben Sie einen Nachnamen ein</div>
+        </div>
 
       </div>
 
 
-      <div class="mt-3">
-        <label for="city" class="form-label">Ort</label>
-        <input formControlName="city" type="text" class="form-control" id="city">
-      </div>
-      <div *ngIf="city?.invalid && (city?.touched)">
-        <div class="form-error-message" *ngIf="city?.errors?.['pattern']">Ungültiges Format</div>
-        <div class="form-error-message" *ngIf="city?.errors?.['required']"> Geben Sie einen Ort ein</div>
-      </div>
 
-      <div class="mt-3 ">
-        <label for="country" class="form-label">Land</label>
-        <input formControlName="country" type="text" class="form-control" id="country">
-      </div>
-      <div *ngIf="city?.invalid && (city?.touched)">
-        <div class="form-error-message" *ngIf="city?.errors?.['pattern']">Ungültiges Format</div>
-        <div class="form-error-message" *ngIf="city?.errors?.['required']"> Geben Sie Ihr Land ein</div>
-        <div class="form-error-message" *ngIf="city?.errors?.['minlength']">Bitte geben Sie den vollständigen Namen Ihres Landes ein</div>
-      </div>
 
-      <div class="mb-3 mt-3">
-        <label for="plz" class="me-3 form-label">PLZ</label>
-        <input formControlName="plz" type="text" class="form-control-sm" id="plz">
+      <div >
+        <h3 class="mt-3">Ihre Address Angaben</h3>
+        <div>
+          <label for="street" class="form-label">Strasse und Hausnummer</label>
+          <input formControlName="street" type="text" class="form-control" id="street">
+        </div>
 
-        <div *ngIf="plz?.invalid && ( plz?.touched) " class="mb-3 ">
-          <div class="form-error-message" *ngIf="plz?.errors?.['minlength']">Die PLZ muss mind. 4 Ziffern enthalten</div>
-          <div class="form-error-message" *ngIf="plz?.errors?.['maxlength']">Die PLZ darf max. 4 Ziffern enthalten</div>
-          <div class="form-error-message" *ngIf="plz?.errors?.['required']">Bitte Geben Sie eine PLZ ein</div>
+        <div *ngIf="street?.invalid && (street?.touched)">
+          <div class="form-error-message" *ngIf="street?.errors?.['pattern']">Ungültiges Format</div>
+          <div class="form-error-message" *ngIf="street?.errors?.['pattern']"> Achten Sie auf die Eingabe einer Hausnummer</div>
+          <div class="form-error-message" *ngIf="street?.errors?.['required']"> Geben Sie Ihre Strasse und Hausnummer ein</div>
+
+        </div>
+
+
+        <div class="mt-3">
+          <label for="city" class="form-label">Ort</label>
+          <input formControlName="city" type="text" class="form-control" id="city">
+        </div>
+        <div *ngIf="city?.invalid && (city?.touched)">
+          <div class="form-error-message" *ngIf="city?.errors?.['pattern']">Ungültiges Format</div>
+          <div class="form-error-message" *ngIf="city?.errors?.['required']"> Geben Sie einen Ort ein</div>
+        </div>
+
+        <div class="mt-3 ">
+          <label for="country" class="form-label">Land</label>
+          <input formControlName="country" type="text" class="form-control" id="country">
+        </div>
+        <div *ngIf="city?.invalid && (city?.touched)">
+          <div class="form-error-message" *ngIf="city?.errors?.['pattern']">Ungültiges Format</div>
+          <div class="form-error-message" *ngIf="city?.errors?.['required']"> Geben Sie Ihr Land ein</div>
+          <div class="form-error-message" *ngIf="city?.errors?.['minlength']">Bitte geben Sie den vollständigen Namen Ihres Landes ein</div>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label for="plz" class="me-3 form-label">PLZ</label>
+          <input formControlName="plz" type="text" class="form-control-sm" id="plz">
+
+          <div *ngIf="plz?.invalid && ( plz?.touched) " class="mb-3 ">
+            <div class="form-error-message" *ngIf="plz?.errors?.['minlength']">Die PLZ muss mind. 4 Ziffern enthalten</div>
+            <div class="form-error-message" *ngIf="plz?.errors?.['maxlength']">Die PLZ darf max. 4 Ziffern enthalten</div>
+            <div class="form-error-message" *ngIf="plz?.errors?.['required']">Bitte Geben Sie eine PLZ ein</div>
+          </div>
         </div>
       </div>
 
+
       <div>
+        <h3>
+          Anzahl Personen
+        </h3>
         <div class="mt-3">
           <div class="col-3">
             <label class="me-3" for="numberAdults">Anzahl Erwachsene</label>
@@ -141,7 +173,13 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">Eingaben absenden</button>
+
+      <button *ngIf="splitForm" type="submit" class="btn btn-success">Weiter</button>
+      <ng-template #submitBtnSplitForm>
+        <button *ngIf="splitForm&& formStep == 3"   type="submit" class="btn btn-primary">Eingaben absenden</button>
+      </ng-template>
+
+      <button *ngIf="!splitForm; else submitBtnSplitForm"   type="submit" class="btn btn-primary">Eingaben absenden</button>
     </form>
 
   </div>

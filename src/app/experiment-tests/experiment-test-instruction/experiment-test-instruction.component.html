@@ -1,7 +1,7 @@
 <div class=" instruction-container">
   <div class="p-1">
     <mat-accordion style="background: none">
-      <mat-expansion-panel hideToggle style="background: white">
+      <mat-expansion-panel togglePosition="after" hideToggle style="background: white">
         <mat-expansion-panel-header class="panel-header" style="min-height: 100px">
           <div  class="p-3">
             <mat-panel-title> Versuchsanleitung</mat-panel-title>
@@ -18,6 +18,14 @@
             <p >{{ i + 1 }}. {{ instruction }} </p>
           </li>
         </ul>
+        <div *ngIf="product">
+          <hr>
+          <p class="fw-bold">Produktspezifikationen</p>
+          <p *ngFor="let key of Object.keys(product); index as i">
+            {{key}}: <span>{{Object.values(product)[i]}}</span>
+          </p>
+
+        </div>
 
       </mat-expansion-panel>
     </mat-accordion>

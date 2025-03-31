@@ -17,3 +17,11 @@
 .flex-list li:nth-child(3n + 1) {
   clear: left; /* Neue Spalte nach jedem dritten Element starten */
 }
+
+.strong-link{
+  font-weight: bold;
+  text-underline: #5C5C5C;
+}
+.link-menu-item{
+  color: black;
+}

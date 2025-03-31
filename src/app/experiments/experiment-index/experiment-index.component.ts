@@ -32,8 +32,7 @@ export class ExperimentIndexComponent implements OnInit {
   router: Router = inject(Router);
   finishedExperiments: Experiment[] | null = [];
   finishedExecutions: ExperimentTestExecution[] = [];
-  numberFinishedTestsForExperiments: number[] = [];
-  protected navigationSetting!: NavigationSetting;
+  protected navigationSetting?: NavigationSetting;
 
   constructor(public readonly accountService: LoginService, private cdrf: ChangeDetectorRef) {
 
@@ -42,6 +41,8 @@ export class ExperimentIndexComponent implements OnInit {
       if (userId) {
         this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
           this.navigationSetting = setting;
+        }, (error) => {
+          console.log(error);
         })
         this.fetchFinishedExecutions(userId, "FINISHED").subscribe((executions) => {
           if (executions.length > 0) {
@@ -86,12 +87,12 @@ export class ExperimentIndexComponent implements OnInit {
         const userId = setting.userID;
           //fetch executions
           this.fetchFinishedExecutions(userId, "FINISHED").subscribe((executions) => {
-
               this.finishedExecutions = executions;
-              // extract exp with min pos
+
+              // extract finishedExperiments
               this.findFinishedExperiments(this.finishedExecutions);
 
-              // extract finished experiments
+              // remove duplicate experiments
               const finishedExperiments = this.filteredExperiments.filter((experiment) => {
                 const finishedExperimentIds = this.finishedExperiments?.map(exp => exp.id);
                 return finishedExperimentIds?.indexOf(experiment.id) != -1;
@@ -134,7 +135,9 @@ export class ExperimentIndexComponent implements OnInit {
   private findFinishedExperiments(executions: ExperimentTestExecution[]) {
     this.experiments.forEach((experiment) => {
       const finishedExecutions = executions.filter(execution => execution.experimentTest?.experiment?.id == experiment.id)
-      if (finishedExecutions.length == experiment.numberExperimentTest) {
+      let finishedExecutionTestIds = finishedExecutions.map(exec => exec.experimentTest?.id);
+      finishedExecutionTestIds = Array.from(new Set(finishedExecutionTestIds));
+      if (finishedExecutionTestIds.length == experiment.numberExperimentTest ) {
         this.finishedExperiments?.push(experiment);
       }
     });

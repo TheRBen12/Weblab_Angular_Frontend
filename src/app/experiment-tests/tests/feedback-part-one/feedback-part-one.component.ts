@@ -37,6 +37,9 @@ export class FeedbackPartOneComponent implements OnInit{
   experimentTest: ExperimentTest|null = null;
   experimentService: ExperimentService = inject(ExperimentService)
   currentInstructionStep = 6;
+  router = inject(Router);
+  formStep = 0;
+  splitForm: boolean = true;
   constructor() {
     this.instructions = ["Geben sie für das Reiseziel ein: Berlin", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
     "Geben Sie Ihre Kontaktdaten an", "Geben Sie für Strasse und Hausnummer ein: Müllereckstrasse",
@@ -45,7 +48,6 @@ export class FeedbackPartOneComponent implements OnInit{
   }
 
 
-  router = inject(Router);
   form = new FormGroup({
     email: new FormControl("", {
       validators: [
@@ -132,8 +134,15 @@ export class FeedbackPartOneComponent implements OnInit{
         Validators.required,
       ], updateOn: "submit"
     }),
+    numberRooms: new FormControl(0 ,{
+      validators: [
+        Validators.required,
+        Validators.min(1)
+      ]
+    })
 
   }, {validators: [dateOrderValidator]});
+
 
 
   get numberAdults(){
@@ -168,6 +177,10 @@ export class FeedbackPartOneComponent implements OnInit{
     return this.form.get('country');
   }
 
+  get numberRooms(){
+    return this.form.get('numberRooms');
+
+  }
 
 
   submitForm() {
@@ -187,8 +200,8 @@ export class FeedbackPartOneComponent implements OnInit{
     const experimentTestId = Number(urlSegments[index]);
     this.experimentService.getExperimentTest(experimentTestId).subscribe((experimentTest) => {
       this.experimentTest = experimentTest;
+      this.splitForm = JSON.parse(experimentTest.configuration)["splitForm"];
     })
-    //this.form.controls.city.markAsTouched();
   }
 
   private finishExperiment() {

@@ -1,0 +1,57 @@
+<div class="mega-drop-down-navigation">
+  <div class="header p-4 d-flex">
+    <h1>Weblab</h1>
+    <div class="header-menu-container w-100 d-flex justify-content-center gap-lg-5">
+
+        <div (mouseleave)="leaveHeaderMenu()" (mouseenter)="displayExperimentMenu()" class="d-flex gap-lg-5">
+          <div >
+            <a [ngClass]="{'no-pointer-events': noPointerEvents}"  style="min-height: 100px" class="header-menu-item" routerLink="/">Experimente</a>
+          </div>
+          <div >
+            <a [ngClass]="{'no-pointer-events': noPointerEvents}"  class="header-menu-item" routerLink="/settings">Einstellungen</a></div>
+        </div>
+        <div >
+          <a class="header-menu-item">Hilfe</a>
+        </div>
+
+
+    </div>
+    <div class="d-flex justify-content-end gap-5">
+      <div>
+        <a [ngClass]="{'no-pointer-events': noPointerEvents}" class="header-menu-item" routerLink="/profile">{{loginService.currentUser()?.email}}</a>
+      </div>
+      <div>
+        <a [ngClass]="{'no-pointer-events': noPointerEvents}" class="header-menu-item" (click)="logout()">Abmelden</a>
+      </div>
+    </div>
+  </div>
+
+  <div  >
+    <div (mouseleave)="leaveExperimentMenu()"  (mouseenter)="enterExperimentMenu()" [ngClass]="{'hidden': !showExperimentMenu, 'd-flex p-3 visible':showExperimentMenu}"
+         [@hoverState]="showExperimentMenu ? 'open' : 'closed'" class="experiment-menu-container gap-lg-5">
+      <div (mouseenter)="checkIfDisplayExperimentTestMenu(experiment)"
+           class="menu-item"
+           *ngFor="let experiment of experiments">
+        <a  routerLink="/tests/{{experiment.id}}" class="menu-item-link" [ngClass]="{'active': experiment.id==currentSelectedExperiment?.id, 'no-pointer-events': noPointerEvents}">{{ experiment.name }}</a>
+      </div>
+    </div>
+    <div (mouseleave)="checkToHideExperimentTestMenu()" (mouseenter)="enterExperimentTestMenu()"  [ngClass]="{'hidden': !showExperimentTestMenu, 'p-2 visible': showExperimentTestMenu}" class="experiment-test-menu-container"
+         [@hoverState]="showExperimentTestMenu ? 'open' : 'closed' ">
+      <div class="col-lg-auto">
+        <div class="d-flex justify-content-center">
+          <ul class="list-group list-group-flush">
+            <div *ngFor="let test of experimentTests" class=" list-group-item">
+              <a [ngClass]="{'no-pointer-events': noPointerEvents}" routerLink="/tests/detail/{{test.id}}" class="sub-menu-item">{{ test.name }}</a>
+            </div>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+

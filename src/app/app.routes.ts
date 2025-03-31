@@ -40,6 +40,10 @@ import {
 } from './experiment-tests/tests/recall-recognition/recall-recognition-part-four/recall-recognition-part-four.component';
 import {FeedbackPartOneComponent} from './experiment-tests/tests/feedback-part-one/feedback-part-one.component';
 import {NavigationSelectComponent} from './navigation-select/navigation-select.component';
+import {
+  MentalModelRightSideNavigationComponent
+} from './experiment-tests/tests/mental-model-right-side-navigation/mental-model-right-side-navigation.component';
+import {FeedbackPartTwoComponent} from './experiment-tests/tests/feedback-part-two/feedback-part-two.component';
 
 export const routes: Routes = [
   {
@@ -122,7 +126,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/12', component: MentalModelLeftSideNavigationComponent, children: [
+            path: 'mental-model/12', component: MentalModelRightSideNavigationComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -161,6 +165,12 @@ export const routes: Routes = [
           {
             path: 'feedback/18', component: FeedbackPartOneComponent
           },
+
+          {
+            path: 'feedback/19', component: FeedbackPartTwoComponent
+          },
+
+
 
 
 

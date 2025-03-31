@@ -1,1 +1,248 @@
-<p>feedback-part-two works!</p>
+<div class="d-flex flex-row">
+  <div>
+    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"
+                                     [target]="experimentTest?.goalInstruction?? ''"></app-experiment-test-instruction>
+  </div>
+
+  <div class="mt-3 container-fluid">
+
+    <h1>Wohin geht die Reise</h1>
+
+    <div *ngIf="splitForm" class="d-flex flex-row gap-lg-5">
+      <div [ngClass]="{'active': formStep == 0}">
+        <p class="fw-bold"><span class="fw-bold">1. </span> Angaben zu Ihrere Reise</p>
+      </div>
+
+      <div [ngClass]="{'active': formStep == 1}">
+        <p class="fw-bold"><span class="fw-bold">2. </span> Ihre Kontaktangaben</p>
+      </div>
+
+      <div [ngClass]="{'active': formStep == 2}">
+        <p class="fw-bold"><span class="fw-bold">3. </span> Ihre Adressangaben</p>
+      </div>
+
+      <div [ngClass]="{'active': formStep == 3}">
+        <p class="fw-bold"><span class="fw-bold">4. </span>Anzahl Personen</p>
+      </div>
+
+    </div>
+
+    <div class="col-6">
+      <form [formGroup]="form" (ngSubmit)="submitForm()" class="mt-3 ">
+
+        <mat-card *ngIf="formStep == 0 && splitForm">
+          <div class="p-4 ">
+            <div class="mb-3">
+              <label for="location" class="form-label">Reiseziel</label>
+              <input formControlName="location" class="form-control" id="location" type="text" placeholder="Wohin">
+            </div>
+            <div *ngIf="location?.invalid && (location?.touched)">
+              <div class="form-error-message" *ngIf="location?.errors?.['required']">Bitte geben Sie einen gültigen Ort
+                ein
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3 d-flex flex-row gap-3">
+              <mat-form-field id="arrive">
+                <mat-label>Ankunftsdatum</mat-label>
+                <input formControlName="arrival" matInput [matDatepicker]="pickerArrive">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerArrive"></mat-datepicker-toggle>
+                <mat-datepicker #pickerArrive></mat-datepicker>
+              </mat-form-field>
+
+              <div class="mb-3">
+                <mat-form-field id="departure">
+                  <mat-label>Abbreisedatum</mat-label>
+                  <input formControlName="departure" matInput [matDatepicker]="pickerDeparture">
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="pickerDeparture"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerDeparture></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div *ngIf="form.errors?.['dateOrderInvalid']">
+              <div class="form-error-message">
+                Das Abreisedatum muss nach dem Ankunftsdatum liegen!
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <div class="col-3">
+                <label class="me-3" for="numberRooms">Anzahl Zimmer</label>
+              </div>
+              <mat-form-field id="numberRooms" floatLabel="always">
+                <mat-label>Anzahl</mat-label>
+                <input formControlName="numberRooms" matInput type="number" placeholder="0"/>
+                <span matTextSuffix></span>
+              </mat-form-field>
+            </div>
+            <div *ngIf="numberRooms?.invalid && numberRooms?.touched">
+              <div class="form-error-message" *ngIf="numberRooms?.errors?.['min']">Sie müssen mindestens ein Zimmer
+                buchen
+              </div>
+              <div class="form-error-message" *ngIf="numberRooms?.errors?.['required']">Sie müssen mindestens eine
+                Zimmer
+                buchen
+              </div>
+            </div>
+          </div>
+
+        </mat-card>
+
+
+        <mat-card *ngIf="splitForm && formStep == 1">
+          <div class="p-4">
+            <h3 class="mt-3">Ihre Kontaktangaben</h3>
+            <div class="">
+              <label for="email" class="form-label">E-Mail</label>
+              <input formControlName="email" type="email" class="form-control" id="email">
+            </div>
+            <div *ngIf="email?.invalid && (email?.touched)">
+              <div class="form-error-message" *ngIf="email?.errors?.['email']">Bitte geben Sie einen gültige E-Mail ein
+              </div>
+              <div class="form-error-message" *ngIf="email?.errors?.['required']">Bitte geben Sie eine E-Mail ein</div>
+            </div>
+
+            <div class="mt-3">
+              <label for="name" class="form-label">Vorname</label>
+              <input formControlName="name" type="text" class="form-control" id="name">
+            </div>
+            <div *ngIf="name?.invalid && (name?.touched)">
+              <div class="form-error-message" *ngIf="name?.errors?.['required']">Bitte geben Sie Ihren Vornamen ein
+              </div>
+            </div>
+
+
+            <div class="mt-3">
+              <label for="firstName" class="form-label">Nachname</label>
+              <input formControlName="firstName" type="text" class="form-control" id="firstName">
+            </div>
+            <div *ngIf="firstName?.invalid && (name?.touched)">
+              <div class="form-error-message" *ngIf="firstName?.errors?.['required']">Bitte geben Sie einen Nachnamen
+                ein
+              </div>
+            </div>
+
+          </div>
+        </mat-card>
+
+
+        <mat-card *ngIf="splitForm && formStep == 2">
+          <div class="p-4" >
+            <h3 class="mt-3">Ihre Address Angaben</h3>
+            <div>
+              <label for="street" class="form-label">Strasse und Hausnummer</label>
+              <input formControlName="street" type="text" class="form-control" id="street">
+            </div>
+
+            <div *ngIf="street?.invalid && (street?.touched)">
+              <div class="form-error-message" *ngIf="street?.errors?.['pattern']">Ungültiges Format</div>
+              <div class="form-error-message" *ngIf="street?.errors?.['pattern']"> Achten Sie auf die Eingabe einer
+                Hausnummer
+              </div>
+              <div class="form-error-message" *ngIf="street?.errors?.['required']"> Geben Sie Ihre Strasse und
+                Hausnummer ein
+              </div>
+
+            </div>
+
+
+            <div class="mt-3">
+              <label for="city" class="form-label">Ort</label>
+              <input formControlName="city" type="text" class="form-control" id="city">
+            </div>
+            <div *ngIf="city?.invalid && (city?.touched)">
+              <div class="form-error-message" *ngIf="city?.errors?.['pattern']">Ungültiges Format</div>
+              <div class="form-error-message" *ngIf="city?.errors?.['required']"> Geben Sie einen Ort ein</div>
+            </div>
+
+            <div class="mt-3 ">
+              <label for="country" class="form-label">Land</label>
+              <input formControlName="country" type="text" class="form-control" id="country">
+            </div>
+            <div *ngIf="country?.invalid && (country?.touched)">
+              <div class="form-error-message" *ngIf="city?.errors?.['pattern']">Ungültiges Format</div>
+              <div class="form-error-message" *ngIf="city?.errors?.['required']"> Geben Sie Ihr Land ein</div>
+              <div class="form-error-message" *ngIf="city?.errors?.['minlength']">Bitte geben Sie den vollständigen
+                Namen
+                Ihres Landes ein
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label for="plz" class="me-3 form-label">PLZ</label>
+              <input formControlName="plz" type="text" class="form-control-sm" id="plz">
+
+              <div *ngIf="plz?.invalid && ( plz?.touched) " class="mb-3 ">
+                <div class="form-error-message" *ngIf="plz?.errors?.['minlength']">Die PLZ muss mind. 4 Ziffern
+                  enthalten
+                </div>
+                <div class="form-error-message" *ngIf="plz?.errors?.['maxlength']">Die PLZ darf max. 4 Ziffern enthalten
+                </div>
+                <div class="form-error-message" *ngIf="plz?.errors?.['required']">Bitte Geben Sie eine PLZ ein</div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+
+
+        <mat-card *ngIf="splitForm && formStep==3">
+          <div class="p-4">
+            <h3>
+              Anzahl Personen
+            </h3>
+            <div class="mt-3">
+              <div class="col-3">
+                <label class="me-3" for="numberAdults">Anzahl Erwachsene</label>
+              </div>
+              <mat-form-field id="numberAdults" floatLabel="always">
+                <mat-label>Anzahl</mat-label>
+                <input formControlName="numberAdults" matInput type="number" class="example-right-align" placeholder="0"/>
+                <span matTextSuffix></span>
+              </mat-form-field>
+            </div>
+            <div *ngIf="numberAdults?.invalid && numberAdults?.touched">
+              <div class="form-error-message" *ngIf="numberAdults?.errors?.['min']">Es muss mind. eine erwachsene Person
+                dabei sein
+              </div>
+              <div class="form-error-message" *ngIf="numberAdults?.errors?.['required']">Es muss mind. eine erwachsene
+                Person dabei sein
+              </div>
+            </div>
+
+
+            <div class="mt-3">
+              <div class="col-3">
+                <label class="me-3" for="numberChildren">Anzahl Kinder</label>
+              </div>
+              <mat-form-field id="numberChildren" floatLabel="always">
+                <mat-label>Anzahl</mat-label>
+                <input formControlName="numberChildren" matInput type="number" class="example-right-align"
+                       placeholder="0"/>
+                <span matTextSuffix></span>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card>
+
+
+
+
+        <button (click)="checkInputForCurrentFormStep()" *ngIf="splitForm && formStep < 3" class="mt-3 btn btn-success">
+          Weiter
+        </button>
+        <button [ngClass]="{'ms-3': formStep < 3}" (click)="back()" *ngIf="splitForm && formStep > 0"
+                class="mt-3 btn btn-secondary">Zurück
+        </button>
+        <div *ngIf="formStep == 3">
+          <button *ngIf="formStep == 3" type="submit" class="mt-3 btn btn-primary">Eingaben absenden</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+
+</div>

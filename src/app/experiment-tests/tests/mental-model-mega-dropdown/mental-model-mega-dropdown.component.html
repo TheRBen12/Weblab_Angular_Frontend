@@ -1,10 +1,10 @@
 <div class="d-flex flex-row">
   <div class="col-3">
-    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
-                                     [instructions]="instructions"></app-experiment-test-instruction>
+    <app-experiment-test-instruction [product]="{Kategorie: 'PC', Arbeitspeicher: '32 GB', Marke: 'HP', Festplatte: '2000 GB', Betriebssystem: 'Windows 11', 'Anzahl ProzessorKerne': '24 Core'}" [currentInstructionStep]="currentInstructionStep"
+                                     [instructions]="!showHelpInstructions ? instructions : helpInstructions"></app-experiment-test-instruction>
   </div>
 
-  <div style="width: 100%">
+  <div (click)="updateClickBehaviour($event)"  style="width: 100%">
     <div class="container-fluid border-bottom">
       <div (mouseenter)="hideSubMenu()"  class="row shadow">
         <div class="col-md-auto d-flex align-items-center">
@@ -39,7 +39,7 @@
                      class=" link-offset-2 link-offset-3-hover fw-bold
                       link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
                      [ngClass]="{'strong-link' :  currentType?.name ==category.name}"
-                     routerLink="{{categoryLinks[i]}}">{{ category.name }}</a>
+                     routerLink="{{parentCategoryLinks[i]}}">{{ category.name }}</a>
                 </li>
               </ul>
             </div>
@@ -53,19 +53,32 @@
         </div>
       </div>
       <div class="row main mb-3 scrollable-list">
-          <div class="col-lg-auto">
+          <div class="col-lg-8">
             <router-outlet></router-outlet>
           </div>
-          <div class="col-2 me-3">
-            <div >
-              <app-basket [isHidden]=basketIsHidden (checkoutEventEmitter)="finishExperiment($event)"
-                          [basket]=basket></app-basket>
-            </div>
+        <div class="col-2 me-3">
+          <div >
+            <app-basket [isHidden]=basketIsHidden (checkoutEventEmitter)="checkToFinishExperiment()"
+                        [basket]=basket></app-basket>
           </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>
 
 
 

@@ -12,6 +12,7 @@ export class ProductService {
   foodCategories: string[] = ["Teigwaren", "Penne", "Spaghetti", "Spiral-Nudeln", "Tomaten", "Brot", "Zwiebeln", "Schokolade"];
   basketSubscription: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   private productLimitSubscription: BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null);
+  private filterUsedSubscription: BehaviorSubject<string> = new BehaviorSubject("");
 
 
   constructor(private toastr: ToastrService) {
@@ -86,5 +87,13 @@ export class ProductService {
 
   getProductLimitSubscription() {
     return this.productLimitSubscription.asObservable();
+  }
+
+  getFilterUsedSubscription() {
+    return this.filterUsedSubscription.asObservable();
+  }
+
+  updatedFilterUsedSubscription(filterName: string) {
+    this.filterUsedSubscription.next(filterName);
   }
 }

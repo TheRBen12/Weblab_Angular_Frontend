@@ -11,11 +11,10 @@
           </div>
         </div>
         <li class="list-group-item list-group-item-action" *ngFor="let category of productCategories; index as i">
-          <a (click)="emitCategoryLink(category.name)"
-             class="link-offset-2 link-offset-3-hover fw-bold
-                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
+          <a (click)="emitCategoryLink(category.name)" class="link-menu-item"
              [ngClass]="{'strong-link' : currentCategory==category.name}"
-             routerLink="{{categoryLinks[i]}}">{{ category.name }}</a>
+             routerLink="{{categoryLinks[i]}}">{{ category.name }}
+          </a>
         </li>
       </ul>
   </div>

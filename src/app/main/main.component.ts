@@ -10,9 +10,10 @@ import {TimeService} from '../services/time.service';
 import {UserBehaviour} from '../models/user-behaviour';
 import {SettingService} from '../services/setting.service';
 import {NavigationSetting} from '../models/navigation-setting';
-import {NgIf} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {SideNavigationComponent} from '../side-navigation/side-navigation.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MegaDropDownNavigationComponent} from '../mega-drop-down-navigation/mega-drop-down-navigation.component';
 
 @Component({
   selector: 'app-main',
@@ -23,6 +24,8 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
     MatFabButton,
     NgIf,
     SideNavigationComponent,
+    MegaDropDownNavigationComponent,
+    NgClass,
   ],
   standalone: true,
   templateUrl: './main.component.html',
@@ -30,11 +33,12 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 })
 export class MainComponent implements OnInit {
   closedModal = false;
+  menuOpen = false;
   timeService = inject(TimeService);
   loginService: LoginService = inject(LoginService);
   userBehaviour: UserBehaviour | null = null;
   settingService: SettingService = inject(SettingService);
-  protected navigationSetting!: NavigationSetting;
+  protected navigationSetting?: NavigationSetting;
 
   constructor(private dialog: MatDialog) {
 
@@ -43,6 +47,10 @@ export class MainComponent implements OnInit {
       if (userId) {
         this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
           this.navigationSetting = setting;
+        }, (error) => {
+          if (error){
+            console.log(error)
+          }
         })
 
       }
@@ -51,7 +59,8 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
 
-    const userId = this.loginService.currentUser()?.id
+    const user = this.loginService.currentUser();
+    const userId = user?.id;
     if (userId) {
       this.settingService.fetchNavigationSetting(userId).subscribe((navigationSetting) => {
         this.navigationSetting = navigationSetting
@@ -62,9 +71,9 @@ export class MainComponent implements OnInit {
 
     }
 
-    if (sessionStorage.getItem('closedModal') == '' || sessionStorage.getItem('closedModal') == null) {
+    if ((sessionStorage.getItem("closedModal") == "" || sessionStorage.getItem('closedModal') == null) && user?.group != "C") {
       this.openWelcomeHelpModal("Bevor Sie loslegen, hier einige Tipps", true)
-      this.timeService.startWelcomeModalTimer()
+      this.timeService.startWelcomeModalTimer();
     }
 
   }

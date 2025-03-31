@@ -7,6 +7,7 @@ import {ExperimentTestExecution} from '../models/experiment-test-execution';
 import {RecallRecognitionExperimentExecution} from '../models/recall-recognition-experiment-execution';
 import {HicksLawExperimentExecution} from '../models/hicks-law-experiment-execution';
 import {ErrorCorrectionExperimentExecution} from '../models/ErrorCorrectionExperimentExecution';
+import {MentalModelExecution} from '../models/mental-model-execution';
 
 @Injectable({
   providedIn: 'root'
@@ -108,5 +109,9 @@ export class ExperimentService {
   saveErrorCorrectionExperiment(execution: ErrorCorrectionExperimentExecution): Observable<ErrorCorrectionExperimentExecution> {
     return this.http.post<ErrorCorrectionExperimentExecution>('https://localhost:7147/api/ErrorCorrectionExperiment/new', execution);
 
+  }
+
+  saveMentalModelExperimentExecution(execution: { [p: string]: any }) {
+    return this.http.post<MentalModelExecution>('https://localhost:7147/api/experiment/mental-model/new', execution);
   }
 }

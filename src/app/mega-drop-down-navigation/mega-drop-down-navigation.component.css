@@ -1,0 +1,78 @@
+.header{
+  background-color: #404040;
+}
+h1{
+  color: white;
+}
+
+.header-menu-item{
+  color: white;
+  font-size: 20px;
+}
+
+
+.experiment-menu-container{
+  background-color: #D6D6D6;
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+
+}
+.experiment-test-menu-container{
+  background-color: #F0F0F0;
+  z-index: 10;
+  position: absolute;
+  width: 100%;
+  top: calc(100% + 50px); /* Abstand zum ersten Menü */
+
+}
+
+a{
+  cursor: pointer;
+}
+
+.menu-item-link{
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.sub-menu-item{
+  color: black;
+  font-size: 16px;
+  opacity: 75%;
+}
+
+.active{
+  border-bottom: solid 2px black;
+}
+
+.hidden{
+  pointer-events: none;
+  padding: 0;
+  overflow: hidden;
+}
+.visible{
+  overflow: auto;
+}
+
+.no-pointer-events{
+  pointer-events: none;
+}
+
+.no-pointer-events:hover{
+  pointer-events: auto;
+}
+
+.mega-drop-down-navigation{
+  display: block;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+}
+
+
+
+
+

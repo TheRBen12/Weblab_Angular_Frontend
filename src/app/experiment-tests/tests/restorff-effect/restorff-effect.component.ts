@@ -131,10 +131,11 @@ export class RestorffEffectComponent implements OnInit {
         }
       }
       this.currentEmailIndex++;
-    }, 3000);
+    }, 3500);
 
     if (this.currentEmailIndex >= this.emailData.length) {
       clearInterval(intervall);
+      this.finishExperiment();
     }
   }
 
@@ -150,6 +151,10 @@ export class RestorffEffectComponent implements OnInit {
     if (this.emailData.find((mail) => mail.id == $event.id)){
       this.mails = this.mails.filter(mail => mail.id != $event.id);
     }
+
+  }
+
+  private finishExperiment() {
 
   }
 }

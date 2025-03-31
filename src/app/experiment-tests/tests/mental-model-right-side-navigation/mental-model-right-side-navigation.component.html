@@ -1,3 +1,69 @@
 <div class="d-flex flex-row">
-  <app-experiment-test-instruction></app-experiment-test-instruction>
+  <div class="col-sm-3">
+    <app-experiment-test-instruction [product]="{Kategorie: 'Notebook', Arbeitspeicher: '16 GB', Marke: 'Asus'}"  [currentInstructionStep]="0" [instructions]="!showHelpInstructions ? instructions : helpInstructions"></app-experiment-test-instruction>
+    <div class="d-flex justify-content-center align-items-center">
+
+    </div>
+  </div>
+
+  <div (click)="updateClickBehaviour($event)"   style="width: 100%">
+    <nav class="navbar navbar-expand-lg shadow">
+      <div class="container-fluid">
+        <h1 class="shop-title navbar-brand">WebLab Shop</h1>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <app-search-bar (click)="updateSearchBarBehaviour()"  (inputTextEvent)="filterProducts($event)"  [searchOnEnter]="true" [disabled]="false" [placeholder]="'Produkte suchen'" ></app-search-bar>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button class="btn btn-primary">Anmelden</button>
+            </li>
+          </ul>
+          <div class="d-flex" role="search">
+            <button (click)="toggleBasket()"  mat-fab class="me-4 d-flex justify-content-center align-items-center">
+              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                        fontIcon="shopping_cart">
+
+              </mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main mb-3">
+      <div class="row">
+        <div class="col-sm-auto">
+          <app-side-menu (routeEvent)="updateInstructions($event)"
+            [categoryLinks]=categoryLinks
+                         [productCategories]="productCategories"
+                         [currentRoute]="currentRoute"
+                         [parentRoute]="parentRoute"
+                         [parentCategory]="parentCategory"> </app-side-menu>
+        </div>
+        <div class="col-sm-7 scrollable-list responsive-list-layout">
+          <router-outlet></router-outlet>
+        </div>
+        <div *ngIf="showBasket" class="col-sm-auto">
+          <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"  [basket]="basket"  [isHidden]="!showBasket"></app-basket>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>
+
