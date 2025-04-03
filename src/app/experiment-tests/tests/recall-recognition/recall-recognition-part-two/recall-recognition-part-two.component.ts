@@ -21,6 +21,7 @@ import {ExperimentTestExecution} from '../../../../models/experiment-test-execut
 import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {TimeService} from '../../../../services/time.service';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -48,6 +49,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   currentRoute: string = "Home";
   router = inject(Router);
   productService = inject(ProductService);
+  timeService: TimeService = inject(TimeService);
   filterService = inject(FilterService);
   userService: LoginService = inject(LoginService);
   experimentService: ExperimentService = inject(ExperimentService);
@@ -70,15 +72,19 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   private clickedRoutes: { [key: string]: string } = {};
   private failedClicks: number = 0;
   private numberClicks: number = 0;
+  private timeToClickSearchBar: number = 0;
+
 
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
     this.instructions = ["Benutzen Sie das Suchfeld, um ein Smartphone Ihrer Lieblingsmarke zu suchen.",
-      "Wählen Sie ein Smartphone aus.", "Legen Sie das Smartphone in den Warenkorb. Danach ist das Experiment zu Ende", "Gehen Sie zur Kasse"];
+      "Wählen Sie ein Smartphone aus.", "Legen Sie das Smartphone in den Warenkorb.", "Gehen Sie zur Kasse"];
   }
 
   ngOnInit(): void {
+    this.timeService.startTimer();
+
     this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
     this.productService.getBasketSubscription().subscribe((basket) => {
       if (basket.length < this.basket.length) {
@@ -159,6 +165,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
 
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
+    this.experimentService.setLastFinishedExperimentTest(this.experimentTestId);
     if (id) {
       this.loading = true;
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
@@ -175,6 +182,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
           numberUsedSearchBar: this.numberUsedSearchBar,
+          timeToClickSearchBar: this.timeToClickSearchBar,
         };
 
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
@@ -207,6 +215,8 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
 
   setSearchBarUsedToTrue() {
     this.clickedOnSearchBar = true;
+    this.timeService.stopTimer();
+    this.timeToClickSearchBar = this.timeService.getCurrentTime();
   }
 
   toggleBasket() {

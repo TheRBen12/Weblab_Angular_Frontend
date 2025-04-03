@@ -190,6 +190,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.experimentService.setLastFinishedExperimentTest(this.experimentTestId)
       this.loading = true;
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
         this.currentExecution = exec;
@@ -207,7 +208,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/")
+            this.router.navigateByUrl("tests/1");
             this.toasterService.success("Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
         });

@@ -34,7 +34,7 @@ export class MegaDropDownMenuComponent implements OnChanges{
   ngOnChanges(changes: SimpleChanges): void {
     if(this.currentCategory && this.currentCategory != "Home"){
       this.productService.getAllSubcategoriesByParentCategory(this.currentCategory).subscribe((types) => {
-       this.productCategories = types;
+       this.productCategories = Array.from(new Set(types));
         this.categoryLinks = this.routerService.buildValueKeyPairForCategoryLinks(this.productCategories);
       });
 

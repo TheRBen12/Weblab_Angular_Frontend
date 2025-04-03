@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {ProductType} from '../models/product-category';
 import {ToastrService} from 'ngx-toastr';
+import {MentalModelShopConfiguration} from '../models/mental-model-shop-configuration';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class ProductService {
   http = inject(HttpClient);
   foodCategories: string[] = ["Teigwaren", "Penne", "Spaghetti", "Spiral-Nudeln", "Tomaten", "Brot", "Zwiebeln", "Schokolade"];
   basketSubscription: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  filterConfiguredByUserSubscription: BehaviorSubject<MentalModelShopConfiguration|null> = new BehaviorSubject<MentalModelShopConfiguration|null>(null);
   private productLimitSubscription: BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null);
   private filterUsedSubscription: BehaviorSubject<string> = new BehaviorSubject("");
 
@@ -65,6 +67,9 @@ export class ProductService {
   getBasketSubscription(){
     return this.basketSubscription.asObservable();
   }
+  getFilterConfiguredByUserSubscription(){
+    return this.filterConfiguredByUserSubscription.asObservable();
+  }
    getBasket() {
      const cart = JSON.parse(localStorage.getItem("cart") ?? "[]") || []; // Falls `null`, nutze leeres Array
      this.basketSubscription.next(cart);
@@ -95,5 +100,9 @@ export class ProductService {
 
   updatedFilterUsedSubscription(filterName: string) {
     this.filterUsedSubscription.next(filterName);
+  }
+
+  updateFilterConfiguredByUser(configuration: MentalModelShopConfiguration) {
+    this.filterConfiguredByUserSubscription.next(configuration)
   }
 }

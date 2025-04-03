@@ -13,4 +13,5 @@ export interface RecallRecognitionExperimentExecution {
   numberClicks: number;
   clickedOnSearchBar? : boolean;
   numberUsedSearchBar?: number;
+  timeToClickSearchBar?: number;
 }

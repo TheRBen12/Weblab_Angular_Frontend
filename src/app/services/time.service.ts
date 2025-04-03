@@ -1,8 +1,11 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {TimeInterval} from 'rxjs/internal/operators/timeInterval';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {D} from '@angular/cdk/keycodes';
-import {ExperimentNavigationTime} from '../models/experiment-navigation-time';
+import {UserNavigationTime} from '../models/user-navigation-time';
+import {HttpClient} from '@angular/common/http';
+import {NavigationTime} from '../models/navigation-time';
+import {User} from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +13,10 @@ import {ExperimentNavigationTime} from '../models/experiment-navigation-time';
 export class TimeService {
   timeToReadWelcomeModal = 0;
   welcomeModalTimer = 0;
-  experimentNavigationTimeSubscription: BehaviorSubject<ExperimentNavigationTime|null> = new BehaviorSubject<any>(null);
-  intervall: any
+  experimentNavigationTimeSubscription: BehaviorSubject<UserNavigationTime|null> = new BehaviorSubject<any>(null);
+  interval: any
   time: number = 0;
-
+  http: HttpClient = inject(HttpClient);
   constructor() {
 
   }
@@ -21,12 +24,8 @@ export class TimeService {
   getExperimentNavigationTimeSubscription() {
     return this.experimentNavigationTimeSubscription.asObservable();
   }
-  updateExperimentNavigationTime(navTime: ExperimentNavigationTime){
+  updateExperimentNavigationTime(navTime: UserNavigationTime){
     this.experimentNavigationTimeSubscription.next(navTime);
-  }
-
-  saveTimeToReadWelcomeModal() {
-
   }
 
   startWelcomeModalTimer() {
@@ -37,7 +36,7 @@ export class TimeService {
   }
 
   stopTimer() {
-    clearInterval(this.intervall);
+    clearInterval(this.interval);
   }
 
   getCurrentTime(){
@@ -52,12 +51,12 @@ export class TimeService {
     clearInterval(this.welcomeModalTimer);
   }
 
-  saveNavigationTime(timeData: ExperimentNavigationTime) {
-
+  saveNavigationTime(timeData: UserNavigationTime): Observable<UserNavigationTime> {
+    return this.http.post<UserNavigationTime>("https://localhost:7147/api/userNavigation/new", timeData)
   }
 
   startTimer() {
-    this.intervall = setInterval(() => {
+    this.interval = setInterval(() => {
       this.time++;
     }, 1000)
   }

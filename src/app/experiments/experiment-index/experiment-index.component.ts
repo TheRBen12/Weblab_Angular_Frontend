@@ -30,7 +30,7 @@ export class ExperimentIndexComponent implements OnInit {
   currentUserSetting?: UserSetting;
   serverError: boolean = false;
   router: Router = inject(Router);
-  finishedExperiments: Experiment[] | null = [];
+  finishedExperiments: Experiment[] = [];
   finishedExecutions: ExperimentTestExecution[] = [];
   protected navigationSetting?: NavigationSetting;
 
@@ -54,6 +54,7 @@ export class ExperimentIndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    localStorage.setItem('numberNavigationClicks', "0");
     if (!localStorage.getItem('reachedSiteAt')) {
       localStorage.setItem("reachedSiteAt", String(new Date()));
     }
@@ -83,36 +84,39 @@ export class ExperimentIndexComponent implements OnInit {
         this.settingService.fetchLastSetting(user.id))
     ).subscribe((setting) => {
       this.currentUserSetting = setting;
-      if (this.currentUserSetting?.progressiveVisualizationExperiment) {
-        const userId = setting.userID;
-          //fetch executions
-          this.fetchFinishedExecutions(userId, "FINISHED").subscribe((executions) => {
-              this.finishedExecutions = executions;
 
-              // extract finishedExperiments
-              this.findFinishedExperiments(this.finishedExecutions);
+      const userId = setting.userID;
+      //fetch executions
+      this.fetchFinishedExecutions(userId, "FINISHED").subscribe((executions) => {
+        this.finishedExecutions = executions;
 
-              // remove duplicate experiments
-              const finishedExperiments = this.filteredExperiments.filter((experiment) => {
-                const finishedExperimentIds = this.finishedExperiments?.map(exp => exp.id);
-                return finishedExperimentIds?.indexOf(experiment.id) != -1;
-              });
+        // extract finishedExperiments
+        this.findFinishedExperiments(this.finishedExecutions);
 
-              // extract non-finished experiments
-              const nonFinishedExperiments = this.filteredExperiments.filter((exp) => {
-                const finishedExperiments = this.finishedExperiments?.map(exp => exp.id);
-                return finishedExperiments?.indexOf(exp.id) == -1;
-              });
-              // Find experiment with minimal position
-              const expPosValues = nonFinishedExperiments.reduce((min, exp, index) =>
-                  exp.position < min.value.position ? {value: exp, index} : min
-                , {value: nonFinishedExperiments[0], index: 0});
+        // remove duplicate experiments
+        const finishedExperiments = this.filteredExperiments.filter((experiment) => {
+          const finishedExperimentIds = this.finishedExperiments?.map(exp => exp.id);
+          return finishedExperimentIds?.indexOf(experiment.id) != -1;
+        });
 
-              const expWithMinPos = expPosValues.value;
-              this.filteredExperiments = [...finishedExperiments].concat([expWithMinPos]);
+        // extract non-finished experiments
+        const nonFinishedExperiments = this.filteredExperiments.filter((exp) => {
+          const finishedExperiments = this.finishedExperiments?.map(exp => exp.id);
+          return finishedExperiments?.indexOf(exp.id) == -1;
+        });
 
-          });
+
+        if (this.currentUserSetting?.progressiveVisualizationExperiment) {
+          // Find experiment with minimal position
+          const expPosValues = nonFinishedExperiments.reduce((min, exp, index) =>
+              exp.position < min.value.position ? {value: exp, index} : min
+            , {value: nonFinishedExperiments[0], index: 0});
+
+          const expWithMinPos = expPosValues.value;
+          this.filteredExperiments = [...finishedExperiments].concat([expWithMinPos]);
         }
+      });
+
     });
   }
 
@@ -137,7 +141,7 @@ export class ExperimentIndexComponent implements OnInit {
       const finishedExecutions = executions.filter(execution => execution.experimentTest?.experiment?.id == experiment.id)
       let finishedExecutionTestIds = finishedExecutions.map(exec => exec.experimentTest?.id);
       finishedExecutionTestIds = Array.from(new Set(finishedExecutionTestIds));
-      if (finishedExecutionTestIds.length == experiment.numberExperimentTest ) {
+      if (finishedExecutionTestIds.length == experiment.numberExperimentTest) {
         this.finishedExperiments?.push(experiment);
       }
     });

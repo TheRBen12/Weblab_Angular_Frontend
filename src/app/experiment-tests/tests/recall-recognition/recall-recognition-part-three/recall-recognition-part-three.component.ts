@@ -1,18 +1,15 @@
-import {ChangeDetectorRef, Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {AutoCompleteComponent} from '../../../../auto-complete/auto-complete.component';
 import {
   ExperimentTestInstructionComponent
 } from "../../../experiment-test-instruction/experiment-test-instruction.component";
 import {MatIcon} from "@angular/material/icon";
 import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
-import {SearchBarComponent} from "../../../../search-bar/search-bar.component";
 import {SideMenuComponent} from "../../side-menu/side-menu.component";
 import {ProductType} from '../../../../models/product-category';
 import {ProductService} from '../../../../services/product.service';
 import {FilterService} from '../../../../services/filter.service';
-import {Observable, Subscription} from 'rxjs';
-import {SideMenuService} from '../../../../services/side-menu.service';
-import {FormControl} from '@angular/forms';
+
 import {BasketComponent} from '../../../../basket/basket.component';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -64,10 +61,10 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   numberClicks: number = 0;
   clickedOnSearchBar: boolean = false;
   numberUsedSearchBar: number = 0;
+  targetInstruction: string = "";
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
-    this.instructions = ["Benutzen Sie das Suchfeld, um Tastaturen mit Ihrem gewünschten Tastaturlayout " +
-    "und Ihrer bevorzugten peripheren Verbindungsart und Signalübertragun zu suchen."];
+    this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden."];
 
   }
 
@@ -95,6 +92,8 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
     const urlSegments = this.router.url.split("/");
     const index = urlSegments.indexOf("recall-recognition") + 1;
     this.experimentTestId = Number(urlSegments[index]);
+    this.fetchExperimentTest(this.experimentTestId);
+
   }
 
   fetchProductTypes(currentRoute: string) {
@@ -108,6 +107,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.experimentService.setLastFinishedExperimentTest(this.experimentTestId);
       this.loading = true;
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
         this.currentExecution = exec;
@@ -158,5 +158,12 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
   increaseNumberUsedSearchBar() {
     this.numberUsedSearchBar++;
+  }
+
+  private fetchExperimentTest(experimentTestId: number) {
+    this.experimentService.getExperimentTest(experimentTestId).subscribe((test) => {
+      this.targetInstruction = test.goalInstruction;
+    });
+
   }
 }

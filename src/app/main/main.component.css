@@ -74,3 +74,7 @@
   padding: 20px;
   background: #f1f1f1;
 }
+
+a{
+  pointer-events: auto;
+}

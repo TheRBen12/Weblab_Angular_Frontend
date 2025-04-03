@@ -108,6 +108,7 @@ export class ErrorCorrectionComponent implements OnInit {
     this.execution['finishedExecutionAt'] = new Date();
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.experimentService.setLastFinishedExperimentTest(this.experimentId);
       this.loading = true;
       this.experimentService.getExperimentExecutionByStateAndTest(id, this.experimentId, "INPROCESS").subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;

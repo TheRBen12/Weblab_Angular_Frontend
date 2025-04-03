@@ -37,7 +37,8 @@ export class ExperimentService {
 
 
   setLastFinishedExperimentTest(id: number) {
-    const data: any = {experimentId: id, finishedAt: new Date()}
+    const d = new Date();
+    const data: any = {experimentId: id, finishedAt: d}
     localStorage.setItem('lastFinishedExperimentTest', JSON.stringify(data));
   }
 
@@ -50,10 +51,6 @@ export class ExperimentService {
 
   }
 
-
-  getLastStartedExperiment(id: number) {
-    return localStorage.getItem('lastSelectedExperimentTest');
-  }
 
   setNextStartedExperimentTest(experiment: any) {
     const data: any = {experimentId: experiment.id, startedAt: experiment.startedAt}

@@ -35,6 +35,7 @@ export class SettingsComponent implements OnInit {
         progressiveVisualizationExperimentTest: this.settingsForm.get("progressiveVisualizationExperimentTest")?.value,
         autoStartNextExperiment: this.settingsForm.get('autoStartNextExperiment')?.value,
         userID: userID,
+        id: 0,
       }
 
       this.settingsService.saveSettings(userSetting).subscribe((settings) => {

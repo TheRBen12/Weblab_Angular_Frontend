@@ -1,5 +1,5 @@
-import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {switchMap} from 'rxjs';
 import {ExperimentTest} from '../../models/experiment-test';
 import {ExperimentService} from '../../services/experiment.service';
@@ -12,6 +12,7 @@ import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 import {LoginService} from '../../services/login.service';
 import {SettingService} from '../../services/setting.service';
 import {NavigationSetting} from '../../models/navigation-setting';
+import {UserSetting} from '../../models/user-setting';
 
 @Component({
   selector: 'app-experiment-test-index',
@@ -27,7 +28,7 @@ import {NavigationSetting} from '../../models/navigation-setting';
   templateUrl: './experiment-test-index.component.html',
   styleUrl: './experiment-test-index.component.css'
 })
-export class ExperimentTestIndexComponent implements OnInit {
+export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   experimentService = inject(ExperimentService);
   filterService = inject(FilterService);
@@ -41,9 +42,13 @@ export class ExperimentTestIndexComponent implements OnInit {
   finishedExecutions: ExperimentTestExecution[] = [];
   testCompletedKeyValues: { [key: number]: boolean } = {};
   protected navigationConfig: NavigationSetting|null = null;
+  router: Router = inject(Router);
+  countDownToStartNextTest: number = 3;
+  setting?: UserSetting
 
 
   ngOnInit() {
+    localStorage.setItem('numberNavigationClicks', "0");
     localStorage.removeItem("cart");
     this.route.paramMap.pipe(
       switchMap(params => {
@@ -102,6 +107,20 @@ export class ExperimentTestIndexComponent implements OnInit {
 
   private fetchCurrentUserSetting(userId: number) {
     this.settingService.fetchLastSetting(userId).subscribe((setting) => {
+      this.setting = setting;
+      if (setting.autoStartNextExperiment){
+        const nextExperiment: ExperimentTest|null = this.findNextExperiment();
+        if (nextExperiment){
+          const interval = setInterval(() => {
+            this.countDownToStartNextTest--;
+            if (this.countDownToStartNextTest < 1){
+              this.router.navigateByUrl("/tests/detail/"+nextExperiment?.id);
+              this.countDownToStartNextTest = 3;
+              clearInterval(interval);
+            }
+          }, 1000);
+        }
+      }
       if (setting.progressiveVisualizationExperimentTest && this.experimentTests.length > 0) {
         this.displayProgressiveVisualizationTestsAccordingToSetting();
       }
@@ -111,20 +130,11 @@ export class ExperimentTestIndexComponent implements OnInit {
   private displayProgressiveVisualizationTestsAccordingToSetting() {
     let tests: any[] = [];
     // find finished tests
-    const finishedTests = this.finishedExecutions.map(exec => exec.experimentTest);
+    const finishedTests = this.findFinishedTests();
     // extract non-finished tests
-    const nonFinishedTests = this.experimentTests.filter((test) => {
-      const finishedTestIds = this.finishedExecutions.map(exec => exec.experimentTest?.id);
-      return finishedTestIds.indexOf(test.id) == -1;
-    });
+    const nonFinishedTests=this.findNonFinishedTests();
     // find test with min pos
-    let testWithMinPosition = nonFinishedTests[0]!;
-    const minPos = testWithMinPosition.position;
-    nonFinishedTests.forEach((test) => {
-      if (test?.position < minPos) {
-        testWithMinPosition = test;
-      }
-    });
+    let testWithMinPosition =this.findTestWithMinPos(nonFinishedTests);
     this.filteredExperimentTests =  tests.concat(finishedTests.concat([testWithMinPosition]))
     this.experimentTests = this.filteredExperimentTests;
   }
@@ -133,5 +143,40 @@ export class ExperimentTestIndexComponent implements OnInit {
     this.settingService.fetchNavigationSetting(userId).subscribe((navigationConfig) => {
       this.navigationConfig = navigationConfig;
     })
+  }
+
+  private findNextExperiment(): ExperimentTest|null {
+    // extract non-finished tests
+    const nonFinishedTests = this.findNonFinishedTests();
+    if (nonFinishedTests.length == 0){
+      return null
+    }
+    return this.findTestWithMinPos(nonFinishedTests);
+
+  }
+
+  findFinishedTests(){
+    return this.finishedExecutions.map(exec => exec.experimentTest);
+  }
+  findNonFinishedTests(){
+    return this.experimentTests.filter((test) => {
+      const finishedTestIds = this.finishedExecutions.map(exec => exec.experimentTest?.id);
+      return finishedTestIds.indexOf(test.id) == -1;
+    });
+  }
+
+  findTestWithMinPos(tests: ExperimentTest[]){
+    let testWithMinPosition = tests[0]!;
+    const minPos = testWithMinPosition.position;
+    tests.forEach((test) => {
+      if (test?.position < minPos) {
+        testWithMinPosition = test;
+      }
+    });
+    return testWithMinPosition;
+  }
+
+  ngOnDestroy(): void {
+    this.countDownToStartNextTest = 3;
   }
 }

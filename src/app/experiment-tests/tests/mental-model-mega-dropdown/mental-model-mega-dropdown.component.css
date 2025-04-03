@@ -32,3 +32,10 @@ nav{
 .progress-title{
   color: white;
 }
+
+.strong-link{
+  font-weight: bold;
+  font-style: normal;
+  font-size: 20px;
+}
+

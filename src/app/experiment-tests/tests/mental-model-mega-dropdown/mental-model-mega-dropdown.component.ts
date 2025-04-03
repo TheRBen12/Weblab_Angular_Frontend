@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {BasketComponent} from '../../../basket/basket.component';
 import {
   ExperimentTestInstructionComponent
@@ -16,7 +16,6 @@ import {SearchBarComponent} from '../../../search-bar/search-bar.component';
 import {CommonModule} from '@angular/common';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MegaDropDownMenuComponent} from '../../../mega-drop-down-menu/mega-drop-down-menu.component';
-import {D} from '@angular/cdk/keycodes';
 import {ExperimentService} from '../../../services/experiment.service';
 import {ExperimentTest} from '../../../models/experiment-test';
 import {LoginService} from '../../../services/login.service';
@@ -102,8 +101,6 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     'clickedOnSearchBar': false,
     'firstClick': "",
   };
-
-
 
 
   constructor(private readonly toasterService: ToastrService) {

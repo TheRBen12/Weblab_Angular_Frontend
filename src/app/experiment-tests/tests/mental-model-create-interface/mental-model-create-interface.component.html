@@ -1,33 +1,22 @@
 <div class="d-flex flex-row">
-  <div class="menu-icon">
-    <div class="col-1 ms-3 mt-5 d-flex justify-content-center">
-      <button (click)="toggleInstructions()"  mat-fab>
-        <mat-icon>menu_book</mat-icon>
-      </button>
-    </div>
-  </div>
 
-    <div *ngIf="showInstructions" class="outer-instruction-container col-2">
+    <div  class="col-2">
       <app-experiment-test-instruction [target]="experimentTest?.goalInstruction?? ''" [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"></app-experiment-test-instruction>
 
-    <div class="d-flex justify-content-center align-items-center">
-      <button class="btn btn-lg btn-success">Versuch abschliessen</button>
+    <div class="d-flex mt-3 justify-content-center align-items-center">
+      <button (click)="saveUserNavigationSelection()"  class="btn btn-lg btn-success">Auswahl bestätigen</button>
     </div>
-
     </div>
-
-
-
   <div style="width: 100%">
     <div class="container-fluid">
       <div class="row">
-        <div [ngClass]="{'disabled': !isSelected('navbarTop') }"  (click)="selectElement('navbarTop', $event)"  class="  nav navbar navbar-expand-md shadow w-100">
-          <h2 class="col-sm-2 p-2">Weblab Shop</h2>
-          <div (click)="selectElement('searchBarTop', $event)"  [ngClass]="{'disabled': !isSelected('searchBarTop') }" class="disabled col-sm-3">
-            <app-search-bar [placeholder]="'Standardsuchfunktion'"  ></app-search-bar>
+        <div [ngClass]="{'disabled': !isSelected('navbarTop'), 'selected':isSelected('navbarTop') }"  (click)="selectElement('navbarTop', $event)"  class="  nav navbar navbar-expand-md shadow w-100">
+          <h2 class="shop-title col-sm-2 p-2">Weblab Shop</h2>
+          <div (click)="selectElement('searchBarTop', $event)"  [ngClass]="{'disabled': !isSelected('searchBarTop'), 'selected':isSelected('searchBarTop') }" class="disabled col-sm-3">
+            <app-search-bar (click)="selectElement('searchBarTop', $event)" [placeholder]="'Standardsuchfunktion'" ></app-search-bar>
           </div>
 
-          <div (click)="selectElement('autoCompleteTop', $event)" [ngClass]="{'disabled': !isSelected('autoCompleteTop') }" class="ms-3 me-4 w-75">
+          <div (click)="selectElement('autoCompleteTop', $event)" [ngClass]="{'disabled': !isSelected('autoCompleteTop'), 'selected':isSelected('autoCompleteTop')}" class="ms-3 me-4 w-75">
             <app-auto-complete [products]="products" class="products"
                                [placeholder]="'Suchfunktion mit Autovervollständigung'">
 
@@ -37,7 +26,7 @@
           <div class="me-3 ms-3">
             <button class=" btn btn-primary">Anmelden</button>
           </div>
-          <div (click)="selectElement('shoppingCartTopLeft', $event)"  [ngClass]="{'disabled': !isSelected('shoppingCartTopLeft') }" class="ms-3">
+          <div (click)="selectElement('shoppingCartTopLeft', $event)"  [ngClass]="{'disabled': !isSelected('shoppingCartTopLeft'), 'selected':isSelected('shoppingCartTopLeft') }" class="ms-3">
             <button mat-fab>
               <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
                         fontIcon="shopping_cart">
@@ -45,21 +34,19 @@
             </button>
           </div>
 
-
           <div class="w-100 me-3 d-flex justify-content-end ">
-            <div (click)="selectElement('shoppingCartTopRight', $event)" [ngClass]="{'disabled': !isSelected('shoppingCartTopRight') }">
+            <div (click)="selectElement('shoppingCartTopRight', $event)" [ngClass]="{'disabled': !isSelected('shoppingCartTopRight'), 'selected':isSelected('shoppingCartTopRight') }">
               <button mat-fab>
                 <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
                           fontIcon="shopping_cart">
                 </mat-icon>
               </button>
             </div>
-
           </div>
 
         </div>
       </div>
-      <div (click)="selectElement('mega-drop-down', $event)"  [ngClass]="{'disabled': !isSelected('mega-drop-down') }" class="row">
+      <div (click)="selectElement('megaDropDown', $event)"  [ngClass]="{'disabled': !isSelected('megaDropDown'), 'selected': isSelected('megaDropDown') }" class="mt-1 row">
         <div>
           <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
@@ -111,9 +98,9 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div [ngClass]="{'disabled': !isSelected('sideMenuLeft')}" (click)="selectElement('sideMenuLeft', $event)"  class="col-3">
-          <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
+      <div class="mt-1 row">
+        <div [ngClass]="{'disabled': !isSelected('sideMenuLeft'), 'selected': isSelected('sideMenuLeft')}" (click)="selectElement('sideMenuLeft', $event)"  class="col-3">
+          <app-side-menu  [categoryLinks]=categoryLinks
                          [productCategories]="productCategories"
                          [currentRoute]="currentRoute"
                          [parentRoute]="parentRoute"
@@ -122,10 +109,19 @@
         </div>
 
         <div class="col-5 scrollable-list">
+          <div (click)="selectElement('filter',$event)"  [ngClass]="{'disabled': !isSelected('filter'), 'selected': isSelected('filter')}" class="mt-3">
+            <div class="ms-2 fw-bold ">
+              Filter
+            </div>
+            <div class="ms-2">
+              <app-filter-select-dropdown (click)="selectElement('filter',$event)"  [values]="['Apple']" [title]="'Marke'" ></app-filter-select-dropdown>
+
+            </div>
+          </div>
           <router-outlet></router-outlet>
         </div>
 
-        <div (click)="selectElement('sideMenuRight', $event)"  [ngClass]="{'disabled': !isSelected('sideMenuRight')}"  class="col-3 ">
+        <div (click)="selectElement('sideMenuRight', $event)"  [ngClass]="{'disabled': !isSelected('sideMenuRight'), 'selected': isSelected('sideMenuRight')}"  class="col-3 ">
           <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
                          [productCategories]="productCategories"
                          [currentRoute]="currentRoute"
@@ -133,18 +129,18 @@
                          [parentCategory]="parentCategory">
           </app-side-menu>
         </div>
-
       </div>
     </div>
 
-    <div class="bottom-nav d-flex shadow w-100">
-      <div (click)="selectElement('navBarBottom', $event)"  [ngClass]="{'disabled': !isSelected('navBarBottom')}" class=" nav navbar d-flex justify-content-space-between navbar-expand-md shadow w-100 me-2">
-        <h2 class="p-2">Weblab Shop</h2>
-        <div (click)="selectElement('searchBarBottom', $event)"  [ngClass]="{'disabled': !isSelected('searchBarBottom')}"  class="col-sm-2">
-          <app-search-bar (click)="selectElement('searchBarBottom', $event)"  [placeholder]="'Standardsuchfunktion'" ></app-search-bar>
+    <div class="bottom-nav mt-1 shadow">
+      <div [ngClass]="{'disabled': !isSelected('navbarBottom'), 'selected':isSelected('navbarBottom') }"  (click)="selectElement('navbarBottom', $event)"  class="nav navbar navbar-expand-md shadow w-100">
+        <h2 class="shop-title col-sm-2 p-2">Weblab Shop</h2>
+        <div (click)="selectElement('searchBarBottom', $event)"  [ngClass]="{'disabled': !isSelected('searchBarBottom'), 'selected':isSelected('searchBarBottom') }" class="disabled col-sm-3">
+          <app-search-bar (click)="selectElement('searchBarBottom', $event)" [placeholder]="'Standardsuchfunktion'" ></app-search-bar>
         </div>
-        <div (click)="selectElement('autoCompleteBottom', $event)"  [ngClass]="{'disabled': !isSelected('autoCompleteBottom')}" class="ms-3 me-4 w-25 col-sm-3">
-          <app-auto-complete  [products]="products" class="products"
+
+        <div (click)="selectElement('autoCompleteBottom', $event)" [ngClass]="{'disabled': !isSelected('autoCompleteBottom'), 'selected':isSelected('autoCompleteBottom')}" class="ms-3 me-4 w-75">
+          <app-auto-complete [products]="products" class="products"
                              [placeholder]="'Suchfunktion mit Autovervollständigung'">
 
           </app-auto-complete>
@@ -153,26 +149,39 @@
         <div class="me-3 ms-3">
           <button class=" btn btn-primary">Anmelden</button>
         </div>
-        <div (click)="selectElement('shoppingCartBottomLeft', $event)" [ngClass]="{'disabled': !isSelected('shoppingCartBottomLeft')}" class="ms-3">
-          <button mat-fab >
+        <div (click)="selectElement('shoppingCartBottomLeft', $event)"  [ngClass]="{'disabled': !isSelected('shoppingCartBottomLeft'), 'selected':isSelected('shoppingCartBottomLeft') }" class="ms-3">
+          <button mat-fab>
             <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
                       fontIcon="shopping_cart">
             </mat-icon>
           </button>
         </div>
 
-        <div class="right-side-shopping-cart">
-          <div (click)="selectElement('shoppingCartBottomRight', $event)"  [ngClass]="{'disabled': !isSelected('shoppingCartBottomRight')} ">
-            <button mat-fab (click)="selectElement('shoppingCartBottomRight', $event)">
+        <div class="w-100 me-3 d-flex justify-content-end ">
+          <div (click)="selectElement('shoppingCartBottomRight', $event)" [ngClass]="{'disabled': !isSelected('shoppingCartBottomRight'), 'selected':isSelected('shoppingCartBottomRight') }">
+            <button mat-fab>
               <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
                         fontIcon="shopping_cart">
               </mat-icon>
             </button>
           </div>
-
         </div>
+
       </div>
     </div>
 
   </div>
 </div>
+
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Vielen Dank. Haben Sie einen moment Geduld, die Schnittstelle wird für Sie eingerichtet.</h3>
+    <mat-progress-spinner
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>
+

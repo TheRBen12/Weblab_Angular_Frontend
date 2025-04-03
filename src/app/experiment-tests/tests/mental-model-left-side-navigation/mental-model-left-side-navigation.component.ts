@@ -195,6 +195,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     localStorage.setItem("clickedRoutes", JSON.stringify(this.clickedRoutes));
     if (!this.firstClick){
       this.firstClick = route;
+
       this.timeService.stopTimer();
       this.execution['timeToClickFirstCategory'] = this.timeService.getCurrentTime();
     }
@@ -217,7 +218,6 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution['experimentTestExecutionId'] = exec.id;
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
-
           setTimeout(() => {
             this.loading = false;
             this.router.navigateByUrl("tests/"+this.experimentTest?.experiment?.id);

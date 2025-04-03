@@ -3,4 +3,5 @@ export interface UserSetting {
   progressiveVisualizationExperimentTest: boolean | null | undefined;
   autoStartNextExperiment: boolean | null | undefined;
   userID: number;
+  id: number;
 }

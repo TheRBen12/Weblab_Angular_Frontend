@@ -38,7 +38,7 @@
                   <a (click)="setCurrentRoute(category.name)"
                      class=" link-offset-2 link-offset-3-hover fw-bold
                       link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
-                     [ngClass]="{'strong-link' :  currentType?.name ==category.name}"
+                     [ngClass]="{'strong-link' :  currentRoute ==category.name}"
                      routerLink="{{parentCategoryLinks[i]}}">{{ category.name }}</a>
                 </li>
               </ul>

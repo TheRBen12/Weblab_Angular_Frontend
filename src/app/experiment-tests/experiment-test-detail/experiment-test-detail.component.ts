@@ -4,13 +4,13 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {ExperimentService} from '../../services/experiment.service';
 import {ExperimentTest} from '../../models/experiment-test';
 import {experimentTestRoutes} from '../routes';
-import {ExperimentNavigationTime} from '../../models/experiment-navigation-time';
-import {D} from '@angular/cdk/keycodes';
 import {TimeService} from '../../services/time.service';
 import {LoginService} from '../../services/login.service';
 import {SettingService} from '../../services/setting.service';
 import {UserSetting} from '../../models/user-setting';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
+import {UserNavigationTime} from '../../models/user-navigation-time';
+import {D} from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-experiment-test-detail',
@@ -28,16 +28,16 @@ export class ExperimentTestDetailComponent implements OnInit {
   userService: LoginService = inject(LoginService);
   settingService: SettingService = inject(SettingService);
   experimentTestId: number = 0;
-  experimentTest: ExperimentTest | undefined
+  experimentTest?: ExperimentTest
   experimentTestUrl: string = "";
-  userSetting: UserSetting | null = null;
+  userSetting!: UserSetting;
   openedTestDescAt: Date = new Date();
   timeReadingDescription: number = 0;
   timer: any
 
   ngOnInit(): void {
     this.timer = setInterval(() => {
-      this.timeReadingDescription ++
+      this.timeReadingDescription++
     }, 1000);
 
 
@@ -66,27 +66,35 @@ export class ExperimentTestDetailComponent implements OnInit {
   }
 
   setLastStartedExperiment() {
+
     this.experimentService.setNextStartedExperimentTest({id: this.experimentTest?.id ?? 0, startedAt: new Date()});
     // saveNavigationTime
     const lastFinishedExperiment = this.experimentService.getLastFinishedExperimentTest();
     const reachedSiteAt = localStorage.getItem('reachedSiteAt');
-    let reachedSiteDate = null;
-    if (reachedSiteAt) {
-      reachedSiteDate = new Date(reachedSiteAt);
+    const reachedSiteDate: Date = reachedSiteAt ? new Date(reachedSiteAt): new Date();
+    const startedNavigation = lastFinishedExperiment != null ? lastFinishedExperiment.finishedAt : reachedSiteDate;
+    const lastFinishedExperimentTestId = lastFinishedExperiment != null ? lastFinishedExperiment.experimentId : null
+    let savedNumberClicks = localStorage.getItem('numberNavigationClicks');
+    let numberClicks = 0;
+    if (savedNumberClicks){
+      numberClicks = Number(savedNumberClicks);
     }
-    const startedNavigation = lastFinishedExperiment ? lastFinishedExperiment.finishedAt : reachedSiteDate;
-    const lastFinishedExperimentTestId = lastFinishedExperiment ? lastFinishedExperiment.id : null
-    const navigationTime: ExperimentNavigationTime = {
-      userSetting: this.userSetting,
-      startedNavigation,
-      endedNavigation: new Date(),
+    const navigationTime: UserNavigationTime = {
+      userId: this.userSetting.userID,
+      finishedNavigation: new Date(),
+      startedNavigation: startedNavigation,
+      toExperimentId: this.experimentTest?.id??-1,
+      userSettingId: this.userSetting.id,
       fromExperimentId: lastFinishedExperimentTestId,
-      toExperimentId: this.experimentTestId
-    }
-    this.timeService.saveNavigationTime(navigationTime);
+      numberClicks: numberClicks
+    };
+    localStorage.setItem('numberNavigationClicks', String(0));
+
+    this.timeService.saveNavigationTime(navigationTime).subscribe(() => {
+      console.log(navigationTime)
+    });
 
     this.saveExperimentExecution();
-
   }
 
   private saveExperimentExecution() {
@@ -100,7 +108,6 @@ export class ExperimentTestDetailComponent implements OnInit {
       state: "INPROCESS",
     }
     this.experimentService.saveExperimentExecution(newExecution).subscribe((execution) => {
-      console.log(execution);
     });
   }
 }

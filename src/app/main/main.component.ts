@@ -1,8 +1,8 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnInit, signal} from '@angular/core';
 import {WelcomeHelpModalComponent} from '../welcome-help-modal/welcome-help-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NavigationComponent} from '../navigation/navigation/navigation.component';
-import {RouterOutlet} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
 import {LoginService} from '../services/login.service';
@@ -12,7 +12,6 @@ import {SettingService} from '../services/setting.service';
 import {NavigationSetting} from '../models/navigation-setting';
 import {NgClass, NgIf} from '@angular/common';
 import {SideNavigationComponent} from '../side-navigation/side-navigation.component';
-import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {MegaDropDownNavigationComponent} from '../mega-drop-down-navigation/mega-drop-down-navigation.component';
 
 @Component({
@@ -33,12 +32,13 @@ import {MegaDropDownNavigationComponent} from '../mega-drop-down-navigation/mega
 })
 export class MainComponent implements OnInit {
   closedModal = false;
-  menuOpen = false;
+  router: Router = inject(Router);
   timeService = inject(TimeService);
   loginService: LoginService = inject(LoginService);
   userBehaviour: UserBehaviour | null = null;
   settingService: SettingService = inject(SettingService);
   protected navigationSetting?: NavigationSetting;
+  private numberNavigationClicks: number = 0;
 
   constructor(private dialog: MatDialog) {
 
@@ -48,7 +48,7 @@ export class MainComponent implements OnInit {
         this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
           this.navigationSetting = setting;
         }, (error) => {
-          if (error){
+          if (error) {
             console.log(error)
           }
         })
@@ -58,6 +58,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
+  localStorage.setItem("numberNavigationClicks", "0");
 
     const user = this.loginService.currentUser();
     const userId = user?.id;
@@ -92,7 +93,7 @@ export class MainComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.timeService.stopWelcomeModalTimer();
       sessionStorage.setItem('closedModal', 'closed');
-      if (!this.userBehaviour){
+      if (!this.userBehaviour) {
         const userBehaviour: UserBehaviour = {
           timeReadingWelcomeModal: this.timeService.getTimeToReadWelcomeModal(),
           welcomeModalTipIndex: dialogRef.componentInstance.data.currentTipIndex,
@@ -107,9 +108,9 @@ export class MainComponent implements OnInit {
           this.userBehaviour = userBehaviour;
           this.loginService.emitUserBehaviour(userBehaviour);
         });
-      }else{
-        if (this.userBehaviour){
-          this.userBehaviour.numberClickedOnHint = this.userBehaviour.numberClickedOnHint + 1 ;
+      } else {
+        if (this.userBehaviour) {
+          this.userBehaviour.numberClickedOnHint = this.userBehaviour.numberClickedOnHint + 1;
           this.userBehaviour.clickedOnHint = true;
         }
 
@@ -118,5 +119,18 @@ export class MainComponent implements OnInit {
         });
       }
     });
+  }
+
+  increaseNumberNavigationClicks() {
+    const n = localStorage.getItem("numberNavigationClicks");
+    if (n){
+      this.numberNavigationClicks = Number(n) + 1;
+    }
+    localStorage.setItem('numberNavigationClicks', String(this.numberNavigationClicks));
+  }
+
+  logout() {
+    this.loginService.logout();
+    this.router.navigateByUrl("/login");
   }
 }

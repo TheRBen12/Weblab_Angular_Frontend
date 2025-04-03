@@ -129,7 +129,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
         this.showBasket = true;
         this.currentInstructionStep = 2;
       }
-    })
+    });
 
 
     this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));

@@ -35,6 +35,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   specifications: string[] = [];
   productLimit: number | null = null;
   productProperties = ["Marke", "Kategorie"];
+  filterConfig: boolean = true;
 
   filterSubscription: Subscription = new Subscription();
   @Input() category: string = "";
@@ -45,6 +46,12 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.productService.getFilterConfiguredByUserSubscription().subscribe((config) => {
+     if (config != null){
+       this.filterConfig = config.filter;
+     }
+
+    })
     this.fetchAllProducts().subscribe((products) => {
       this.products = products;
     });
@@ -67,6 +74,10 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
       } else {
         this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
         this.showFilterResultTitle = this.filteredProducts.length > 0;
+        if (filterText != ""){
+          this.jumpToProductList();
+        }
+
       }
     });
 
@@ -198,5 +209,12 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
     this.experimentService.getExperimentTest(expId).subscribe((test) => {
       this.filterDisabled = !Boolean(JSON.parse(test.configuration)['filterDisabled']);
     });
+  }
+
+  private jumpToProductList() {
+    const element = document.getElementById('productList');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

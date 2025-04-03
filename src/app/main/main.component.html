@@ -1,4 +1,4 @@
-<div *ngIf="navigationSetting?.sideNavigationSearchBarTop">
+<div (click)="increaseNumberNavigationClicks()"  *ngIf="navigationSetting?.sideNavigationSearchBarTop">
 
   <div class="d-flex flex-row">
     <div class="col-sm-auto me-1" style="min-height: 100vh;">
@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<div *ngIf="navigationSetting?.horizontalNavigation || !navigationSetting">
+<div (click)="increaseNumberNavigationClicks()" *ngIf="navigationSetting?.horizontalNavigation || !navigationSetting">
   <app-navigation></app-navigation>
   <router-outlet></router-outlet>
 </div>
@@ -27,34 +27,32 @@
 </div>
 
 
-<div *ngIf="navigationSetting?.sideNavigationUserInformationTop">
-  <div class="d-flex">
-    <div class="col-2">
+<div (click)="increaseNumberNavigationClicks()"  *ngIf="navigationSetting?.sideNavigationUserInformationTop">
+  <div class="d-flex flex-row">
+    <div class="col-sm-auto">
       <app-side-navigation [showLogoutAndProfile]="false"></app-side-navigation>
     </div>
     <div class="col">
       <div class="main-header d-flex justify-content-end">
         <div class="d-flex justify-content-end align-items-center gap-3 w-100 me-3">
           <div class="p-3 right-side-header-item fw-bold">
-            <a (click)="loginService.logout()" class="ms-2">Abmelden</a>
+            <a (click)="logout()" class="ms-2">Abmelden</a>
           </div>
           <div class="p-3 right-side-header-item fw-bold ">
             <a class="">{{loginService.currentUser()?.email}}</a>
           </div>
         </div>
       </div>
-      <div class="top-header w-100 d-flex justify-content-center">
-        <div class="d-flex justify-content-center w-100 scrollable-list">
+        <div class=" w-100 scrollable-list">
           <router-outlet></router-outlet>
         </div>
-      </div>
     </div>
   </div>
 </div>
 
 
 
-<div *ngIf="navigationSetting?.megaDropDown">
+<div (click)="increaseNumberNavigationClicks()"  *ngIf="navigationSetting?.megaDropDown">
   <app-mega-drop-down-navigation [noPointerEvents]="false"></app-mega-drop-down-navigation>
   <router-outlet></router-outlet>
 </div>

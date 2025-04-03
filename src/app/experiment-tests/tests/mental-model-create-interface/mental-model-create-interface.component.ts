@@ -5,7 +5,7 @@ import {
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {Router, RouterOutlet} from '@angular/router';
+import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../search-bar/search-bar.component';
 import {ProductService} from '../../../services/product.service';
 import {RouterService} from '../../../services/router.service';
@@ -16,6 +16,12 @@ import {SideMenuComponent} from '../side-menu/side-menu.component';
 import {AutoCompleteComponent} from '../../../auto-complete/auto-complete.component';
 import {ExperimentService} from '../../../services/experiment.service';
 import {ExperimentTest} from '../../../models/experiment-test';
+import {SettingService} from '../../../services/setting.service';
+import {FilterSelectDropdownComponent} from '../../../filter-select-dropdown/filter-select-dropdown.component';
+import {LoginService} from '../../../services/login.service';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MentalModelShopConfiguration} from '../../../models/mental-model-shop-configuration';
 
 @Component({
   selector: 'app-mental-model-create-interface',
@@ -30,6 +36,10 @@ import {ExperimentTest} from '../../../models/experiment-test';
     SideMenuComponent,
     AutoCompleteComponent,
     NgIf,
+    FilterSelectDropdownComponent,
+    MatCard,
+    MatCardContent,
+    MatProgressSpinner,
   ],
   templateUrl: './mental-model-create-interface.component.html',
   standalone: true,
@@ -40,10 +50,13 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
   routerService = inject(RouterService);
   filterService = inject(FilterService);
   experimentService: ExperimentService = inject(ExperimentService);
+  settingsService: SettingService = inject(SettingService);
+  loginService: LoginService = inject(LoginService);
   router: Router = inject(Router);
+  route: ActivatedRoute = inject(ActivatedRoute);
+
   currentInstructionStep: number = 0;
   instructions: string[] = [];
-  basketIsHidden: boolean = true;
   basket: any[] = [];
   categoryLinks: string[] = [];
   products: any[] = [];
@@ -52,72 +65,90 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
   currentRoute: string = "Home";
   parentRoute: string | null = null;
   parentCategory: string | null = null;
-  currentType: ProductType | undefined = undefined;
   routes = routerLinks
-  showSubNavMenu = false;
   dummyCategories: string[] = ["PC", "Notebook", "Smartphone", "Keypad"]
   showInstructions: boolean = true;
   protected experimentTest: ExperimentTest | null = null;
 
-  selectedInterFace: { [key: string]: boolean } = {
-    'navbarTop': false,
-    'navbarBottom': false,
-    "shoppingCartBottomLeft": false,
-    "shoppingCartBottomRight": false,
-   " shoppingCartTopRight": false,
-    "shoppingCartTopLeft": false,
-    "searchBarTop": false,
-    "searchBarBottom": false,
-    "autoCompleteTop": false,
-    "autoCompleteBottom": false,
-    "sideMenuLeft": false,
-    "sideMenuRight": false,
-    "mega-drop-down": false,
+  selectedInterFace: MentalModelShopConfiguration = {
+    autoCompleteBottom: false,
+    autoCompleteTop: false,
+    filter: false,
+    megaDropDown: false,
+    navBarBottom: false,
+    navBarTop: false,
+    searchBarBottom: false,
+    searchBarTop: false,
+    shoppingCartBottomLeft: false,
+    shoppingCartBottomRight: false,
+    shoppingCartTopLeft: false,
+    sideMenuLeft: false,
+    sideMenuRight: false,
+    userId: undefined,
+    shoppingCartTopRight: false,
+
   }
+  loading: boolean = false;
 
 
   selectElement(element: string, event: Event) {
-    event.stopPropagation();
-    if (element == "navbarTop" && this.selectedInterFace[element]){
-      return;
-    }
-    if (this.selectedInterFace[element]){
+      event.stopPropagation();
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+    if (this.selectedInterFace[element]) {
       this.selectedInterFace[element] = false;
       return;
     }
-    if (element.includes('shoppingCartBottom') && (this.selectedInterFace["shoppingCartBottomLeft"] || this.selectedInterFace["shoppingCartBottomRight"])){
+    if (element.includes('shoppingCartBottom') && (this.selectedInterFace.shoppingCartBottomLeft || this.selectedInterFace.shoppingCartBottomRight)) {
       return;
-    }else if (element.includes('shoppingCartTop') && (this.selectedInterFace["shoppingCartTopLeft"] || this.selectedInterFace["shoppingCartTopRight"])){
+    } else if (element.includes('shoppingCartTop') && (this.selectedInterFace.shoppingCartTopLeft || this.selectedInterFace.shoppingCartTopLeft)) {
       return;
-    }else{
+    } else if (element.includes('searchBarTop') && (this.selectedInterFace.autoCompleteTop || this.selectedInterFace.autoCompleteBottom)) {
+      return;
+    } else if (element.includes('autoComplete') && (this.selectedInterFace.searchBarTop || this.selectedInterFace.searchBarBottom)) {
+      return;
+    } else if (element.includes('sideMenuRight') && this.selectedInterFace.sideMenuLeft) {
+      return;
+    } else if (element.includes('sideMenuLeft') && this.selectedInterFace.sideMenuRight) {
+      return;
+    } else {
       this.selectedInterFace[element] = true;
     }
 
   }
 
   isSelected(elementName: string): boolean {
-    return this.selectedInterFace[elementName];
+    return <boolean>this.selectedInterFace[elementName];
   }
 
   setCurrentRoute($event: string) {
 
   }
 
-  toggleInstructions() {
-    this.showInstructions = !this.showInstructions;
-
-  }
-
   ngOnInit(): void {
     this.fetchProductTypes(this.currentRoute);
     this.fetchExperimentTest();
-
   }
 
   fetchProductTypes(currentRoute: string) {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
       this.categoryLinks = this.routerService.buildValueKeyPairForCategoryLinks(this.productCategories);
+    });
+  }
+
+  saveUserNavigationSelection() {
+    this.selectedInterFace["userId"] = this.loginService.currentUser()?.id;
+    this.loading = true;
+    this.settingsService.saveShopNavigationConfiguration(this.selectedInterFace).subscribe((config) => {
+      if (config) {
+        setTimeout(() => {
+          const parentRoute = this.route.parent?.parent?.parent;
+          this.loading = false;
+          this.router.navigateByUrl("test/execute/mental-model/"+this.experimentTest?.id+"/user-shop/" + this.loginService.currentUser()?.id);
+        }, 2000);
+      }
     });
   }
 

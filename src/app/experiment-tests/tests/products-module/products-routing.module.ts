@@ -21,6 +21,8 @@ const routes: Routes = [
       {path: 'wohnen', component: ProductIndexComponent, title: "Wohnen"},
       {path: 'peripherie', component: ProductIndexComponent, title: "Peripherie"},
       {path: 'keypad', component: ProductIndexComponent, title: "Tastaturen"},
+      {path: 'maus', component: ProductIndexComponent, title: "Computer Maus"},
+
       {path: 'lebensmittel', component: ProductIndexComponent, title: "Lebensmittel"},
       {path: 'pc', component: ProductIndexComponent, title: "PC"},
       {path: 'haushalt', component: ProductIndexComponent, title: "Haushalt"},

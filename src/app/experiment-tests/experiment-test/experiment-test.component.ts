@@ -40,7 +40,6 @@ export class ExperimentTestComponent implements OnChanges, OnInit {
   @Input() markedText: string = "";
   @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;
   @Input() finishedExecutions: { [key: number]: boolean } = {};
-  userService: LoginService = inject(LoginService);
   @Input() state: string = 'Freigeschaltet';
 
 

@@ -13,5 +13,6 @@ export const routerLinks: {[key: string]: string } = {
   "Lebensmittel": "lebensmittel",
   "Haushalt": "haushalt",
   "Kaffeemaschine": "kaffeemaschine",
-  "Wohnen": "wohnen"
+  "Wohnen": "wohnen",
+  "Maus": "maus"
 }

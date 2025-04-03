@@ -22,7 +22,6 @@ import {SideMenuService} from '../../../../services/side-menu.service';
 import {RouterService} from '../../../../services/router.service';
 import {BasketComponent} from '../../../../basket/basket.component';
 import {MatFabButton} from '@angular/material/button';
-import {D} from '@angular/cdk/keycodes';
 import {RecallRecognitionExperimentExecution} from '../../../../models/recall-recognition-experiment-execution';
 import {LoginService} from '../../../../services/login.service';
 import {ExperimentService} from '../../../../services/experiment.service';
@@ -31,6 +30,7 @@ import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {NgIf} from '@angular/common';
+import {ExperimentTest} from '../../../../models/experiment-test';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -73,6 +73,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   updateMenuSubscription: Subscription = new Subscription();
   basketIsHidden = true;
   experimentTestId: number = 0;
+  experimentTest!: ExperimentTest
   clickedRoutes: { [key: string]: string } = {};
   failedClicks: number = 0;
   private currentExecution: ExperimentTestExecution | null = null;
@@ -89,8 +90,9 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
+    this.fetchExperimentTest(this.experimentTestId);
+
     const id = this.userService.currentUser()?.id
     if (id) {
       this.fetchExecutionInProcess(id, this.experimentTestId);
@@ -257,6 +259,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     const id = this.userService.currentUser()?.id
     if (id) {
       this.loading = true;
+      this.experimentService.setLastFinishedExperimentTest(this.experimentTestId);
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
         this.currentExecution = exec;
         const recallRecognitionExecution: RecallRecognitionExperimentExecution = {
@@ -273,7 +276,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/")
+            this.router.navigateByUrl("/tests/"+this.experimentTest.experiment?.id);
             this.toastrService.success("Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
 
@@ -298,5 +301,12 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   increaseClicks() {
     this.numberClicks++;
     localStorage.setItem('numberClicks', String(this.numberClicks));
+  }
+
+  private fetchExperimentTest(experimentTestId: number) {
+    this.experimentService.getExperimentTest(experimentTestId).subscribe((test) => {
+      this.experimentTest = test;
+    })
+
   }
 }

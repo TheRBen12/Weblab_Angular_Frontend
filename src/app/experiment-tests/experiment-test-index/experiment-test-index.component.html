@@ -23,6 +23,9 @@
         <p class="fw-bold">{{experimentTests.length}} Versuche</p>
         <p>{{finishedExecutions.length}} Versuche von {{experimentTests.length}} Versuchen abgeschlossen.</p>
       </div>
+      <div *ngIf="setting?.autoStartNextExperiment">
+        <p class="fw-bold">Das nächste Experiment wird ausgewählt in {{countDownToStartNextTest}} Sekunden</p>
+      </div>
       <div class="test-container">
         <div *ngIf="filteredExperimentTests " class=" flex-row row ">
           <div *ngFor="let test of filteredExperimentTests">

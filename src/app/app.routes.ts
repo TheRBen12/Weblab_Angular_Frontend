@@ -44,6 +44,7 @@ import {
   MentalModelRightSideNavigationComponent
 } from './experiment-tests/tests/mental-model-right-side-navigation/mental-model-right-side-navigation.component';
 import {FeedbackPartTwoComponent} from './experiment-tests/tests/feedback-part-two/feedback-part-two.component';
+import {CreatedUserShopComponent} from './created-user-shop/created-user-shop.component';
 
 export const routes: Routes = [
   {
@@ -152,16 +153,24 @@ export const routes: Routes = [
             ]
           },
 
-
           {
             path: 'mental-model/16', component: MentalModelCreateInterfaceComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
-              }
+              },
             ]
           },
 
+          {
+            path: 'mental-model/:testId/user-shop/:userId', component: CreatedUserShopComponent, children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          }
+,
           {
             path: 'feedback/18', component: FeedbackPartOneComponent
           },
@@ -169,10 +178,6 @@ export const routes: Routes = [
           {
             path: 'feedback/19', component: FeedbackPartTwoComponent
           },
-
-
-
-
 
         ]
       }
@@ -186,5 +191,6 @@ export const routes: Routes = [
   {
     path: "navigation-select", component: NavigationSelectComponent
   },
+
 
 ];
