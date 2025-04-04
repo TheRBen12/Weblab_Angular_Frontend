@@ -22,9 +22,10 @@ export class BasketComponent implements OnInit{
   products: any[] = [];
   productService = inject(ProductService);
   @Input() basket: any[] = [];
-  @Input() isHidden = true;
+  @Input() isHidden = false;
   @Output() checkoutEventEmitter: EventEmitter<number> = new EventEmitter<number>();
   @Output() hiddenEventEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   hideBasket(){
     this.isHidden = !this.isHidden;
     this.hiddenEventEmitter.emit(this.isHidden);

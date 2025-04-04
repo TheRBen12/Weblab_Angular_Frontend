@@ -37,6 +37,7 @@ export class TimeService {
 
   stopTimer() {
     clearInterval(this.interval);
+    this.time = 0;
   }
 
   getCurrentTime(){

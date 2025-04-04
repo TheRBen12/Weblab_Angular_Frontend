@@ -1,7 +1,7 @@
 <div class="d-flex flex-row">
   <div class="instruction-container shadow col-3">
       <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep"
-                                       [instructions]="instructions" [target]="targetInstruction" >
+                                       [instructions]="instructions" [target]="experimentTest?.goalInstruction??''">
       </app-experiment-test-instruction>
 
   </div>
@@ -15,7 +15,7 @@
                 <h2 class="me-4">WeblabShop</h2>
               </div>
               <div (click)="clickedOnSearchBar = true"  class="col-7 flex-fill">
-                <app-auto-complete (onInputClearedEventEmitter)="this.increaseNumberUsedSearchBar()"  (onSelectEventEmitter)="showProduct($event)"  [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
+                <app-auto-complete (click)="updateTimeToClickSearchBar()"  (onInputClearedEventEmitter)="this.increaseNumberUsedSearchBar()"  (onSelectEventEmitter)="showProduct($event)"  [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
                                    [placeholder]="'Produkte suchen'">
 
                 </app-auto-complete>

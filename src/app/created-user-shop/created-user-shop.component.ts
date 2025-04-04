@@ -254,6 +254,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   finishExperiment() {
     this.execution['finishedExecutionAt'] = new Date();
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
+    this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
     const userId = this.loginService.currentUser()?.id;
     if (userId){
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {

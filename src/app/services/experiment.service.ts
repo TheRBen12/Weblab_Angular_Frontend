@@ -8,6 +8,8 @@ import {RecallRecognitionExperimentExecution} from '../models/recall-recognition
 import {HicksLawExperimentExecution} from '../models/hicks-law-experiment-execution';
 import {ErrorCorrectionExperimentExecution} from '../models/ErrorCorrectionExperimentExecution';
 import {MentalModelExecution} from '../models/mental-model-execution';
+import {FormFeedbackExperimentExecution} from '../models/form-feedback-experiment-execution';
+import {FittsLawExperiment} from '../models/fitts-law-experiment';
 
 @Injectable({
   providedIn: 'root'
@@ -111,4 +113,12 @@ export class ExperimentService {
   saveMentalModelExperimentExecution(execution: { [p: string]: any }) {
     return this.http.post<MentalModelExecution>('https://localhost:7147/api/experiment/mental-model/new', execution);
   }
+
+  saveFormFeedbackExperiment(execution: { [p: string]: any }) {
+    return this.http.post<FormFeedbackExperimentExecution>('https://localhost:7147/api/formAndFeedbackExperiment/form-feedback-experiment/new', execution);  }
+
+  saveFittsLawExperiment(execution: {[p: string]: any}) {
+    return this.http.post<FittsLawExperiment>('https://localhost:7147/api/formAndFeedbackExperiment/form-feedback-experiment/new', execution);
+  }
+
 }

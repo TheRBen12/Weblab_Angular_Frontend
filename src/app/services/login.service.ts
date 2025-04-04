@@ -12,47 +12,51 @@ export class LoginService {
   http = inject(HttpClient);
   private userSource = new ReplaySubject<User | null>(1);
   currentUser = signal<User | null>(null);
-  userBehaviourSubscription: BehaviorSubject<UserBehaviour|null> = new BehaviorSubject<UserBehaviour|null>(null);
+  userBehaviourSubscription: BehaviorSubject<UserBehaviour | null> = new BehaviorSubject<UserBehaviour | null>(null);
   user$ = this.userSource.asObservable()
-  constructor() { }
 
-  login(email: string): Observable<User>{
+  constructor() {
+  }
+
+  login(email: string): Observable<User> {
     return this.http.get<User>("https://localhost:7147/api/account/login", {params: {email: email}});
   }
-  setUser(user: User){
+
+  setUser(user: User) {
     this.currentUser.set(user);
     this.userSource.next(user);
   }
 
-  refreshUser(email: any){
+  refreshUser(email: any) {
     return this.http.get<User>("https://localhost:7147/api/account/login", {params: {email: email}}).subscribe(
       user => {
-        if (user){
+        if (user) {
           this.setUser(user);
           console.log(user);
         }
       }
     );
   }
-  getUserBehaviourSubscription(){
+
+  getUserBehaviourSubscription() {
     return this.userBehaviourSubscription.asObservable();
   }
 
   getCurrentUser() {
     const userString = localStorage.getItem('user');
-    if (userString){
+    if (userString) {
       const user: User = JSON.parse(userString);
       return user
     }
     return null;
   }
 
-  logout(){
+  logout() {
     localStorage.clear();
     sessionStorage.clear();
     const finishedAt = new Date();
     const user = this.currentUser();
-    if (user){
+    if (user) {
       user.finishedUserExperienceAt = finishedAt;
       this.updateUser(user).subscribe();
     }
@@ -80,4 +84,17 @@ export class LoginService {
   emitUserBehaviour(userBehaviour: UserBehaviour) {
     this.userBehaviourSubscription.next(userBehaviour);
   }
+
+  increaseNumberClickedSettings(userBehaviour: UserBehaviour) {
+    userBehaviour.clickedOnSettings = true;
+    userBehaviour.numberClickedOnSettings = userBehaviour?.numberClickedOnSettings + 1;
+    return userBehaviour;
+  }
+
+  increaseNumberClickedHelp(userBehaviour: UserBehaviour) {
+    userBehaviour.clickedOnHelp = true;
+    userBehaviour.numberClickedOnHelp = userBehaviour.numberClickedOnHelp + 1;
+    return userBehaviour;
+  }
+
 }

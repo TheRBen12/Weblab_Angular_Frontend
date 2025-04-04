@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, effect, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {NgClass, NgForOf} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {ExperimentService} from '../services/experiment.service';
@@ -6,6 +6,8 @@ import {Experiment} from '../models/experiment';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {ExperimentTest} from '../models/experiment-test';
 import {LoginService} from '../services/login.service';
+import {UserBehaviour} from '../models/user-behaviour';
+import {RouterService} from '../services/router.service';
 
 @Component({
 
@@ -31,6 +33,7 @@ import {LoginService} from '../services/login.service';
 export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   experimentService: ExperimentService = inject(ExperimentService);
   loginService: LoginService = inject(LoginService);
+  routerService: RouterService = inject(RouterService);
   router: Router = inject(Router);
   experiments: Experiment[] = [];
   showExperimentMenu: boolean = false;
@@ -42,11 +45,33 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   pointerInHeaderMenu: boolean = false;
   @Input() noPointerEvents: boolean = true;
   @Input() showMenu!: boolean;
+  currentRoute: string = "Experimente";
+  userBehaviour!: UserBehaviour
+
 
 
   constructor() {
+
+    effect(() => {
+      const userId = this.loginService.currentUser()?.id;
+      if (userId) {
+        this.loginService.getUserBehaviour(userId).subscribe((userBehaviour) => {
+          this.userBehaviour = userBehaviour;
+        })
+      }
+    });
   }
+
+
+
   ngOnInit(): void {
+    this.currentRoute = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
+
+    this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
+      if (userBehaviour){
+        this.userBehaviour = userBehaviour;
+      }
+    });
     this.experimentService.getExperiments().subscribe((experiments) => {
       this.experiments = experiments;
     });
@@ -89,7 +114,6 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
     if (!this.pointerInExperimentTestMenu){
       this.hideExperimentTestMenu();
     }
-    //this.checkToHideExperimentTestMenu();
   }
 
   checkToHideExperimentMenu() {
@@ -98,11 +122,10 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
         if (!this.pointerInExperimentTestMenu && !this.pointerInExperimentMenu){
           this.hideExperimentMenu();
         }
-      }, 1800)
+      }, 1800);
     }
 
   }
-
 
   checkIfDisplayExperimentTestMenu(experiment: Experiment) {
     if (this.showExperimentMenu){
@@ -144,5 +167,22 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   leaveExperimentMenu() {
     this.pointerInExperimentMenu = false;
     this.checkToHideExperimentMenu();
+  }
+
+  setCurrentRoute(route: string) {
+    this.currentRoute = route;
+    if (route == "Einstellungen"){
+      this.userBehaviour = this.loginService.increaseNumberClickedSettings(this.userBehaviour);
+      this.updateUserBehaviour(this.userBehaviour);
+    }
+    else if (route == "Hilfe"){
+      this.userBehaviour = this.loginService.increaseNumberClickedHelp(this.userBehaviour);
+      this.updateUserBehaviour(this.userBehaviour);
+    }
+  }
+  updateUserBehaviour(userBehaviour: UserBehaviour) {
+    this.loginService.updateUserBehaviour(userBehaviour).subscribe((user) => {
+      this.userBehaviour = userBehaviour;
+    });
   }
 }

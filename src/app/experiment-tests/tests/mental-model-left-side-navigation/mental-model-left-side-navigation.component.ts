@@ -195,9 +195,8 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     localStorage.setItem("clickedRoutes", JSON.stringify(this.clickedRoutes));
     if (!this.firstClick){
       this.firstClick = route;
-
-      this.timeService.stopTimer();
       this.execution['timeToClickFirstCategory'] = this.timeService.getCurrentTime();
+      this.timeService.stopTimer();
     }
     this.showHelpInstructions = this.targetRoutes.indexOf(route) == -1 && this.currentRoute != "Home";
   }

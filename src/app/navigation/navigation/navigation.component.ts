@@ -4,7 +4,7 @@ import {LoginService} from '../../services/login.service';
 import {User} from '../../models/user';
 import {NgClass, NgIf} from '@angular/common';
 import {UserBehaviour} from '../../models/user-behaviour';
-import {BehaviorSubject, refCount} from 'rxjs';
+import {RouterService} from '../../services/router.service';
 
 @Component({
   selector: 'app-navigation',
@@ -23,6 +23,7 @@ export class NavigationComponent implements OnInit {
   currentUser: User | null
   currentLink: string = "Experimente"
   userBehaviour!: UserBehaviour | null;
+  routerService: RouterService = inject(RouterService);
 
   constructor() {
     this.currentUser = this.loginService.getCurrentUser();
@@ -94,6 +95,8 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.currentLink = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
+    this.router.url;
     this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
       if (userBehaviour) {
         this.userBehaviour = userBehaviour;

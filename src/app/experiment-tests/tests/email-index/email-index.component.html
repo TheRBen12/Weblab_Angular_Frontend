@@ -42,10 +42,6 @@
 </div>
 
 
-<div *ngIf="snackBarNumber==1" class="snackbar-1 fade-in">
-  <app-snackbar (undoEventEmitter)="undoDeletingMail()" [largeBtn]=true></app-snackbar>
-</div>
-
 
 <div *ngIf="snackBarNumber == 5" class="snackbar-5 fade-in">
   <app-snackbar (undoEventEmitter)="undoDeletingMail()"></app-snackbar>
@@ -53,20 +49,6 @@
 
 <div *ngIf="snackBarNumber == 6" class="snackbar-6">
   <app-snackbar (undoEventEmitter)="undoDeletingMail()"></app-snackbar>
-</div>
-
-
-<div style="height: 450px" *ngIf="snackBarNumber==7" class="snackbar-7 ">
-  <app-snackbar (undoEventEmitter)="undoDeletingMail()" [largeBtn]=" true"></app-snackbar>
-</div>
-
-
-<div *ngIf="snackBarNumber == 8" class="snackbar-8">
-  <app-snackbar (undoEventEmitter)="undoDeletingMail()"></app-snackbar>
-</div>
-
-<div *ngIf="snackBarNumber == 9" class="snackbar-9">
-  <app-snackbar [largeBtn]="true" (undoEventEmitter)="undoDeletingMail()"></app-snackbar>
 </div>
 
 

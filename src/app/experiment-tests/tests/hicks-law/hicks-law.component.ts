@@ -7,10 +7,10 @@ import {SearchBarComponent} from '../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {ProductType} from '../../../models/product-category';
 import {ProductService} from '../../../services/product.service';
-import {Router, RouterOutlet} from '@angular/router';
+import {NavigationEnd, NavigationStart, Router, RouterOutlet} from '@angular/router';
 import {RouterService} from '../../../services/router.service';
 import {routerLinks} from '../routes';
-import {Subscription} from 'rxjs';
+import {filter, Subscription} from 'rxjs';
 import {SideMenuService} from '../../../services/side-menu.service';
 import {BasketComponent} from '../../../basket/basket.component';
 import {NgIf} from '@angular/common';
@@ -22,6 +22,7 @@ import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {TimeService} from '../../../services/time.service';
+import {MatFabButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-hicks-law',
@@ -35,7 +36,8 @@ import {TimeService} from '../../../services/time.service';
     NgIf,
     MatCard,
     MatCardContent,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatFabButton
   ],
   templateUrl: './hicks-law.component.html',
   standalone: true,
@@ -43,10 +45,9 @@ import {TimeService} from '../../../services/time.service';
 })
 export class HicksLawComponent implements OnInit {
   productService = inject(ProductService);
-  productCategoryRouterLinksService = inject(RouterService);
+  routerService = inject(RouterService);
   experimentService: ExperimentService = inject(ExperimentService);
   filterService = inject(FilterService);
-  menuService: SideMenuService = inject(SideMenuService);
   router = inject(Router);
   userService: LoginService = inject(LoginService);
   timerService = inject(TimeService);
@@ -59,23 +60,23 @@ export class HicksLawComponent implements OnInit {
   categoryLinks: string[] = [];
   routes = routerLinks
   parentRoute: string = "";
-  updateMenuSubscription: Subscription = new Subscription();
   targetRoutes = ["Lebensmittel"]
   basket: any[] = [];
   searchBarDisabled = true;
-  experimentId: number | null = null;
+  experimentTestId!: number ;
   targetInstruction: string = "";
   productLimit: number = 0;
   categoryLimit: number = 0;
   clickedRoutes: { [key: string]: string } = {};
   numberClickedSearchBar: number = 0;
   clickedOnFilters: boolean = false;
-  selectedProducts: {[key: number]: Date} = {}
+  selectedProducts: { [key: number]: Date } = {}
   protected loading: boolean = false;
   private failedClicks: number = 0;
   private numberClicks: number = 0;
-  private firstClick: string|null = null;
+  private firstClick: string | null = null;
   private timeToClickFirstCategoryLink: number = 0;
+  showBasket: boolean = false;
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -86,23 +87,20 @@ export class HicksLawComponent implements OnInit {
   ngOnInit(): void {
     this.timerService.startTimer();
 
+    this.experimentTestId = this.routerService.getExperimentTestIdByUrl(this.router.url, "hicks-law");
+    this.fetchExperimentTest(this.experimentTestId);
 
-    const urlSegments = this.router.url.split("/");
-    const id = urlSegments.indexOf("hicks-law")
-
-    const expId = Number(urlSegments[id + 1]);
-    if (expId) {
-      this.experimentId = expId;
-      this.fetchExperimentTest(this.experimentId);
-    }
-    if (this.experimentId == 6) {
+    if (this.experimentTestId == 6) {
       this.searchBarDisabled = false;
     }
+    this.productService.getFilterUsedSubscription().subscribe((filter) => {
+      this.clickedOnFilters = true;
+    })
 
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((products) => {
       if (products.length > this.basket.length) {
-        this.selectedProducts[products.length-1] = new Date();
+        this.selectedProducts[products.length - 1] = new Date();
         localStorage.setItem('selctedPrducts', JSON.stringify(this.selectedProducts));
         this.currentInstructionStep = 0;
       } else if (this.basket.length > products.length) {
@@ -115,15 +113,26 @@ export class HicksLawComponent implements OnInit {
       }
     });
 
-    this.updateMenuSubscription = this.menuService.getSubject().subscribe((updateMenu) => {
-      if (updateMenu) {
-        this.fetchProductTypes("Home");
-        this.currentRoute = "Home";
-        this.currentInstructionStep = 2;
-      }
-    });
+    let oldRoute;
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationStart)))
+      .subscribe((event) => {
+        oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+      });
 
-    this.currentRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+        this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+        if (this.currentRoute == "Lebensmittel"){
+          this.currentInstructionStep = 1;
+        }
+        this.buildParentRoute();
+        this.fetchProductTypes(this.currentRoute);
+      });
+
+    this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+
     if (this.currentRoute != "Home") {
       const parentRoute = localStorage.getItem("parentRoute") ?? "";
       this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
@@ -133,21 +142,28 @@ export class HicksLawComponent implements OnInit {
       });
     }
     const selections = localStorage.getItem('selectedProducts');
-     if (selections){
-       this.selectedProducts = JSON.parse(selections);
-     }
+    if (selections) {
+      this.selectedProducts = JSON.parse(selections);
+    }
 
     this.cdRef.detectChanges();
   }
 
+  buildParentRoute() {
+    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories)
+    this.parentCategory = parentRouteData.parentCategory;
+    this.parentRoute = parentRouteData.parentRoute;
+  }
+
+
   setCurrentRoute(route: string) {
-    if (Object.values(this.clickedRoutes).length == 0){
+    if (Object.values(this.clickedRoutes).length == 0) {
       this.timeToClickFirstCategoryLink = this.timerService.getCurrentTime();
       this.timerService.stopTimer();
     }
-    if (this.clickedRoutes[route]){
+    if (this.clickedRoutes[route]) {
       this.clickedRoutes[route] += " " + new Date().toISOString();
-    }else{
+    } else {
       this.clickedRoutes[route] = new Date().toISOString();
     }
 
@@ -187,7 +203,7 @@ export class HicksLawComponent implements OnInit {
         this.categoryLinks.filter(type => type == "lebensmittel");
         this.productCategories = [];
       }
-      this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
+      this.categoryLinks = this.routerService.buildValueKeyPairForCategoryLinks(this.productCategories);
     });
   }
 
@@ -200,14 +216,15 @@ export class HicksLawComponent implements OnInit {
   finishExperiment(productNumberInBasket: number) {
     const id = this.userService.currentUser()?.id
     if (productNumberInBasket >= 3 && id) {
+      this.experimentService.setLastFinishedExperimentTest(this.experimentTestId)
       this.loading = true;
-      this.fetchExecutionInProcess(id, this.experimentId).subscribe((exec) => {
+      this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
         const hicksLawExecution: HicksLawExperimentExecution = {
           productLimit: this.productLimit,
           categoryLimit: this.categoryLimit,
           categoryLinkClickDates: JSON.stringify(this.clickedRoutes),
           numberClickedSearchBar: this.numberClickedSearchBar,
-          clickedOnFilters: false,
+          clickedOnFilters: this.clickedOnFilters,
           firstChoiceAt: this.selectedProducts[0],
           secondChoiceAt: this.selectedProducts[1],
           thirdChoiceAt: this.selectedProducts[2],
@@ -216,8 +233,8 @@ export class HicksLawComponent implements OnInit {
           failedClicks: this.failedClicks,
           numberClicks: this.numberClicks,
           firstClick: this.firstClick,
-          timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink
-        }
+          timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
+        };
 
         this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -229,7 +246,6 @@ export class HicksLawComponent implements OnInit {
 
       });
     }
-
   }
 
   private fetchExperimentTest(experimentId: number) {
@@ -258,9 +274,13 @@ export class HicksLawComponent implements OnInit {
   }
 
   increaseNumberClicks(event: MouseEvent) {
-    if (!this.firstClick){
+    if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
     }
     this.numberClicks++;
+  }
+
+  toggleBasket() {
+    this.showBasket = !this.showBasket;
   }
 }

@@ -77,7 +77,6 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   currentRoute: string = "Home";
   parentRoute: string | null = null;
   parentCategory: string | null = null;
-  currentType: ProductType | undefined = undefined;
   routes = routerLinks
   showSubNavMenu = false;
   private clickedRoutes: { [key: string]: string } = {};
@@ -109,6 +108,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.timeService.startTimer();
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
       if (filter != ""){
         this.execution['usedFilters'] = true;
@@ -161,10 +161,13 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   }
 
   setCurrentRoute(route: string) {
+    if (Object.values(this.clickedRoutes).length == 0){
+      this.execution["timeToClickFirstCategoroy"] = this.timeService.getCurrentTime();
+      this.timeService.stopTimer();
+    }
     if (this.targetRoutes.indexOf(route) == -1) {
       this.execution['failedClicks'] = this.execution['failedClicks'] + 1;
       this.saveExecutionTemporarily(this.execution);
-
 
     }
     this.clickedRoutes[route] = new Date().toISOString();

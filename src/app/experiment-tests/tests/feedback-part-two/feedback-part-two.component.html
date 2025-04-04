@@ -1,7 +1,6 @@
 <div class="d-flex flex-row">
-  <div>
-    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"
-                                     [target]="experimentTest?.goalInstruction?? ''"></app-experiment-test-instruction>
+  <div class="col-3">
+    <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep" [instructions]="instructions" [target]="experimentTest.goalInstruction"></app-experiment-test-instruction>
   </div>
 
   <div class="mt-3 container-fluid">
@@ -28,7 +27,7 @@
     </div>
 
     <div class="col-6">
-      <form [formGroup]="form" (ngSubmit)="submitForm()" class="mt-3 ">
+      <form (click)="increaseNumberClicks()"  [formGroup]="form" (ngSubmit)="submitForm()" class="mt-3 ">
 
         <mat-card *ngIf="formStep == 0 && splitForm">
           <div class="p-4 ">
@@ -64,6 +63,12 @@
             <div *ngIf="form.errors?.['dateOrderInvalid']">
               <div class="form-error-message">
                 Das Abreisedatum muss nach dem Ankunftsdatum liegen!
+              </div>
+            </div>
+
+            <div *ngIf="form.errors?.['arrivalDateOrderInvalid']">
+              <div class="form-error-message">
+                Das Abreisedatum kann nicht in der Vergangenheit liegen.
               </div>
             </div>
 
@@ -226,9 +231,6 @@
           </div>
         </mat-card>
 
-
-
-
         <button (click)="checkInputForCurrentFormStep()" *ngIf="splitForm && formStep < 3" class="mt-3 btn btn-success">
           Weiter
         </button>
@@ -241,8 +243,17 @@
 
       </form>
     </div>
-
   </div>
-
-
 </div>
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin m-auto"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>

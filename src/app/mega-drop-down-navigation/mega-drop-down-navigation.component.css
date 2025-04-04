@@ -68,9 +68,12 @@ a{
   display: block;
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-
 }
+
+.active-link{
+  border-bottom: white solid 2px;
+}
+
 
 
 

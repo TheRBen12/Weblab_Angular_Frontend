@@ -35,7 +35,7 @@ export class MainComponent implements OnInit {
   router: Router = inject(Router);
   timeService = inject(TimeService);
   loginService: LoginService = inject(LoginService);
-  userBehaviour: UserBehaviour | null = null;
+  userBehaviour?: UserBehaviour | null = null;
   settingService: SettingService = inject(SettingService);
   protected navigationSetting?: NavigationSetting;
   private numberNavigationClicks: number = 0;
@@ -45,6 +45,10 @@ export class MainComponent implements OnInit {
     effect(() => {
       const userId = this.loginService.currentUser()?.id;
       if (userId) {
+        debugger;
+        this.loginService.getUserBehaviour(userId).subscribe((userBehaviour) => {
+          this.userBehaviour = userBehaviour;
+        })
         this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
           this.navigationSetting = setting;
         }, (error) => {
@@ -58,7 +62,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-  localStorage.setItem("numberNavigationClicks", "0");
+    localStorage.setItem("numberNavigationClicks", "0");
 
     const user = this.loginService.currentUser();
     const userId = user?.id;
@@ -67,10 +71,12 @@ export class MainComponent implements OnInit {
         this.navigationSetting = navigationSetting
       });
       this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
-        this.userBehaviour = userBehaviour;
+        if (userBehaviour) {
+          this.userBehaviour = userBehaviour;
+        }
       });
-
     }
+
 
     if ((sessionStorage.getItem("closedModal") == "" || sessionStorage.getItem('closedModal') == null) && user?.group != "C") {
       this.openWelcomeHelpModal("Bevor Sie loslegen, hier einige Tipps", true)
@@ -123,7 +129,7 @@ export class MainComponent implements OnInit {
 
   increaseNumberNavigationClicks() {
     const n = localStorage.getItem("numberNavigationClicks");
-    if (n){
+    if (n) {
       this.numberNavigationClicks = Number(n) + 1;
     }
     localStorage.setItem('numberNavigationClicks', String(this.numberNavigationClicks));

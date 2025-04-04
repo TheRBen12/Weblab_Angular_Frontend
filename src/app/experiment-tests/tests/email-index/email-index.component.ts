@@ -15,6 +15,7 @@ import {
 import {SnackbarComponent} from '../../../snackbar/snackbar.component';
 
 import {ExperimentService} from '../../../services/experiment.service';
+import {TimeService} from '../../../services/time.service';
 
 @Component({
   selector: 'app-email-index',
@@ -52,8 +53,6 @@ export class EmailIndexComponent implements OnInit {
   snackBarNumber: number = 0;
   oldSnackBarNumber: number = 0;
 
-
-
   constructor() {
     this.title = this.route.snapshot.title;
   }
@@ -78,9 +77,7 @@ export class EmailIndexComponent implements OnInit {
     } else {
       this.fetchMails();
     }
-
   }
-
 
   deleteEmail(deletedMail: Email, pos: number) {
     this.emailService.emitMailDeleted({mail: deletedMail, position: pos });
@@ -98,7 +95,7 @@ export class EmailIndexComponent implements OnInit {
       this.openRandomSnackbar()
       this.disableMail(deletedMail);
     } else {
-      this.openSnackBar("Gelöscht", "Rückgängig");
+      this.openSnackBar(6000, "Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
     }
 
   }
@@ -128,7 +125,32 @@ export class EmailIndexComponent implements OnInit {
     this.oldSnackBarNumber = this.snackBarNumber;
     const timeout = setTimeout(() => {
       this.snackBarNumber = 0;
-    }, 2000)
+    }, 1700)
+
+
+    if (this.snackBarNumber == 1){
+      this.horizontalPosition = "left";
+      this.verticalPosition = "bottom"
+      this.openSnackBar(1500, "Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
+    }
+    if (this.snackBarNumber == 7){
+      this.horizontalPosition = "right";
+      this.verticalPosition = "bottom"
+      this.openSnackBar(1500,"Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
+    }
+
+    if (this.snackBarNumber == 8){
+      this.horizontalPosition = "left";
+      this.verticalPosition = "top"
+      this.openSnackBar(1500,"Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
+    }
+
+    if (this.snackBarNumber == 9){
+      this.horizontalPosition = "end";
+      this.verticalPosition = "top"
+      this.openSnackBar(1500,"Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
+    }
+
   }
 
 
@@ -137,8 +159,8 @@ export class EmailIndexComponent implements OnInit {
     return urlSegments[urlSegments.length - 1] == "deletedItems";
   }
 
-  openSnackBar(message: string, action: string) {
-    const snackBarRef: MatSnackBarRef<TextOnlySnackBar> = this.snackBar.open(message, action, {duration: 6000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition});
+  openSnackBar(duration: number, message: string, action: string, horizontalPosition: MatSnackBarHorizontalPosition, verticalPosition:MatSnackBarVerticalPosition) {
+    const snackBarRef: MatSnackBarRef<TextOnlySnackBar> = this.snackBar.open(message, action, {duration: duration, horizontalPosition: horizontalPosition, verticalPosition: verticalPosition});
     snackBarRef.onAction().subscribe((event) => {
       this.undoDeletingMail();
     });

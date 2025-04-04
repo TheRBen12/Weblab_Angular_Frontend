@@ -19,6 +19,8 @@ import {LoginService} from '../../../../services/login.service';
 import {ExperimentService} from '../../../../services/experiment.service';
 import {ExperimentTestExecution} from '../../../../models/experiment-test-execution';
 import {ToastrService} from 'ngx-toastr';
+import {ExperimentTest} from '../../../../models/experiment-test';
+import {TimeService} from '../../../../services/time.service';
 
 @Component({
   selector: 'app-recall-recognition-part-three',
@@ -48,6 +50,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   currentInstructionStep: number = 0;
   products: any[] = [];
   filterService = inject(FilterService);
+  timeService: TimeService = inject(TimeService);
   productService = inject(ProductService);
   router = inject(Router);
   userService: LoginService = inject(LoginService);
@@ -62,6 +65,8 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   clickedOnSearchBar: boolean = false;
   numberUsedSearchBar: number = 0;
   targetInstruction: string = "";
+  experimentTest?: ExperimentTest
+  private timeToClickSearchBar?: number;
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
     this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden."];
@@ -79,6 +84,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.timeService.startTimer();
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       if (basket.length == 1){
@@ -122,11 +128,12 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
           numberUsedSearchBar: this.numberUsedSearchBar,
+          timeToClickSearchBar: this.timeToClickSearchBar,
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/")
+            this.router.navigateByUrl("/tests/"+this.experimentTest?.experiment?.id)
             this.toasterService.success("Vielen Dank! Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
 
@@ -162,8 +169,13 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
   private fetchExperimentTest(experimentTestId: number) {
     this.experimentService.getExperimentTest(experimentTestId).subscribe((test) => {
-      this.targetInstruction = test.goalInstruction;
+      this.experimentTest = test;
     });
 
+  }
+
+  updateTimeToClickSearchBar() {
+    this.timeService.stopTimer();
+    this.timeToClickSearchBar = this.timeService.getCurrentTime();
   }
 }

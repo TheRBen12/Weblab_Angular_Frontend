@@ -2,3 +2,19 @@
   color: #ba1a1a;
   display: block;font-size: 15px;
 }
+.progress-bar-circle{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(100, 100, 100, 0.8); /* Schwarzer Hintergrund mit 50% Transparenz */
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  z-index: 1000; ;
+}
+
+.progress-title{
+  color: white;
+}

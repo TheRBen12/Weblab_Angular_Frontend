@@ -5,13 +5,13 @@
 
         <div (mouseleave)="leaveHeaderMenu()" (mouseenter)="displayExperimentMenu()" class="d-flex gap-lg-5">
           <div >
-            <a [ngClass]="{'no-pointer-events': noPointerEvents}"  style="min-height: 100px" class="header-menu-item" routerLink="/">Experimente</a>
+            <a (click)="setCurrentRoute('Experimente')"  [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Experimente'}"  style="min-height: 100px" class="header-menu-item" routerLink="/">Experimente</a>
           </div>
           <div >
-            <a [ngClass]="{'no-pointer-events': noPointerEvents}"  class="header-menu-item" routerLink="/settings">Einstellungen</a></div>
+            <a (click)="setCurrentRoute('Einstellungen')" [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Einstellungen'}"  class="header-menu-item" routerLink="/settings">Einstellungen</a></div>
         </div>
         <div >
-          <a class="header-menu-item">Hilfe</a>
+          <a (click)="setCurrentRoute('Hilfe')"  [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Hilfe'}" routerLink="/help" class="header-menu-item">Hilfe</a>
         </div>
 
 

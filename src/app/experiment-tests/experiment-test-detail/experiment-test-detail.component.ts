@@ -66,9 +66,7 @@ export class ExperimentTestDetailComponent implements OnInit {
   }
 
   setLastStartedExperiment() {
-
     this.experimentService.setNextStartedExperimentTest({id: this.experimentTest?.id ?? 0, startedAt: new Date()});
-    // saveNavigationTime
     const lastFinishedExperiment = this.experimentService.getLastFinishedExperimentTest();
     const reachedSiteAt = localStorage.getItem('reachedSiteAt');
     const reachedSiteDate: Date = reachedSiteAt ? new Date(reachedSiteAt): new Date();
@@ -89,11 +87,7 @@ export class ExperimentTestDetailComponent implements OnInit {
       numberClicks: numberClicks
     };
     localStorage.setItem('numberNavigationClicks', String(0));
-
-    this.timeService.saveNavigationTime(navigationTime).subscribe(() => {
-      console.log(navigationTime)
-    });
-
+    this.timeService.saveNavigationTime(navigationTime).subscribe();
     this.saveExperimentExecution();
   }
 

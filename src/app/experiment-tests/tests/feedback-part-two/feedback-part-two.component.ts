@@ -11,7 +11,10 @@ import {NgClass, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import {ExperimentTest} from '../../../models/experiment-test';
 import {ExperimentService} from '../../../services/experiment.service';
-import {MatCard} from '@angular/material/card';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {TimeService} from '../../../services/time.service';
+import {LoginService} from '../../../services/login.service';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-feedback-part-two',
@@ -28,7 +31,9 @@ import {MatCard} from '@angular/material/card';
     NgIf,
     ReactiveFormsModule,
     NgClass,
-    MatCard
+    MatCard,
+    MatCardContent,
+    MatProgressSpinner
   ],
   templateUrl: './feedback-part-two.component.html',
   standalone: true,
@@ -39,9 +44,21 @@ export class FeedbackPartTwoComponent implements OnInit {
   splitForm: any;
   formStep: number = 0;
   router = inject(Router);
-  experimentTest: ExperimentTest | null = null;
+  experimentTest!: ExperimentTest;
   experimentService: ExperimentService = inject(ExperimentService)
+  timeService: TimeService = inject(TimeService);
+  loginService: LoginService = inject(LoginService);
   offset = 0;
+  loading: boolean = false;
+  execution: {
+    [key: string]: any
+  } = {
+    'experimentTestExecutionId': null,
+    'numberClicks': 0,
+    'finishedExecutionAt': null,
+    'numberFormValidations': 0,
+    "executionTime": 0
+  };
 
   instructions = ["Geben sie für den Zielort ein: Madrid", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
     "Geben Sie Ihre Kontaktdaten an", "Geben Sie für die Strasse und Hausnummer ein: Engestrasse",
@@ -199,19 +216,13 @@ export class FeedbackPartTwoComponent implements OnInit {
       this.currentInstructionStep++;
       if (this.form.valid) {
         this.finishExperiment();
-
-        const feedbackExperimentExecution = {
-          finishedExecutionAt: new Date()
-
-        }
-
       }
+      this.execution["numberFormValidartions"] = this.execution["numberFormValidations"] + 1;
     }
-
   }
 
-
   ngOnInit(): void {
+    this.timeService.startTimer();
     const urlSegments = this.router.url.split("/");
     const index = urlSegments.indexOf("feedback") + 1;
     const experimentTestId = Number(urlSegments[index]);
@@ -222,7 +233,27 @@ export class FeedbackPartTwoComponent implements OnInit {
   }
 
   private finishExperiment() {
+    this.execution["executionTime"] = this.timeService.getCurrentTime();
+    this.execution["finishedExecutionAt"] = new Date();
+    this.timeService.stopTimer();
+    const userId = this.loginService.currentUser()?.id;
+    if (userId){
+      this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
+      this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
+        this.execution["experimentTestExecutionId"] = exec.id;
+        this.loading = true;
+        this.experimentService.saveFormFeedbackExperiment(this.execution).subscribe()
+        setTimeout(() => {
+          this.loading = false;
+          this.router.navigateByUrl("tests/"+this.experimentTest.experiment?.id);
+        }, 2000)
+      });
+    }
 
+  }
+
+  increaseNumberClicks() {
+    this.execution["numberClicks"] = this.execution["numberClicks"] + 1;
   }
 
   clearErrors() {
@@ -268,6 +299,7 @@ export class FeedbackPartTwoComponent implements OnInit {
     });
     this.clearErrors();
     if (increaseFormStep) {
+      this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
       this.formStep++;
       if (this.formStep == 2){
         this.currentInstructionStep = 6

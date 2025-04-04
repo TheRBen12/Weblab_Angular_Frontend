@@ -12,6 +12,7 @@ import {LoginService} from '../../../services/login.service';
 import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {TimeService} from '../../../services/time.service';
 
 @Component({
   selector: 'app-error-correction',
@@ -33,6 +34,7 @@ export class ErrorCorrectionComponent implements OnInit {
   experimentService = inject(ExperimentService);
   emailService = inject(EmailService);
   userService: LoginService = inject(LoginService);
+  timeService: TimeService = inject(TimeService);
   emailToDelete: number = 0;
   instructions: string[] = [];
   currentInstructionStep = 0;
@@ -50,13 +52,15 @@ export class ErrorCorrectionComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.timeService.startTimer();
     this.execution["numberClicks"] = 0;
     this.execution["failedClicks"] = 0;
     this.execution["clickedOnDeletedItems"] = false;
     this.emailService.getUndoEventSubscription().subscribe((emailIndex) => {
       if (emailIndex) {
-
+        this.execution["timeToClickUndo"] = this.timeService.getCurrentTime();
         this.execution['clickedOnUndo'] = true;
+        this.timeService.stopTimer();
       }
     })
     this.emailService.getDeletedMailSubscripition().subscribe((data) => {

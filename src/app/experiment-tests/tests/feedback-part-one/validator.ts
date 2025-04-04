@@ -6,8 +6,16 @@ export const dateOrderValidator: ValidatorFn = (group: AbstractControl): Validat
 
   if (!arrival || !departure) return null;
 
+  const now = new Date();
   const arrivalDate = new Date(arrival);
   const departureDate = new Date(departure);
 
-  return arrivalDate < departureDate ? null : { dateOrderInvalid: true };
+  if (arrivalDate > departureDate){
+    return { dateOrderInvalid: true };
+  }
+  if (arrivalDate < now){
+    return { arrivalDateOrderInvalid: true };
+  }
+  return null;
+
 };

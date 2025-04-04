@@ -10,7 +10,6 @@ export class RouterService {
   productCategoryLinks = routerLinks
   private lastKnownRoute: string = '../'; // Standard-Fallback
 
-
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -31,7 +30,6 @@ export class RouterService {
 
   }
 
-
   buildValueKeyPairForCategoryLinks(productCategories: ProductType[]) {
     const links = productCategories.reduce((acc, category) => {
       const slug = category.name
@@ -50,7 +48,6 @@ export class RouterService {
     return category ? category : "Home";
   }
 
-
   rebuildParentRoute(route: string, categories: ProductType[]){
     const currentType = categories.find((category) => category.name == route)
     const parentCategory = currentType?.parentType?.name ?? "Home";
@@ -59,6 +56,16 @@ export class RouterService {
     return {parentCategory: parentCategory, parentRoute: parentRoute}
   }
 
-
-
+  rebuildCurrentNavigationRoute(url: string) {
+    if (url == "/settings"){
+      return "Einstellungen";
+    }else if (url == "/help"){
+      return "Hilfe";
+    }else if (url=="/profile"){
+      return "Profil";
+    }
+    else{
+      return "Experimente";
+    }
+  }
 }
