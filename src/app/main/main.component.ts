@@ -45,7 +45,6 @@ export class MainComponent implements OnInit {
     effect(() => {
       const userId = this.loginService.currentUser()?.id;
       if (userId) {
-        debugger;
         this.loginService.getUserBehaviour(userId).subscribe((userBehaviour) => {
           this.userBehaviour = userBehaviour;
         })

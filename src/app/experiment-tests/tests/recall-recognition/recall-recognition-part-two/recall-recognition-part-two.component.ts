@@ -73,6 +73,8 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   private failedClicks: number = 0;
   private numberClicks: number = 0;
   private timeToClickSearchBar: number = 0;
+  private timeToClickFirstCategoryLink: number = 0;
+
 
 
 

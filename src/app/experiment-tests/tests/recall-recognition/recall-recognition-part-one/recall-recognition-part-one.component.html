@@ -1,9 +1,6 @@
 <div class="d-flex flex-row">
   <div class="col-2">
     <app-experiment-test-instruction [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"></app-experiment-test-instruction>
-    <div class="d-flex justify-content-center align-items-center">
-      <button (click)="cancelExperiment()"  class="btn btn-danger btn-lg">Versuch beenden</button>
-    </div>
   </div>
 
   <div (click)="increaseClicks()" style="width: 100%">
@@ -49,8 +46,8 @@
           <router-outlet></router-outlet>
         </div>
         <div class="col-sm-3 ">
-          <div class="container-md">
-            <app-basket [isHidden] = basketIsHidden (checkoutEventEmitter)="finishExperiment($event)"  [basket] = basket></app-basket>
+          <div *ngIf="!basketIsHidden" class="container-md">
+            <app-basket (hiddenEventEmitter)="basketIsHidden=!basketIsHidden" (checkoutEventEmitter)="finishExperiment($event)"  [basket] = basket></app-basket>
           </div>
         </div>
       </div>
@@ -60,7 +57,7 @@
 
 <mat-card *ngIf="loading" class="progress-bar-circle">
   <mat-card-content>
-    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
+    <h3 class="progress-title fw-bold m-auto">Vielen Dank. Ihre Daten werden gespeichert</h3>
     <mat-progress-spinner
       class="example-margin"
       [mode]="'indeterminate'"

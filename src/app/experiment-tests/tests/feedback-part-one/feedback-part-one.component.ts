@@ -61,6 +61,7 @@ export class FeedbackPartOneComponent implements OnInit{
     'numberFormValidations': 0,
     "executionTime": 0
   };
+  private experimentFinished: boolean = false;
 
   constructor() {
     this.instructions = ["Geben sie für das Reiseziel ein: Berlin", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
@@ -204,6 +205,14 @@ export class FeedbackPartOneComponent implements OnInit{
 
   }
 
+  canDeactivate(){
+    if (!this.experimentFinished){
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren." )
+    }else{
+      return true;
+    }
+  }
+
 
   submitForm() {
     Object.keys(this.form.controls).forEach(field => {
@@ -233,6 +242,7 @@ export class FeedbackPartOneComponent implements OnInit{
     this.timeService.stopTimer();
     const userId = this.loginService.currentUser()?.id;
     if (userId){
+      this.experimentFinished = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;

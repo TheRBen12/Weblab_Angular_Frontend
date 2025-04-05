@@ -86,6 +86,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0) {
+        this.basketIsHidden = false;
         this.currentInstructionStep = this.instructions.length - 1;
       } else {
         this.currentInstructionStep = this.currentInstructionStep <= 0 ? 0 : this.currentInstructionStep - 1;
@@ -101,6 +102,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
     });
     this.currentRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
     if (this.currentRoute != "Home") {
+      this.failedClicks++;
       const parentRoute = localStorage.getItem("parentRoute") ?? "";
       this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
         this.currentType = categories.find(type => type.name == this.currentRoute);

@@ -45,6 +45,7 @@ import {
 } from './experiment-tests/tests/mental-model-right-side-navigation/mental-model-right-side-navigation.component';
 import {FeedbackPartTwoComponent} from './experiment-tests/tests/feedback-part-two/feedback-part-two.component';
 import {CreatedUserShopComponent} from './created-user-shop/created-user-shop.component';
+import {experimentRouteGuard} from './guards/experiment-route.guard';
 
 export const routes: Routes = [
   {
@@ -58,10 +59,10 @@ export const routes: Routes = [
       },
       {path: 'tests/detail/:testId', component: ExperimentTestDetailComponent},
       {
-        path: 'test/execute', component: ExperimentTestExecutionComponent, children: [
+        path: 'test/execute', component: ExperimentTestExecutionComponent, canDeactivate:[experimentRouteGuard], children: [
 
           {
-            path: 'recall-recognition/1', component: RecallRecognitionPartOneComponent, children: [
+            path: 'recall-recognition/1', component: RecallRecognitionPartOneComponent, canDeactivate:[experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)

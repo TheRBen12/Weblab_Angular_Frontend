@@ -13,6 +13,7 @@ import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {TimeService} from '../../../services/time.service';
+import {config} from 'rxjs';
 
 @Component({
   selector: 'app-error-correction',
@@ -46,6 +47,7 @@ export class ErrorCorrectionComponent implements OnInit {
   private experimentId!: number;
   private firstClick: string|null = null;
   private deletedPos: number = -2;
+  private experimentFinished: boolean = false;
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -83,6 +85,13 @@ export class ErrorCorrectionComponent implements OnInit {
 
     this.fetchExperimentTest(this.experimentId);
 
+  }
+  canDeactivate(){
+    if (!this.experimentFinished){
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren." )
+    }else{
+      return true;
+    }
   }
 
   private fetchExperimentTest(experimentId: number) {

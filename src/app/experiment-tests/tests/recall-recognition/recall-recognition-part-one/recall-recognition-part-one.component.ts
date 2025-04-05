@@ -31,6 +31,7 @@ import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {NgIf} from '@angular/common';
 import {ExperimentTest} from '../../../../models/experiment-test';
+import {TimeService} from '../../../../services/time.service';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -60,7 +61,8 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   router = inject(Router);
   userService: LoginService = inject(LoginService);
   productService = inject(ProductService);
-  productCategoryRouterLinksService = inject(RouterService);
+  routerService = inject(RouterService);
+  timeService: TimeService = inject(TimeService);
   basket: any[] = [];
   specifications: any[] = [];
   parentCategory: string | null = null;
@@ -80,6 +82,8 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   private numberClicks: number = 0;
   loading: boolean = false;
   private clickedOnSearchBar: boolean = false;
+  private experimentFinished: boolean = false;
+  timeToClickFirstCategoryLink: number = 0;
 
   constructor(private cdRef: ChangeDetectorRef, private toastrService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
@@ -89,18 +93,23 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
       "Fügen Sie das Notebook dem Warenkorb hinzu", "Gehen Sie zur Kasse"];
   }
 
+  canDeactivate(){
+    if (!this.experimentFinished){
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren." )
+    }else{
+      return true;
+    }
+  }
   ngOnInit(): void {
+    this.timeService.startTimer();
     this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
     this.fetchExperimentTest(this.experimentTestId);
 
-    const id = this.userService.currentUser()?.id
-    if (id) {
-      this.fetchExecutionInProcess(id, this.experimentTestId);
-    }
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0) {
+        this.basketIsHidden=false;
         this.currentInstructionStep = this.instructions.length - 1;
       } else {
         this.currentInstructionStep = this.currentInstructionStep <= 0 ? 0 : this.currentInstructionStep - 1;
@@ -116,35 +125,31 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     });
 
 
-    let oldRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
-
+    let oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
     this.rebuildRoute(oldRoute);
-    let newRoute;
-
 
     let isPopState = false;
     this.router.events
       .pipe(filter(event => (event instanceof NavigationStart && event.navigationTrigger == 'popstate')))
       .subscribe((event) => {
         isPopState = true;
-        oldRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
+        oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+      });
+
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationStart)))
+      .subscribe((event) => {
+        oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
       });
 
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
-
-        newRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
-        if (isPopState && (this.currentType?.parentType?.name == newRoute || newRoute == "Home")) {
-          this.backWardNavigation(oldRoute);
-        } else {
-          if (isPopState) {
-            this.forwardNavigation(newRoute);
-          }
-        }
+        this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+        this.updateInstructions(this.currentRoute);
+        this.buildParentRoute();
+       this.fetchProductTypes(this.currentRoute);
       });
-
-    isPopState = false;
 
     this.fetchProductTypes(this.currentRoute);
     const clickedRoutes = localStorage.getItem('clickedRoutes')
@@ -157,38 +162,16 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  backWardNavigation(oldRoute: string) {
-    if (oldRoute != "Home") {
-      const parentRoute = localStorage.getItem("parentRoute") ?? "";
-      this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
-        this.productCategories = categories;
-        this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
-        this.currentType = categories.find(type => type.name == oldRoute)?.parentType;
-        this.parentCategory = this.setParentCategory();
-        this.currentRoute = this.currentType?.name ?? 'Home';
-        this.parentRoute = this.routerLinks[this.parentCategory]
-        localStorage.setItem("parentRoute", this.parentCategory);
-      });
-    }
+  buildParentRoute() {
+    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories)
+    this.parentCategory = parentRouteData.parentCategory;
+    this.parentRoute = parentRouteData.parentRoute;
   }
 
-  forwardNavigation(newRoute: string) {
-    this.currentType = this.productCategories.find(type => type.name == newRoute);
-    this.parentCategory = this.setParentCategory();
-    this.currentRoute = this.currentType?.name ?? 'Home';
-    this.parentRoute = this.routerLinks[this.parentCategory]
-    localStorage.setItem("parentRoute", this.parentCategory);
-    this.fetchProductTypes(this.currentRoute);
-  }
-
-  setParentCategory(){
-    return this.currentType?.parentType ? this.currentType.parentType.name : "Home";
-
-  }
 
   rebuildRoute(oldRoute: string,) {
     if (oldRoute != "Home") {
+      this.failedClicks++;
       const parentRoute = localStorage.getItem('parentRoute') ?? "Home";
       this.productService.fetchSubCategoriesObjects(parentRoute).subscribe((categories) => {
         this.productCategories = categories;
@@ -197,6 +180,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
         this.currentRoute = this.currentType?.name ?? 'Home';
         this.fetchProductTypes(this.currentRoute);
         this.parentRoute = this.routerLinks[this.parentCategory]
+        this.updateInstructions(this.currentRoute);
       });
     }
   }
@@ -206,6 +190,11 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   setCurrentRoute($event: string) {
+    if (Object.values(this.clickedRoutes).length == 0){
+      this.timeToClickFirstCategoryLink = this.timeService.getCurrentTime();
+      this.timeService.stopTimer();
+      debugger;
+    }
     if (this.targetRoutes.indexOf($event) == -1) {
       this.failedClicks++;
     }
@@ -244,7 +233,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   fetchProductTypes(currentRoute: string) {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
-      this.categoryLinks = this.productCategoryRouterLinksService.buildValueKeyPairForCategoryLinks(this.productCategories);
+      this.categoryLinks = this.routerService.buildValueKeyPairForCategoryLinks(this.productCategories);
     });
   }
 
@@ -258,6 +247,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.experimentFinished = true;
       this.loading = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId);
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
@@ -272,6 +262,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
           experimentTestExecutionId: this.currentExecution?.id,
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
+          timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -294,10 +285,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
 
   }
 
-  cancelExperiment() {
-
-  }
-
   increaseClicks() {
     this.numberClicks++;
     localStorage.setItem('numberClicks', String(this.numberClicks));
@@ -306,7 +293,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   private fetchExperimentTest(experimentTestId: number) {
     this.experimentService.getExperimentTest(experimentTestId).subscribe((test) => {
       this.experimentTest = test;
-    })
-
+    });
   }
 }
