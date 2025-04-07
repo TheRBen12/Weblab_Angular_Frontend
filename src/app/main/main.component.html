@@ -57,7 +57,7 @@
 </div>
 
 
-<button [ngClass]="{'top-left': navigationSetting?.sideNavigationSearchbarBottom}" (click)="openWelcomeHelpModal('Informationen', false)" mat-fab class="fab">
+<button *ngIf="showHintButton" [ngClass]="{'top-left': navigationSetting?.sideNavigationSearchbarBottom}" (click)="openWelcomeHelpModal('Informationen', false)" mat-fab class="fab">
   <mat-icon>info</mat-icon>
 </button>
 

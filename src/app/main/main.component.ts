@@ -2,7 +2,7 @@ import {Component, effect, inject, OnInit} from '@angular/core';
 import {WelcomeHelpModalComponent} from '../welcome-help-modal/welcome-help-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NavigationComponent} from '../navigation/navigation/navigation.component';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
 import {LoginService} from '../services/login.service';
@@ -13,6 +13,7 @@ import {NavigationSetting} from '../models/navigation-setting';
 import {NgClass, NgIf} from '@angular/common';
 import {SideNavigationComponent} from '../side-navigation/side-navigation.component';
 import {MegaDropDownNavigationComponent} from '../mega-drop-down-navigation/mega-drop-down-navigation.component';
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -40,6 +41,7 @@ export class MainComponent implements OnInit {
   settingService: SettingService = inject(SettingService);
   protected navigationSetting?: NavigationSetting;
   private numberNavigationClicks: number = 0;
+  protected showHintButton: boolean = true;
 
   constructor(private dialog: MatDialog) {
 
@@ -62,6 +64,15 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+        if (this.router.url.includes("test/execute/")){
+          this.showHintButton = false;
+        }
+      });
+
     localStorage.setItem("numberNavigationClicks", "0");
 
     const user = this.loginService.currentUser();

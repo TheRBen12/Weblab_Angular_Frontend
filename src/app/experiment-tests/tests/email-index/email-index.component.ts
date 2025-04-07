@@ -95,7 +95,7 @@ export class EmailIndexComponent implements OnInit {
       this.openRandomSnackbar()
       this.disableMail(deletedMail);
     } else {
-      this.openSnackBar(6000, "Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
+      this.openSnackBar(7000, "Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
     }
 
   }
@@ -103,6 +103,7 @@ export class EmailIndexComponent implements OnInit {
   fetchDeletedEmails() {
     this.emailService.getDeletedEmails().subscribe((deletedEmail) => {
       this.fetchedMails = deletedEmail;
+      this.fetchedMails = this.fetchedMails.reverse();
     });
   }
 
@@ -183,6 +184,5 @@ export class EmailIndexComponent implements OnInit {
   }
   disable(email: Email){
     return this.emailsToDisable.indexOf(email) != -1;
-
   }
 }

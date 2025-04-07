@@ -50,7 +50,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   timeService: TimeService = inject(TimeService);
   experimentService: ExperimentService = inject(ExperimentService);
   loginService =inject(LoginService);
-  instructions = ["Suchen Sie das unten spezifizierte Produkt", "Legen Sie es in den Warenkorb", "Gehen Sie zur Kasse"];
+  instructions = ["Suchen Sie ein Produkt, welches die unten spezifizierten Eigenschaften aufweist.", "Legen Sie es in den Warenkorb", "Gehen Sie zur Kasse"];
   helpInstructions = ["Sie befinden sich in der falschen Produktkategorie. Finden Sie die passende Kategorie."]
   showHelpInstructions = false;
   targetRoutes = ["IT und Multimedia", "PC und Notebooks", "Notebooks"]
@@ -73,7 +73,6 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   private currentType?: ProductType;
 
   constructor(private readonly toasterService: ToastrService) {
-    this.instructions = ["Finden Sie die passende Produktkategorie des unten spezifizierten Produktes"]
   }
 
 

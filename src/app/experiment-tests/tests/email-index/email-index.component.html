@@ -13,7 +13,7 @@
 
          *ngFor="let email of fetchedMails; index as i" class="list-group-item list-group-item-action">
 
-        <app-email-list-item [deletedMailId]="deletedMailId" [coloredMark]="(coloredMark && deletedMailId==email.id || (i == fetchedMails.length-1 && coloredMark && isDeleted()))" [isDeleted]="isDeleted()"
+        <app-email-list-item [deletedMailId]="deletedMailId" [coloredMark]="(coloredMark && deletedMailId==email.id || (i == 0 && coloredMark && isDeleted()))" [isDeleted]="isDeleted()"
                              (deleteEmailEventEmitter)="deleteEmail($event, i)" [email]=email>
 
 

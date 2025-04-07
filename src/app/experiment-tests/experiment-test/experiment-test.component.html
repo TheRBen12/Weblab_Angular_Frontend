@@ -1,4 +1,4 @@
-<div [ngClass]="{'completed-test': completed}"  class="card p-3 mt-3">
+<div [ngClass]="{'completed-test': completed, 'border-blue': isProgressiveVisualization && !completed}" class="card p-3 mt-3">
   <div class="container">
     <div class="test-header d-flex flex-column">
       <div class="d-flex justify-content-between">

@@ -1,12 +1,8 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {
-  ActivatedRoute,
   NavigationEnd,
-  NavigationStart,
   Router,
-  RouterEvent,
   RouterOutlet,
-  RoutesRecognized
 } from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';

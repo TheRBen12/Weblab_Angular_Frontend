@@ -181,7 +181,7 @@ export class RestorffEffectComponent implements OnInit {
         clearInterval(intervall);
         this.finishExperiment();
       }
-    }, 3500);
+    }, 4000);
 
 
   }
@@ -212,23 +212,26 @@ export class RestorffEffectComponent implements OnInit {
   }
 
   private finishExperiment() {
-    this.execution["executionTime"] = this.timeService.getCurrentTime();
-    this.timeService.stopTimer();
-    const userId = this.loginService.currentUser()?.id;
-    this.execution["finishedExecutionAt"] = new Date();
-    this.execution["tasks"] = JSON.stringify(this.tasks);
-    this.execution["reactionTimes"] = JSON.stringify(this.reactions);
-    if (userId) {
-      this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
-        this.execution["experimentTestExecutionId"] = exec.id;
-        this.loading = true
-        this.experimentService.saveRestorffExperiment(this.execution).subscribe();
-        setTimeout(() => {
-          this.loading = false;
-          this.router.navigateByUrl("/tests/" + this.experimentTest.experiment?.id)
-        }, 2000);
-      });
-    }
+    setTimeout(() => {
+      this.execution["executionTime"] = this.timeService.getCurrentTime();
+      this.timeService.stopTimer();
+      const userId = this.loginService.currentUser()?.id;
+      this.execution["finishedExecutionAt"] = new Date();
+      this.execution["tasks"] = JSON.stringify(this.tasks);
+      this.execution["reactionTimes"] = JSON.stringify(this.reactions);
+      if (userId) {
+        this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
+          this.execution["experimentTestExecutionId"] = exec.id;
+          this.loading = true
+          this.experimentService.saveRestorffExperiment(this.execution).subscribe();
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigateByUrl("/tests/" + this.experimentTest.experiment?.id)
+          }, 4000);
+        });
+      }
+    }, 2000);
+
   }
 
   increaseNumberClicks() {
@@ -237,5 +240,21 @@ export class RestorffEffectComponent implements OnInit {
 
   increaseFailedClicks() {
     this.execution["numberFailedClicks"] + 1;
+  }
+
+  send(email: Email, index: number,) {
+    if (this.currentEmailIndex == 3 || this.currentEmailIndex==5){
+      this.deleteEmail(email, index);
+    }else{
+      this.increaseFailedClicks();
+    }
+  }
+
+  checkIfCanDelete($event: Email, i: number) {
+    if (this.currentEmailIndex != 3 && this.currentEmailIndex != 5 ){
+      this.deleteEmail($event, i);
+    }else{
+      this.increaseFailedClicks();
+    }
   }
 }

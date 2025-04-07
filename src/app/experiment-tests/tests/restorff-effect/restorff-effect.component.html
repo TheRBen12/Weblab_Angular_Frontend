@@ -16,14 +16,20 @@
 
         <a [ngClass]="{'email-with-border' : i==lastAddedEmailIndex && configuration['coloredEmailBorder'] == true && mails.length > 3}"
            *ngFor="let email of mails.slice(0, mails.length); index as i" class="list-group-item list-group-item-action">
-          <app-restorff-email-list-item (failedClickEventEmitter)="increaseFailedClicks()"  [coloredDeleteButton] = "configuration['coloredDeleteButton']" (deleteEmailEventEmitter)="deleteEmail($event, i)"
+          <app-restorff-email-list-item (sendClickEventEmitter)="send($event, i)"  [coloredSubject]="i==lastAddedEmailIndex && mails.length > 3 && configuration['coloredSubject']" (failedClickEventEmitter)="increaseFailedClicks()"  [coloredDeleteButton] = "configuration['coloredDeleteButton']" (deleteEmailEventEmitter)="checkIfCanDelete($event, i)"
                                         [email]=email></app-restorff-email-list-item>
         </a>
       </ul>
     </div>
+    <div class="col mt-3">
+      <p *ngIf="currentEmailIndex == 2 || currentEmailIndex==4; else standard" class="fw-bold">Senden Sie die nächste Email, welche hinzugefügt wird.</p>
+      <ng-template #standard>
+        <p class="fw-bold">Löschen Sie die nächste E-Mail, welche hinzugefügt wird.</p>
+      </ng-template>
 
+
+    </div>
   </div>
-
 </div>
 <mat-card *ngIf="loading" class="progress-bar-circle">
   <mat-card-content>

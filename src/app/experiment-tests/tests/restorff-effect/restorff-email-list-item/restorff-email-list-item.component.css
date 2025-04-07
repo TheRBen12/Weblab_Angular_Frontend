@@ -21,3 +21,14 @@ span{
 .email-text{
   color: #8F8E8E;;
 }
+
+.colored-subject{
+  color: #189086;
+}
+
+.blue-btn{
+background-color:  #3b71ca
+}
+mat-icon{
+  color: white;
+}

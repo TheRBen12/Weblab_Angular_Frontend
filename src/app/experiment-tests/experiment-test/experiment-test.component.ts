@@ -41,6 +41,7 @@ export class ExperimentTestComponent implements OnChanges, OnInit {
   @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;
   @Input() finishedExecutions: { [key: number]: boolean } = {};
   @Input() state: string = 'Freigeschaltet';
+  @Input() isProgressiveVisualization: boolean = false;
 
 
   ngOnChanges(changes: SimpleChanges): void {

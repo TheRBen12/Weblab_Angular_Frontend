@@ -1,6 +1,6 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {switchMap} from 'rxjs';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
+import {filter, switchMap} from 'rxjs';
 import {ExperimentTest} from '../../models/experiment-test';
 import {ExperimentService} from '../../services/experiment.service';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
@@ -34,6 +34,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   filterService = inject(FilterService);
   userService = inject(LoginService);
   settingService: SettingService = inject(SettingService);
+  router: Router = inject(Router);
   experimentId: number = 0;
   experimentTests: ExperimentTest[] = [];
   filteredExperimentTests: ExperimentTest[] = [];
@@ -42,12 +43,25 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   finishedExecutions: ExperimentTestExecution[] = [];
   testCompletedKeyValues: { [key: number]: boolean } = {};
   protected navigationConfig: NavigationSetting|null = null;
-  router: Router = inject(Router);
   countDownToStartNextTest: number = 3;
   setting?: UserSetting
+  interval: number = 0;
+  protected numberTests: number = 0;
 
 
   ngOnInit() {
+
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+        if (this.router.url == "/"){
+          clearInterval(this.interval);
+          this.countDownToStartNextTest = 3;
+        }
+      });
+
+
+
     localStorage.setItem('numberNavigationClicks', "0");
     localStorage.removeItem("cart");
     this.route.paramMap.pipe(
@@ -58,6 +72,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
       })
     ).subscribe(tests => {
       this.experimentTests = tests;
+      this.numberTests = tests.length;
       this.experimentTests = this.sortExperimentTestsByPosition(this.experimentTests)
       this.filteredExperimentTests = this.experimentTests;
       const userId = this.userService.currentUser()?.id
@@ -111,12 +126,12 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
       if (setting.autoStartNextExperiment){
         const nextExperiment: ExperimentTest|null = this.findNextExperiment();
         if (nextExperiment){
-          const interval = setInterval(() => {
+          this.interval = setInterval(() => {
             this.countDownToStartNextTest--;
             if (this.countDownToStartNextTest < 1){
               this.router.navigateByUrl("/tests/detail/"+nextExperiment?.id);
               this.countDownToStartNextTest = 3;
-              clearInterval(interval);
+              clearInterval(this.interval);
             }
           }, 1000);
         }

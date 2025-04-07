@@ -19,3 +19,8 @@ li{
 p{
   font-size: 18px;
 }
+
+.border-blue{
+  border: #297BE7 solid 2px;
+}
+

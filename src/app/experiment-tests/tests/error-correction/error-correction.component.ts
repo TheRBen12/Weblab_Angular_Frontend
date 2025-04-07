@@ -54,19 +54,18 @@ export class ErrorCorrectionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.timeService.startTimer();
     this.execution["numberClicks"] = 0;
     this.execution["failedClicks"] = 0;
     this.execution["clickedOnDeletedItems"] = false;
     this.emailService.getUndoEventSubscription().subscribe((emailIndex) => {
       if (emailIndex) {
-        this.execution["timeToClickUndo"] = this.timeService.getCurrentTime();
+        this.execution["timeToClickOnUndo"] = this.timeService.getCurrentTime();
         this.execution['clickedOnUndo'] = true;
-        this.timeService.stopTimer();
       }
     })
     this.emailService.getDeletedMailSubscripition().subscribe((data) => {
       if (data) {
+        this.timeService.startTimer();
         this.deletedMail = data.mail??null;
         this.deletedPos = data.position;
         this.mailWasDeleted = true;
@@ -74,7 +73,7 @@ export class ErrorCorrectionComponent implements OnInit {
       }
     });
 
-    this.emailToDelete = Math.floor(Math.random() * 10) + 1;
+    this.emailToDelete = Math.floor(Math.random() * 7) + 1;
 
     this.instructions = ["Löschen Sie die " + this.emailToDelete + ". " + "E-Mail", "Geben Sie in das Eingabefeld ein, wann die gelöschte E-Mail erhalten worden ist. " +
     "Tipp: Das Datum wann die E-Mail erhalten wurde befindet sich am rechten Rand der E-Mails"];
@@ -121,6 +120,7 @@ export class ErrorCorrectionComponent implements OnInit {
     this.execution['finishedExecutionAt'] = new Date();
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.timeService.stopTimer();
       this.experimentFinished = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentId);
       this.loading = true;
@@ -139,6 +139,7 @@ export class ErrorCorrectionComponent implements OnInit {
 
   updateClickBehaviour(value: string) {
     if (value == 'deletedItems') {
+      this.execution["timeToClickOnDeletedItems"] = this.timeService.getCurrentTime();
       this.execution["clickedOnDeletedItems"] = true;
     }
     this.increaseFailedClicks();

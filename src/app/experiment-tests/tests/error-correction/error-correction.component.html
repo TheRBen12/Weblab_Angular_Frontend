@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex flex-row">
     <div class="col-3">
       <app-experiment-test-instruction [target]="targetInstruction" [currentInstructionStep]="currentInstructionStep"
                                        [instructions]="instructions"></app-experiment-test-instruction>
@@ -8,12 +8,12 @@
       </div>
     </div>
   <div (click)="increaseNumberClicks($event)" >
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-auto">
+    <div class=" w-100">
+      <div class="d-flex flex-row ">
+        <div class="col-sm-4">
           <app-email-menu (onMenuItemSelected) = updateClickBehaviour($event) ></app-email-menu>
         </div>
-        <div class="col-8">
+        <div class="col-9">
           <router-outlet></router-outlet>
         </div>
       </div>
@@ -23,9 +23,9 @@
 
 <mat-card *ngIf="loading" class="progress-bar-circle">
   <mat-card-content>
-    <h3 class="fw-bold m-auto">Ihre Daten werden gespeichert</h3>
+    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
     <mat-progress-spinner
-      class="example-margin"
+      class="example-margin m-auto"
       [mode]="'indeterminate'"
       [value]="50"
       [color]="'accent'"
@@ -33,7 +33,6 @@
     </mat-progress-spinner>
   </mat-card-content>
 </mat-card>
-
 
 
 

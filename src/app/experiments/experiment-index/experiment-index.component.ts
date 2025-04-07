@@ -12,6 +12,7 @@ import {FilterService} from '../../services/filter.service';
 import {Router} from '@angular/router';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 import {NavigationSetting} from '../../models/navigation-setting';
+import {TimeService} from '../../services/time.service';
 
 @Component({
   selector: 'app-experiment-index',
@@ -22,6 +23,7 @@ import {NavigationSetting} from '../../models/navigation-setting';
 })
 export class ExperimentIndexComponent implements OnInit {
   title = "Experimente";
+  timeService: TimeService = inject(TimeService);
   experimentService = inject(ExperimentService);
   settingService = inject(SettingService);
   filterService = inject(FilterService);
@@ -54,6 +56,7 @@ export class ExperimentIndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.timeService.stopTimer();
     localStorage.setItem('numberNavigationClicks', "0");
     if (!localStorage.getItem('reachedSiteAt')) {
       localStorage.setItem("reachedSiteAt", String(new Date()));

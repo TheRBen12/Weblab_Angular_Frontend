@@ -6,7 +6,8 @@ import {ExperimentService} from '../services/experiment.service';
 import {switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExperimentFeedback} from '../models/experiment-feedback';
-import {FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
+import {LoginService} from '../services/login.service';
 
 @Component({
   selector: 'app-experiment-test-feedback',
@@ -20,29 +21,38 @@ import {FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
   styleUrl: './experiment-test-feedback.component.css'
 })
 export class ExperimentTestFeedbackComponent implements OnInit{
-  experimentTest?: ExperimentTest
+  experimentTest!: ExperimentTest
   experimentService: ExperimentService = inject(ExperimentService);
   route: ActivatedRoute = inject(ActivatedRoute);
+  loginService: LoginService = inject(LoginService);
   router: Router = inject(Router);
+  protected readonly String = String;
+
   feedback: ExperimentFeedback = {
     cognitiveStress: 0,
-
     consistency: 0,
     learnability: 0,
     structure: 0,
     text: '',
     mentalModel: 0,
-
+    experimentTestId: 0,
+    userId: 0,
   }
-  questions: string[] = ["Wie hoch war die kognitive Belastung, um das Experiment abzuschliessen?",
-    "Entsprach die Webseite Ihrem mentalen Modell, d,h. funktionierte die Schnittstelle so, wie Sie dies erwartet haben?",
-    "War die Funktionsweise der Schnittstelle klar und verständlich?", "War die Funktionsweise der Schnittstelle einfach erkennbar und erlernabar?",
-    "War der Aufbau und die Funktionsweise der Schnittstelle konsistent?"];
 
-  questionValues: string[] = ["1) sehr gering, 2) gering, 3) mittel, 4) hoch, 5) sehr hoch",
-    "1) sehr gering, 2) gering, 3) mittel, 4) hoch, 5) sehr hoch", "1) kaum verständlich, 2) gering verständlich, 3) einigermassen verständlich, 4) gut verständlich 5) sehr vertsändlich",
-    "1) sehr schwierig, 2) schwierig, 3) einigermassen einfach, 4) einfach, 5) sehr einfach",
-    "1) kaum konsistent, 2) gering konsistent, 3) einigermassen konsistent, 4) gute Konsistenz, 5) sehr konsistent"];
+  questions: string[] = ["Erforderte das Durchführen des Experimentes viel Mühe, Anstrengung oder Konzentration?",
+    "Entsprach die Schnittstelle Ihrem mentalen Modell, d.h. funktionierte die Schnittstelle so, wie Sie dies erwartet haben und so wie Sie dies von anderen Schnittstellen her bereits kennen?",
+    "War die Funktionsweise der Schnittstelle klar und verständlich?", "War die Funktionsweise der Schnittstelle einfach erkennbar und erlernabar?",
+    "Waren der Aufbau, Abfolgen und die Funktionsweise der Schnittstelle konsistent, d.h. befolgte die Schnittstelle Muster und wurden diese Muster über die gesamte Interaktion hinweg beigehalten?"];
+
+
+
+  clickedRoutes: { [key: string]: string } = {};
+
+
+  questionLabels: {[key: number]: string[]} = {0: ["sehr gering", "gering",  "mittel" ,"hoch", "sehr hoch"], 1: ["sehr gering", "gering",  "mittel" ,"hoch", "sehr hoch"],
+  2: ["kaum verständlich", "gering verständlich", "einigermassen verständlich", "gut verständlich", "sehr vertsändlich"],
+  3: ["sehr schwierig", "schwierig", "einigermassen einfach", "einfach", "sehr einfach"],
+  4: ["kaum konsistent", "wenig konsistent", "einigermassen konsistent", "gute Konsistenz", "sehr konsistent"]};
 
   identifier = ["cognitiveStress", "mentalModel", "understandable", "learnability", "consistency"];
 
@@ -56,14 +66,19 @@ export class ExperimentTestFeedbackComponent implements OnInit{
     })
   }
 
-  protected readonly String = String;
 
   updateFeedback(value: number, identifier: string) {
     this.feedback[identifier] = value;
   }
   submitFeedback(){
-    this.experimentService.submitFeedback(this.feedback);
-    this.router.navigateByUrl("test/"+this.experimentTest?.experiment?.id);
+   const userId =  this.loginService.currentUser()?.id;
+    if (userId){
+      this.feedback.userId = userId
+      this.feedback.experimentTestId = this.experimentTest.id;
+      this.experimentService.submitFeedback(this.feedback).subscribe();
+      this.router.navigateByUrl("test/"+this.experimentTest?.experiment?.id);
+    }
+
   }
 
   updateText(value: string) {

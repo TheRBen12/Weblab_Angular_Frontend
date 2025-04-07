@@ -20,8 +20,8 @@
     <hr>
     <div>
       <div>
-        <p class="fw-bold">{{experimentTests.length}} Versuche</p>
-        <p>{{finishedExecutions.length}} Versuche von {{experimentTests.length}} Versuchen abgeschlossen.</p>
+        <p class="fw-bold">Total {{numberTests}} Versuche ({{experimentTests.length}} Versuche angezeigt)</p>
+        <p>{{finishedExecutions.length}} Versuche von {{numberTests}} Versuchen abgeschlossen.</p>
       </div>
       <div *ngIf="setting?.autoStartNextExperiment">
         <p class="fw-bold">Das nächste Experiment wird ausgewählt in {{countDownToStartNextTest}} Sekunden</p>
@@ -29,7 +29,7 @@
       <div class="test-container">
         <div *ngIf="filteredExperimentTests " class=" flex-row row ">
           <div *ngFor="let test of filteredExperimentTests">
-            <app-experiment-test [state] = "testCompletedKeyValues[test.id] ? 'Abgeschlossen' : 'Freigeschaltet'" [completed]="testCompletedKeyValues[test.id]" [markedText]="markedText" [test]="test"></app-experiment-test>
+            <app-experiment-test [isProgressiveVisualization]="setting?.progressiveVisualizationExperimentTest??false" [state] = "testCompletedKeyValues[test.id] ? 'Abgeschlossen' : 'Freigeschaltet'" [completed]="testCompletedKeyValues[test.id]" [markedText]="markedText" [test]="test"></app-experiment-test>
           </div>
         </div>
       </div>
@@ -38,7 +38,6 @@
         <p>Ihre Suche ergab leider keine Treffer</p>
       </div>
     </div>
-    <button routerLink="/" class="mt-3 mb-3 btn btn-secondary btn-lg">Zurück</button>
   </div>
 </div>
 

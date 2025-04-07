@@ -6,5 +6,7 @@ export interface ExperimentFeedback {
   structure: number;
   learnability: number;
   text: string;
+  userId: number;
+  experimentTestId: number;
 
 }
