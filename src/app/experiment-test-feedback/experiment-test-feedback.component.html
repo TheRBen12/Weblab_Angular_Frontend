@@ -1,1 +1,25 @@
-<p>experiment-test-feedback works!</p>
+<div class="container mt-3">
+  <h1>Schlussfeedback</h1>
+  <h5>Bitte beantowrten Sie die folgenden Fragen</h5>
+  <div class="form-container">
+    <form class="mt-3">
+      <div *ngFor="let question of questions; index as i" class="mb-3 ">
+        <p >
+          <span class="fw-bold">{{ i+1 }}. {{ question }}</span> <span> {{ questionValues[i] }}</span>
+        </p>
+
+        <app-radio-button [identifier]="identifier[i]" (selectionEventEmitter)="updateFeedback($event.value, $event.identifier)" *ngFor="let j of [1,2,3,4,5]" [id]="'radio_'+identifier[i]+'_'+j" [label]="String(j)"
+                          [value]="j"></app-radio-button>
+      </div>
+      <div class="input-group">
+        <div class="mb-3">
+            <label for="textArea" class="fw-bold form-label">Gibt es Funktionalitäten oder Schaltflächen, welche die Schnittstelle
+            nicht zur Verfügung stellt,
+            welche Sie aber gerne in der Schnittstelle gehabt hätten?</label>
+          <textarea #text (input)="updateText(text.value)"  class="form-control" id="textArea" rows="3"></textarea>
+        </div>
+      </div>
+      <button (click)="submitFeedback()"  class="btn btn-success btn-lg">Formular absenden</button>
+    </form>
+  </div>
+</div>

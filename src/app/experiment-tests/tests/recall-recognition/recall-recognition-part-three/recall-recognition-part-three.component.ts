@@ -21,21 +21,23 @@ import {ExperimentTestExecution} from '../../../../models/experiment-test-execut
 import {ToastrService} from 'ngx-toastr';
 import {ExperimentTest} from '../../../../models/experiment-test';
 import {TimeService} from '../../../../services/time.service';
+import {MatFabButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-recall-recognition-part-three',
-  imports: [
-    AutoCompleteComponent,
-    ExperimentTestInstructionComponent,
-    MatIcon,
-    RouterOutlet,
-    SideMenuComponent,
-    BasketComponent,
-    MatCard,
-    MatCardContent,
-    MatProgressSpinner,
-    NgIf
-  ],
+    imports: [
+        AutoCompleteComponent,
+        ExperimentTestInstructionComponent,
+        MatIcon,
+        RouterOutlet,
+        SideMenuComponent,
+        BasketComponent,
+        MatCard,
+        MatCardContent,
+        MatProgressSpinner,
+        NgIf,
+        MatFabButton
+    ],
   templateUrl: './recall-recognition-part-three.component.html',
   standalone: true,
   styleUrl: './recall-recognition-part-three.component.css'
@@ -64,14 +66,23 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   numberClicks: number = 0;
   clickedOnSearchBar: boolean = false;
   numberUsedSearchBar: number = 0;
-  targetInstruction: string = "";
   experimentTest?: ExperimentTest
   private timeToClickSearchBar?: number;
+  experimentFinished: boolean = false;
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
-    this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden."];
+    this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden " +
+    "(Tastaturen haben den Typ Keypad)."];
 
   }
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
+  }
+
 
   filterProducts(text: string) {
     this.filterService.dispatchFilterText(text);
@@ -113,6 +124,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.experimentFinished = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId);
       this.loading = true;
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {
@@ -165,6 +177,9 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
   increaseNumberUsedSearchBar() {
     this.numberUsedSearchBar++;
+    if (this.numberUsedSearchBar >= 1){
+      this.failedClicks++;
+    }
   }
 
   private fetchExperimentTest(experimentTestId: number) {
@@ -175,7 +190,11 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   }
 
   updateTimeToClickSearchBar() {
-    this.timeService.stopTimer();
     this.timeToClickSearchBar = this.timeService.getCurrentTime();
+    this.timeService.stopTimer();
+  }
+
+  toggleBasket() {
+    this.basketIsHidden = !this.basketIsHidden;
   }
 }

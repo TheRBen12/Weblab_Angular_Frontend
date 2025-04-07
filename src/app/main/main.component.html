@@ -36,20 +36,19 @@
       <div class="main-header d-flex justify-content-end">
         <div class="d-flex justify-content-end align-items-center gap-3 w-100 me-3">
           <div class="p-3 right-side-header-item fw-bold">
-            <a (click)="logout()" class="ms-2">Abmelden</a>
+            <a routerLink="/login" (click)="logout()" class="nav-link ms-2">Abmelden</a>
           </div>
           <div class="p-3 right-side-header-item fw-bold ">
-            <a class="">{{loginService.currentUser()?.email}}</a>
+            <a routerLink="/profile" class="">{{loginService.currentUser()?.email}}</a>
           </div>
         </div>
       </div>
-        <div class=" w-100 scrollable-list">
+        <div class="w-100 scrollable-list">
           <router-outlet></router-outlet>
         </div>
     </div>
   </div>
 </div>
-
 
 
 <div (click)="increaseNumberNavigationClicks()"  *ngIf="navigationSetting?.megaDropDown">
@@ -61,3 +60,4 @@
 <button [ngClass]="{'top-left': navigationSetting?.sideNavigationSearchbarBottom}" (click)="openWelcomeHelpModal('Informationen', false)" mat-fab class="fab">
   <mat-icon>info</mat-icon>
 </button>
+

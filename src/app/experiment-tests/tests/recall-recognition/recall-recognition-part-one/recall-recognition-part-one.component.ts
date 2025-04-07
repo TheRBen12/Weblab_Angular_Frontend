@@ -29,7 +29,7 @@ import {ExperimentTestExecution} from '../../../../models/experiment-test-execut
 import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {ExperimentTest} from '../../../../models/experiment-test';
 import {TimeService} from '../../../../services/time.service';
 
@@ -47,6 +47,7 @@ import {TimeService} from '../../../../services/time.service';
     MatCardContent,
     MatProgressSpinner,
     NgIf,
+    NgForOf,
   ],
   templateUrl: './recall-recognition-part-one.component.html',
   standalone: true,
@@ -84,6 +85,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   private clickedOnSearchBar: boolean = false;
   private experimentFinished: boolean = false;
   timeToClickFirstCategoryLink: number = 0;
+  links: string[] = [];
 
   constructor(private cdRef: ChangeDetectorRef, private toastrService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
@@ -93,13 +95,14 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
       "Fügen Sie das Notebook dem Warenkorb hinzu", "Gehen Sie zur Kasse"];
   }
 
-  canDeactivate(){
-    if (!this.experimentFinished){
-      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren." )
-    }else{
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
       return true;
     }
   }
+
   ngOnInit(): void {
     this.timeService.startTimer();
     this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
@@ -109,7 +112,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0) {
-        this.basketIsHidden=false;
+        this.basketIsHidden = false;
         this.currentInstructionStep = this.instructions.length - 1;
       } else {
         this.currentInstructionStep = this.currentInstructionStep <= 0 ? 0 : this.currentInstructionStep - 1;
@@ -128,27 +131,20 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     let oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
     this.rebuildRoute(oldRoute);
 
-    let isPopState = false;
-    this.router.events
-      .pipe(filter(event => (event instanceof NavigationStart && event.navigationTrigger == 'popstate')))
-      .subscribe((event) => {
-        isPopState = true;
-        oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
-      });
-
-    this.router.events
-      .pipe(filter(event => (event instanceof NavigationStart)))
-      .subscribe((event) => {
-        oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
-      });
 
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
         this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
         this.updateInstructions(this.currentRoute);
+        if (this.currentType?.parentType?.name == this.currentRoute) {
+          this.currentType = this.currentType.parentType;
+        } else {
+          this.currentType = this.productCategories.find(type => type.name == this.currentRoute);
+        }
         this.buildParentRoute();
-       this.fetchProductTypes(this.currentRoute);
+        this.buildHeaderLinks();
+        this.fetchProductTypes(this.currentRoute);
       });
 
     this.fetchProductTypes(this.currentRoute);
@@ -163,11 +159,23 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   buildParentRoute() {
-    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories)
+    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories, this.currentType)
     this.parentCategory = parentRouteData.parentCategory;
     this.parentRoute = parentRouteData.parentRoute;
   }
 
+  buildHeaderLinks() {
+    if (this.links.indexOf(this.currentRoute) != -1) {
+      this.links.pop();
+    } else if (this.currentRoute == "Home") {
+      this.links = [];
+    } else {
+      if (this.links.indexOf(this.currentRoute) == -1){
+        this.links.push(this.currentRoute);
+      }
+    }
+
+  }
 
   rebuildRoute(oldRoute: string,) {
     if (oldRoute != "Home") {
@@ -190,10 +198,9 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   setCurrentRoute($event: string) {
-    if (Object.values(this.clickedRoutes).length == 0){
+    if (Object.values(this.clickedRoutes).length == 0) {
       this.timeToClickFirstCategoryLink = this.timeService.getCurrentTime();
       this.timeService.stopTimer();
-      debugger;
     }
     if (this.targetRoutes.indexOf($event) == -1) {
       this.failedClicks++;
@@ -202,12 +209,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     localStorage.setItem('clickedRoutes', JSON.stringify(this.clickedRoutes));
     this.currentRoute = $event;
     this.updateInstructions($event);
-    this.fetchProductTypes(this.currentRoute);
-    if (this.currentType?.parentType?.name == $event) {
-      this.currentType = this.currentType.parentType;
-    } else {
-      this.currentType = this.productCategories.find(type => type.name == $event);
-    }
+
     if (this.currentType?.parentType) {
       this.parentCategory = this.currentType.parentType.name;
     } else {
@@ -267,7 +269,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/tests/"+this.experimentTest.experiment?.id);
+            this.router.navigateByUrl("/tests/" + this.experimentTest.experiment?.id);
             this.toastrService.success("Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
 
@@ -281,12 +283,14 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   setClickedOnSearchBar() {
+    this.failedClicks++;
     this.clickedOnSearchBar = true;
 
   }
 
   increaseClicks() {
     this.numberClicks++;
+
     localStorage.setItem('numberClicks', String(this.numberClicks));
   }
 

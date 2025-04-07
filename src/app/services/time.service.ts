@@ -17,6 +17,8 @@ export class TimeService {
   interval: any
   time: number = 0;
   http: HttpClient = inject(HttpClient);
+  restorffTimer: any
+  restorffTimes: number = 0;
   constructor() {
 
   }
@@ -61,4 +63,17 @@ export class TimeService {
       this.time++;
     }, 1000)
   }
+
+
+  startRestorffTimer(){
+    this.restorffTimer = setInterval(() => {
+      this.restorffTimes = this.restorffTimes + 100;
+    },100)
+  }
+
+  stopRestorffTimer(){
+    clearInterval(this.restorffTimer);
+    this.restorffTimes = 0;
+  }
+
 }

@@ -6,7 +6,7 @@
   <div (click)="increaseClicks()" style="width: 100%">
     <nav class="navbar navbar-expand-lg shadow">
       <div class="container-fluid">
-        <a class="navbar-brand">WebLab Shop</a>
+        <a class="shop-title navbar-brand">WebLab Shop</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -43,6 +43,9 @@
         </div>
 
         <div class="col-sm-7 scrollable-list responsive-list-layout">
+          <div class="container" *ngIf="links.length > 0">
+            <a class="header-link">Home</a><a class="header-link" *ngFor="let link of links"> > {{link}}</a>
+          </div>
           <router-outlet></router-outlet>
         </div>
         <div class="col-sm-3 ">

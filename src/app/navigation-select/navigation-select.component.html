@@ -22,8 +22,8 @@
         <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
         <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
         <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
-
       </mat-radio-group>
+      <p class="fw-bold">Bewegen Sie die Maus auf den Eintrag "Experimente", um zu sehen, wie diese Navigationsstruktur funktioniert.</p>
       <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
     </div>
   </div>
@@ -215,7 +215,7 @@
     <mat-card-content>
       <h3 class="progress-title fw-bold">Bitte haben Sie einen Moment Geduld, ihre Schnittstelle wird eingerichtet...</h3>
       <mat-progress-spinner
-        class="example-margin"
+        class="m-auto"
         [mode]="'indeterminate'"
         [value]="50"
         [color]="'accent'"

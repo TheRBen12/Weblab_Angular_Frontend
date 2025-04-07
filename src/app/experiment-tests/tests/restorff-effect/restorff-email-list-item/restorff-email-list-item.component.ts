@@ -17,6 +17,8 @@ export class RestorffEmailListItemComponent implements OnInit{
 
   @Input() email: Email|undefined
   @Output() deleteEmailEventEmitter: EventEmitter<Email> = new EventEmitter<Email>();
+  @Output() failedClickEventEmitter: EventEmitter<any> = new EventEmitter<any>();
+
   capitalLetter = "";
   @Input() isDeleted!: boolean;
   @Input() coloredDeleteButton: boolean = false;
@@ -29,4 +31,7 @@ export class RestorffEmailListItemComponent implements OnInit{
     this.deleteEmailEventEmitter.emit(this.email);
   }
 
+  emitFailedClick() {
+    this.failedClickEventEmitter.emit();
+  }
 }

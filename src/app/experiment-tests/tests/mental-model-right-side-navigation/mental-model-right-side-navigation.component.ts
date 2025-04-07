@@ -52,7 +52,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   instructions = ["Suchen Sie das unten spezifizierte Produkt", "Legen Sie es in den Warenkorb", "Gehen Sie zur Kasse"];
   helpInstructions = ["Sie befinden sich in der falschen Produktkategorie. Finden Sie die passende Kategorie."]
   showHelpInstructions = false;
-  targetRoutes = ["IT und Multimedia", "PC und Notebooks", "Notebooks"]
+  targetRoutes = ["IT und Multimedia", "PC und Notebooks", "Notebook"];
   categoryLinks: string[] = [];
   productCategories: ProductType[] = [];
   currentRoute: string = "Home";
@@ -68,10 +68,21 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   private usedFilters: string[] = [];
   private experimentTest?: ExperimentTest;
   loading: boolean = false;
+  private currentType?: ProductType;
+  private experimentFinished: boolean = false;
 
 
   constructor(private readonly toasterService: ToastrService) {
   }
+
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
+  }
+
 
   toggleBasket() {
     this.showBasket = !this.showBasket;
@@ -95,8 +106,8 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
 
 
   ngOnInit(): void {
-    this.fetchExperimentTest();
     this.timeService.startTimer();
+    this.fetchExperimentTest();
 
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
       if (filter != "" && filter != undefined) {
@@ -104,7 +115,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
         this.usedFilters.push(filter);
       }
     })
-
+    this.execution['usedSearchBar'] = false;
     this.execution['usedFilter'] = false;
     this.execution["numberClicks"] = localStorage.getItem('numberClicks') ?? 0;
     this.execution["failedClicks"] = localStorage.getItem('failedClicks') ?? 0;
@@ -131,8 +142,6 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
       }
     });
 
-
-    this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
     if (this.currentRoute != "Home") {
       const parentRoute = localStorage.getItem('parentRoute');
       this.fetchProductCategories(parentRoute ?? "Home").subscribe((categories) => {
@@ -162,6 +171,11 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
         this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+        if (this.currentType?.parentType?.name == this.currentRoute) {
+          this.currentType = this.currentType.parentType;
+        } else {
+          this.currentType = this.productCategories.find(type => type.name == this.currentRoute);
+        }
         this.buildParentRoute();
         this.fetchProductCategories(this.currentRoute).subscribe((categories) => {
           this.productCategories = categories
@@ -171,7 +185,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   }
 
   buildParentRoute() {
-    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories)
+    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories, this.currentType)
     this.parentCategory = parentRouteData.parentCategory;
     this.parentRoute = parentRouteData.parentRoute;
   }
@@ -191,9 +205,8 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     }
     this.clickedRoutes[route] = new Date().toISOString();
     localStorage.setItem("clickedRoutes", JSON.stringify(this.clickedRoutes));
-    if (!this.firstClick) {
-      this.firstClick = route;
-      this.timeService.stopTimer();
+
+    if (Object.values(this.clickedRoutes).length == 0) {
       this.execution['timeToClickFirstCategory'] = this.timeService.getCurrentTime();
     }
     this.showHelpInstructions = this.targetRoutes.indexOf(route) == -1 && this.currentRoute != "Home";
@@ -212,14 +225,16 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     this.execution["finishedExecutionAt"] = new Date();
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest) {
+      this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
+      this.timeService.stopTimer();
+      this.experimentFinished = true;
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution['experimentTestExecutionId'] = exec.id;
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
-
           setTimeout(() => {
             this.loading = false;
             this.router.navigateByUrl("tests/" + this.experimentTest?.experiment?.id);
-            this.toasterService.success("Sie haben das Experiment erfolgreich abgeschlossen");
+            this.toasterService.success("Vielen Dank! Sie haben das Experiment erfolgreich abgeschlossen");
 
           }, 2000)
         });
@@ -244,7 +259,11 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   }
 
   updateSearchBarBehaviour() {
+    if (this.execution['clickedOnSearchBar'] == false){
+      this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
+    }
     this.execution['clickedOnSearchBar'] = true;
+
   }
 
   private fetchExperimentTest() {

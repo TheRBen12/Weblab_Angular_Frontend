@@ -46,6 +46,7 @@ import {
 import {FeedbackPartTwoComponent} from './experiment-tests/tests/feedback-part-two/feedback-part-two.component';
 import {CreatedUserShopComponent} from './created-user-shop/created-user-shop.component';
 import {experimentRouteGuard} from './guards/experiment-route.guard';
+import {ExperimentTestFeedbackComponent} from './experiment-test-feedback/experiment-test-feedback.component';
 
 export const routes: Routes = [
   {
@@ -70,7 +71,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'recall-recognition/2', component: RecallRecognitionPartTwoComponent, children: [
+            path: 'recall-recognition/2', component: RecallRecognitionPartTwoComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -78,7 +79,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'recall-recognition/3', component: RecallRecognitionPartThreeComponent, children: [
+            path: 'recall-recognition/3', component: RecallRecognitionPartThreeComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -87,7 +88,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'recall-recognition/17', component: RecallRecognitionPartFourComponent, children: [
+            path: 'recall-recognition/17', component: RecallRecognitionPartFourComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -95,7 +96,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'hicks-law/:testId', component: HicksLawComponent, children: [
+            path: 'hicks-law/:testId', component: HicksLawComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -103,7 +104,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: "error-correction/:testId", component: ErrorCorrectionComponent, children: [
+            path: "error-correction/:testId", component: ErrorCorrectionComponent, canDeactivate: [experimentRouteGuard], children: [
 
               {
                 path: '',
@@ -111,7 +112,7 @@ export const routes: Routes = [
               }]
           },
           {
-            path: 'restorff-effect/:testId', component: RestorffEffectComponent, children: [
+            path: 'restorff-effect/:testId', component: RestorffEffectComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)
@@ -119,7 +120,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'fitts-law/:testId', component: FittsLawComponent, children: [
+            path: 'fitts-law/:testId', component: FittsLawComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/email-module/email.module').then(m => m.EmailModule)
@@ -128,7 +129,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/12', component: MentalModelRightSideNavigationComponent, children: [
+            path: 'mental-model/12', component: MentalModelRightSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -137,7 +138,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/13', component: MentalModelLeftSideNavigationComponent, children: [
+            path: 'mental-model/13', component: MentalModelLeftSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -146,7 +147,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/14', component: MentalModelMegaDropdownComponent, children: [
+            path: 'mental-model/14', component: MentalModelMegaDropdownComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -155,7 +156,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/16', component: MentalModelCreateInterfaceComponent, children: [
+            path: 'mental-model/16', component: MentalModelCreateInterfaceComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -164,7 +165,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/:testId/user-shop/:userId', component: CreatedUserShopComponent, children: [
+            path: 'mental-model/:testId/user-shop/:userId', component: CreatedUserShopComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -173,15 +174,16 @@ export const routes: Routes = [
           }
 ,
           {
-            path: 'feedback/18', component: FeedbackPartOneComponent
+            path: 'feedback/18', component: FeedbackPartOneComponent, canDeactivate: [experimentRouteGuard],
           },
 
           {
-            path: 'feedback/19', component: FeedbackPartTwoComponent
+            path: 'feedback/19', component: FeedbackPartTwoComponent, canDeactivate: [experimentRouteGuard],
           },
 
         ]
-      }
+      },
+      {path: "test/:id/feedback", component: ExperimentTestFeedbackComponent}
     ]
   },
   {

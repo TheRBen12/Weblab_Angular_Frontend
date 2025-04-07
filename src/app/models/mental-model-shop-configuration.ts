@@ -15,5 +15,6 @@ export interface MentalModelShopConfiguration {
   navBarBottom: boolean;
   megaDropDown: boolean;
   userId?: number;
+  breadcrumbs: boolean;
 
 }

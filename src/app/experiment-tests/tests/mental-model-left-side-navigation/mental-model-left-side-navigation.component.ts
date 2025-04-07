@@ -70,6 +70,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   private experimentTest?: ExperimentTest;
   loading: boolean = false;
   products: any[] = [];
+  private currentType?: ProductType;
 
   constructor(private readonly toasterService: ToastrService) {
     this.instructions = ["Finden Sie die passende Produktkategorie des unten spezifizierten Produktes"]
@@ -119,7 +120,6 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     }
 
 
-
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
@@ -128,7 +128,6 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
         this.currentInstructionStep = 2;
       }
     })
-
 
     this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
     if (this.currentRoute != "Home") {
@@ -160,6 +159,11 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
         this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+        if (this.currentType?.parentType?.name == this.currentRoute) {
+          this.currentType = this.currentType.parentType;
+        } else {
+          this.currentType = this.productCategories.find(type => type.name == this.currentRoute);
+        }
         this.buildParentRoute();
         this.fetchProductCategories(this.currentRoute).subscribe((categories) => {
           this.productCategories = categories
@@ -169,7 +173,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   buildParentRoute(){
-    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories)
+    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories, this.currentType)
     this.parentCategory = parentRouteData.parentCategory;
     this.parentRoute = parentRouteData.parentRoute;
   }
@@ -244,7 +248,6 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
   updateSearchBarBehaviour() {
     this.execution['clickedOnSearchBar'] = true;
-
     this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1
     localStorage.setItem("numberUsedSearchBar", this.execution["numberUsedSearchBar"]);
     const n = this.execution["numberUsedSearchBar"];

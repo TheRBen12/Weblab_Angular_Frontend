@@ -73,10 +73,6 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   private failedClicks: number = 0;
   private numberClicks: number = 0;
   private timeToClickSearchBar: number = 0;
-  private timeToClickFirstCategoryLink: number = 0;
-
-
-
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -95,6 +91,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
       this.basket = basket;
       if (this.basket.length > 0) {
         this.currentInstructionStep = this.instructions.length - 1;
+        this.showBasket = true;
       }
     });
     this.updateMenuSubscription = this.recallRecognitionService.getSubject().subscribe((updateMenu) => {

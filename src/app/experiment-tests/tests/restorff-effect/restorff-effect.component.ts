@@ -4,12 +4,16 @@ import {EmailMenuComponent} from '../email-menu/email-menu.component';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import {ExperimentTest} from '../../../models/experiment-test';
 import {EmailService} from '../../../services/email.service';
 import {ExperimentService} from '../../../services/experiment.service';
 import {RestorffEmailListItemComponent} from './restorff-email-list-item/restorff-email-list-item.component';
+import {TimeService} from '../../../services/time.service';
+import {LoginService} from '../../../services/login.service';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 const emails: Email[] = [
   {
@@ -65,7 +69,18 @@ const emails: Email[] = [
     subject: "Neues Jobangebot",
     body: "Hallo Jack, wir haben eine spannende Stelle für dich. Interesse?",
     user: 0
+  },
+  {
+    id: 30,
+    sender: "info@bern.com",
+    receiver: "peter.schaller@example.com",
+    date: "2025-02-02T09:10:00Z",
+    subject: "Wir aktualisieren unsere Datenschutzbedingungen",
+    body: "Hallo Peter, wir aktualisieren ",
+    user: 0
   }
+
+
 ];
 
 
@@ -76,7 +91,11 @@ const emails: Email[] = [
     ExperimentTestInstructionComponent,
     NgForOf,
     RestorffEmailListItemComponent,
-    NgClass
+    NgClass,
+    MatCard,
+    MatCardContent,
+    MatProgressSpinner,
+    NgIf
   ],
   templateUrl: './restorff-effect.component.html',
   standalone: true,
@@ -84,17 +103,38 @@ const emails: Email[] = [
 })
 export class RestorffEffectComponent implements OnInit {
   mails: Email[] = [];
-  experimentTest: ExperimentTest | null = null
+  experimentTest!: ExperimentTest
   currentInstructionStep: number = 0;
   currentEmailIndex: number = 0;
   lastAddedEmailIndex: number = 0;
 
   instructions: string[] = [];
   emailService = inject(EmailService);
+  timeService: TimeService = inject(TimeService);
   experimentService = inject(ExperimentService);
+  loginService: LoginService = inject(LoginService);
   router = inject(Router);
   configuration: any = {};
   emailData: Email[] = [];
+  reactions: { [key: number]: number } = {};
+  tasks: { [key: number]: boolean } = {};
+  loading: boolean = false;
+
+
+  execution: {
+    [key: string]: any
+  } = {
+    'executionTime': 0,
+    'experimentTestExecutionId': null,
+    'numberFailedClicks': 0,
+    'numberClicks': 0,
+    'finishedExecutionAt': null,
+    'reactionTimes': "",
+    'tasks': "",
+    "numberDeletedMails": 0
+  };
+  private startTime: number = 0;
+
   constructor() {
 
   }
@@ -112,6 +152,7 @@ export class RestorffEffectComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.timeService.startTimer();
     this.emailData = emails;
     this.fetchExperimentTest();
     this.fetchEmails();
@@ -120,23 +161,29 @@ export class RestorffEffectComponent implements OnInit {
         clearInterval(intervall);
       }
       const mail = emails.at(this.currentEmailIndex);
+
       if (mail) {
         if (Math.random() < 0.5) {
           this.mails.push(mail)
+          this.startTime = performance.now();
           this.lastAddedEmailIndex = this.mails.length - 1;
 
         } else {
+          this.startTime = performance.now();
           this.mails.unshift(mail);
           this.lastAddedEmailIndex = 0;
         }
       }
+
+      this.tasks[this.currentEmailIndex] = false;
       this.currentEmailIndex++;
+      if (this.currentEmailIndex >= this.emailData.length) {
+        clearInterval(intervall);
+        this.finishExperiment();
+      }
     }, 3500);
 
-    if (this.currentEmailIndex >= this.emailData.length) {
-      clearInterval(intervall);
-      this.finishExperiment();
-    }
+
   }
 
   private fetchEmails() {
@@ -147,14 +194,48 @@ export class RestorffEffectComponent implements OnInit {
     })
   }
 
-  deleteEmail($event: Email) {
-    if (this.emailData.find((mail) => mail.id == $event.id)){
+  deleteEmail($event: Email, index: number) {
+    if (this.emailData.find((mail) => mail.id == $event.id)) {
+      const endTime = performance.now(); // Endzeit
+      // Differenz in ms
+      this.execution["numberDeletedMails"] = this.execution["numberDeletedMails"] + 1;
+      this.reactions[this.currentEmailIndex - 1] = Math.round(endTime - this.startTime)
+
+      if (this.lastAddedEmailIndex == this.currentEmailIndex-1 || this.lastAddedEmailIndex == index){
+        this.tasks[this.currentEmailIndex - 1] = true;
+      }
       this.mails = this.mails.filter(mail => mail.id != $event.id);
+    } else {
+      this.increaseFailedClicks();
     }
 
   }
 
   private finishExperiment() {
+    this.execution["executionTime"] = this.timeService.getCurrentTime();
+    this.timeService.stopTimer();
+    const userId = this.loginService.currentUser()?.id;
+    this.execution["finishedExecutionAt"] = new Date();
+    this.execution["tasks"] = JSON.stringify(this.tasks);
+    this.execution["reactionTimes"] = JSON.stringify(this.reactions);
+    if (userId) {
+      this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
+        this.execution["experimentTestExecutionId"] = exec.id;
+        this.loading = true
+        this.experimentService.saveRestorffExperiment(this.execution).subscribe();
+        setTimeout(() => {
+          this.loading = false;
+          this.router.navigateByUrl("/tests/" + this.experimentTest.experiment?.id)
+        }, 2000);
+      });
+    }
+  }
 
+  increaseNumberClicks() {
+    this.execution["numberClicks"] = this.execution["numberClicks"] + 1;
+  }
+
+  increaseFailedClicks() {
+    this.execution["numberFailedClicks"] + 1;
   }
 }

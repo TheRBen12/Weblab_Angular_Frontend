@@ -10,6 +10,8 @@ import {ErrorCorrectionExperimentExecution} from '../models/ErrorCorrectionExper
 import {MentalModelExecution} from '../models/mental-model-execution';
 import {FormFeedbackExperimentExecution} from '../models/form-feedback-experiment-execution';
 import {FittsLawExperiment} from '../models/fitts-law-experiment';
+import {RestorffExperiment} from '../models/restorff-experiment';
+import {ExperimentFeedback} from '../models/experiment-feedback';
 
 @Injectable({
   providedIn: 'root'
@@ -121,4 +123,12 @@ export class ExperimentService {
     return this.http.post<FittsLawExperiment>('https://localhost:7147/api/formAndFeedbackExperiment/form-feedback-experiment/new', execution);
   }
 
+  saveRestorffExperiment(execution: { [p: string]: any }) {
+    return this.http.post<RestorffExperiment>('https://localhost:7147/api/restorffExperiment/new', execution);
+  }
+
+  submitFeedback(feedback: ExperimentFeedback) {
+    return this.http.post<ExperimentFeedback>('https://localhost:7147/api/experiment/feedback/new', feedback);
+
+  }
 }

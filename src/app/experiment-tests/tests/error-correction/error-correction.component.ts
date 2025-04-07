@@ -121,6 +121,7 @@ export class ErrorCorrectionComponent implements OnInit {
     this.execution['finishedExecutionAt'] = new Date();
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.experimentFinished = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentId);
       this.loading = true;
       this.experimentService.getExperimentExecutionByStateAndTest(id, this.experimentId, "INPROCESS").subscribe((exec) => {
@@ -128,7 +129,7 @@ export class ErrorCorrectionComponent implements OnInit {
         this.experimentService.saveErrorCorrectionExperiment(this.execution).subscribe(() => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/")
+            this.router.navigateByUrl("/test/"+this.experimentId+"/feedback")
             this.toasterService.success("Vielen Dank! Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
         });

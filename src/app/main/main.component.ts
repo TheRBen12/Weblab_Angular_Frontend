@@ -1,8 +1,8 @@
-import {Component, effect, inject, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {WelcomeHelpModalComponent} from '../welcome-help-modal/welcome-help-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NavigationComponent} from '../navigation/navigation/navigation.component';
-import {Router, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
 import {LoginService} from '../services/login.service';
@@ -25,6 +25,7 @@ import {MegaDropDownNavigationComponent} from '../mega-drop-down-navigation/mega
     SideNavigationComponent,
     MegaDropDownNavigationComponent,
     NgClass,
+    RouterLink,
   ],
   standalone: true,
   templateUrl: './main.component.html',

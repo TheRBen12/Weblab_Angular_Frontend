@@ -33,14 +33,9 @@ export class ExperimentTestDetailComponent implements OnInit {
   userSetting!: UserSetting;
   openedTestDescAt: Date = new Date();
   timeReadingDescription: number = 0;
-  timer: any
 
   ngOnInit(): void {
-    this.timer = setInterval(() => {
-      this.timeReadingDescription++
-    }, 1000);
-
-
+    this.timeService.startTimer();
     this.openedTestDescAt = new Date();
     localStorage.removeItem("cart");
     this.route.paramMap.pipe(
@@ -92,7 +87,8 @@ export class ExperimentTestDetailComponent implements OnInit {
   }
 
   private saveExperimentExecution() {
-    clearInterval(this.timer);
+    this.timeReadingDescription = this.timeService.getCurrentTime();
+    this.timeService.stopTimer();
     const newExecution: ExperimentTestExecution = {
       timeReadingDescription: this.timeReadingDescription,
       openedDescAt: this.openedTestDescAt,

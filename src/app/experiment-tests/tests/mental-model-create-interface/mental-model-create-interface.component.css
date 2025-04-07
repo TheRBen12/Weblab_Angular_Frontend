@@ -16,6 +16,7 @@
   background-color: #fff;
   box-shadow: 0px -6px 20px rgba(0, 0, 0, 0.8); /* Starker Schatten */
   z-index: 1000;
+  position: fixed;
 }
 
 .left-side-shopping-cart{

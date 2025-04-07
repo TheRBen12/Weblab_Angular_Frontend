@@ -48,12 +48,22 @@ export class RouterService {
     return category ? category : "Home";
   }
 
-  rebuildParentRoute(route: string, categories: ProductType[]){
-    const currentType = categories.find((category) => category.name == route)
-    const parentCategory = currentType?.parentType?.name ?? "Home";
-    const parentRoute = this.productCategoryLinks[parentCategory];
-    localStorage.setItem('parentRoute', parentCategory);
+  rebuildParentRoute(route: string, categories: ProductType[], currentType?: ProductType){
+    let parentRoute = "";
+    let parentCategory = "";
+    if (currentType?.parentType){
+      parentCategory = currentType?.parentType?.name ?? "Home";
+      parentRoute = this.productCategoryLinks[parentCategory];
+      localStorage.setItem('parentRoute', parentCategory);
+
+    }else{
+      const currentType = categories.find((category) => category.name == route)
+      parentCategory = currentType?.parentType?.name ?? "Home";
+      parentRoute = this.productCategoryLinks[parentCategory];
+      localStorage.setItem('parentRoute', parentCategory);
+    }
     return {parentCategory: parentCategory, parentRoute: parentRoute}
+
   }
 
   rebuildCurrentNavigationRoute(url: string) {

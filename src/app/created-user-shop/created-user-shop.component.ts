@@ -26,6 +26,7 @@ import {ExperimentTest} from '../models/experiment-test';
 import {ExperimentService} from '../services/experiment.service';
 import {LoginService} from '../services/login.service';
 import {ToastrService} from 'ngx-toastr';
+import {routerLinks} from '../experiment-tests/tests/routes';
 
 @Component({
   animations: [
@@ -72,6 +73,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   timeService: TimeService = inject(TimeService);
   experimentService: ExperimentService = inject(ExperimentService);
   experimentTest!: ExperimentTest
+  routerLinks = routerLinks
 
   private clickedRoutes: { [key: string]: string } = {};
   firstClick: string | null = null;
@@ -94,7 +96,11 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   instructions = ["Finden Sie ein Produkt, welches die folgenden Eigenschaften aufweist."];
   helpInstructions = ["Sie suchen in der falschen Kategorie, finden Sie die korrekte Produktkategorie"];
   showHelpInstructions: boolean = false;
-
+  links: string[] = [];
+  showSubNavMenu: boolean = false;
+  parentCategoryLinks: string[] = [];
+  private currentType?: ProductType;
+  private experimentFinished: boolean = false;
   execution: {
     [key: string]: any
   } = {
@@ -111,9 +117,16 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     'firstClick': "",
     'timeToClickSearchBar': null
   };
-  showSubNavMenu: boolean = false;
-  parentCategoryLinks: string[] = [];
+
   constructor(private readonly toasterService: ToastrService) {
+  }
+
+  canDeactivate(){
+    if (!this.experimentFinished){
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren." )
+    }else{
+      return true;
+    }
   }
 
   ngOnInit(): void {
@@ -188,6 +201,12 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
         this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
+        if (this.currentType?.parentType?.name == this.currentRoute) {
+          this.currentType = this.currentType.parentType;
+        } else {
+          this.currentType = this.productCategories.find(type => type.name == this.currentRoute);
+        }
+        this.buildBreadcrumbs();
         this.buildParentRoute();
         this.fetchProductCategories(this.currentRoute).subscribe((categories) => {
           this.productCategories = categories
@@ -198,7 +217,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   }
 
   buildParentRoute() {
-    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories)
+    const parentRouteData = this.routerService.rebuildParentRoute(this.currentRoute, this.productCategories, this.currentType)
     this.parentCategory = parentRouteData.parentCategory;
     this.parentRoute = parentRouteData.parentRoute;
   }
@@ -215,13 +234,29 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
 
   }
 
+  buildBreadcrumbs() {
+    if (this.links.indexOf(this.currentRoute) != -1) {
+      this.links.pop();
+    } else if (this.currentRoute == "Home") {
+      this.links = [];
+    } else {
+      if (this.links.indexOf(this.currentRoute) == -1){
+        this.links.push(this.currentRoute);
+      }
+    }
+
+  }
+
   setCurrentRoute($event: string) {
-    this.clickedRoutes[$event] = new Date().toISOString();
     if (this.targetRoutes.indexOf($event) == -1 || this.clickedRoutes[$event] != undefined) {
       this.increaseFailedClicks();
       this.showHelpInstructions = true;
+    }else{
+      this.showHelpInstructions = false;
     }
-    this.showHelpInstructions = false;
+    this.clickedRoutes[$event] = new Date().toISOString();
+
+
     if (!this.execution["timeToClickFirstCategory"]){
       this.execution["timeToClickFirstCategory"] = this.timeService.getCurrentTime();
     }
@@ -245,6 +280,9 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   filterProducts(filterText: string) {
     this.filterService.dispatchFilterText(filterText)
     this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1;
+    if ( this.execution["numberUsedSearchBar"] > 1){
+      this.increaseFailedClicks();
+    }
   }
 
   hideSubMenu() {
@@ -257,6 +295,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
     const userId = this.loginService.currentUser()?.id;
     if (userId){
+      this.timeService.stopTimer();
+      this.experimentFinished = true;
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;
         this.loading = true;
@@ -264,7 +304,6 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             this.loading = false;
             this.router.navigateByUrl("tests/"+this.experimentTest?.experiment?.id);
-            this.timeService.stopTimer();
             this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000)
 
@@ -288,7 +327,6 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
 
   private increaseFailedClicks() {
     this.execution["failedClicks"] = this.execution["failedClicks"] + 1;
-
   }
 
   updateTimeToClickSearchBar() {
@@ -315,4 +353,6 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
       this.finishExperiment();
     }
   }
+
+
 }

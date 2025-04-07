@@ -69,6 +69,7 @@ export class ExperimentTestComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     if (this.completed){
+      this.test.state = 'Abgeschlossen';
       this.state = 'Abgeschlossen';
     }
 

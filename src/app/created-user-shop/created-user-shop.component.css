@@ -17,8 +17,11 @@
 
 }
 
-
 no-pointer-events{
+  pointer-events: all;
+}
+
+no-pointer-events:hover{
   pointer-events: none;
 }
 .progress-bar-circle{
@@ -37,3 +40,10 @@ no-pointer-events{
 .progress-title{
   color: white;
 }
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
+}
+

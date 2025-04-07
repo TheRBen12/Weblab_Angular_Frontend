@@ -173,6 +173,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.clickedRoutes[route] = new Date().toISOString();
     this.execution['clickedRoutes'] = JSON.stringify(this.clickedRoutes);
     this.saveExecutionTemporarily(this.execution);
+    this.currentRoute = route;
 
   }
 

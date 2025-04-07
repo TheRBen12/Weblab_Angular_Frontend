@@ -86,6 +86,7 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     sideMenuRight: false,
     userId: undefined,
     shoppingCartTopRight: false,
+    breadcrumbs: false,
 
   }
   loading: boolean = false;
