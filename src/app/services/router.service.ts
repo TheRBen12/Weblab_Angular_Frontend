@@ -23,6 +23,22 @@ export class RouterService {
     return this.lastKnownRoute;
   }
 
+
+  buildBreadcrumbs(links: string[], currentRoute: string) {
+    if (links.indexOf(currentRoute) != -1) {
+      const offset = links.indexOf(currentRoute);
+      links = links.slice(0, offset+1);
+    } else if (currentRoute == "Home") {
+      links = [];
+    } else {
+      if (links.indexOf(currentRoute) == -1){
+        links.push(currentRoute);
+      }
+    }
+    return links;
+
+  }
+
   getExperimentTestIdByUrl(url: string, experimentName: string){
     const urlSegments = url.split("/");
     const index = urlSegments.indexOf(experimentName);

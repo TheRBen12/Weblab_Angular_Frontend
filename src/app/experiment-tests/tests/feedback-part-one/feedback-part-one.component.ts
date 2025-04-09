@@ -40,8 +40,8 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
   standalone: true,
   styleUrl: './feedback-part-one.component.css'
 })
-export class FeedbackPartOneComponent implements OnInit{
-  instructions: string[]  = [];
+export class FeedbackPartOneComponent implements OnInit {
+  instructions: string[] = [];
   experimentTest!: ExperimentTest;
   experimentService: ExperimentService = inject(ExperimentService)
   loginService: LoginService = inject(LoginService);
@@ -52,6 +52,7 @@ export class FeedbackPartOneComponent implements OnInit{
   formStep = 0;
   splitForm: boolean = true;
   loading: boolean = false;
+  numberErrors: number = 0;
   execution: {
     [key: string]: any
   } = {
@@ -59,14 +60,15 @@ export class FeedbackPartOneComponent implements OnInit{
     'numberClicks': 0,
     'finishedExecutionAt': null,
     'numberFormValidations': 0,
-    "executionTime": 0
+    "executionTime": 0,
+    "numberErrors": 0
   };
   private experimentFinished: boolean = false;
 
   constructor() {
     this.instructions = ["Geben sie für das Reiseziel ein: Berlin", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
-    "Geben Sie Ihre Kontaktdaten an", "Geben Sie für Strasse und Hausnummer ein: Müllereckstrasse",
-    "Geben Sie Ihren Wohnort an", "Geben sie für das Land ein: CH", "Geben Sie für die PLZ ein: 30654",
+      "Geben Sie Ihre Kontaktdaten an", "Geben Sie für Strasse und Hausnummer ein: Müllereckstrasse",
+      "Geben Sie Ihren Wohnort an", "Geben sie für das Land ein: CH", "Geben Sie für die PLZ ein: 30654",
       "Korrigieren Sie all Fehleingaben, Entscheiden Sie selbst, wie Sie die EIngaben korrigieren"];
   }
 
@@ -157,7 +159,7 @@ export class FeedbackPartOneComponent implements OnInit{
         Validators.required,
       ], updateOn: "submit"
     }),
-    numberRooms: new FormControl(0 ,{
+    numberRooms: new FormControl(0, {
       validators: [
         Validators.required,
         Validators.min(1)
@@ -167,11 +169,11 @@ export class FeedbackPartOneComponent implements OnInit{
   }, {validators: [dateOrderValidator]});
 
 
-
-  get numberAdults(){
+  get numberAdults() {
     return this.form.get('numberAdults');
   }
-  get city(){
+
+  get city() {
     return this.form.get('city');
   }
 
@@ -182,6 +184,7 @@ export class FeedbackPartOneComponent implements OnInit{
   get firstName() {
     return this.form.get('firstName');
   }
+
   get location() {
     return this.form.get('location');
   }
@@ -189,6 +192,7 @@ export class FeedbackPartOneComponent implements OnInit{
   get email() {
     return this.form.get('email');
   }
+
   get plz() {
     return this.form.get('plz');
   }
@@ -196,19 +200,20 @@ export class FeedbackPartOneComponent implements OnInit{
   get street() {
     return this.form.get('street');
   }
+
   get country() {
     return this.form.get('country');
   }
 
-  get numberRooms(){
+  get numberRooms() {
     return this.form.get('numberRooms');
 
   }
 
-  canDeactivate(){
-    if (!this.experimentFinished){
-      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren." )
-    }else{
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
       return true;
     }
   }
@@ -217,13 +222,17 @@ export class FeedbackPartOneComponent implements OnInit{
   submitForm() {
     Object.keys(this.form.controls).forEach(field => {
       const control = this.form.get(field);
-      control?.markAsTouched({ onlySelf: true });
+      control?.markAsTouched({onlySelf: true});
+      if (control?.errors) {
+        this.numberErrors++;
+      }
     });
+    this.execution["numberErrors"] = this.numberErrors;
     this.currentInstructionStep++;
-    if (this.form.valid){
+    if (this.form.valid) {
       this.finishExperiment();
     }
-    this.execution["numberFormValidations"] = this.execution["numberFormValidations"] +1;
+    this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
 
   }
 
@@ -241,7 +250,7 @@ export class FeedbackPartOneComponent implements OnInit{
     this.execution["finishedExecutionAt"] = new Date();
     this.timeService.stopTimer();
     const userId = this.loginService.currentUser()?.id;
-    if (userId){
+    if (userId) {
       this.experimentFinished = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
@@ -250,7 +259,7 @@ export class FeedbackPartOneComponent implements OnInit{
         this.experimentService.saveFormFeedbackExperiment(this.execution).subscribe()
         setTimeout(() => {
           this.loading = false;
-          this.router.navigateByUrl("tests/"+this.experimentTest.experiment?.id);
+          this.router.navigateByUrl("/test/" + this.experimentTest.id + "/feedback");
         }, 2000)
       });
     }

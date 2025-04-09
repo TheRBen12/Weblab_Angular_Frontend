@@ -48,7 +48,6 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   timeService: TimeService = inject(TimeService);
   experimentService: ExperimentService = inject(ExperimentService);
   loginService = inject(LoginService);
-
   instructions = ["Suchen Sie das unten spezifizierte Produkt", "Legen Sie es in den Warenkorb", "Gehen Sie zur Kasse"];
   helpInstructions = ["Sie befinden sich in der falschen Produktkategorie. Finden Sie die passende Kategorie."]
   showHelpInstructions = false;
@@ -63,13 +62,13 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   basket: any[] = [];
   currentInstructionStep: number = 0;
   execution: { [key: string]: any } = {};
-  private firstClick: any | null = null;
-  private clickedRoutes: { [key: string]: string } = {};
-  private usedFilters: string[] = [];
-  private experimentTest?: ExperimentTest;
+  firstClick: any | null = null;
+  clickedRoutes: { [key: string]: string } = {};
+  usedFilters: string[] = [];
+  experimentTest?: ExperimentTest;
   loading: boolean = false;
-  private currentType?: ProductType;
-  private experimentFinished: boolean = false;
+  currentType?: ProductType;
+  experimentFinished: boolean = false;
 
 
   constructor(private readonly toasterService: ToastrService) {
@@ -85,6 +84,9 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
 
 
   toggleBasket() {
+    if (!this.execution["timeToClickShoppingCart"]){
+      this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
+    }
     this.showBasket = !this.showBasket;
   }
 
@@ -117,6 +119,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     })
     this.execution['usedSearchBar'] = false;
     this.execution['usedFilter'] = false;
+    this.execution['usedBreadcrumbs'] = false;
     this.execution["numberClicks"] = localStorage.getItem('numberClicks') ?? 0;
     this.execution["failedClicks"] = localStorage.getItem('failedClicks') ?? 0;
     this.execution["numberUsedSearchBar"] = Number(localStorage.getItem('numberUsedSearchBar')) ?? 0

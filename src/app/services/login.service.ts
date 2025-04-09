@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {User} from '../models/user';
 import {UserBehaviour} from '../models/user-behaviour';
 import {D} from '@angular/cdk/keycodes';
+import {TimeService} from './time.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class LoginService {
   currentUser = signal<User | null>(null);
   userBehaviourSubscription: BehaviorSubject<UserBehaviour | null> = new BehaviorSubject<UserBehaviour | null>(null);
   user$ = this.userSource.asObservable()
+  private timeService: TimeService = inject(TimeService);
 
   constructor() {
   }
@@ -52,6 +54,7 @@ export class LoginService {
   }
 
   logout() {
+    this.timeService.stopTimer();
     localStorage.clear();
     sessionStorage.clear();
     const finishedAt = new Date();

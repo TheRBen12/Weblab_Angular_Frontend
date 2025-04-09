@@ -15,6 +15,7 @@ import {MatCard, MatCardContent} from '@angular/material/card';
 import {TimeService} from '../../../services/time.service';
 import {LoginService} from '../../../services/login.service';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-feedback-part-two',
@@ -50,6 +51,7 @@ export class FeedbackPartTwoComponent implements OnInit {
   loginService: LoginService = inject(LoginService);
   offset = 0;
   loading: boolean = false;
+  numberErrors: number = 0;
   execution: {
     [key: string]: any
   } = {
@@ -57,13 +59,16 @@ export class FeedbackPartTwoComponent implements OnInit {
     'numberClicks': 0,
     'finishedExecutionAt': null,
     'numberFormValidations': 0,
-    "executionTime": 0
+    "executionTime": 0,
+    "numberErrors": 0
   };
 
   instructions = ["Geben sie für den Zielort ein: Madrid", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
     "Geben Sie Ihre Kontaktdaten an", "Geben Sie für die Strasse und Hausnummer ein: Engestrasse",
     "Geben Sie Ihren Wohnort an", "Geben sie für das Land ein: CH", "Geben Sie für die PLZ ein: 3011", "Treffen Sie eine Auswahl für die Persoen, welche mitreisen."];
 
+  constructor(private readonly toasterService: ToastrService) {
+  }
 
   form = new FormGroup({
 
@@ -164,6 +169,7 @@ export class FeedbackPartTwoComponent implements OnInit {
 
 
   }, {validators: [dateOrderValidator]});
+  private submit: boolean = false;
 
 
   get numberAdults() {
@@ -209,7 +215,7 @@ export class FeedbackPartTwoComponent implements OnInit {
 
 
   submitForm() {
-    if (this.formStep == 3){
+    if (this.formStep == 3 && this.submit){
       Object.keys(this.form.controls).forEach(field => {
         const control = this.form.get(field);
       });
@@ -235,6 +241,7 @@ export class FeedbackPartTwoComponent implements OnInit {
   private finishExperiment() {
     this.execution["executionTime"] = this.timeService.getCurrentTime();
     this.execution["finishedExecutionAt"] = new Date();
+    this.execution["numberErrors"] = this.numberErrors;
     this.timeService.stopTimer();
     const userId = this.loginService.currentUser()?.id;
     if (userId){
@@ -244,8 +251,9 @@ export class FeedbackPartTwoComponent implements OnInit {
         this.loading = true;
         this.experimentService.saveFormFeedbackExperiment(this.execution).subscribe()
         setTimeout(() => {
+          this.toasterService.success("Vielen Dank, Sie haben das Experiment erfolgreich abgeschlossen")
           this.loading = false;
-          this.router.navigateByUrl("tests/"+this.experimentTest.experiment?.id);
+          this.router.navigateByUrl("/test/"+this.experimentTest.id+"/feedback");
         }, 2000)
       });
     }
@@ -268,7 +276,6 @@ export class FeedbackPartTwoComponent implements OnInit {
   }
 
   checkInputForCurrentFormStep() {
-
     const keys = Object.keys(this.form.controls);
     const key = keys[0];
     let start = 0
@@ -295,6 +302,7 @@ export class FeedbackPartTwoComponent implements OnInit {
       }
       if (control.errors && (index <= end && index >= start)) {
         increaseFormStep = false;
+        this.numberErrors = this.numberErrors + 1;
       }
     });
     this.clearErrors();
@@ -311,5 +319,9 @@ export class FeedbackPartTwoComponent implements OnInit {
 
   back() {
     this.formStep--;
+  }
+
+  sendForm() {
+    this.submit = true;
   }
 }

@@ -32,7 +32,7 @@ export class ExperimentTestFeedbackComponent implements OnInit{
     cognitiveStress: 0,
     consistency: 0,
     learnability: 0,
-    structure: 0,
+    understandable: 0,
     text: '',
     mentalModel: 0,
     experimentTestId: 0,
@@ -40,8 +40,8 @@ export class ExperimentTestFeedbackComponent implements OnInit{
   }
 
   questions: string[] = ["Erforderte das Durchführen des Experimentes viel Mühe, Anstrengung oder Konzentration?",
-    "Entsprach die Schnittstelle Ihrem mentalen Modell, d.h. funktionierte die Schnittstelle so, wie Sie dies erwartet haben und so wie Sie dies von anderen Schnittstellen her bereits kennen?",
-    "War die Funktionsweise der Schnittstelle klar und verständlich?", "War die Funktionsweise der Schnittstelle einfach erkennbar und erlernabar?",
+    "Entsprach die Schnittstelle Ihrem mentalen Modell, d.h. funktionierte die Schnittstelle so, wie Sie dies erwartet haben und so, wie Sie dies von anderen Schnittstellen her bereits kennen?",
+    "War die Funktionsweise der Schnittstelle klar und verständlich?", "War die Funktionsweise der Schnittstelle einfach erkennbar, einprägsam und erlernabar?",
     "Waren der Aufbau, Abfolgen und die Funktionsweise der Schnittstelle konsistent, d.h. befolgte die Schnittstelle Muster und wurden diese Muster über die gesamte Interaktion hinweg beigehalten?"];
 
 
@@ -75,8 +75,10 @@ export class ExperimentTestFeedbackComponent implements OnInit{
     if (userId){
       this.feedback.userId = userId
       this.feedback.experimentTestId = this.experimentTest.id;
-      this.experimentService.submitFeedback(this.feedback).subscribe();
-      this.router.navigateByUrl("test/"+this.experimentTest?.experiment?.id);
+      this.experimentService.submitFeedback(this.feedback).subscribe((feedback) => {
+        this.router.navigateByUrl("tests/"+this.experimentTest?.experiment?.id);
+      });
+
     }
 
   }

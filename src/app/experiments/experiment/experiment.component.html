@@ -21,7 +21,7 @@
   </ul>
   <div class="card-body">
     <div class="d-flex justify-content-center align-items-center mt-3">
-      <button routerLink="/tests/{{experiment.id}}" class="btn btn-primary btn-lg">Zu den Versuchsexperimenten</button>
+      <button (click)="emitExperimentSelection()" routerLink="/tests/{{experiment.id}}" class="btn btn-primary btn-lg">Zu den Versuchsexperimenten</button>
     </div>
   </div>
 </div>

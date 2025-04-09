@@ -15,7 +15,7 @@
       <h5 class="p-1 mt-2 ">{{filteredExperiments.length}} Experimente angezeigt</h5>
     <p class="p-1" *ngIf="filteredExperiments.length > 0">Führen Sie die unten aufgelisteten Experiment durch.</p>
       <div class="row row-cols-3 mb-2">
-        <app-experiment class="mb-2" [isProgressiveVisualization]="currentUserSetting?.progressiveVisualizationExperiment ?? false" [currentUserPosition]="accountService.currentUser()?.currentExperimentPos ?? 0" [experiment]="experiment" *ngFor="let experiment of filteredExperiments"></app-experiment>
+        <app-experiment (experimentSelectEventEmitter)="saveExperimentSelectionTime($event)"  class="mb-2" [isProgressiveVisualization]="currentUserSetting?.progressiveVisualizationExperiment ?? false" [currentUserPosition]="accountService.currentUser()?.currentExperimentPos ?? 0" [experiment]="experiment" *ngFor="let experiment of filteredExperiments"></app-experiment>
       </div>
       <div *ngIf="filteredExperiments.length == 0">
         <p>Ihre Suche ergab leider keine Treffer</p>

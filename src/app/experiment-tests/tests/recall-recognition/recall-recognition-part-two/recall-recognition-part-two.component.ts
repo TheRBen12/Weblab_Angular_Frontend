@@ -72,7 +72,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   private clickedRoutes: { [key: string]: string } = {};
   private failedClicks: number = 0;
   private numberClicks: number = 0;
-  private timeToClickSearchBar: number = 0;
+  private timeToClickSearchBar?: number|null = null;
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -181,7 +181,8 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
           numberUsedSearchBar: this.numberUsedSearchBar,
-          timeToClickSearchBar: this.timeToClickSearchBar,
+          timeToClickSearchBar: this.timeToClickSearchBar??0,
+          usedBreadcrumbs: false
         };
 
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
@@ -214,8 +215,10 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
 
   setSearchBarUsedToTrue() {
     this.clickedOnSearchBar = true;
+    if (!this.timeToClickSearchBar){
+      this.timeToClickSearchBar = this.timeService.getCurrentTime();
+    }
     this.timeService.stopTimer();
-    this.timeToClickSearchBar = this.timeService.getCurrentTime();
   }
 
   toggleBasket() {

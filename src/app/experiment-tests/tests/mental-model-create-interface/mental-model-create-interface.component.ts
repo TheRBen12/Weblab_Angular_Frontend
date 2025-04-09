@@ -54,7 +54,6 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
   loginService: LoginService = inject(LoginService);
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
-
   currentInstructionStep: number = 0;
   instructions: string[] = [];
   basket: any[] = [];
@@ -67,8 +66,10 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
   parentCategory: string | null = null;
   routes = routerLinks
   dummyCategories: string[] = ["PC", "Notebook", "Smartphone", "Keypad"]
-  showInstructions: boolean = true;
-  protected experimentTest: ExperimentTest | null = null;
+  experimentTest?: ExperimentTest;
+  loading: boolean = false;
+  product: any;
+  latestUserNavigationConfig?: MentalModelShopConfiguration
 
   selectedInterFace: MentalModelShopConfiguration = {
     autoCompleteBottom: false,
@@ -87,23 +88,23 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     userId: undefined,
     shoppingCartTopRight: false,
     breadcrumbs: false,
-
-  }
-  loading: boolean = false;
+    createdAt: new Date(),
+    experimentTestId: 0,
+  };
 
 
   selectElement(element: string, event: Event) {
-      event.stopPropagation();
-      event.preventDefault();
-      event.stopImmediatePropagation();
+    event.stopPropagation();
+    event.preventDefault();
+    event.stopImmediatePropagation();
 
     if (this.selectedInterFace[element]) {
       this.selectedInterFace[element] = false;
       return;
     }
-    if (element.includes('shoppingCartBottom') && (this.selectedInterFace.shoppingCartBottomLeft || this.selectedInterFace.shoppingCartBottomRight)) {
+    if (element.includes('shoppingCartBottom') && (this.selectedInterFace.shoppingCartTopLeft || this.selectedInterFace.shoppingCartTopRight)) {
       return;
-    } else if (element.includes('shoppingCartTop') && (this.selectedInterFace.shoppingCartTopLeft || this.selectedInterFace.shoppingCartTopLeft)) {
+    } else if (element.includes('shoppingCartTop') && (this.selectedInterFace.shoppingCartBottomRight || this.selectedInterFace.shoppingCartBottomLeft)) {
       return;
     } else if (element.includes('searchBarTop') && (this.selectedInterFace.autoCompleteTop || this.selectedInterFace.autoCompleteBottom)) {
       return;
@@ -112,6 +113,10 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     } else if (element.includes('sideMenuRight') && this.selectedInterFace.sideMenuLeft) {
       return;
     } else if (element.includes('sideMenuLeft') && this.selectedInterFace.sideMenuRight) {
+      return;
+    } else if (element.includes("megaDropDown") && (this.selectedInterFace.sideMenuLeft || this.selectedInterFace.sideMenuRight)) {
+      return;
+    } else if (element.includes("sideMenu") && this.selectedInterFace.megaDropDown) {
       return;
     } else {
       this.selectedInterFace[element] = true;
@@ -140,26 +145,57 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
   }
 
   saveUserNavigationSelection() {
-    this.selectedInterFace["userId"] = this.loginService.currentUser()?.id;
     this.loading = true;
+    if (this.selectedInterFace["id"]){
+      this.updateUserNavigationConfig();
+      return;
+    }
+    this.selectedInterFace["userId"] = this.loginService.currentUser()?.id;
+    this.selectedInterFace["createdAt"] = new Date();
+    this.selectedInterFace["experimentTestId"] = this.experimentTest?.id??0;
     this.settingsService.saveShopNavigationConfiguration(this.selectedInterFace).subscribe((config) => {
       if (config) {
-        setTimeout(() => {
-          const parentRoute = this.route.parent?.parent?.parent;
-          this.loading = false;
-          this.router.navigateByUrl("test/execute/mental-model/"+this.experimentTest?.id+"/user-shop/" + this.loginService.currentUser()?.id);
-        }, 2000);
+        this.displayProgressBar();
       }
     });
   }
 
+
+  displayProgressBar(){
+    setTimeout(() => {
+      const parentRoute = this.route.parent?.parent?.parent;
+      this.loading = false;
+      this.router.navigateByUrl("test/execute/mental-model/" + this.experimentTest?.id + "/user-shop/" + this.loginService.currentUser()?.id);
+    }, 2000);
+  }
+
   private fetchExperimentTest() {
-    const experimentIdIndex = this.router.url.split("/").indexOf("mental-model") + 1;
-    const id = Number(this.router.url.split("/")[experimentIdIndex]);
-    this.experimentService.getExperimentTest(id).subscribe((test) => {
+    const experimentTestId = this.routerService.getExperimentTestIdByUrl(this.router.url, "adaptability")
+    this.experimentService.getExperimentTest(experimentTestId).subscribe((test) => {
       this.experimentTest = test;
+      this.product = JSON.parse(this.experimentTest.configuration);
+      this.fetchLatestUserNavigationConfiguration();
+
     });
 
   }
+  updateUserNavigationConfig(){
+    this.settingsService.updateUserShopNavigationConfiguration(this.selectedInterFace).subscribe((config) => {
+      this.selectedInterFace = config;
+      this.displayProgressBar();
+    });
+  }
 
+
+  private fetchLatestUserNavigationConfiguration() {
+    const userId = this.loginService.currentUser()?.id;
+    if (userId && this.experimentTest?.id) {
+      this.settingsService.getShopNavigationConfig(userId, this.experimentTest.id).subscribe((config) => {
+        this.latestUserNavigationConfig = config;
+        if (this.latestUserNavigationConfig){
+          this.selectedInterFace = this.latestUserNavigationConfig;
+        }
+      });
+    }
+  }
 }

@@ -9,10 +9,11 @@ import {LoginService} from '../../services/login.service';
 import {UserSetting} from '../../models/user-setting';
 import {filter, switchMap} from 'rxjs';
 import {FilterService} from '../../services/filter.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 import {NavigationSetting} from '../../models/navigation-setting';
 import {TimeService} from '../../services/time.service';
+import {ExperimentSelectionTime} from '../../models/experiment-selection-time';
 
 @Component({
   selector: 'app-experiment-index',
@@ -35,18 +36,20 @@ export class ExperimentIndexComponent implements OnInit {
   finishedExperiments: Experiment[] = [];
   finishedExecutions: ExperimentTestExecution[] = [];
   protected navigationSetting?: NavigationSetting;
+  userId: number = 0;
 
   constructor(public readonly accountService: LoginService, private cdrf: ChangeDetectorRef) {
 
     effect(() => {
       const userId = this.accountService.currentUser()?.id;
       if (userId) {
-        this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
+        this.userId = userId;
+        this.settingService.fetchNavigationSetting(this.userId).subscribe((setting) => {
           this.navigationSetting = setting;
         }, (error) => {
           console.log(error);
         })
-        this.fetchFinishedExecutions(userId, "FINISHED").subscribe((executions) => {
+        this.fetchFinishedExecutions(this.userId, "FINISHED").subscribe((executions) => {
           if (executions.length > 0) {
             this.finishedExecutions = executions;
           }
@@ -56,14 +59,13 @@ export class ExperimentIndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.timeService.stopTimer();
     localStorage.setItem('numberNavigationClicks', "0");
     if (!localStorage.getItem('reachedSiteAt')) {
       localStorage.setItem("reachedSiteAt", String(new Date()));
     }
     this.fetchExperiments();
     this.fetchCurrentUserSetting();
-
+    this.timeService.startTimer();
   }
 
 
@@ -148,5 +150,12 @@ export class ExperimentIndexComponent implements OnInit {
         this.finishedExperiments?.push(experiment);
       }
     });
+  }
+
+  saveExperimentSelectionTime(experiment: Experiment) {
+    const selectionTime = this.timeService.getCurrentTime();
+    this.timeService.stopTimer();
+    const experimentSelectionTime: ExperimentSelectionTime = {experimentId: experiment.id, time: selectionTime, userId: this.userId, settingId: this.currentUserSetting?.id};
+    this.experimentService.saveExperimentSelectionTime(experimentSelectionTime).subscribe();
   }
 }

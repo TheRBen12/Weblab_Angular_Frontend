@@ -64,7 +64,6 @@ import {routerLinks} from '../experiment-tests/tests/routes';
 export class CreatedUserShopComponent implements OnInit, OnDestroy {
   settingService: SettingService = inject(SettingService);
   loginService: LoginService = inject(LoginService);
-
   productService: ProductService = inject(ProductService);
   routerService = inject(RouterService);
   filterService: FilterService = inject(FilterService);
@@ -93,7 +92,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   targetRoutes = ["Haushalt", "Kaffeemaschine"];
   targetInstruction: string = "Vorher haben Sie Ihre eigene Schnittstelle zusammengestellt. Nun müssen Sie diese verwenden " +
     "um ein Produkt zu finden, welche die unten spezifizierten Eigenschaften erfüllt.";
-  instructions = ["Finden Sie ein Produkt, welches die folgenden Eigenschaften aufweist."];
+  instructions = ["Finden Sie ein Produkt, welches die folgenden Eigenschaften aufweist und legen Sie es in den Warenkorb.", "Gehen Sie zur Kasse"];
   helpInstructions = ["Sie suchen in der falschen Kategorie, finden Sie die korrekte Produktkategorie"];
   showHelpInstructions: boolean = false;
   links: string[] = [];
@@ -115,15 +114,18 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     'timeToClickFirstCategory': null,
     'clickedOnSearchBar': false,
     'firstClick': "",
-    'timeToClickSearchBar': null
+    'timeToClickSearchBar': null,
+    "timeToClickShoppingCart": null,
+    "usedBreadcrumbs": false,
   };
+  product: any;
 
   constructor(private readonly toasterService: ToastrService) {
   }
 
   canDeactivate(){
     if (!this.experimentFinished){
-      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren." )
+      return confirm(" Wollen Sie zur Auswahl zurückkehren. All Ihre Fortschritte der aktuellen Suche werden nicht gespeichert. Wollen Sie fortfahren." )
     }else{
       return true;
     }
@@ -147,7 +149,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(
       switchMap(params => {
         const userId = Number(params.get('userId'));
-        return this.getUserNavigationConfig(userId);
+        const experimentTestId = this.routerService.getExperimentTestIdByUrl(this.router.url, "mental-model");
+        return this.getUserNavigationConfig(userId, experimentTestId);
       })
     ).subscribe((config) => {
       this.navigationConfig = config;
@@ -160,7 +163,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
       this.basket = basket;
       if (this.basket.length > 0) {
         this.showBasket = true;
-        this.currentInstructionStep = 2;
+        this.currentInstructionStep = 1;
       }
     });
 
@@ -222,8 +225,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     this.parentRoute = parentRouteData.parentRoute;
   }
 
-  getUserNavigationConfig(userId: number) {
-    return this.settingService.getShopNavigationConfig(userId);
+  getUserNavigationConfig(userId: number, testId: number) {
+    return this.settingService.getShopNavigationConfig(userId, testId);
   }
 
   showSubMenu(link: string) {
@@ -235,28 +238,15 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   }
 
   buildBreadcrumbs() {
-    if (this.links.indexOf(this.currentRoute) != -1) {
-      this.links.pop();
-    } else if (this.currentRoute == "Home") {
-      this.links = [];
-    } else {
-      if (this.links.indexOf(this.currentRoute) == -1){
-        this.links.push(this.currentRoute);
-      }
-    }
-
+    this.links = this.routerService.buildBreadcrumbs(this.links, this.currentRoute);
   }
 
   setCurrentRoute($event: string) {
-    if (this.targetRoutes.indexOf($event) == -1 || this.clickedRoutes[$event] != undefined) {
+    this.showHelpInstructions = this.targetRoutes.indexOf($event) == -1;
+    if (this.clickedRoutes[$event] != undefined){
       this.increaseFailedClicks();
-      this.showHelpInstructions = true;
-    }else{
-      this.showHelpInstructions = false;
     }
     this.clickedRoutes[$event] = new Date().toISOString();
-
-
     if (!this.execution["timeToClickFirstCategory"]){
       this.execution["timeToClickFirstCategory"] = this.timeService.getCurrentTime();
     }
@@ -274,6 +264,9 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   }
 
   toggleBasket() {
+    if (!this.execution["timeToClickShoppingCart"]){
+      this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
+    }
     this.showBasket = !this.showBasket;
   }
 
@@ -325,7 +318,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
 
   }
 
-  private increaseFailedClicks() {
+  increaseFailedClicks() {
     this.execution["failedClicks"] = this.execution["failedClicks"] + 1;
   }
 
@@ -345,6 +338,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     const expTestId = this.routerService.getExperimentTestIdByUrl(this.router.url, "mental-model")
     this.experimentService.getExperimentTest(expTestId).subscribe((test) => {
       this.experimentTest = test;
+      this.product = JSON.parse(this.experimentTest.configuration);
     })
   }
 
@@ -355,4 +349,13 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   }
 
 
+  navigate() {
+    const parentRoute = this.route.parent;
+    this.router.navigate(["/test/execute/adaptability/"+this.experimentTest.id], {relativeTo: parentRoute})
+  }
+
+  updateBreadcrumbsClickBehaviour() {
+    this.increaseFailedClicks();
+    this.execution["usedBreadcrumbs"] = true;
+  }
 }

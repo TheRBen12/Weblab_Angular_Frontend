@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {
   NavigationEnd,
-  Router,
+  Router, RouterLink,
   RouterOutlet,
 } from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
@@ -44,6 +44,7 @@ import {TimeService} from '../../../../services/time.service';
     MatProgressSpinner,
     NgIf,
     NgForOf,
+    RouterLink,
   ],
   templateUrl: './recall-recognition-part-one.component.html',
   standalone: true,
@@ -82,6 +83,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   private experimentFinished: boolean = false;
   timeToClickFirstCategoryLink: number = 0;
   links: string[] = [];
+  private usedBreadCrumbs: boolean = false;
 
   constructor(private cdRef: ChangeDetectorRef, private toastrService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
@@ -161,15 +163,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   }
 
   buildHeaderLinks() {
-    if (this.links.indexOf(this.currentRoute) != -1) {
-      this.links.pop();
-    } else if (this.currentRoute == "Home") {
-      this.links = [];
-    } else {
-      if (this.links.indexOf(this.currentRoute) == -1){
-        this.links.push(this.currentRoute);
-      }
-    }
+    this.links = this.routerService.buildBreadcrumbs(this.links, this.currentRoute);
 
   }
 
@@ -245,6 +239,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.timeService.stopTimer();
       this.experimentFinished = true;
       this.loading = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId);
@@ -261,11 +256,13 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
+          usedBreadcrumbs: this.usedBreadCrumbs,
+
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/tests/" + this.experimentTest.experiment?.id);
+            this.router.navigateByUrl("/test/"+this.experimentTestId+"/feedback")
             this.toastrService.success("Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
 
@@ -294,5 +291,10 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     this.experimentService.getExperimentTest(experimentTestId).subscribe((test) => {
       this.experimentTest = test;
     });
+  }
+
+  updateBreadcrumbsBehaviour() {
+    this.usedBreadCrumbs = true;
+    this.failedClicks++;
   }
 }

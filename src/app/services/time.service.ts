@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {TimeInterval} from 'rxjs/internal/operators/timeInterval';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
 import {D} from '@angular/cdk/keycodes';
 import {UserNavigationTime} from '../models/user-navigation-time';
 import {HttpClient} from '@angular/common/http';
@@ -13,22 +13,10 @@ import {User} from '../models/user';
 export class TimeService {
   timeToReadWelcomeModal = 0;
   welcomeModalTimer = 0;
-  experimentNavigationTimeSubscription: BehaviorSubject<UserNavigationTime|null> = new BehaviorSubject<any>(null);
   interval: any
   time: number = 0;
   http: HttpClient = inject(HttpClient);
-  restorffTimer: any
-  restorffTimes: number = 0;
-  constructor() {
-
-  }
-
-  getExperimentNavigationTimeSubscription() {
-    return this.experimentNavigationTimeSubscription.asObservable();
-  }
-  updateExperimentNavigationTime(navTime: UserNavigationTime){
-    this.experimentNavigationTimeSubscription.next(navTime);
-  }
+  private timerSubscription!: Subscription;
 
   startWelcomeModalTimer() {
     this.welcomeModalTimer = setInterval(() => {
@@ -39,6 +27,10 @@ export class TimeService {
 
   stopTimer() {
     clearInterval(this.interval);
+    if (this.timerSubscription){
+      this.timerSubscription.unsubscribe();
+    }
+
     this.time = 0;
   }
 
@@ -59,21 +51,12 @@ export class TimeService {
   }
 
   startTimer() {
-    this.interval = setInterval(() => {
-      this.time++;
-    }, 1000)
-  }
+    this.time = 0;
+      this.timerSubscription = interval(1000).subscribe(() => {
+        this.time++;
+        console.log(this.time);
+      });
 
-
-  startRestorffTimer(){
-    this.restorffTimer = setInterval(() => {
-      this.restorffTimes = this.restorffTimes + 100;
-    },100)
-  }
-
-  stopRestorffTimer(){
-    clearInterval(this.restorffTimer);
-    this.restorffTimes = 0;
   }
 
 }

@@ -8,7 +8,7 @@
           <span class="fw-bold">{{ i+1 }}. {{ question }}</span>
         </p>
 
-        <app-radio-button [identifier]="identifier[i]" (selectionEventEmitter)="updateFeedback($event.value, $event.identifier)" *ngFor="let j of [1,2,3,4,5]" [id]="'radio_'+identifier[i]+'_'+j" [label]="String(j) + ' ' + questionLabels[i][j]"
+        <app-radio-button [identifier]="identifier[i]" (selectionEventEmitter)="updateFeedback($event.value, $event.identifier)" *ngFor="let j of [1,2,3,4,5]" [id]="'radio_'+identifier[i]+'_'+j" [label]="String(j) + ' ' + questionLabels[i][j-1]"
                           [value]="j"></app-radio-button>
       </div>
       <div class="input-group">

@@ -1,6 +1,6 @@
 <div (click)="increaseNumberClicks()" class="d-flex">
   <div class="col-3">
-    <app-experiment-test-instruction [target]="experimentTest?.goalInstruction?? ''"
+    <app-experiment-test-instruction [target]="experimentTest.goalInstruction"
                                      [currentInstructionStep]="currentInstructionStep"
                                      [instructions]="instructions"></app-experiment-test-instruction>
   </div>

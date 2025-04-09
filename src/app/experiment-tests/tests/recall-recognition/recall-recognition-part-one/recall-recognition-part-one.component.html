@@ -43,8 +43,8 @@
         </div>
 
         <div class="col-sm-7 scrollable-list responsive-list-layout">
-          <div class="container" *ngIf="links.length > 0">
-            <a class="header-link">Home</a><a class="header-link" *ngFor="let link of links"> > {{link}}</a>
+          <div (click)="updateBreadcrumbsBehaviour()" class="container" *ngIf="links.length > 0">
+            <a routerLink="./" class="header-link">Home</a> <a routerLink="{{routerLinks[link]}}" class="header-link" *ngFor="let link of links"> > {{link}}</a>
           </div>
           <router-outlet></router-outlet>
         </div>

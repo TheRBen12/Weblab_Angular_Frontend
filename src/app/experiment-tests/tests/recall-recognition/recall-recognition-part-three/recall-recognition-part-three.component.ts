@@ -67,7 +67,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   clickedOnSearchBar: boolean = false;
   numberUsedSearchBar: number = 0;
   experimentTest?: ExperimentTest
-  private timeToClickSearchBar?: number;
+  private timeToClickSearchBar?: number|null = null;
   experimentFinished: boolean = false;
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
@@ -116,7 +116,6 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   fetchProductTypes(currentRoute: string) {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
-      const route = this.router.url;
       this.categoryLinks = new Array(this.productCategories.length).fill("/test/execute/recall-recognition/3");
     });
   }
@@ -140,7 +139,8 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
           numberUsedSearchBar: this.numberUsedSearchBar,
-          timeToClickSearchBar: this.timeToClickSearchBar,
+          timeToClickSearchBar: this.timeToClickSearchBar??0,
+          usedBreadcrumbs: false,
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -190,8 +190,10 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   }
 
   updateTimeToClickSearchBar() {
-    this.timeToClickSearchBar = this.timeService.getCurrentTime();
-    this.timeService.stopTimer();
+    if (!this.timeToClickSearchBar){
+      this.timeToClickSearchBar = this.timeService.getCurrentTime();
+      this.timeService.stopTimer();
+    }
   }
 
   toggleBasket() {

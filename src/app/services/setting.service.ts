@@ -40,12 +40,14 @@ export class SettingService {
 
   }
 
-  getShopNavigationConfig(userId: number) {
-    return this.http.get<MentalModelShopConfiguration>("https://localhost:7147/api/setting/mental-model/shop/user-navigation/find", {params: {userId: userId}});
+  getShopNavigationConfig(userId: number, testId: number) {
+    return this.http.get<MentalModelShopConfiguration>("https://localhost:7147/api/setting/mental-model/shop/user-navigation/find", {params: {userId: userId, testId: testId}});
 
   }
 
-  updateFilterConfiguredByUser() {
+
+  updateUserShopNavigationConfiguration(selectedInterFace: MentalModelShopConfiguration) {
+    return this.http.put<MentalModelShopConfiguration>("https://localhost:7147/api/setting/mental-model/shop/user-navigation/update", selectedInterFace);
 
   }
 }

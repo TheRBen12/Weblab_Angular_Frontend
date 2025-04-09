@@ -64,19 +64,19 @@ export class ExperimentTestDetailComponent implements OnInit {
     this.experimentService.setNextStartedExperimentTest({id: this.experimentTest?.id ?? 0, startedAt: new Date()});
     const lastFinishedExperiment = this.experimentService.getLastFinishedExperimentTest();
     const reachedSiteAt = localStorage.getItem('reachedSiteAt');
-    const reachedSiteDate: Date = reachedSiteAt ? new Date(reachedSiteAt): new Date();
+    const reachedSiteDate: Date = reachedSiteAt ? new Date(reachedSiteAt) : new Date();
     const startedNavigation = lastFinishedExperiment != null ? lastFinishedExperiment.finishedAt : reachedSiteDate;
     const lastFinishedExperimentTestId = lastFinishedExperiment != null ? lastFinishedExperiment.experimentId : null
     let savedNumberClicks = localStorage.getItem('numberNavigationClicks');
     let numberClicks = 0;
-    if (savedNumberClicks){
+    if (savedNumberClicks) {
       numberClicks = Number(savedNumberClicks);
     }
     const navigationTime: UserNavigationTime = {
       userId: this.userSetting.userID,
       finishedNavigation: new Date(),
       startedNavigation: startedNavigation,
-      toExperimentId: this.experimentTest?.id??-1,
+      toExperimentId: this.experimentTest?.id ?? -1,
       userSettingId: this.userSetting.id,
       fromExperimentId: lastFinishedExperimentTestId,
       numberClicks: numberClicks

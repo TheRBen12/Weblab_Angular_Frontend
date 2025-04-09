@@ -12,11 +12,12 @@ import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
 import {MatIcon} from '@angular/material/icon';
 import {MatFabButton} from '@angular/material/button';
 import {NgClass, NgIf} from '@angular/common';
-import {Router, RouterLink} from '@angular/router';
+import {NavigationEnd, Router, RouterLink} from '@angular/router';
 import {LoginService} from '../services/login.service';
 import {User} from '../models/user';
 import {UserBehaviour} from '../models/user-behaviour';
 import {RouterService} from '../services/router.service';
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'app-side-navigation',
@@ -57,10 +58,18 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit() {
-    this.drawer.open(); // Öffnet den Drawer nach der Initialisierung
+    //this.drawer.open(); // Öffnet den Drawer nach der Initialisierung
   }
 
   ngOnInit(): void {
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+        if (this.router.url == "/"){
+          this.currentRoute = "Experimente";
+        }
+      });
+
     this.currentRoute = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
     this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
       if (userBehaviour) {

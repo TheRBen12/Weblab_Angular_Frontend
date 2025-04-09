@@ -1,5 +1,5 @@
 export interface MentalModelShopConfiguration {
-  [key: string]: boolean | number | undefined;
+  [key: string]: boolean | number | undefined | Date;
   shoppingCartBottomRight: boolean;
   shoppingCartBottomLeft: boolean;
   searchBarTop: boolean;
@@ -16,5 +16,7 @@ export interface MentalModelShopConfiguration {
   megaDropDown: boolean;
   userId?: number;
   breadcrumbs: boolean;
+  createdAt: Date;
+  experimentTestId: number
 
 }

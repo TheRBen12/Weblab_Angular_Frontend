@@ -1,4 +1,4 @@
-import {Component, effect, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, effect, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Experiment} from '../../models/experiment';
 import {NgIf, NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
@@ -7,6 +7,7 @@ import {ExperimentService} from '../../services/experiment.service';
 import {ExperimentTest} from '../../models/experiment-test';
 import {LoginService} from '../../services/login.service';
 import {MatIcon} from '@angular/material/icon';
+import {ExperimentFeedback} from '../../models/experiment-feedback';
 
 @Component({
   selector: 'app-experiment',
@@ -23,6 +24,7 @@ export class ExperimentComponent {
   @Input() isProgressiveVisualization: boolean = true;
   @Input() finishedExecutions: ExperimentTestExecution[] = [];
   @Input() finishedExperiments: Experiment[] = [];
+  @Output() experimentSelectEventEmitter: EventEmitter<Experiment> = new EventEmitter<Experiment>()
   numberFinishedTests: number = 0;
   completed: boolean = false;
   experimentService: ExperimentService = inject(ExperimentService);
@@ -72,4 +74,7 @@ export class ExperimentComponent {
 
   }
 
+  emitExperimentSelection() {
+    this.experimentSelectEventEmitter.emit(this.experiment);
+  }
 }

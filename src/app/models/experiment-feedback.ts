@@ -3,7 +3,7 @@ export interface ExperimentFeedback {
   mentalModel: number;
   cognitiveStress: number;
   consistency: number;
-  structure: number;
+  understandable: number;
   learnability: number;
   text: string;
   userId: number;

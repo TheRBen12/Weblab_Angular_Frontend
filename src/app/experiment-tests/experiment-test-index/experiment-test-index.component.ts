@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, switchMap} from 'rxjs';
 import {ExperimentTest} from '../../models/experiment-test';
 import {ExperimentService} from '../../services/experiment.service';
@@ -13,6 +13,7 @@ import {LoginService} from '../../services/login.service';
 import {SettingService} from '../../services/setting.service';
 import {NavigationSetting} from '../../models/navigation-setting';
 import {UserSetting} from '../../models/user-setting';
+import {TimeService} from '../../services/time.service';
 
 @Component({
   selector: 'app-experiment-test-index',
@@ -21,7 +22,6 @@ import {UserSetting} from '../../models/user-setting';
     NgIf,
     ExperimentTestComponent,
     SearchBarComponent,
-    RouterLink,
     NgClass
   ],
   standalone: true,
@@ -34,6 +34,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   filterService = inject(FilterService);
   userService = inject(LoginService);
   settingService: SettingService = inject(SettingService);
+  timeService: TimeService = inject(TimeService);
   router: Router = inject(Router);
   experimentId: number = 0;
   experimentTests: ExperimentTest[] = [];
@@ -58,9 +59,10 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
           clearInterval(this.interval);
           this.countDownToStartNextTest = 3;
         }
+        if (this.router.url.includes("tests/")){
+          this.timeService.stopTimer();
+        }
       });
-
-
 
     localStorage.setItem('numberNavigationClicks', "0");
     localStorage.removeItem("cart");

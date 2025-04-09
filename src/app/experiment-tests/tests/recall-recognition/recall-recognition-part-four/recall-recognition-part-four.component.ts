@@ -22,6 +22,7 @@ import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {NgIf} from '@angular/common';
+import {TimeService} from '../../../../services/time.service';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -52,6 +53,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   userService: LoginService = inject(LoginService);
   productService = inject(ProductService);
   productCategoryRouterLinksService = inject(RouterService);
+  timeService: TimeService = inject(TimeService);
   basket: any[] = [];
   specifications: any[] = [];
   parentCategory: string | null = null;
@@ -70,6 +72,8 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   clickedOnSearchBar: boolean = false;
   loading: boolean = false;
   numberClicks: number = 0;
+  private usedBreadcrumbs: boolean = false;
+  timeToClickFirstCategoryLink?: number|null = null;
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie Lebensmittel",
@@ -80,6 +84,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.timeService.startTimer();
     this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
 
     this.productService.getBasket();
@@ -139,6 +144,11 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
       this.failedClicks++;
       localStorage.setItem('failedClicks', String(this.failedClicks));
     }
+    if (!this.timeToClickFirstCategoryLink){
+      this.timeToClickFirstCategoryLink = this.timeService.getCurrentTime();
+      this.timeService.stopTimer();
+    }
+
     this.clickedRoutes[$event] = new Date().toDateString();
     localStorage.setItem('clickedRoutes', JSON.stringify(this.clickedRoutes));
 
@@ -206,6 +216,8 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
           experimentTestExecutionId: this.currentExecution?.id,
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
+          usedBreadcrumbs: this.usedBreadcrumbs,
+          timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink??0,
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {

@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
+  ElementRef, inject,
   Input,
   OnChanges,
   QueryList,
@@ -9,6 +9,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-auto-complete-product',
@@ -24,6 +25,8 @@ export class AutoCompleteProductComponent implements OnChanges, AfterViewInit{
   @Input() product: any
   @Input() textToMark: string = "";
   @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;
+  router: Router = inject(Router);
+  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,4 +58,10 @@ export class AutoCompleteProductComponent implements OnChanges, AfterViewInit{
 
   }
 
+  showProduct() {
+    this.router.url;
+    const childRoute = this.activatedRoute.firstChild;
+
+    this.router.navigate(["/show/product/"+this.product.id], {relativeTo: childRoute});
+  }
 }

@@ -181,7 +181,7 @@ export class RestorffEffectComponent implements OnInit {
         clearInterval(intervall);
         this.finishExperiment();
       }
-    }, 4000);
+    }, 5000);
 
 
   }

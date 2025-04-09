@@ -99,6 +99,8 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     'timeToClickFirstCategory': null,
     'clickedOnSearchBar': false,
     'firstClick': "",
+    "usedBreadcrumbs": false,
+    "timeToClickShoppingCart": null,
   };
 
 
@@ -140,6 +142,9 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   }
 
   openBasket() {
+    if (!this.execution["timeToClickShoppingCart"]){
+      this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
+    }
     this.basketIsHidden = !this.basketIsHidden;
   }
 
@@ -152,7 +157,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl('/tests/'+this.experimentTest?.experiment?.id);
+            this.router.navigateByUrl("/test/"+this.experimentTest?.id+"/feedback")
             this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen.")
           }, 2000);
         })

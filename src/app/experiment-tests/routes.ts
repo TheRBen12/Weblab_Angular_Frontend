@@ -5,5 +5,6 @@ export const experimentTestRoutes: { [key: string]: string } = {
   "Restorff Effekt": "restorff-effect",
   "Gesetz von Fitt": "fitts-law",
   "Mentales Modell": "mental-model",
-  "Feedback": "feedback"
+  "Feedback": "feedback",
+  "Adaptability": "adaptability"
 }

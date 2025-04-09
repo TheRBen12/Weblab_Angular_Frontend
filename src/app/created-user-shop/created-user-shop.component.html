@@ -1,158 +1,174 @@
 <div class="d-flex flex-row">
+
   <div class="instruction-container  border-end border-3 col-2">
     <app-experiment-test-instruction
-      [product]="{Kategorie: 'Kaffeemaschine', Pumpendruck: '12 Bar', Aufheizzeit: '10 Minuten', 'Wassertank Volumen': '2.5 L'}"
+      [product]="product"
       [target]="targetInstruction"
       [instructions]="showHelpInstructions ? helpInstructions: instructions"></app-experiment-test-instruction>
-  </div>
-  <div (click)="updateClickBehaviour($event)" style="width: 100%">
-    <div class="container-fluid">
-      <div class="row">
-
-        <div *ngIf="navigationConfig?.navBarTop" class="d-flex align-items-center shadow nav navbar-expand-md navbar">
-          <h2 class="ms-2 shop-title col-sm-2 p-2">Weblab Shop</h2>
-
-          <div *ngIf="navigationConfig?.searchBarTop">
-            <app-search-bar (click)="updateTimeToClickSearchBar()" (inputTextEvent)="filterProducts($event)"
-                            [searchOnEnter]="true"
-                            [placeholder]="'Produkt suchen'" [disabled]="false"></app-search-bar>
-          </div>
-
-          <div *ngIf="navigationConfig?.autoCompleteTop" class="ms-3 me-4 w-75">
-            <app-auto-complete (click)="updateTimeToClickSearchBar()"  (onSelectEventEmitter)="increaseUsedSearchBar()" [products]="products" class="products"
-                               [placeholder]="'Produkte Suchen'">
-
-            </app-auto-complete>
-          </div>
-
-          <div class="me-3 ms-3">
-            <button class=" btn btn-primary">Anmelden</button>
-          </div>
-
-          <div *ngIf="navigationConfig?.shoppingCartTopLeft" class="ms-3">
-            <button (click)="toggleBasket()" mat-fab>
-              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
-                        fontIcon="shopping_cart">
-              </mat-icon>
-            </button>
-          </div>
-
-          <div *ngIf="navigationConfig?.shoppingCartTopRight" class="w-100 mt1 me-3 d-flex justify-content-end ">
-            <div>
-              <button (click)="toggleBasket()" mat-fab>
-                <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
-                          fontIcon="shopping_cart">
-                </mat-icon>
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-
-        <nav *ngIf="navigationConfig?.megaDropDown" (mouseleave)="hideSubMenu()"
-             class="navbar navbar-expand-lg bg-body-tertiary">
-          <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li (mouseenter)="showSubMenu(category.name)" class="nav-item"
-                    *ngFor="let category of parentTypes; index as i">
-                  <a (click)="setCurrentRoute(category.name)"
-                     class="
-                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
-                     [ngClass]="{'active' :  currentRoute ==category.name}"
-                     routerLink="{{parentCategoryLinks[i]}}">{{ category.name }}</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-        <div class="w-100 navbar submenu" [ngClass]="{'menu-open': showSubNavMenu, 'no-pointer-events d-none': !showSubNavMenu}"
-             (mouseenter)="showSubMenu(currentRoute)"
-             (mouseleave)="hideSubMenu()" [@hoverState]="showSubNavMenu ? 'open' : 'closed' ">
-          <app-mega-drop-down-menu (routeEvent)="setCurrentRoute($event)"
-                                   [currentCategory]="currentRoute"></app-mega-drop-down-menu>
-        </div>
-
-
-        <div class="mt-1 row">
-          <div class="col-sm-auto" *ngIf="navigationConfig?.sideMenuLeft">
-            <app-side-menu (routeEvent)="setCurrentRoute($event)"
-                           [categoryLinks]=categoryLinks
-                           [productCategories]="productCategories"
-                           [currentRoute]="currentRoute"
-                           [parentRoute]="parentRoute"
-                           [parentCategory]="parentCategory">
-            </app-side-menu>
-          </div>
-
-            <div class="col-sm-7 scrollable-list">
-                <div class="container" *ngIf="links.length > 0 && navigationConfig.breadcrumbs && !navigationConfig.megaDropDown">
-                  <a routerLink="./" class="ms-2 header-link">Home</a><a routerLink="{{routerLinks[link]}}"  class="header-link" *ngFor="let link of links"> > {{link}}</a>
-                </div>
-              <router-outlet></router-outlet>
-            </div>
-
-
-          <div class="col-sm-3" *ngIf="navigationConfig?.sideMenuLeft && showBasket">
-            <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"  [basket]="basket" ></app-basket>
-          </div>
-
-          <div class="col-sm-2" *ngIf="navigationConfig?.sideMenuRight">
-            <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
-                           [productCategories]="productCategories"
-                           [currentRoute]="currentRoute"
-                           [parentRoute]="parentRoute"
-                           [parentCategory]="parentCategory">
-            </app-side-menu>
-          </div>
-
-          <div class="col-sm-3" *ngIf="navigationConfig?.sideMenuRight && showBasket">
-            <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"  [basket]="basket" ></app-basket>
-          </div>
-
-        </div>
-      </div>
-      <div class="bottom-nav d-flex shadow w-100">
-        <div *ngIf="navigationConfig?.navBarBottom"
-             class=" nav navbar d-flex justify-content-space-between navbar-expand-md shadow w-100 me-2">
-          <h2 class="p-2">Weblab Shop</h2>
-          <div *ngIf="navigationConfig.searchBarBottom" class="col-sm-2">
-            <app-search-bar (click)="updateTimeToClickSearchBar()"  (inputTextEvent)="filterProducts($event)" [disabled]="false"
-                            [placeholder]="'Produkte suchen'"></app-search-bar>
-          </div>
-          <div *ngIf="navigationConfig.autoCompleteBottom" class="ms-3 me-4 w-25 col-sm-3">
-            <app-auto-complete (click)="updateTimeToClickSearchBar()"  (onSelectEventEmitter)="increaseUsedSearchBar()" [products]="products" class="products"
-                               [placeholder]="'Suchfunktion mit Autovervollständigung'">
-
-            </app-auto-complete>
-          </div>
-
-          <div class="me-3 ms-3">
-            <button class=" btn btn-primary">Anmelden</button>
-          </div>
-          <div *ngIf="navigationConfig?.shoppingCartBottomLeft" class="ms-3">
-            <button (click)="toggleBasket()" mat-fab>
-              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
-                        fontIcon="shopping_cart">
-              </mat-icon>
-            </button>
-          </div>
-
-          <div class="right-side-shopping-cart">
-            <div *ngIf="navigationConfig?.shoppingCartBottomRight">
-              <button mat-fab>
-                <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
-                          fontIcon="shopping_cart">
-                </mat-icon>
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </div>
+    <div class="w-100 d-flex justify-content-center">
+      <button (click)="navigate()"  class=" mt-3 btn btn-lg btn-secondary">Zurück zur Auswahl</button>
 
     </div>
+  </div>
+
+  <div class="page-container" (click)="updateClickBehaviour($event)" style="width: 100%">
+
+    <div class="main">
+      <div *ngIf="navigationConfig?.navBarTop" class="d-flex align-items-center shadow nav navbar-expand-md navbar">
+        <h2 class="ms-2 shop-title p-2">Weblab Shop</h2>
+
+        <div *ngIf="navigationConfig?.searchBarTop">
+          <app-search-bar (click)="updateTimeToClickSearchBar()" (inputTextEvent)="filterProducts($event)"
+                          [searchOnEnter]="true"
+                          [placeholder]="'Produkt suchen'" [disabled]="false"></app-search-bar>
+        </div>
+
+        <div *ngIf="navigationConfig?.autoCompleteTop" class="ms-3 me-4 w-75">
+          <app-auto-complete (click)="updateTimeToClickSearchBar()" (onSelectEventEmitter)="increaseUsedSearchBar()"
+                             [products]="products" class="products"
+                             [placeholder]="'Produkte Suchen'">
+
+          </app-auto-complete>
+        </div>
+
+        <div class="me-3 ms-3">
+          <button class=" btn btn-primary">Anmelden</button>
+        </div>
+
+        <div *ngIf="navigationConfig?.shoppingCartTopLeft" class="ms-3">
+          <button (click)="toggleBasket()" mat-fab>
+            <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                      fontIcon="shopping_cart">
+            </mat-icon>
+          </button>
+        </div>
+
+        <div *ngIf="navigationConfig?.shoppingCartTopRight" class="w-100 mt1 me-3 d-flex justify-content-end ">
+          <div>
+            <button (click)="toggleBasket()" mat-fab>
+              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                        fontIcon="shopping_cart">
+              </mat-icon>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+
+      <nav *ngIf="navigationConfig?.megaDropDown" (mouseleave)="hideSubMenu()"
+           class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li (mouseenter)="showSubMenu(category.name)" class="nav-item"
+                  *ngFor="let category of parentTypes; index as i">
+                <a (click)="setCurrentRoute(category.name)"
+                   class="
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"
+                   [ngClass]="{'active' :  currentRoute ==category.name}"
+                   routerLink="{{parentCategoryLinks[i]}}">{{ category.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="w-100 navbar submenu"
+           [ngClass]="{'menu-open': showSubNavMenu, 'no-pointer-events d-none': !showSubNavMenu}"
+           (mouseenter)="showSubMenu(currentRoute)"
+           (mouseleave)="hideSubMenu()" [@hoverState]="showSubNavMenu ? 'open' : 'closed' ">
+        <app-mega-drop-down-menu (routeEvent)="setCurrentRoute($event)"
+                                 [currentCategory]="currentRoute"></app-mega-drop-down-menu>
+      </div>
+
+
+      <div class="mt-1 row">
+        <div class="col-sm-auto" *ngIf="navigationConfig?.sideMenuLeft">
+          <app-side-menu (routeEvent)="setCurrentRoute($event)"
+                         [categoryLinks]=categoryLinks
+                         [productCategories]="productCategories"
+                         [currentRoute]="currentRoute"
+                         [parentRoute]="parentRoute"
+                         [parentCategory]="parentCategory">
+          </app-side-menu>
+        </div>
+
+        <div class="col-sm-7 scrollable-list">
+          <div (click)="updateBreadcrumbsClickBehaviour()"  class="container"
+               *ngIf="links.length > 0 && navigationConfig.breadcrumbs && !navigationConfig.megaDropDown">
+            <a routerLink="./" class="ms-2 header-link">Home</a><a routerLink="{{routerLinks[link]}}"
+                                                                   class="header-link" *ngFor="let link of links">
+            > {{ link }}</a>
+          </div>
+          <router-outlet></router-outlet>
+        </div>
+
+
+        <div class="col-sm-3" *ngIf="(navigationConfig?.sideMenuLeft || navigationConfig?.megaDropDown) && showBasket">
+          <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"
+                      [basket]="basket"></app-basket>
+        </div>
+
+        <div class="col-sm-2" *ngIf="navigationConfig?.sideMenuRight">
+          <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
+                         [productCategories]="productCategories"
+                         [currentRoute]="currentRoute"
+                         [parentRoute]="parentRoute"
+                         [parentCategory]="parentCategory">
+          </app-side-menu>
+        </div>
+
+        <div class="col-sm-3" *ngIf="navigationConfig?.sideMenuRight && showBasket">
+          <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"
+                      [basket]="basket"></app-basket>
+        </div>
+
+      </div>
+    </div>
+    <div class="bottom-nav shadow">
+      <div *ngIf="navigationConfig?.navBarBottom"
+           class=" container-nav nav navbar d-flex justify-content-space-between navbar-expand-md shadow w-100 me-2">
+        <div>
+          <h2 class="p-2">Weblab Shop</h2>
+        </div>
+        <div *ngIf="navigationConfig.searchBarBottom" class="col-sm-2">
+          <app-search-bar (click)="updateTimeToClickSearchBar()" (inputTextEvent)="filterProducts($event)"
+                          [disabled]="false"
+                          [placeholder]="'Produkte suchen'"></app-search-bar>
+        </div>
+        <div *ngIf="navigationConfig.autoCompleteBottom" class="ms-3 me-4 w-25 col-sm-3">
+          <app-auto-complete (click)="updateTimeToClickSearchBar()" (onSelectEventEmitter)="increaseUsedSearchBar()"
+                             [products]="products" class="products"
+                             [placeholder]="'Suchfunktion mit Autovervollständigung'">
+
+          </app-auto-complete>
+        </div>
+
+        <div class="me-3 ms-3">
+          <button class=" btn btn-primary">Anmelden</button>
+        </div>
+
+        <div *ngIf="navigationConfig?.shoppingCartBottomLeft" class="ms-3">
+          <button (click)="toggleBasket()" mat-fab>
+            <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                      fontIcon="shopping_cart">
+            </mat-icon>
+          </button>
+        </div>
+
+        <div class="right-side-shopping-cart d-flex me-2 justify-content-end w-100">
+          <div *ngIf="navigationConfig?.shoppingCartBottomRight">
+            <button (click)="toggleBasket()" mat-fab>
+              <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                        fontIcon="shopping_cart">
+              </mat-icon>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 

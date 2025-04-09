@@ -238,7 +238,7 @@
                 class="mt-3 btn btn-secondary">Zurück
         </button>
         <div *ngIf="formStep == 3">
-          <button *ngIf="formStep == 3" type="submit" class="mt-3 btn btn-primary">Eingaben absenden</button>
+          <button (click)="sendForm()"  *ngIf="formStep == 3" type="submit" class="mt-3 btn btn-primary">Eingaben absenden</button>
         </div>
 
       </form>

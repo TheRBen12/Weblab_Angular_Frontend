@@ -39,7 +39,7 @@
         </div>
 
         <div class="col-3 mt-3">
-          <app-auto-complete (onSelectEventEmitter)="updateSearchBarBehaviour()" (click)="updateSearchBarBehaviour()"  [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
+          <app-auto-complete (onSelectEventEmitter)="updateSearchBarBehaviour($event)" (click)="updateSearchBarBehaviour(null)"  [products]="products" class="products" (onInputEventEmitter)="filterProducts($event)"
                              [placeholder]="'Produkte suchen'">
 
           </app-auto-complete>

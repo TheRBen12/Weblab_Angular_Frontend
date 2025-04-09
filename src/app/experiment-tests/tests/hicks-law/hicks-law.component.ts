@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, inject, OnInit, signal} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
@@ -10,8 +10,7 @@ import {ProductService} from '../../../services/product.service';
 import {NavigationEnd, NavigationStart, Router, RouterOutlet} from '@angular/router';
 import {RouterService} from '../../../services/router.service';
 import {routerLinks} from '../routes';
-import {filter, Subscription} from 'rxjs';
-import {SideMenuService} from '../../../services/side-menu.service';
+import {filter} from 'rxjs';
 import {BasketComponent} from '../../../basket/basket.component';
 import {NgIf} from '@angular/common';
 import {ExperimentService} from '../../../services/experiment.service';
@@ -75,8 +74,9 @@ export class HicksLawComponent implements OnInit {
   private failedClicks: number = 0;
   private numberClicks: number = 0;
   private firstClick: string | null = null;
-  private timeToClickFirstCategoryLink: number = 0;
+  private timeToClickFirstCategoryLink: number|null = null;
   showBasket: boolean = false;
+  usedFilters: string[] = [];
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -95,6 +95,9 @@ export class HicksLawComponent implements OnInit {
     }
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
       this.clickedOnFilters = true;
+      if (filter != ""){
+        this.usedFilters.push(filter);
+      }
     })
 
     this.productService.getBasket();
@@ -103,6 +106,7 @@ export class HicksLawComponent implements OnInit {
         this.selectedProducts[products.length - 1] = new Date();
         localStorage.setItem('selctedPrducts', JSON.stringify(this.selectedProducts));
         this.currentInstructionStep = 0;
+        this.showBasket = true;
       } else if (this.basket.length > products.length) {
         this.currentInstructionStep = 1;
       }
@@ -234,6 +238,7 @@ export class HicksLawComponent implements OnInit {
           numberClicks: this.numberClicks,
           firstClick: this.firstClick,
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
+          usedFilters: JSON.stringify(this.usedFilters),
         };
 
         this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {

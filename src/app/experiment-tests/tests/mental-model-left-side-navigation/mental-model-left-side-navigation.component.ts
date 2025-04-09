@@ -1,6 +1,6 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatIcon} from '@angular/material/icon';
-import {NavigationEnd, NavigationStart, Router, RouterOutlet} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterOutlet} from '@angular/router';
 import {SideMenuComponent} from '../side-menu/side-menu.component';
 import {BasketComponent} from '../../../basket/basket.component';
 import {MatFabButton} from '@angular/material/button';
@@ -71,6 +71,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   loading: boolean = false;
   products: any[] = [];
   private currentType?: ProductType;
+  private activatedRoute = inject(ActivatedRoute);
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -86,14 +87,14 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   ngOnInit(): void {
+    this.timeService.startTimer();
     this.productService.getAllProducts().subscribe((products) => {
       this.products = products;
     })
-
     this.fetchExperimentTest();
-    this.timeService.startTimer();
     this.execution['usedFilter'] = false;
     this.execution['numberClicks'] = 0;
+    this.execution["usedBreadcrumbs"] = false;
 
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
       if (filter != "" && filter != undefined){
@@ -196,10 +197,8 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     }
     this.clickedRoutes[route] = new Date().toISOString();
     localStorage.setItem("clickedRoutes", JSON.stringify(this.clickedRoutes));
-    if (!this.firstClick){
-      this.firstClick = route;
+    if (Object.values(this.clickedRoutes).length == 0) {
       this.execution['timeToClickFirstCategory'] = this.timeService.getCurrentTime();
-      this.timeService.stopTimer();
     }
     this.showHelpInstructions = this.targetRoutes.indexOf(route) == -1 && this.currentRoute != "Home";
   }
@@ -217,6 +216,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution["finishedExecutionAt"] = new Date();
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
+      this.timeService.stopTimer();
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution['experimentTestExecutionId'] = exec.id;
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
@@ -245,15 +245,21 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     }
     localStorage.setItem('numberClicks', this.execution['numberClicks']);
   }
-  updateSearchBarBehaviour() {
+  updateSearchBarBehaviour(id: number|null) {
+    if (!this.execution["timeToClickSearchBar"]){
+      this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
+    }
     this.execution['clickedOnSearchBar'] = true;
-    this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1
     localStorage.setItem("numberUsedSearchBar", this.execution["numberUsedSearchBar"]);
     const n = this.execution["numberUsedSearchBar"];
     if (n >=1){
       this.increaseFailedClicks();
     }
-
+    if(id){
+      this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1
+      const childRoute = this.activatedRoute.firstChild;
+      this.router.navigate(['./show/product/' + id], {relativeTo: childRoute});
+    }
   }
 
   private fetchExperimentTest() {
@@ -272,6 +278,9 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   toggleBasket() {
+    if (!this.execution["timeToClickShoppingCart"]){
+      this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
+    }
     this.showBasket = !this.showBasket;
   }
 }

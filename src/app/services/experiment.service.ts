@@ -12,6 +12,7 @@ import {FormFeedbackExperimentExecution} from '../models/form-feedback-experimen
 import {FittsLawExperiment} from '../models/fitts-law-experiment';
 import {RestorffExperiment} from '../models/restorff-experiment';
 import {ExperimentFeedback} from '../models/experiment-feedback';
+import {ExperimentSelectionTime} from '../models/experiment-selection-time';
 
 @Injectable({
   providedIn: 'root'
@@ -129,6 +130,11 @@ export class ExperimentService {
 
   submitFeedback(feedback: ExperimentFeedback) {
     return this.http.post<ExperimentFeedback>('https://localhost:7147/api/experiment/feedback/new', feedback);
+
+  }
+
+  saveExperimentSelectionTime(experimentSelectionTime: ExperimentSelectionTime) {
+    return this.http.post<ExperimentSelectionTime>('https://localhost:7147/api/experiment/selection-time/new', experimentSelectionTime);
 
   }
 }

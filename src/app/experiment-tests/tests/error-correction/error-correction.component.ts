@@ -13,7 +13,6 @@ import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {TimeService} from '../../../services/time.service';
-import {config} from 'rxjs';
 
 @Component({
   selector: 'app-error-correction',
