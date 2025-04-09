@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, switchMap} from 'rxjs';
 import {ExperimentTest} from '../../models/experiment-test';
@@ -43,23 +43,32 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   markedText: string = "";
   finishedExecutions: ExperimentTestExecution[] = [];
   testCompletedKeyValues: { [key: number]: boolean } = {};
-  protected navigationConfig: NavigationSetting|null = null;
+  protected navigationConfig: NavigationSetting | null = null;
   countDownToStartNextTest: number = 3;
   setting?: UserSetting
   interval: number = 0;
   protected numberTests: number = 0;
 
+  constructor() {
+
+    effect(() => {
+      const userId = this.userService.currentUser()?.id;
+      if (userId) {
+        this.fetchExecutions(userId);
+      }
+    });
+  }
 
   ngOnInit() {
 
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
-        if (this.router.url == "/"){
+        if (this.router.url == "/") {
           clearInterval(this.interval);
           this.countDownToStartNextTest = 3;
         }
-        if (this.router.url.includes("tests/")){
+        if (this.router.url.includes("tests/")) {
           this.timeService.stopTimer();
         }
       });
@@ -125,13 +134,13 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   private fetchCurrentUserSetting(userId: number) {
     this.settingService.fetchLastSetting(userId).subscribe((setting) => {
       this.setting = setting;
-      if (setting.autoStartNextExperiment){
-        const nextExperiment: ExperimentTest|null = this.findNextExperiment();
-        if (nextExperiment){
+      if (setting.autoStartNextExperiment) {
+        const nextExperiment: ExperimentTest | null = this.findNextExperiment();
+        if (nextExperiment) {
           this.interval = setInterval(() => {
             this.countDownToStartNextTest--;
-            if (this.countDownToStartNextTest < 1){
-              this.router.navigateByUrl("/tests/detail/"+nextExperiment?.id);
+            if (this.countDownToStartNextTest < 1) {
+              this.router.navigateByUrl("/tests/detail/" + nextExperiment?.id);
               this.countDownToStartNextTest = 3;
               clearInterval(this.interval);
             }
@@ -149,10 +158,10 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     // find finished tests
     const finishedTests = this.findFinishedTests();
     // extract non-finished tests
-    const nonFinishedTests=this.findNonFinishedTests();
+    const nonFinishedTests = this.findNonFinishedTests();
     // find test with min pos
-    let testWithMinPosition =this.findTestWithMinPos(nonFinishedTests);
-    this.filteredExperimentTests =  tests.concat(finishedTests.concat([testWithMinPosition]))
+    let testWithMinPosition = this.findTestWithMinPos(nonFinishedTests);
+    this.filteredExperimentTests = tests.concat(finishedTests.concat([testWithMinPosition]))
     this.experimentTests = this.filteredExperimentTests;
   }
 
@@ -162,27 +171,28 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     })
   }
 
-  private findNextExperiment(): ExperimentTest|null {
+  private findNextExperiment(): ExperimentTest | null {
     // extract non-finished tests
     const nonFinishedTests = this.findNonFinishedTests();
-    if (nonFinishedTests.length == 0){
+    if (nonFinishedTests.length == 0) {
       return null
     }
     return this.findTestWithMinPos(nonFinishedTests);
 
   }
 
-  findFinishedTests(){
+  findFinishedTests() {
     return this.finishedExecutions.map(exec => exec.experimentTest);
   }
-  findNonFinishedTests(){
+
+  findNonFinishedTests() {
     return this.experimentTests.filter((test) => {
       const finishedTestIds = this.finishedExecutions.map(exec => exec.experimentTest?.id);
       return finishedTestIds.indexOf(test.id) == -1;
     });
   }
 
-  findTestWithMinPos(tests: ExperimentTest[]){
+  findTestWithMinPos(tests: ExperimentTest[]) {
     let testWithMinPosition = tests[0]!;
     const minPos = testWithMinPosition.position;
     tests.forEach((test) => {

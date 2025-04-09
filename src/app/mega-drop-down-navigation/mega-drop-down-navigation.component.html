@@ -2,19 +2,16 @@
   <div class="header p-4 d-flex">
     <h1>Weblab</h1>
     <div class="header-menu-container w-100 d-flex justify-content-center gap-lg-5">
-
         <div (mouseleave)="leaveHeaderMenu()" (mouseenter)="displayExperimentMenu()" class="d-flex gap-lg-5">
           <div >
             <a (click)="setCurrentRoute('Experimente')"  [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Experimente'}"  style="min-height: 100px" class="header-menu-item" routerLink="/">Experimente</a>
           </div>
           <div >
             <a (click)="setCurrentRoute('Einstellungen')" [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Einstellungen'}"  class="header-menu-item" routerLink="/settings">Einstellungen</a></div>
+          <div >
+            <a (click)="setCurrentRoute('Hilfe')"  [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Hilfe'}" routerLink="/help" class="header-menu-item">Hilfe</a>
+          </div>
         </div>
-        <div >
-          <a (click)="setCurrentRoute('Hilfe')"  [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Hilfe'}" routerLink="/help" class="header-menu-item">Hilfe</a>
-        </div>
-
-
     </div>
     <div class="d-flex justify-content-end gap-5">
       <div>
@@ -26,7 +23,6 @@
     </div>
   </div>
 
-  <div  >
     <div (mouseleave)="leaveExperimentMenu()"  (mouseenter)="enterExperimentMenu()" [ngClass]="{'hidden': !showExperimentMenu, 'd-flex p-3 visible':showExperimentMenu}"
          [@hoverState]="showExperimentMenu ? 'open' : 'closed'" class="experiment-menu-container gap-lg-5">
       <div (mouseenter)="checkIfDisplayExperimentTestMenu(experiment)"
@@ -41,16 +37,13 @@
         <div class="d-flex justify-content-center">
           <ul class="list-group list-group-flush">
             <div *ngFor="let test of experimentTests" class=" list-group-item">
-              <a [ngClass]="{'no-pointer-events': noPointerEvents}" routerLink="/tests/detail/{{test.id}}" class="sub-menu-item">{{ test.name }}</a>
+              <a [ngClass]="{'no-pointer-events': noPointerEvents}" routerLink="/tests/detail/{{test.id}}" class="active sub-menu-item">{{ test.name }}</a>
             </div>
           </ul>
         </div>
 
       </div>
     </div>
-  </div>
-
-
 
 </div>
 

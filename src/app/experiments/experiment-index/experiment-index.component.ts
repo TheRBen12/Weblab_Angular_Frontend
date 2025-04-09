@@ -48,7 +48,7 @@ export class ExperimentIndexComponent implements OnInit {
           this.navigationSetting = setting;
         }, (error) => {
           console.log(error);
-        })
+        });
         this.fetchFinishedExecutions(this.userId, "FINISHED").subscribe((executions) => {
           if (executions.length > 0) {
             this.finishedExecutions = executions;

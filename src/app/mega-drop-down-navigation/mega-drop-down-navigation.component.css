@@ -13,18 +13,17 @@ h1{
 
 .experiment-menu-container{
   background-color: #D6D6D6;
-  position: absolute;
   z-index: 10;
   width: 100%;
+  position: absolute;
 
 }
 .experiment-test-menu-container{
   background-color: #F0F0F0;
   z-index: 10;
-  position: absolute;
   width: 100%;
-  top: calc(100% + 50px); /* Abstand zum ersten Menü */
-
+  position: absolute;
+  top: calc(100% + 100px); /* Abstand zum ersten Menü */
 }
 
 a{
