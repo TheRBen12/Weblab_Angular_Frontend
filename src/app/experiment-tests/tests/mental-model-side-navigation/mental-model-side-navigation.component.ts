@@ -102,6 +102,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     'firstClick': "",
     "usedBreadcrumbs": false,
     "timeToClickShoppingCart": null,
+    "numberToggledMenu": 0,
   };
 
   constructor(private readonly toasterService: ToastrService) {
@@ -253,7 +254,8 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.links = this.routerService.buildBreadcrumbs(this.links, this.currentRoute);
   }
 
-  checkToIncreaseFailedClicks($event: number) {
+  increaseToggledMenu($event: number) {
+    this.execution["numberToggledMenu"] =  this.execution["numberToggledMenu"] + 1;
     if ($event > 1) {
       this.increaseFailedClicks();
     }
