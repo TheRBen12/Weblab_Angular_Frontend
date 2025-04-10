@@ -1,0 +1,48 @@
+<div class="side-menu-container shadow">
+  <div class="mt-1 ms-3 d-flex flex-row gap-3">
+    <button class="mt-2" (click)="toggle()" mat-fab>
+      <mat-icon class="menu-icon">menu</mat-icon>
+    </button>
+    <h3 class="menu-title p-3">Menu</h3>
+  </div>
+
+  <div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <a class="link-offset-2 home-link link-underline-opacity-75-hover" routerLink="./">Home</a>
+      </li>
+    </ul>
+  </div>
+
+  <mat-drawer-container class="draw-container h-100" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <ul class="list-group list-group-flush">
+        <li *ngIf="parentCategory && currentRoute != 'Home'" class="list-group-item list-group-item-action menu-item">
+          <a routerLink="{{parentRoute}}" (click)="emitCurrentRoute(parentCategory)"
+             class="link-offset-2 link-offset-3-hover
+         link-underline-opacity-0
+         link-underline-opacity-75-hover">{{ parentCategory }}
+          </a>
+        </li>
+
+      </ul>
+
+      <ul class="list-group list-group-flush">
+        <li *ngIf="currentRoute != 'Home' " class=" list-group-item">
+          <div class="active link-offset-2 link-offset-3-hover
+         link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ currentRoute }}
+          </div>
+        </li>
+
+        <li class="list-group-item menu-item" *ngFor="let category of menuItems; index as i">
+          <a (click)="emitCurrentRoute(category.name)"
+             class=" link-offset-3-hover link-underline  link-underline-opacity-75-hover"
+             routerLink="{{links[i]}}">{{ category.name }}</a>
+        </li>
+      </ul>
+    </mat-drawer>
+
+  </mat-drawer-container>
+
+</div>
+

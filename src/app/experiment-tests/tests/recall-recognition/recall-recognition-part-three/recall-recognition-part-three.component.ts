@@ -79,6 +79,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
     if (!this.experimentFinished) {
       return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
     } else {
+
       return true;
     }
   }
@@ -145,7 +146,8 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/tests/"+this.experimentTest?.experiment?.id)
+            this.router.navigateByUrl("/test/"+this.experimentTest?.id+"/feedback")
+
             this.toasterService.success("Vielen Dank! Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
 

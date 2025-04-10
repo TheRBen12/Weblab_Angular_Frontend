@@ -149,6 +149,9 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   }
 
   finishExperiment() {
+    this.execution["finishedExecutionAt"] = new Date();
+    this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
+    this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, 'INPROCESS').subscribe((exec) => {

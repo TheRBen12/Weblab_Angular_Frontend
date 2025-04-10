@@ -65,6 +65,7 @@ export class ExperimentIndexComponent implements OnInit {
     }
     this.fetchExperiments();
     this.fetchCurrentUserSetting();
+    this.timeService.stopTimer();
     this.timeService.startTimer();
   }
 

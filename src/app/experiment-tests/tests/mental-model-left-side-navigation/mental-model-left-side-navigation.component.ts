@@ -10,7 +10,6 @@ import {
 import {ProductType} from '../../../models/product-category';
 import {ProductService} from '../../../services/product.service';
 import {RouterService} from '../../../services/router.service';
-import {routerLinks} from '../routes';
 import {AutoCompleteComponent} from '../../../auto-complete/auto-complete.component';
 import {FilterService} from '../../../services/filter.service';
 import {TimeService} from '../../../services/time.service';
@@ -222,9 +221,8 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("tests/"+this.experimentTest?.experiment?.id);
+            this.router.navigateByUrl("test/"+this.experimentTest?.id + "/feedback");
             this.toasterService.success("Sie haben das Experiment erfolgreich abgeschlossen");
-
           }, 2000)
         });
 

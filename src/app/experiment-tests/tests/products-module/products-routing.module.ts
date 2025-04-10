@@ -5,7 +5,6 @@ import {ProductIndexComponent} from '../product-index/product-index.component';
 import {ProductDetailComponent} from '../product-detail/product-detail.component';
 import {ShopIndexComponent} from '../shop-index/shop-index.component';
 import {HomeComponent} from '../home/home.component';
-import {redirectGuardGuard} from '../../../guards/redirect-guard.guard';
 
 
 
@@ -20,9 +19,8 @@ const routes: Routes = [
       {path: 'smartphone', component: ProductIndexComponent, title: "Smartphone"},
       {path: 'wohnen', component: ProductIndexComponent, title: "Wohnen"},
       {path: 'peripherie', component: ProductIndexComponent, title: "Peripherie"},
-      {path: 'keypad', component: ProductIndexComponent, title: "Tastaturen"},
+      {path: 'tastatur', component: ProductIndexComponent, title: "Tastaturen"},
       {path: 'maus', component: ProductIndexComponent, title: "Computer Maus"},
-
       {path: 'lebensmittel', component: ProductIndexComponent, title: "Lebensmittel"},
       {path: 'pc', component: ProductIndexComponent, title: "PC"},
       {path: 'haushalt', component: ProductIndexComponent, title: "Haushalt"},

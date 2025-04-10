@@ -64,6 +64,15 @@ export class RouterService {
     return category ? category : "Home";
   }
 
+  buildCurrentType(categories: ProductType[], route: string, currentType?: ProductType){
+    if (currentType?.parentType?.name == route) {
+      currentType = currentType?.parentType;
+    } else {
+      currentType = categories.find(type => type.name == route);
+    }
+    return currentType;
+  }
+
   rebuildParentRoute(route: string, categories: ProductType[], currentType?: ProductType){
     let parentRoute = "";
     let parentCategory = "";
@@ -71,7 +80,6 @@ export class RouterService {
       parentCategory = currentType?.parentType?.name ?? "Home";
       parentRoute = this.productCategoryLinks[parentCategory];
       localStorage.setItem('parentRoute', parentCategory);
-
     }else{
       const currentType = categories.find((category) => category.name == route)
       parentCategory = currentType?.parentType?.name ?? "Home";

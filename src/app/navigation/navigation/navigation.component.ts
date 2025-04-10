@@ -5,6 +5,7 @@ import {User} from '../../models/user';
 import {NgClass, NgIf} from '@angular/common';
 import {UserBehaviour} from '../../models/user-behaviour';
 import {RouterService} from '../../services/router.service';
+import {TimeService} from '../../services/time.service';
 
 @Component({
   selector: 'app-navigation',
@@ -24,6 +25,7 @@ export class NavigationComponent implements OnInit {
   currentLink: string = "Experimente"
   userBehaviour!: UserBehaviour | null;
   routerService: RouterService = inject(RouterService);
+  timeService: TimeService = inject(TimeService);
 
   constructor() {
     this.currentUser = this.loginService.getCurrentUser();
@@ -40,6 +42,7 @@ export class NavigationComponent implements OnInit {
 
   logout() {
     this.loginService.logout();
+    this.timeService.stopTimer();
   }
 
   setCurrentLink(link: string) {

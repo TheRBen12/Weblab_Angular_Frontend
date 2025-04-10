@@ -1,0 +1,30 @@
+.draw-container{
+  background-color: #FEFEFE;
+}
+.side-menu-container{
+  background-color: #FEFEFE;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.menu-icon{
+  font-size: 25px;
+  width: 30px;
+  color: black;
+  font-weight: bold;
+}
+button{
+  background-color: #FEFEFE
+}
+.menu-title{
+  color: #107CCA;
+}
+
+.home-link{
+  color: #107CCA;
+  font-size: 20px;
+}
+.active{
+  font-weight: bold;
+  font-size: 20px;
+}

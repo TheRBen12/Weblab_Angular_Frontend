@@ -296,7 +296,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("tests/"+this.experimentTest?.experiment?.id);
+            this.router.navigateByUrl("/test/"+this.experimentTest.id+"/feedback")
             this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000)
 

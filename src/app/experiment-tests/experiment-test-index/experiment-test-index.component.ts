@@ -69,6 +69,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
           this.countDownToStartNextTest = 3;
         }
         if (this.router.url.includes("tests/")) {
+
           this.timeService.stopTimer();
         }
       });

@@ -12,6 +12,9 @@ import {emails} from '../data/emails';
 import {TimeService} from '../../../services/time.service';
 import {RouterService} from '../../../services/router.service';
 import {LoginService} from '../../../services/login.service';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-fitts-law',
@@ -19,6 +22,10 @@ import {LoginService} from '../../../services/login.service';
     EmailMenuComponent,
     ExperimentTestInstructionComponent,
     RouterOutlet,
+    MatCard,
+    MatCardContent,
+    MatProgressSpinner,
+    NgIf,
   ],
   templateUrl: './fitts-law.component.html',
   standalone: true,
@@ -32,7 +39,7 @@ export class FittsLawComponent implements OnInit {
   timeService: TimeService = inject(TimeService);
   routerService: RouterService = inject(RouterService);
   loginService: LoginService = inject(LoginService);
-  instructions: string[] = [];
+  instructions: string[] = ["Löschen Sie alle E-Mails in der Liste. Versuche Sie jedes Mal das Löschen danch rückgängig zu machen."];
   currentInstructionStep = 0;
   targetInstruction: string = "";
 
@@ -43,6 +50,7 @@ export class FittsLawComponent implements OnInit {
   deletedEmail: Email | null = null;
   reactions: { [key: number]: number } = {};
   tasks: { [key: number]: boolean } = {};
+  currentExecutionStep: number = 0;
 
 
   loading: boolean = false;
@@ -69,12 +77,21 @@ export class FittsLawComponent implements OnInit {
 
   ngOnInit(): void {
     this.timeService.startTimer();
-    this.instructions = ["Löschen Sie alle E-Mails in der Liste. Versuche Sie jedes Mal das Löschen danch rückgängig zu machen."];
+    this.fetchExperimentTest()
     this.emailToDelete = Math.floor(Math.random() * 6) + 1;
+    this.emailData = emails;
+
     this.emailService.getDeletedMailSubscripition().subscribe((data) => {
       if (data) {
+        this.currentExecutionStep++;
         this.tasks[data.position] = false;
         this.deletedEmail = data.mail;
+        if (this.currentExecutionStep == this.emailData.length){
+          setTimeout(() => {
+            this.checkToFinishExperiment();
+          }, 5000)
+          this.finishExperiment();
+        }
       }
     });
 
@@ -87,8 +104,7 @@ export class FittsLawComponent implements OnInit {
         this.timeService.stopTimer();
       }
     });
-    this.emailData = emails;
-    this.fetchExperimentTest()
+
   }
 
 
@@ -97,19 +113,23 @@ export class FittsLawComponent implements OnInit {
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["tasks"] = JSON.stringify(this.tasks);
     const userID = this.loginService.currentUser()?.id;
+    this.timeService.stopTimer();
     if (userID) {
       this.experimentService.getExperimentExecutionByStateAndTest(userID, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;
         this.loading = true;
         setTimeout(() => {
           this.loading = false;
-          this.router.navigateByUrl("/tests/" + this.experimentTest.experiment?.id);
+          this.router.navigateByUrl("/test/" + this.experimentTest.id + "/feedback");
         }, 2000);
         this.experimentService.saveFittsLawExperiment(this.execution).subscribe();
-
       });
     }
+  }
 
-
+  private checkToFinishExperiment() {
+    if (this.currentExecutionStep == this.emailData.length){
+      this.finishExperiment();
+    }
   }
 }

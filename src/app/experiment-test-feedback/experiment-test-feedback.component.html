@@ -23,3 +23,16 @@
     </form>
   </div>
 </div>
+
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Vielen Dank, Ihre Daten werden übermittelt</h3>
+    <mat-progress-spinner
+      class="example-margin m-auto"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>

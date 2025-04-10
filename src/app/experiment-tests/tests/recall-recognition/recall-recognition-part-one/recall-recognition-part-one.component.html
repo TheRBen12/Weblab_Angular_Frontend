@@ -2,7 +2,6 @@
   <div class="col-2">
     <app-experiment-test-instruction [target]="experimentTest.goalInstruction"  [currentInstructionStep]="currentInstructionStep" [instructions]="instructions"></app-experiment-test-instruction>
   </div>
-
   <div (click)="increaseClicks()" style="width: 100%">
     <nav class="navbar navbar-expand-lg shadow">
       <div class="container-fluid">
@@ -62,7 +61,7 @@
   <mat-card-content>
     <h3 class="progress-title fw-bold m-auto">Vielen Dank. Ihre Daten werden gespeichert</h3>
     <mat-progress-spinner
-      class="example-margin"
+      class="example-margin m-auto"
       [mode]="'indeterminate'"
       [value]="50"
       [color]="'accent'"

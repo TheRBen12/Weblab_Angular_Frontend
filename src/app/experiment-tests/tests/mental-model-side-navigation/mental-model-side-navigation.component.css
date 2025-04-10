@@ -1,5 +1,10 @@
-p{
-  font-size: 18px;
+.main{
+  width: 100%;
+}
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
 }
 .progress-bar-circle{
   position: fixed;

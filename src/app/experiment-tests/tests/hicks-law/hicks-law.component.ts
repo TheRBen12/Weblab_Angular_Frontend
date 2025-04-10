@@ -220,6 +220,7 @@ export class HicksLawComponent implements OnInit {
   finishExperiment(productNumberInBasket: number) {
     const id = this.userService.currentUser()?.id
     if (productNumberInBasket >= 3 && id) {
+      this.timerService.stopTimer();
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId)
       this.loading = true;
       this.fetchExecutionInProcess(id, this.experimentTestId).subscribe((exec) => {

@@ -1,0 +1,75 @@
+<div class="d-flex flex-row">
+  <div class="col-sm-3">
+    <app-experiment-test-instruction [product]="product"  [instructions]="instructions"
+                                     [currentInstructionStep]="currentInstructionStep"></app-experiment-test-instruction>
+  </div>
+  <div class="main" (click)="increaseNumberClicks($event)" >
+
+      <nav class="navbar navbar-expand-lg shadow">
+        <div class="container-fluid">
+          <a class="shop-title navbar-brand">WebLab Shop</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <app-auto-complete (onSelectEventEmitter)="increaseNumberSearchBarUsed()"  (onInputClearedEventEmitter)="increaseNumberSearchBarUsed()"  (onInputEventEmitter)="findProducts($event)"  (click)="setClickedOnSearchBar()"
+                          [placeholder]="'Produkte suchen'"></app-auto-complete>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <button class="btn btn-primary">Anmelden</button>
+              </li>
+            </ul>
+            <div class="d-flex" role="search">
+              <button (click)="toggleBasket()" mat-fab class="me-4 d-flex justify-content-center align-items-center">
+                <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
+                          fontIcon="shopping_cart">
+
+                </mat-icon>
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+    <div class="main mb-3">
+      <div class="row">
+        <div class="col-sm-auto">
+          <app-product-off-canvas-menu (toggleEvent) = "checkToIncreaseFailedClicks($event)" [toggleMenu]="showBasket" [currentRoute]="currentRoute"  [parentCategory]="parentCategory" [parentRoute]="parentRoute"   (routeEvent)="setCurrentRoute($event)"  [menuItems]="productCategories" [links]="categoryLinks"  ></app-product-off-canvas-menu>
+        </div>
+        <div class="col-sm-7 mt-2 responsive-list-layout">
+          <div (click)="updateBreadcrumbsBehaviour()" class="container" *ngIf="links.length > 0">
+            <a routerLink="./" class="header-link">Home</a> <a routerLink="{{routerLinks[link]}}" class="header-link" *ngFor="let link of links"> > {{link}}</a>
+          </div>
+
+          <div class="scrollable-list">
+            <router-outlet></router-outlet>
+          </div>
+
+        </div>
+        <div class="col-sm-2 ">
+          <div *ngIf="!showBasket" class="container-md">
+            <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment($event)"  [basket] = basket></app-basket>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<mat-card *ngIf="loading" class="progress-bar-circle">
+  <mat-card-content>
+    <h3 class="progress-title fw-bold">Ihre Daten werden gespeichert</h3>
+    <mat-progress-spinner
+      class="example-margin m-auto"
+      [mode]="'indeterminate'"
+      [value]="50"
+      [color]="'accent'"
+    >
+    </mat-progress-spinner>
+  </mat-card-content>
+</mat-card>

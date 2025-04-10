@@ -223,7 +223,7 @@ export class FeedbackPartTwoComponent implements OnInit {
       if (this.form.valid) {
         this.finishExperiment();
       }
-      this.execution["numberFormValidartions"] = this.execution["numberFormValidations"] + 1;
+      this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
     }
   }
 

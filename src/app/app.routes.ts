@@ -47,6 +47,9 @@ import {FeedbackPartTwoComponent} from './experiment-tests/tests/feedback-part-t
 import {CreatedUserShopComponent} from './created-user-shop/created-user-shop.component';
 import {experimentRouteGuard} from './guards/experiment-route.guard';
 import {ExperimentTestFeedbackComponent} from './experiment-test-feedback/experiment-test-feedback.component';
+import {
+  MentalModelSideNavigationComponent
+} from './experiment-tests/tests/mental-model-side-navigation/mental-model-side-navigation.component';
 
 export const routes: Routes = [
   {
@@ -139,6 +142,15 @@ export const routes: Routes = [
 
           {
             path: 'mental-model/13', component: MentalModelLeftSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
+              {
+                path: '',
+                loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
+              }
+            ]
+          },
+
+          {
+            path: 'mental-model/5', component: MentalModelSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
