@@ -77,11 +77,20 @@ export class HicksLawComponent implements OnInit {
   private timeToClickFirstCategoryLink: number|null = null;
   showBasket: boolean = false;
   usedFilters: string[] = [];
+  private experimentFinished: boolean = false;
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie Lebensmittel", "Wählen Sie ein Lebensmittel aus.",
       "Fügen Sie das Lebensmittel dem Warenkrob hinzu"];
+  }
+
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung, Sie sind dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
   }
 
   ngOnInit(): void {
@@ -220,6 +229,7 @@ export class HicksLawComponent implements OnInit {
   finishExperiment(productNumberInBasket: number) {
     const id = this.userService.currentUser()?.id
     if (productNumberInBasket >= 3 && id) {
+      this.experimentFinished = true;
       this.timerService.stopTimer();
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId)
       this.loading = true;
@@ -241,7 +251,6 @@ export class HicksLawComponent implements OnInit {
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
           usedFilters: JSON.stringify(this.usedFilters),
         };
-
         this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;

@@ -85,6 +85,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   usedFilters: string[] = [];
   private experimentTest?: ExperimentTest;
   firstClick?: string;
+  experimentFinished: boolean = false;
   execution: {
     [key: string]: any
   } = {
@@ -106,6 +107,14 @@ export class MentalModelMegaDropdownComponent implements OnInit {
 
   constructor(private readonly toasterService: ToastrService) {
     this.instructions = ["Finden Sie die passende Produktkategorie des unten spezifizierten Produktes"]
+  }
+
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung, Sie sind dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
   }
 
 
@@ -154,6 +163,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
+      this.experimentFinished = true;
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, 'INPROCESS').subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;
         this.loading = true;

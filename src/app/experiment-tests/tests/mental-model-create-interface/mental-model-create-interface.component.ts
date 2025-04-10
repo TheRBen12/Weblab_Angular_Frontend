@@ -93,6 +93,7 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
   };
 
 
+
   selectElement(element: string, event: Event) {
     event.stopPropagation();
     event.preventDefault();

@@ -71,10 +71,18 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   products: any[] = [];
   private currentType?: ProductType;
   private activatedRoute = inject(ActivatedRoute);
+  private experimentFinished: boolean = false;
 
   constructor(private readonly toasterService: ToastrService) {
   }
 
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung, Sie sind dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
+  }
 
   filterProducts(filterText: string) {
     this.filterService.dispatchFilterText(filterText)
@@ -215,6 +223,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution["finishedExecutionAt"] = new Date();
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
+      this.experimentFinished = true;
       this.timeService.stopTimer();
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution['experimentTestExecutionId'] = exec.id;

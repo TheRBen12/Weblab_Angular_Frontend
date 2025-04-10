@@ -51,6 +51,7 @@ export class FittsLawComponent implements OnInit {
   reactions: { [key: number]: number } = {};
   tasks: { [key: number]: boolean } = {};
   currentExecutionStep: number = 0;
+  private experimentFinished: boolean = false;
 
 
   loading: boolean = false;
@@ -66,6 +67,14 @@ export class FittsLawComponent implements OnInit {
     "clickReactionTimes": "",
   };
 
+
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung, Sie sind dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
+  }
 
   private fetchExperimentTest() {
     const experimentId = this.routerService.getExperimentTestIdByUrl(this.router.url, "fitts-law");
@@ -115,6 +124,7 @@ export class FittsLawComponent implements OnInit {
     const userID = this.loginService.currentUser()?.id;
     this.timeService.stopTimer();
     if (userID) {
+      this.experimentFinished = true;
       this.experimentService.getExperimentExecutionByStateAndTest(userID, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;
         this.loading = true;

@@ -84,6 +84,9 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
 
 
   toggleBasket() {
+    if (this.showBasket){
+      this.increaseFailedClicks();
+    }
     if (!this.execution["timeToClickShoppingCart"]){
       this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
     }
@@ -134,7 +137,6 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
       this.usedFilters = JSON.parse(filters);
       this.execution["usedFilters"] = filters;
     }
-
 
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {

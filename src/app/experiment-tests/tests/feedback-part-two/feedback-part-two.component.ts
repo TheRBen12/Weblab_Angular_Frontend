@@ -62,12 +62,21 @@ export class FeedbackPartTwoComponent implements OnInit {
     "executionTime": 0,
     "numberErrors": 0
   };
+  experimentFinished: boolean = false;
 
   instructions = ["Geben sie für den Zielort ein: Madrid", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
     "Geben Sie Ihre Kontaktdaten an", "Geben Sie für die Strasse und Hausnummer ein: Engestrasse",
     "Geben Sie Ihren Wohnort an", "Geben sie für das Land ein: CH", "Geben Sie für die PLZ ein: 3011", "Treffen Sie eine Auswahl für die Persoen, welche mitreisen."];
 
   constructor(private readonly toasterService: ToastrService) {
+  }
+
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung, Sie sind dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
   }
 
   form = new FormGroup({
@@ -245,6 +254,7 @@ export class FeedbackPartTwoComponent implements OnInit {
     this.timeService.stopTimer();
     const userId = this.loginService.currentUser()?.id;
     if (userId){
+      this.experimentFinished = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;

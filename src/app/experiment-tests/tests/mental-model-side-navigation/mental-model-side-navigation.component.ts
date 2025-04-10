@@ -84,7 +84,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
   parentCategory?: string;
   filters: string[] = [];
   protected loading: boolean = false;
-
+  private experimentFinished: boolean = false;
 
   execution: {
     [key: string]: any
@@ -105,6 +105,14 @@ export class MentalModelSideNavigationComponent implements OnInit {
   };
 
   constructor(private readonly toasterService: ToastrService) {
+  }
+
+  canDeactivate() {
+    if (!this.experimentFinished) {
+      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+    } else {
+      return true;
+    }
   }
 
   ngOnInit(): void {
@@ -187,6 +195,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.execution["usedFilters"] = JSON.stringify(this.filters);
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest) {
+      this.experimentFinished = true;
       this.timeService.stopTimer();
       this.execution["finishedExecutionAt"] = new Date();
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, 'INPROCESS').subscribe((exec) => {
