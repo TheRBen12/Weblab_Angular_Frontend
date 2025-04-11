@@ -132,7 +132,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/12', component: MentalModelRightSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'mental-model/9', component: MentalModelRightSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -141,7 +141,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/13', component: MentalModelLeftSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'mental-model/10', component: MentalModelLeftSideNavigationComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -168,7 +168,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'adaptability/7', component: MentalModelCreateInterfaceComponent, children: [
+            path: 'adaptability/8', component: MentalModelCreateInterfaceComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -195,11 +195,11 @@ export const routes: Routes = [
           }
 ,
           {
-            path: 'feedback/18', component: FeedbackPartOneComponent, canDeactivate: [experimentRouteGuard],
+            path: 'feedback/19', component: FeedbackPartOneComponent, canDeactivate: [experimentRouteGuard],
           },
 
           {
-            path: 'feedback/19', component: FeedbackPartTwoComponent, canDeactivate: [experimentRouteGuard],
+            path: 'feedback/20', component: FeedbackPartTwoComponent, canDeactivate: [experimentRouteGuard],
           },
 
         ]

@@ -5,7 +5,7 @@ import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {Router} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {ExperimentTest} from '../../../models/experiment-test';
 import {EmailService} from '../../../services/email.service';
 import {ExperimentService} from '../../../services/experiment.service';
@@ -95,7 +95,8 @@ const emails: Email[] = [
     MatCard,
     MatCardContent,
     MatProgressSpinner,
-    NgIf
+    NgIf,
+    RouterOutlet
   ],
   templateUrl: './restorff-effect.component.html',
   standalone: true,
@@ -179,6 +180,7 @@ export class RestorffEffectComponent implements OnInit {
       this.currentEmailIndex++;
       if (this.currentEmailIndex >= this.emailData.length) {
         clearInterval(intervall);
+        this.currentInstructionStep++;
         this.finishExperiment();
       }
     }, 5000);
@@ -201,10 +203,17 @@ export class RestorffEffectComponent implements OnInit {
       this.execution["numberDeletedMails"] = this.execution["numberDeletedMails"] + 1;
       this.reactions[this.currentEmailIndex - 1] = Math.round(endTime - this.startTime)
 
-      if (this.lastAddedEmailIndex == this.currentEmailIndex-1 || this.lastAddedEmailIndex == index){
+      if (this.lastAddedEmailIndex == this.currentEmailIndex - 1 || this.lastAddedEmailIndex == index) {
         this.tasks[this.currentEmailIndex - 1] = true;
       }
       this.mails = this.mails.filter(mail => mail.id != $event.id);
+      $event.user = this.loginService.currentUser()?.id??0;
+      if (index != 3 && index != 5){
+        this.emailService.saveDeletedEmail($event).subscribe((deletedMail) => {
+          console.log(deletedMail);
+        });
+      }
+
     } else {
       this.increaseFailedClicks();
     }
@@ -239,21 +248,21 @@ export class RestorffEffectComponent implements OnInit {
   }
 
   increaseFailedClicks() {
-    this.execution["numberFailedClicks"] + 1;
+    this.execution["numberFailedClicks"] = this.execution["numberFailedClicks"]+ 1;
   }
 
   send(email: Email, index: number,) {
-    if (this.currentEmailIndex == 3 || this.currentEmailIndex==5){
-      this.deleteEmail(email, index);
-    }else{
+    if (this.currentEmailIndex == 3 || this.currentEmailIndex == 5) {
+      this.deleteEmail(email, this.currentEmailIndex);
+    } else {
       this.increaseFailedClicks();
     }
   }
 
   checkIfCanDelete($event: Email, i: number) {
-    if (this.currentEmailIndex != 3 && this.currentEmailIndex != 5 ){
+    if (this.currentEmailIndex != 3 && this.currentEmailIndex != 5) {
       this.deleteEmail($event, i);
-    }else{
+    } else {
       this.increaseFailedClicks();
     }
   }

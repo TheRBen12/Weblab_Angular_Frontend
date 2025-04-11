@@ -103,6 +103,9 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
         this.failedClicks --;
       }
       this.basket = basket
+      if (this.basket.length > 0){
+        this.basketIsHidden = false;
+      }
     });
 
     this.fetchAllProducts();

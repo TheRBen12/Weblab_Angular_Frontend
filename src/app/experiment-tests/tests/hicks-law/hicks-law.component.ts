@@ -62,7 +62,7 @@ export class HicksLawComponent implements OnInit {
   targetRoutes = ["Lebensmittel"]
   basket: any[] = [];
   searchBarDisabled = true;
-  experimentTestId!: number ;
+  experimentTestId!: number;
   targetInstruction: string = "";
   productLimit: number = 0;
   categoryLimit: number = 0;
@@ -74,7 +74,9 @@ export class HicksLawComponent implements OnInit {
   private failedClicks: number = 0;
   private numberClicks: number = 0;
   private firstClick: string | null = null;
-  private timeToClickFirstCategoryLink: number|null = null;
+  private timeToClickFirstCategoryLink: number | null = null;
+  private timeToFirstClick: number = 0;
+
   showBasket: boolean = false;
   usedFilters: string[] = [];
   private experimentFinished: boolean = false;
@@ -104,7 +106,7 @@ export class HicksLawComponent implements OnInit {
     }
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
       this.clickedOnFilters = true;
-      if (filter != ""){
+      if (filter != "") {
         this.usedFilters.push(filter);
       }
     })
@@ -137,7 +139,7 @@ export class HicksLawComponent implements OnInit {
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
         this.currentRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
-        if (this.currentRoute == "Lebensmittel"){
+        if (this.currentRoute == "Lebensmittel") {
           this.currentInstructionStep = 1;
         }
         this.buildParentRoute();
@@ -291,11 +293,15 @@ export class HicksLawComponent implements OnInit {
   increaseNumberClicks(event: MouseEvent) {
     if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
+      this.timeToFirstClick = this.timerService.getCurrentTime();
     }
     this.numberClicks++;
   }
 
   toggleBasket() {
+    if (this.showBasket) {
+      this.failedClicks++;
+    }
     this.showBasket = !this.showBasket;
   }
 }

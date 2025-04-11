@@ -138,6 +138,10 @@ export class ErrorCorrectionComponent implements OnInit {
 
   updateClickBehaviour(value: string) {
     if (value == 'deletedItems') {
+      if ( this.execution["clickedOnDeletedItems"] == true){
+        this.increaseFailedClicks();
+      }
+
       this.execution["timeToClickOnDeletedItems"] = this.timeService.getCurrentTime();
       this.execution["clickedOnDeletedItems"] = true;
     }

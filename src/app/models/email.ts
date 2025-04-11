@@ -7,4 +7,5 @@ export interface Email {
   body: string,
   subject: string
   user: number;
+  clickedInDeletedItems?: boolean
 }

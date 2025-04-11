@@ -104,6 +104,7 @@ export class EmailIndexComponent implements OnInit {
     this.emailService.getDeletedEmails().subscribe((deletedEmail) => {
       this.fetchedMails = deletedEmail;
       this.fetchedMails = this.fetchedMails.reverse();
+      console.log(this.fetchedMails);
     });
   }
 

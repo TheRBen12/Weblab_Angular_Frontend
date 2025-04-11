@@ -207,7 +207,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
 
   private fetchExperimentTest(expId: number) {
     this.experimentService.getExperimentTest(expId).subscribe((test) => {
-      this.filterDisabled = !Boolean(JSON.parse(test.configuration)['filterDisabled']);
+      this.filterDisabled = Boolean(JSON.parse(test.configuration)['filterDisabled']);
     });
   }
 

@@ -92,6 +92,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     "usedBreadcrumbs": false,
     "timeToClickShoppingCart": null,
     "numberToggledMenu": 0,
+    "timeToFirstClick": 0,
   };
 
   constructor(private readonly toasterService: ToastrService) {
@@ -126,7 +127,6 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0){
-        debugger;
         this.showBasket = true;
       }
     });
@@ -187,6 +187,8 @@ export class MentalModelSideNavigationComponent implements OnInit {
   finishExperiment() {
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.filters);
+    this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
+
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest) {
       this.experimentFinished = true;
@@ -230,7 +232,6 @@ export class MentalModelSideNavigationComponent implements OnInit {
   increaseNumberClicks($event: MouseEvent) {
     if (!this.firstClick) {
       this.execution["firstClick"] = ($event.target as HTMLElement).innerHTML;
-
     }
     this.execution['numberClicks'] = this.execution['numberClicks'] + 1;
   }

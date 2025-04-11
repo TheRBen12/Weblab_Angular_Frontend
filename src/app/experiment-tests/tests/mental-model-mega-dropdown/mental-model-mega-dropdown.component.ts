@@ -84,7 +84,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   loading: boolean = false;
   usedFilters: string[] = [];
   private experimentTest?: ExperimentTest;
-  firstClick?: string;
+  firstClick?: string|null = null;
   experimentFinished: boolean = false;
   execution: {
     [key: string]: any
@@ -102,6 +102,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     'firstClick': "",
     "usedBreadcrumbs": false,
     "timeToClickShoppingCart": null,
+    "timeFirstClick": 0,
   };
 
 
@@ -239,6 +240,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     if (!this.firstClick){
       this.firstClick = (event.target as HTMLElement).innerHTML;
       this.execution['firstClick'] = this.firstClick;
+      this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
     }
     this.execution['numberClicks'] = this.execution['numberClicks'] + 1;
     this.saveExecutionTemporarily(this.execution);

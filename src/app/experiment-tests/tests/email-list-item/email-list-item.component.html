@@ -11,7 +11,7 @@
           <span class="text">{{email?.sender}}</span>
         </div>
        <div>
-         <span [ngClass]="{'blue-text': coloredMark }" class="fw-bold">{{email?.subject}}</span>
+         <span [ngClass]="{'blue-text': (coloredMark) }" class="fw-bold">{{email?.subject}}</span>
        </div>
       </div>
 
@@ -27,6 +27,10 @@
     <p class="text">{{email?.date}}</p>
   </div>
 
+<div class="ms-3">
+  <mat-icon *ngIf="isDeleted && !email?.clickedInDeletedItems">restore</mat-icon>
+
+</div>
 
   <div *ngIf="!isDeleted" class="ms-3 d-flex justify-content-end align-items-center w-100">
     <button mat-fab class="delete-btn" (click)="delete()" >

@@ -23,9 +23,11 @@ export class EmailListItemComponent implements OnInit, OnChanges{
   @Input() isDeleted!: boolean;
   @Input() coloredMark: boolean = false;
   @Input() deletedMailId!: number;
+  @Input() clickedInDeletedItems!: boolean | undefined;
 
   ngOnInit(): void {
     this.capitalLetter = this.email?.sender[0] ?? "";
+    console.log(this.coloredMark);
   }
   delete(){
     this.deleteEmailEventEmitter.emit(this.email);

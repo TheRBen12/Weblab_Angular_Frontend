@@ -213,7 +213,6 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   }
 
   saveTestSelectionTime(testId: number) {
-    debugger;
     const time = this.timeService.getCurrentTime();
     this.timeService.stopTimer();
     const experimentTestSelectionTime: ExperimentTestSelectionTime = {

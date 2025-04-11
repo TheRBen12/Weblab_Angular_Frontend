@@ -72,6 +72,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   private currentType?: ProductType;
   private activatedRoute = inject(ActivatedRoute);
   private experimentFinished: boolean = false;
+  timeToFirstClick: number = 0;
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -242,6 +243,8 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   updateClickBehaviour(event: MouseEvent){
     if (!this.firstClick){
       this.firstClick = (event.target as HTMLElement).innerHTML;
+      this.timeToFirstClick = this.timeService.getCurrentTime();
+      this.execution["timeToFirstClick"] = this.timeToFirstClick;
     }
     let number =  this.execution['numberClicks'];
     if (number){
