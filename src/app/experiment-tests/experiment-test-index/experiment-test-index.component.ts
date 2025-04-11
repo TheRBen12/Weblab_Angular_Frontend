@@ -14,6 +14,7 @@ import {SettingService} from '../../services/setting.service';
 import {NavigationSetting} from '../../models/navigation-setting';
 import {UserSetting} from '../../models/user-setting';
 import {TimeService} from '../../services/time.service';
+import {ExperimentTestSelectionTime} from '../../models/experiment-test-selection-time';
 
 @Component({
   selector: 'app-experiment-test-index',
@@ -36,6 +37,8 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   settingService: SettingService = inject(SettingService);
   timeService: TimeService = inject(TimeService);
   router: Router = inject(Router);
+  loginService: LoginService = inject(LoginService);
+
   experimentId: number = 0;
   experimentTests: ExperimentTest[] = [];
   filteredExperimentTests: ExperimentTest[] = [];
@@ -43,11 +46,11 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   markedText: string = "";
   finishedExecutions: ExperimentTestExecution[] = [];
   testCompletedKeyValues: { [key: number]: boolean } = {};
-  protected navigationConfig: NavigationSetting | null = null;
+  navigationConfig: NavigationSetting | null = null;
   countDownToStartNextTest: number = 3;
   setting?: UserSetting
   interval: number = 0;
-  protected numberTests: number = 0;
+  numberTests: number = 0;
 
   constructor() {
 
@@ -60,6 +63,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.timeService.startTimer();
 
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
@@ -206,5 +210,20 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.countDownToStartNextTest = 3;
+  }
+
+  saveTestSelectionTime(testId: number) {
+    debugger;
+    const time = this.timeService.getCurrentTime();
+    this.timeService.stopTimer();
+    const experimentTestSelectionTime: ExperimentTestSelectionTime = {
+      experimentTestId: testId,
+      time: time,
+      userId: this.loginService.currentUser()?.id,
+      settingId: this.setting?.id,
+    };
+    this.experimentService.saveExperimentTestSelectionTime(experimentTestSelectionTime).subscribe((result) => {
+      console.log(result);
+    });
   }
 }

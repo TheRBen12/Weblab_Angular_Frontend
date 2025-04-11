@@ -18,5 +18,8 @@ export interface MentalModelShopConfiguration {
   breadcrumbs: boolean;
   createdAt: Date;
   experimentTestId: number
+  menuToggleIcon: boolean,
+  menuTitle: boolean,
+  offCanvasMenu: boolean,
 
 }

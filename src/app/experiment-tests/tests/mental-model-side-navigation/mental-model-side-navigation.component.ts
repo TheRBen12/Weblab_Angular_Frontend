@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
@@ -10,20 +10,13 @@ import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {RouterService} from '../../../services/router.service';
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {SearchBarComponent} from '../../../search-bar/search-bar.component';
-import {SideNavigationComponent} from '../../../side-navigation/side-navigation.component';
 import {routerLinks} from '../routes';
 import {BasketComponent} from '../../../basket/basket.component';
 import {NgForOf, NgIf} from '@angular/common';
-import {SideMenuComponent} from '../side-menu/side-menu.component';
 import {ExperimentTest} from '../../../models/experiment-test';
 import {ExperimentService} from '../../../services/experiment.service';
-import {
-  AutoCompleteProductComponent
-} from '../../../auto-complete/auto-complete-product/auto-complete-product.component';
 import {AutoCompleteComponent} from '../../../auto-complete/auto-complete.component';
 import {FilterService} from '../../../services/filter.service';
-import {MatDrawer} from '@angular/material/sidenav';
 import {TimeService} from '../../../services/time.service';
 import {LoginService} from '../../../services/login.service';
 import {ToastrService} from 'ngx-toastr';
@@ -37,15 +30,11 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     ProductOffCanvasMenuComponent,
     MatFabButton,
     MatIcon,
-    SearchBarComponent,
-    SideNavigationComponent,
     BasketComponent,
     NgForOf,
     NgIf,
     RouterLink,
     RouterOutlet,
-    SideMenuComponent,
-    AutoCompleteProductComponent,
     AutoCompleteComponent,
     MatCard,
     MatCardContent,
@@ -136,6 +125,10 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
+      if (this.basket.length > 0){
+        debugger;
+        this.showBasket = true;
+      }
     });
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
       if (filter != "") {

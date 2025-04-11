@@ -168,7 +168,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/16', component: MentalModelCreateInterfaceComponent, children: [
+            path: 'adaptability/7', component: MentalModelCreateInterfaceComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -177,7 +177,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'adaptability/20', component: MentalModelCreateInterfaceComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'adaptability/6', component: MentalModelCreateInterfaceComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)

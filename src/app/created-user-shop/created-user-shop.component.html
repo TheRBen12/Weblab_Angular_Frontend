@@ -83,14 +83,26 @@
 
 
       <div class="mt-1 row">
-        <div class="col-sm-auto" *ngIf="navigationConfig?.sideMenuLeft">
-          <app-side-menu (routeEvent)="setCurrentRoute($event)"
-                         [categoryLinks]=categoryLinks
-                         [productCategories]="productCategories"
-                         [currentRoute]="currentRoute"
-                         [parentRoute]="parentRoute"
-                         [parentCategory]="parentCategory">
-          </app-side-menu>
+        <div class="col-sm-auto" *ngIf="navigationConfig?.sideMenuLeft || navigationConfig?.offCanvasMenu">
+
+
+          <div *ngIf="navigationConfig?.offCanvasMenu">
+            <app-product-off-canvas-menu (toggleEvent) = "increaseToggledMenu($event)" [toggleMenu]="showBasket" [currentRoute]="currentRoute"  [parentCategory]="parentCategory" [parentRoute]="parentRoute"   (routeEvent)="setCurrentRoute($event)"  [menuItems]="productCategories" [links]="categoryLinks"  ></app-product-off-canvas-menu>
+          </div>
+
+          <div *ngIf="navigationConfig?.sideMenuLeft && (!navigationConfig.menuToggleIcon)">
+            <div *ngIf="navigationConfig.menuTitle" class="mt-1 ms-3 d-flex flex-row gap-3">
+              <h3 class="menu-title p-3">Menu</h3>
+            </div>
+            <app-side-menu (routeEvent)="setCurrentRoute($event)"
+                           [categoryLinks]=categoryLinks
+                           [productCategories]="productCategories"
+                           [currentRoute]="currentRoute"
+                           [parentRoute]="parentRoute"
+                           [parentCategory]="parentCategory">
+            </app-side-menu>
+          </div>
+
         </div>
 
         <div class="col-sm-7 scrollable-list">
@@ -176,7 +188,7 @@
   <mat-card-content>
     <h3 class="progress-title fw-bold">Vielen Dank! Ihre Daten werden gespeichert</h3>
     <mat-progress-spinner
-      class="example-margin"
+      class="example-margin m-auto"
       [mode]="'indeterminate'"
       [value]="50"
       [color]="'accent'"

@@ -24,7 +24,7 @@
     </ul>
   <hr>
     <div class="mt-3 d-flex justify-content-center">
-      <button routerLink="/tests/detail/{{test.id}}" class="btn btn-primary btn-lg"> Zu den Versuchsdetails</button>
+      <button (click)="emitSelection()"  routerLink="/tests/detail/{{test.id}}" class="btn btn-primary btn-lg"> Zu den Versuchsdetails</button>
     </div>
 </div>
 

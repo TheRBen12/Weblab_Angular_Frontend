@@ -90,6 +90,9 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     breadcrumbs: false,
     createdAt: new Date(),
     experimentTestId: 0,
+    menuToggleIcon: false,
+    menuTitle: false,
+    offCanvasMenu: false,
   };
 
 
@@ -117,11 +120,16 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
       return;
     } else if (element.includes("megaDropDown") && (this.selectedInterFace.sideMenuLeft || this.selectedInterFace.sideMenuRight)) {
       return;
-    } else if (element.includes("sideMenu") && this.selectedInterFace.megaDropDown) {
+    }
+    else if (element.includes("offCanvas") && this.selectedInterFace.sideMenuRight){
+      return;
+    }
+    else if (element.includes("sideMenu") && this.selectedInterFace.megaDropDown) {
       return;
     } else {
       this.selectedInterFace[element] = true;
     }
+    this.selectedInterFace["offCanvasMenu"] = this.selectedInterFace["menuToggleIcon"] && this.selectedInterFace["sideMenuLeft"];
 
   }
 

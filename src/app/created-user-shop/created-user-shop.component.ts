@@ -27,6 +27,7 @@ import {ExperimentService} from '../services/experiment.service';
 import {LoginService} from '../services/login.service';
 import {ToastrService} from 'ngx-toastr';
 import {routerLinks} from '../experiment-tests/tests/routes';
+import {ProductOffCanvasMenuComponent} from '../product-off-canvas-menu/product-off-canvas-menu.component';
 
 @Component({
   animations: [
@@ -55,7 +56,8 @@ import {routerLinks} from '../experiment-tests/tests/routes';
     MegaDropDownMenuComponent,
     NgForOf,
     RouterLink,
-    NgClass
+    NgClass,
+    ProductOffCanvasMenuComponent
   ],
   templateUrl: './created-user-shop.component.html',
   standalone: true,
@@ -81,8 +83,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   categoryLinks: string[] = [];
   productCategories: ProductType[] = [];
   currentRoute: string = "Home";
-  parentRoute: string | null = null;
-  parentCategory: string | null = null;
+  parentRoute: string  = "";
+  parentCategory: string = "";
   parentTypes: ProductType[] = [];
   products: any[] = [];
   loading: boolean = false;
@@ -117,6 +119,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     'timeToClickSearchBar': null,
     "timeToClickShoppingCart": null,
     "usedBreadcrumbs": false,
+    "numberToggledMenu": 0
   };
   product: any;
 
@@ -154,6 +157,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
       })
     ).subscribe((config) => {
       this.navigationConfig = config;
+      console.log(this.navigationConfig);
       this.productService.updateFilterConfiguredByUser(config);
     });
 
@@ -357,5 +361,12 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   updateBreadcrumbsClickBehaviour() {
     this.increaseFailedClicks();
     this.execution["usedBreadcrumbs"] = true;
+  }
+
+  increaseToggledMenu($event: number) {
+    if ($event > 1){
+      this.increaseFailedClicks();
+    }
+    this.execution["numberToggledMenu"] =  this.execution["numberToggledMenu"] + 1;
   }
 }

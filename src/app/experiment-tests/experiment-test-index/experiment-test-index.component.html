@@ -29,7 +29,7 @@
       <div class="test-container">
         <div *ngIf="filteredExperimentTests " class=" flex-row row ">
           <div *ngFor="let test of filteredExperimentTests">
-            <app-experiment-test [isProgressiveVisualization]="setting?.progressiveVisualizationExperimentTest??false" [state] = "testCompletedKeyValues[test.id] ? 'Abgeschlossen' : 'Freigeschaltet'" [completed]="testCompletedKeyValues[test.id]" [markedText]="markedText" [test]="test"></app-experiment-test>
+            <app-experiment-test (experimentTestSelectionEventEmitter)="saveTestSelectionTime(test.id)" [isProgressiveVisualization]="setting?.progressiveVisualizationExperimentTest??false" [state] = "testCompletedKeyValues[test.id] ? 'Abgeschlossen' : 'Freigeschaltet'" [completed]="testCompletedKeyValues[test.id]" [markedText]="markedText" [test]="test"></app-experiment-test>
           </div>
         </div>
       </div>

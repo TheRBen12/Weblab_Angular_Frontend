@@ -1,10 +1,10 @@
 import {
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   inject,
   Input,
   OnChanges,
-  OnInit,
+  OnInit, Output,
   QueryList,
   SimpleChanges,
   ViewChildren
@@ -14,7 +14,6 @@ import {NgClass, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
-import {LoginService} from '../../services/login.service';
 
 @Component({
   selector: 'app-experiment-test',
@@ -42,6 +41,7 @@ export class ExperimentTestComponent implements OnChanges, OnInit {
   @Input() finishedExecutions: { [key: number]: boolean } = {};
   @Input() state: string = 'Freigeschaltet';
   @Input() isProgressiveVisualization: boolean = false;
+  @Output() experimentTestSelectionEventEmitter: EventEmitter<ExperimentTest> = new EventEmitter<ExperimentTest>();
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -74,6 +74,10 @@ export class ExperimentTestComponent implements OnChanges, OnInit {
       this.state = 'Abgeschlossen';
     }
 
+  }
+
+  emitSelection(){
+    this.experimentTestSelectionEventEmitter.emit(this.test);
   }
 
 

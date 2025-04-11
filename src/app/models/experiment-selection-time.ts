@@ -1,4 +1,3 @@
-import {Experiment} from './experiment';
 
 export interface ExperimentSelectionTime {
   experimentId: number;

@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {ProductType} from '../models/product-category';
 
@@ -17,7 +17,6 @@ import {ProductType} from '../models/product-category';
     NgIf,
     RouterLink,
     NgForOf,
-    MatButton,
   ],
   templateUrl: './product-off-canvas-menu.component.html',
   standalone: true,
