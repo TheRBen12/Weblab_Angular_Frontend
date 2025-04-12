@@ -91,7 +91,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'recall-recognition/17', component: RecallRecognitionPartFourComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'recall-recognition/4', component: RecallRecognitionPartFourComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -159,7 +159,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/14', component: MentalModelMegaDropdownComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'mental-model/7', component: MentalModelMegaDropdownComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -186,7 +186,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'mental-model/:testId/user-shop/:userId', component: CreatedUserShopComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'mental-model/:testId/user-shop/:userId', component: CreatedUserShopComponent, children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)

@@ -21,7 +21,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   standalone: true,
   styleUrl: './auto-complete-product.component.css'
 })
-export class AutoCompleteProductComponent implements OnChanges, AfterViewInit{
+export class AutoCompleteProductComponent implements OnChanges{
   @Input() product: any
   @Input() textToMark: string = "";
   @ViewChildren('textAttribute') textAttributes!: QueryList<ElementRef>;
@@ -54,14 +54,9 @@ export class AutoCompleteProductComponent implements OnChanges, AfterViewInit{
     }
   }
 
-  ngAfterViewInit(): void {
-
-  }
-
   showProduct() {
     this.router.url;
     const childRoute = this.activatedRoute.firstChild;
-
-    this.router.navigate(["/show/product/"+this.product.id], {relativeTo: childRoute});
+    this.router.navigate(["./show/product/"+this.product.id], {relativeTo: childRoute});
   }
 }

@@ -9,11 +9,14 @@ import {LoginService} from '../../services/login.service';
 import {UserSetting} from '../../models/user-setting';
 import {filter, switchMap} from 'rxjs';
 import {FilterService} from '../../services/filter.service';
-import {NavigationEnd, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 import {NavigationSetting} from '../../models/navigation-setting';
 import {TimeService} from '../../services/time.service';
 import {ExperimentSelectionTime} from '../../models/experiment-selection-time';
+import {WelcomeHelpModalComponent} from '../../welcome-help-modal/welcome-help-modal.component';
+import {MatDialog} from '@angular/material/dialog';
+import {SettingHintDialogComponent} from '../../setting-hint-dialog/setting-hint-dialog.component';
 
 @Component({
   selector: 'app-experiment-index',
@@ -38,7 +41,7 @@ export class ExperimentIndexComponent implements OnInit {
   protected navigationSetting?: NavigationSetting;
   userId: number = 0;
 
-  constructor(public readonly accountService: LoginService, private cdrf: ChangeDetectorRef) {
+  constructor(public readonly accountService: LoginService, private dialog: MatDialog) {
 
     effect(() => {
       const userId = this.accountService.currentUser()?.id;
@@ -111,7 +114,6 @@ export class ExperimentIndexComponent implements OnInit {
           return finishedExperiments?.indexOf(exp.id) == -1;
         });
 
-
         if (this.currentUserSetting?.progressiveVisualizationExperiment) {
           // Find experiment with minimal position
           const expPosValues = nonFinishedExperiments.reduce((min, exp, index) =>
@@ -121,6 +123,11 @@ export class ExperimentIndexComponent implements OnInit {
           const expWithMinPos = expPosValues.value;
           this.filteredExperiments = [...finishedExperiments].concat([expWithMinPos]);
         }
+        if (finishedExperiments.length == 3 && !this.currentUserSetting?.progressiveVisualizationExperiment &&
+          !localStorage.getItem('closedSettingHint')) {
+          this.displaySettingsHing();
+        }
+
       });
 
     });
@@ -156,7 +163,23 @@ export class ExperimentIndexComponent implements OnInit {
   saveExperimentSelectionTime(experiment: Experiment) {
     const selectionTime = this.timeService.getCurrentTime();
     this.timeService.stopTimer();
-    const experimentSelectionTime: ExperimentSelectionTime = {experimentId: experiment.id, time: selectionTime, userId: this.userId, settingId: this.currentUserSetting?.id};
+    const experimentSelectionTime: ExperimentSelectionTime = {
+      experimentId: experiment.id,
+      time: selectionTime,
+      userId: this.userId,
+      settingId: this.currentUserSetting?.id
+    };
     this.experimentService.saveExperimentSelectionTime(experimentSelectionTime).subscribe();
+  }
+
+  private displaySettingsHing() {
+    this.openDialog()
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(SettingHintDialogComponent, {
+        disableClose: true,
+      }
+    );
   }
 }

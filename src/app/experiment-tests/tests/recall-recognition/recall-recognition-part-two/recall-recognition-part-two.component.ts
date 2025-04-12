@@ -73,6 +73,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   private failedClicks: number = 0;
   private numberClicks: number = 0;
   private timeToClickSearchBar?: number|null = null;
+  searchParameters: string = "";
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -148,18 +149,18 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
 
   }
 
-  filterProduct($event: string) {
+  filterProduct(filterText: string) {
     this.numberUsedSearchBar++;
     localStorage.setItem('numberUsedSearchBar', String(this.numberUsedSearchBar));
-    this.filteredProducts = this.filterService.filterProducts($event, this.products);
+    this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
     const foundKeyPad = this.filteredProducts.some((product) => product.type == "Smartphone");
     if (foundKeyPad) {
       this.currentInstructionStep++;
     } else {
       this.currentInstructionStep = 0;
     }
-    this.filterService.dispatchFilterText($event)
-
+    this.filterService.dispatchFilterText(filterText)
+    this.searchParameters += filterText;
   }
 
   finishExperiment($event: number) {
@@ -182,13 +183,14 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
           clickedOnSearchBar: this.clickedOnSearchBar,
           numberUsedSearchBar: this.numberUsedSearchBar,
           timeToClickSearchBar: this.timeToClickSearchBar??0,
-          usedBreadcrumbs: false
+          usedBreadcrumbs: false,
+          searchParameters: this.searchParameters,
         };
 
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/")
+            this.router.navigateByUrl("/test/"+this.experimentTestId+"/feedback");
             this.toasterService.success("Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
 

@@ -61,7 +61,6 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   showBasket: boolean = false;
   basket: any[] = [];
   currentInstructionStep: number = 0;
-  execution: { [key: string]: any } = {};
   firstClick: any | null = null;
   clickedRoutes: { [key: string]: string } = {};
   usedFilters: string[] = [];
@@ -69,6 +68,26 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   loading: boolean = false;
   currentType?: ProductType;
   experimentFinished: boolean = false;
+
+  execution: {
+    [key: string]: any
+  } = {
+    'experimentTestExecutionId': null,
+    'failedClicks': 0,
+    'numberClicks': 0,
+    'clickedRoutes': "",
+    'filters': "",
+    'usedFilter': false,
+    'finishedExecutionAt': null,
+    'numberUsedSearchBar': 0,
+    'timeToClickFirstCategory': null,
+    'clickedOnSearchBar': false,
+    'firstClick': "",
+    "usedBreadcrumbs": false,
+    "timeToClickShoppingCart": null,
+    "numberToggledMenu": 0,
+    "timeToFirstClick": 0,
+  };
 
 
   constructor(private readonly toasterService: ToastrService) {
@@ -120,9 +139,6 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
         this.usedFilters.push(filter);
       }
     })
-    this.execution['usedSearchBar'] = false;
-    this.execution['usedFilter'] = false;
-    this.execution['usedBreadcrumbs'] = false;
     this.execution["numberClicks"] = localStorage.getItem('numberClicks') ?? 0;
     this.execution["failedClicks"] = localStorage.getItem('failedClicks') ?? 0;
     this.execution["numberUsedSearchBar"] = Number(localStorage.getItem('numberUsedSearchBar')) ?? 0
@@ -238,9 +254,8 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("tests/" + this.experimentTest?.experiment?.id);
+            this.router.navigateByUrl("test/" + this.experimentTest?.id + "/feedback");
             this.toasterService.success("Vielen Dank! Sie haben das Experiment erfolgreich abgeschlossen");
-
           }, 2000)
         });
 
@@ -252,15 +267,8 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
     }
-    let number = this.execution['numberClicks'];
-    if (number) {
-      number = number + 1;
-      this.execution['numberClicks'] = number;
-    } else {
-      this.execution['numberClicks'] = 1;
-    }
+    this.execution['numberClicks'] = this.execution['numberClicks']+1;
     localStorage.setItem('numberClicks', this.execution['numberClicks']);
-
   }
 
   updateSearchBarBehaviour() {

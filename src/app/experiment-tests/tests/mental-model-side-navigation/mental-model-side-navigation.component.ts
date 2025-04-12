@@ -93,7 +93,9 @@ export class MentalModelSideNavigationComponent implements OnInit {
     "timeToClickShoppingCart": null,
     "numberToggledMenu": 0,
     "timeToFirstClick": 0,
+    "searchParameters": ""
   };
+  products: any[] = [];
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -107,6 +109,9 @@ export class MentalModelSideNavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.productService.getAllProducts().subscribe((products) => {
+      this.products = products;
+    })
     this.timeService.startTimer();
     this.fetchExperimentTest();
 
@@ -126,7 +131,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
-      if (this.basket.length > 0){
+      if (this.basket.length > 0) {
         this.showBasket = true;
       }
     });
@@ -241,6 +246,11 @@ export class MentalModelSideNavigationComponent implements OnInit {
   }
 
   findProducts(filterText: string) {
+    if (filterText.split(" ").length > 1){
+      this.execution["searchParameters"] += " ";
+    }
+    this.execution["searchParameters"] += filterText;
+    debugger;
     this.filterService.dispatchFilterText(filterText)
   }
 
@@ -249,7 +259,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
   }
 
   increaseToggledMenu($event: number) {
-    this.execution["numberToggledMenu"] =  this.execution["numberToggledMenu"] + 1;
+    this.execution["numberToggledMenu"] = this.execution["numberToggledMenu"] + 1;
     if ($event > 1) {
       this.increaseFailedClicks();
     }

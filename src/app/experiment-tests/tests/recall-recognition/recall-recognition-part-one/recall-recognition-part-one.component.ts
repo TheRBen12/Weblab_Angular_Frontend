@@ -76,14 +76,14 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   experimentTest!: ExperimentTest
   clickedRoutes: { [key: string]: string } = {};
   failedClicks: number = 0;
-  private currentExecution: ExperimentTestExecution | null = null;
-  private numberClicks: number = 0;
+  currentExecution: ExperimentTestExecution | null = null;
+  numberClicks: number = 0;
   loading: boolean = false;
-  private clickedOnSearchBar: boolean = false;
-  private experimentFinished: boolean = false;
+  clickedOnSearchBar: boolean = false;
+  experimentFinished: boolean = false;
   timeToClickFirstCategoryLink: number = 0;
   links: string[] = [];
-  private usedBreadCrumbs: boolean = false;
+  usedBreadCrumbs: boolean = false;
 
   constructor(private cdRef: ChangeDetectorRef, private toastrService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
@@ -257,7 +257,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
           clickedOnSearchBar: this.clickedOnSearchBar,
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
           usedBreadcrumbs: this.usedBreadCrumbs,
-
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {

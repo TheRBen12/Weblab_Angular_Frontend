@@ -127,13 +127,6 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   constructor(private readonly toasterService: ToastrService) {
   }
 
-  canDeactivate(){
-    if (!this.experimentFinished){
-      return confirm(" Wollen Sie zur Auswahl zurückkehren. All Ihre Fortschritte der aktuellen Suche werden nicht gespeichert. Wollen Sie fortfahren." )
-    }else{
-      return true;
-    }
-  }
 
   ngOnInit(): void {
     this.fetchExperimentTest();

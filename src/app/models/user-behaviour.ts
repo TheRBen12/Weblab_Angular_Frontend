@@ -1,4 +1,5 @@
 export interface UserBehaviour {
+  clickedOnSettingsAt?: Date|null;
   id?: number;
   clickedOnHelp?: boolean;
   numberClickedOnHelp: number;

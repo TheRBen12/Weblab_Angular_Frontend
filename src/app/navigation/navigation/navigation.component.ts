@@ -76,6 +76,10 @@ export class NavigationComponent implements OnInit {
     if (this.userBehaviour) {
       this.userBehaviour.clickedOnSettings = true;
       this.userBehaviour.numberClickedOnSettings = this.userBehaviour.numberClickedOnSettings + 1;
+      debugger;
+      if (!this.userBehaviour?.clickedOnSettingsAt){
+        this.userBehaviour.clickedOnSettingsAt = new Date();
+      }
       this.updateUserBehaviour(this.userBehaviour);
     } else {
       const userBehaviour: UserBehaviour = {

@@ -67,8 +67,9 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   clickedOnSearchBar: boolean = false;
   numberUsedSearchBar: number = 0;
   experimentTest?: ExperimentTest
-  private timeToClickSearchBar?: number|null = null;
+  timeToClickSearchBar?: number|null = null;
   experimentFinished: boolean = false;
+  searchParameters: string = "";
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
     this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden " +
@@ -86,6 +87,10 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
 
   filterProducts(text: string) {
+    if (text.split("").length > 1){
+      this.searchParameters += " ";
+    }
+    this.searchParameters += text;
     this.filterService.dispatchFilterText(text);
   }
 
@@ -145,6 +150,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
           numberUsedSearchBar: this.numberUsedSearchBar,
           timeToClickSearchBar: this.timeToClickSearchBar??0,
           usedBreadcrumbs: false,
+          searchParameters: this.searchParameters,
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -158,7 +164,6 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
       });
     }
   }
-
 
   private fetchExecutionInProcess(userId: number, testId: number) {
     return this.experimentService.getExperimentExecutionByStateAndTest(userId, testId, "INPROCESS");
@@ -176,7 +181,6 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   }
 
   increaseFailedClicks(event: Event){
-    console.log(event.currentTarget?.toString());
     this.failedClicks++;
   }
 

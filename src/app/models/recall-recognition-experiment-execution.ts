@@ -16,4 +16,5 @@ export interface RecallRecognitionExperimentExecution {
   timeToClickSearchBar?: number;
   timeToClickFirstCategoryLink?: number;
   usedBreadcrumbs: boolean;
+  searchParameters?: string;
 }
