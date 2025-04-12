@@ -122,7 +122,7 @@ export class ExperimentService {
     return this.http.post<FormFeedbackExperimentExecution>('https://localhost:7147/api/formAndFeedbackExperiment/form-feedback-experiment/new', execution);  }
 
   saveFittsLawExperiment(execution: {[p: string]: any}) {
-    return this.http.post<FittsLawExperiment>('https://localhost:7147/api/formAndFeedbackExperiment/form-feedback-experiment/new', execution);
+    return this.http.post<FittsLawExperiment>('https://localhost:7147/api/fittsLawExperiment/new', execution);
   }
 
   saveRestorffExperiment(execution: { [p: string]: any }) {

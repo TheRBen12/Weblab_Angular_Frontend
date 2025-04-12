@@ -102,7 +102,10 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     'firstClick': "",
     "usedBreadcrumbs": false,
     "timeToClickShoppingCart": null,
+    "numberToggledMenu": 0,
     "timeFirstClick": 0,
+    "timeToClickSearchBar": 0
+
   };
 
 
@@ -254,5 +257,9 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     if (this.basket.length == 1 && this.basket[0].type == "PC") {
       this.finishExperiment();
     }
+  }
+
+  updateSearchBarClickBehaviour() {
+    this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
   }
 }

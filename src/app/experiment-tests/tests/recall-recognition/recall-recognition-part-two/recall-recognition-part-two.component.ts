@@ -160,7 +160,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
       this.currentInstructionStep = 0;
     }
     this.filterService.dispatchFilterText(filterText)
-    this.searchParameters += filterText;
+    this.searchParameters += filterText + " ";
   }
 
   finishExperiment($event: number) {
@@ -186,7 +186,6 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
           usedBreadcrumbs: false,
           searchParameters: this.searchParameters,
         };
-
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
@@ -216,9 +215,9 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   }
 
   setSearchBarUsedToTrue() {
-    this.clickedOnSearchBar = true;
     if (!this.timeToClickSearchBar){
       this.timeToClickSearchBar = this.timeService.getCurrentTime();
+      this.clickedOnSearchBar = true;
     }
     this.timeService.stopTimer();
   }

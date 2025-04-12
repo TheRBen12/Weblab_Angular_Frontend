@@ -74,7 +74,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'recall-recognition/2', component: RecallRecognitionPartTwoComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'recall-recognition/2', component: RecallRecognitionPartFourComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -82,7 +82,7 @@ export const routes: Routes = [
             ]
           },
           {
-            path: 'recall-recognition/3', component: RecallRecognitionPartThreeComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'recall-recognition/3', component: RecallRecognitionPartTwoComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)
@@ -91,7 +91,7 @@ export const routes: Routes = [
           },
 
           {
-            path: 'recall-recognition/4', component: RecallRecognitionPartFourComponent, canDeactivate: [experimentRouteGuard], children: [
+            path: 'recall-recognition/4', component: RecallRecognitionPartThreeComponent, canDeactivate: [experimentRouteGuard], children: [
               {
                 path: '',
                 loadChildren: () => import('./experiment-tests/tests/products-module/products.module').then(m => m.ProductsModule)

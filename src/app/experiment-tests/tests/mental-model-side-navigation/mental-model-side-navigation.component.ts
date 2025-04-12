@@ -93,7 +93,8 @@ export class MentalModelSideNavigationComponent implements OnInit {
     "timeToClickShoppingCart": null,
     "numberToggledMenu": 0,
     "timeToFirstClick": 0,
-    "searchParameters": ""
+    "searchParameters": "",
+    "timeToClickSearchBar": 0
   };
   products: any[] = [];
 
@@ -162,6 +163,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
 
   setClickedOnSearchBar() {
     this.execution["clickedOnSearchBar"] = true;
+    this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
   }
 
   toggleBasket() {
@@ -199,6 +201,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
       this.experimentFinished = true;
       this.timeService.stopTimer();
       this.execution["finishedExecutionAt"] = new Date();
+      this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, 'INPROCESS').subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;
         this.loading = true;

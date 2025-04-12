@@ -68,6 +68,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   loading: boolean = false;
   currentType?: ProductType;
   experimentFinished: boolean = false;
+  clicks: string[] = [];
 
   execution: {
     [key: string]: any
@@ -87,6 +88,8 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     "timeToClickShoppingCart": null,
     "numberToggledMenu": 0,
     "timeToFirstClick": 0,
+    "timeToClickSearchBar": 0,
+    "clicks": "",
   };
 
 
@@ -244,6 +247,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     this.execution["finishedExecutionAt"] = new Date();
+    this.execution["clicks"] = JSON.stringify(this.clicks);
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest) {
       this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
@@ -267,6 +271,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
     }
+    this.clicks.push((event.target as HTMLElement).innerHTML);
     this.execution['numberClicks'] = this.execution['numberClicks']+1;
     localStorage.setItem('numberClicks', this.execution['numberClicks']);
   }

@@ -102,6 +102,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   parentCategoryLinks: string[] = [];
   private currentType?: ProductType;
   private experimentFinished: boolean = false;
+  clicks: string[] = [];
   execution: {
     [key: string]: any
   } = {
@@ -120,7 +121,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     "timeToClickShoppingCart": null,
     "usedBreadcrumbs": false,
     "numberToggledMenu": 0,
-    "timeToFirstClick": 0
+    "timeToFirstClick": 0,
+    "clicks": ""
   };
   product: any;
 
@@ -284,6 +286,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     this.execution['finishedExecutionAt'] = new Date();
     this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
+    this.execution["clicks"] = JSON.stringify(this.clicks);
     this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
     const userId = this.loginService.currentUser()?.id;
     if (userId){
@@ -311,6 +314,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
       this.execution["firstClick"] = this.firstClick;
     }
     this.execution["numberClicks"] = this.execution["numberClicks"] + 1;
+    this.clicks.push((event.target as HTMLElement).innerHTML )
   }
 
   increaseUsedSearchBar() {

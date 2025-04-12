@@ -49,7 +49,7 @@ export class FittsLawComponent implements OnInit {
   emailToDelete: number = 0;
   deletedEmail: Email | null = null;
   reactions: { [key: number]: number } = {};
-  tasks: { [key: number]: boolean } = {};
+  tasks: boolean[] = []
   currentExecutionStep: number = 0;
   private experimentFinished: boolean = false;
 
@@ -66,6 +66,7 @@ export class FittsLawComponent implements OnInit {
     "taskSuccess": false,
     "clickReactionTimes": "",
   };
+  private startTime: DOMHighResTimeStamp = 0;
 
 
   canDeactivate() {
@@ -92,24 +93,25 @@ export class FittsLawComponent implements OnInit {
 
     this.emailService.getDeletedMailSubscripition().subscribe((data) => {
       if (data) {
-        this.currentExecutionStep++;
-        this.tasks[data.position] = false;
+        this.startTime = performance.now();
+        if (this.currentExecutionStep < this.tasks.length) {
+          this.currentExecutionStep++;
+        }
+        this.tasks.push(false);
         this.deletedEmail = data.mail;
-        if (this.currentExecutionStep == this.emailData.length){
+        if (this.tasks.length >= 8) {
           setTimeout(() => {
-            this.checkToFinishExperiment();
-          }, 5000)
-          this.finishExperiment();
+            this.finishExperiment();
+          }, 6000)
         }
       }
     });
 
     this.emailService.getUndoEventSubscription().subscribe((emailIndex) => {
-      if (emailIndex) {
-        if (!this.tasks[emailIndex]) {
-          this.tasks[emailIndex] = true;
-        }
-        this.reactions[emailIndex] = this.timeService.getCurrentTime();
+      if (emailIndex != null && emailIndex >=0) {
+        this.tasks[this.currentExecutionStep] = true
+        const endTime = performance.now();
+        this.reactions[this.currentExecutionStep] = Math.round(endTime - this.startTime)
         this.timeService.stopTimer();
       }
     });
@@ -128,18 +130,17 @@ export class FittsLawComponent implements OnInit {
       this.experimentService.getExperimentExecutionByStateAndTest(userID, this.experimentTest.id, "INPROCESS").subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;
         this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.router.navigateByUrl("/test/" + this.experimentTest.id + "/feedback");
-        }, 2000);
-        this.experimentService.saveFittsLawExperiment(this.execution).subscribe();
+        this.experimentService.saveFittsLawExperiment(this.execution).subscribe((exec) => {
+          console.log(exec);
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigateByUrl("/test/" + this.experimentTest.id + "/feedback");
+          }, 2000);
+        });
+
       });
     }
   }
 
-  private checkToFinishExperiment() {
-    if (this.currentExecutionStep == this.emailData.length){
-      this.finishExperiment();
-    }
-  }
+
 }
