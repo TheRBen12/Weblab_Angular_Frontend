@@ -91,6 +91,9 @@ export class LoginService {
   increaseNumberClickedSettings(userBehaviour: UserBehaviour) {
     userBehaviour.clickedOnSettings = true;
     userBehaviour.numberClickedOnSettings = userBehaviour?.numberClickedOnSettings + 1;
+    if (localStorage.getItem("closedSettingHint")){
+      userBehaviour.clickedOnSettingsAfterHintDisplayed = true;
+    }
     return userBehaviour;
   }
 

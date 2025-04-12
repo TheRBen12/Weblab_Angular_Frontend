@@ -64,6 +64,7 @@ export class NavigationComponent implements OnInit {
         numberClickedOnSettings: 0,
         numberClickedOnHint: 0,
         lastUpdatedAt: new Date(),
+        clickedOnSettingsAfterHintDisplayed: false,
       };
       this.loginService.createUserBehaviour(userBehaviour).subscribe((userBehaviour) => {
         this.userBehaviour = userBehaviour;
@@ -74,9 +75,7 @@ export class NavigationComponent implements OnInit {
   updateUserSettingBehaviour() {
     this.currentLink = 'Einstellungen';
     if (this.userBehaviour) {
-      this.userBehaviour.clickedOnSettings = true;
-      this.userBehaviour.numberClickedOnSettings = this.userBehaviour.numberClickedOnSettings + 1;
-      debugger;
+      this.userBehaviour = this.loginService.increaseNumberClickedSettings(this.userBehaviour);
       if (!this.userBehaviour?.clickedOnSettingsAt){
         this.userBehaviour.clickedOnSettingsAt = new Date();
       }
@@ -90,6 +89,7 @@ export class NavigationComponent implements OnInit {
         numberClickedOnHelp: 0,
         numberClickedOnHint: 0,
         lastUpdatedAt: new Date(),
+        clickedOnSettingsAfterHintDisplayed: false,
       };
       this.loginService.createUserBehaviour(userBehaviour);
     }

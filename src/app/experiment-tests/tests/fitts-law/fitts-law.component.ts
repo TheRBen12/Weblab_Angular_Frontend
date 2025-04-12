@@ -115,9 +115,7 @@ export class FittsLawComponent implements OnInit {
         this.timeService.stopTimer();
       }
     });
-
   }
-
 
   finishExperiment() {
     this.execution["clickReactionTimes"] = JSON.stringify(this.reactions);

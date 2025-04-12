@@ -12,5 +12,6 @@ export interface UserBehaviour {
   clickedOnHint?: boolean;
   numberClickedOnHint: number;
   lastUpdatedAt: Date,
+  clickedOnSettingsAfterHintDisplayed
 
 }

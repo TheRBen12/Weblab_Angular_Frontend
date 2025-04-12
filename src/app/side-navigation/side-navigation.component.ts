@@ -86,8 +86,7 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
   setCurrentRoute(route: string) {
     this.currentRoute = route;
     if (route == "Einstellungen"){
-      this.userBehaviour.clickedOnSettings = true;
-      this.userBehaviour.numberClickedOnSettings = this.userBehaviour?.numberClickedOnSettings + 1;
+      this.userBehaviour = this.loginService.increaseNumberClickedSettings(this.userBehaviour);
       this.updateUserBehaviour(this.userBehaviour);
     }
     else if (route == "Hilfe"){
