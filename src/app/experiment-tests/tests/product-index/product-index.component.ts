@@ -8,6 +8,7 @@ import {FilterService} from '../../../services/filter.service';
 import {FilterSelectDropdownComponent} from '../../../filter-select-dropdown/filter-select-dropdown.component';
 import {ExperimentService} from '../../../services/experiment.service';
 import {MatCard} from '@angular/material/card';
+import {MatChip, MatChipSet} from '@angular/material/chips';
 
 @Component({
   selector: 'app-product-index',
@@ -18,6 +19,8 @@ import {MatCard} from '@angular/material/card';
     FilterSelectDropdownComponent,
     MatCard,
     NgClass,
+    MatChipSet,
+    MatChip,
   ],
   templateUrl: './product-index.component.html',
   standalone: true,
@@ -36,6 +39,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   productLimit: number | null = null;
   productProperties = ["Marke", "Kategorie"];
   filterConfig: boolean = true;
+  activeFilters: string[] = [];
 
   filterSubscription: Subscription = new Subscription();
   @Input() category: string = "";
@@ -183,11 +187,17 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
     if (propertyName == "Marke" || propertyName == "Kategorie") {
       this.filteredProducts = this.filteredProducts.filter(product => product.trademark == value || product.type == value);
     }
+    this.addFilter(propertyName, value);
+  }
 
+
+  addFilter(filterName: string, value: string){
+    this.activeFilters.push(filterName +": " + value);
   }
 
   filterProductsBySpecifications(propertyName: string, value: string) {
     this.productService.updatedFilterUsedSubscription(propertyName);
+    this.addFilter(propertyName, value);
     this.filteredProducts = this.filteredProducts.filter((product) => {
       const specification = product.specifications.find((spec: any) => spec.propertyName == propertyName);
       if (specification) {
@@ -195,7 +205,6 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
       }
       return false;
     });
-
 
   }
 

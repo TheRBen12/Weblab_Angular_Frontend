@@ -136,7 +136,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   fetchProductTypes(currentRoute: string) {
     this.productService.fetchSubCategoriesObjects(currentRoute).subscribe((categories) => {
       this.productCategories = categories;
-      this.categoryLinks = new Array(this.productCategories.length).fill("/test/execute/recall-recognition/2");
+      this.categoryLinks = new Array(this.productCategories.length).fill("/test/execute/recall-recognition/3");
     });
 
   }

@@ -19,11 +19,14 @@ import {NgClass, NgIf} from '@angular/common';
 export class EmailListItemComponent implements OnInit, OnChanges{
   @Input() email: Email|undefined
   @Output() deleteEmailEventEmitter: EventEmitter<Email> = new EventEmitter<Email>();
+  @Output() emailSelectEmitter: EventEmitter<number> = new EventEmitter<number>();
+
   capitalLetter = "";
   @Input() isDeleted!: boolean;
   @Input() coloredMark: boolean = false;
   @Input() deletedMailId!: number;
   @Input() clickedInDeletedItems!: boolean | undefined;
+  @Input() selectedEmailId?: number;
 
   ngOnInit(): void {
     this.capitalLetter = this.email?.sender[0] ?? "";
@@ -37,4 +40,7 @@ export class EmailListItemComponent implements OnInit, OnChanges{
 
   }
 
+  selectEmail() {
+    this.emailSelectEmitter.emit(this.email?.id);
+  }
 }

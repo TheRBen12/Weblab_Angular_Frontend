@@ -6,7 +6,7 @@
 
   <div (click)="updateClickBehaviour($event)"  class="main w-100">
     <div class="row">
-      <div class="col-lg-7">
+      <div class="col-sm-6">
           <div class="scrollable-list">
             <router-outlet></router-outlet>
           </div>
@@ -20,7 +20,7 @@
         </app-side-menu>
       </div>
 
-      <div *ngIf="showBasket" class="col-sm-2 me-3">
+      <div *ngIf="showBasket" class="col-sm-3 me-3">
         <div class="container-md">
           <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"
                       [basket]=basket>

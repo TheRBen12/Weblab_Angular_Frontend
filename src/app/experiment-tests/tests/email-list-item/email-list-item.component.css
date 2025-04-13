@@ -12,6 +12,9 @@
   color: black;
 }
 
+.blue-background{
+ background-color: #189086;
+}
 
 .blue-text{
   color: #189086;
@@ -22,3 +25,4 @@
   max-height: 30px;
   pointer-events: all;
 }
+

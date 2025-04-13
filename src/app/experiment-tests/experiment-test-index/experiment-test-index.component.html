@@ -21,7 +21,8 @@
     <div>
       <div>
         <p class="fw-bold">Total {{numberTests}} Versuche ({{experimentTests.length}} Versuche angezeigt)</p>
-        <p>{{finishedExecutions.length}} Versuche von {{numberTests}} Versuchen abgeschlossen.</p>
+        <h4>{{finishedExecutions.length}} Versuche von {{numberTests}} Versuchen abgeschlossen.</h4>
+        <p *ngIf="finishedExecutions.length == numberTests">Sie haben alle Experimente abgeschlossen, gehen Sie zurück zu den Experimenten.</p>
       </div>
       <div *ngIf="setting?.autoStartNextExperiment">
         <p class="fw-bold">Das nächste Experiment wird ausgewählt in {{countDownToStartNextTest}} Sekunden</p>

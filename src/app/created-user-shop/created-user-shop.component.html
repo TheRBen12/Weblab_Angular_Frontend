@@ -86,7 +86,7 @@
         <div class="col-sm-auto" *ngIf="navigationConfig?.sideMenuLeft || navigationConfig?.offCanvasMenu">
 
 
-          <div *ngIf="navigationConfig?.offCanvasMenu">
+          <div class="col-sm-auto" *ngIf="navigationConfig?.offCanvasMenu">
             <app-product-off-canvas-menu (toggleEvent) = "increaseToggledMenu($event)" [toggleMenu]="showBasket" [currentRoute]="currentRoute"  [parentCategory]="parentCategory" [parentRoute]="parentRoute"   (routeEvent)="setCurrentRoute($event)"  [menuItems]="productCategories" [links]="categoryLinks"  ></app-product-off-canvas-menu>
           </div>
 
@@ -105,7 +105,7 @@
 
         </div>
 
-        <div class="col-sm-7 scrollable-list">
+        <div class="col-sm-6 scrollable-list">
           <div (click)="updateBreadcrumbsClickBehaviour()"  class="container"
                *ngIf="links.length > 0 && navigationConfig.breadcrumbs && !navigationConfig.megaDropDown">
             <a routerLink="./" class="ms-2 header-link">Home</a><a routerLink="{{routerLinks[link]}}"

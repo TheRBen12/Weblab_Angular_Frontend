@@ -96,11 +96,9 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
     }
   }
 
-
   updateUserBehaviour(userBehaviour: UserBehaviour) {
     this.loginService.updateUserBehaviour(userBehaviour).subscribe((user) => {
       this.userBehaviour = userBehaviour;
     });
   }
-
 }

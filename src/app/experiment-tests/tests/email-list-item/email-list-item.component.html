@@ -1,6 +1,6 @@
-<div class="d-flex flex-row p-2 ">
+<div (click)="selectEmail()" class="d-flex flex-row p-2 ">
 
-    <div class="capitalLetterCircle d-flex justify-content-center align-items-center">
+    <div [ngClass]="{'blue-background': (coloredMark) }"  class="capitalLetterCircle d-flex justify-content-center align-items-center">
       <span id="capitalLetter">{{capitalLetter}}</span>
     </div>
 
@@ -8,7 +8,7 @@
     <div class="container">
       <div>
         <div>
-          <span class="text">{{email?.sender}}</span>
+          <span class="fw-bold text">{{email?.sender}}</span>
         </div>
        <div>
          <span [ngClass]="{'blue-text': (coloredMark) }" class="fw-bold">{{email?.subject}}</span>

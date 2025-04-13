@@ -64,6 +64,7 @@ export class ErrorCorrectionComponent implements OnInit {
     })
     this.emailService.getDeletedMailSubscripition().subscribe((data) => {
       if (data) {
+        debugger;
         this.timeService.startTimer();
         this.deletedMail = data.mail??null;
         this.deletedPos = data.position;
@@ -134,6 +135,7 @@ export class ErrorCorrectionComponent implements OnInit {
         });
       });
     }
+    this.emailService.emitMailDeleted(null);
   }
 
   updateClickBehaviour(value: string) {

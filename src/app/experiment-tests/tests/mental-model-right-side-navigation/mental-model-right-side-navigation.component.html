@@ -43,10 +43,10 @@
                          [parentRoute]="parentRoute"
                          [parentCategory]="parentCategory"> </app-side-menu>
         </div>
-        <div class="col-sm-7 scrollable-list responsive-list-layout">
+        <div class="col-sm-6 scrollable-list responsive-list-layout">
           <router-outlet></router-outlet>
         </div>
-        <div *ngIf="showBasket" class="col-sm-auto">
+        <div *ngIf="showBasket" class="col-sm-3">
           <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"  [basket]="basket"  [isHidden]="!showBasket"></app-basket>
         </div>
       </div>

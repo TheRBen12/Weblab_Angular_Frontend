@@ -9,11 +9,11 @@
         <h5>Keine Elemente vorhanden</h5>
       </div>
 
-      <a [ngClass]="{'disabled': disable(email)}" routerLink="./email/{{email.id}}"
+      <a [ngClass]="{'disabled': disable(email), 'active': selectedEmail?.id==email.id}" routerLink="./email/{{email.id}}"
 
          *ngFor="let email of fetchedMails; index as i" class="list-group-item list-group-item-action">
 
-        <app-email-list-item [clickedInDeletedItems]="email.clickedInDeletedItems" [deletedMailId]="deletedMailId" [coloredMark]="(coloredMark && deletedMailId==email.id || (i == 0 && coloredMark && isDeleted()))" [isDeleted]="isDeleted()"
+        <app-email-list-item (emailSelectEmitter)="selectEmail($event)" [selectedEmailId]="selectedEmail?.id" [clickedInDeletedItems]="email.clickedInDeletedItems" [deletedMailId]="deletedMailId" [coloredMark]="(coloredMark && deletedMailId==email.id || (i == 0 && coloredMark && isDeleted()))" [isDeleted]="isDeleted()"
                              (deleteEmailEventEmitter)="deleteEmail($event, i)" [email]=email>
 
 

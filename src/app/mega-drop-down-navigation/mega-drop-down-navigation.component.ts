@@ -13,8 +13,8 @@ import {RouterService} from '../services/router.service';
 
   animations: [
     trigger('hoverState', [
-      state('closed', style({ transform: 'translateY(-10px)', 'height': '0px'})),
-      state('open', style({ opacity: 1, transform: 'translateY(0)', 'min-height': '100px', })),
+      state('closed', style({transform: 'translateY(-10px)', 'height': '0px'})),
+      state('open', style({opacity: 1, transform: 'translateY(0)', 'min-height': '100px',})),
       transition('closed => open', animate('0.5s ease-out')),
       transition('open => closed', animate('0.5s ease-in'))
     ]),
@@ -30,7 +30,7 @@ import {RouterService} from '../services/router.service';
   standalone: true,
   styleUrl: './mega-drop-down-navigation.component.css'
 })
-export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
+export class MegaDropDownNavigationComponent implements OnInit, OnChanges {
   experimentService: ExperimentService = inject(ExperimentService);
   loginService: LoginService = inject(LoginService);
   routerService: RouterService = inject(RouterService);
@@ -38,7 +38,7 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   experiments: Experiment[] = [];
   showExperimentMenu: boolean = false;
   showExperimentTestMenu: boolean = false;
-  currentSelectedExperiment: Experiment|null = null;
+  currentSelectedExperiment: Experiment | null = null;
   experimentTests: ExperimentTest[] = [];
   pointerInExperimentMenu: boolean = false;
   pointerInExperimentTestMenu: boolean = false;
@@ -47,7 +47,6 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   @Input() showMenu!: boolean;
   currentRoute: string = "Experimente";
   userBehaviour!: UserBehaviour
-
 
 
   constructor() {
@@ -63,12 +62,11 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   }
 
 
-
   ngOnInit(): void {
     this.currentRoute = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
 
     this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
-      if (userBehaviour){
+      if (userBehaviour) {
         this.userBehaviour = userBehaviour;
       }
     });
@@ -79,9 +77,9 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.currentSelectedExperiment ){
+    if (this.currentSelectedExperiment) {
       this.experimentService.getExperimentTestsByExperiment(this.currentSelectedExperiment.id).subscribe((tests) => {
-        this.experimentTests = tests;
+        this.experimentTests = this.sortExperimentTestsByPosition(tests);
       });
     }
   }
@@ -94,6 +92,14 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
       this.showExperimentTestMenu = true;
     });
   }
+
+  sortExperimentTestsByPosition(experiments: ExperimentTest[]) {
+    experiments = experiments.sort((exp1, exp2) => {
+      return Number(exp1.position) - Number(exp2.position);
+    });
+    return experiments;
+  }
+
 
   displayExperimentMenu() {
     this.experimentService.getExperiments().subscribe((experiments) => {
@@ -111,15 +117,15 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   hideExperimentMenu() {
     this.experiments = [];
     this.showExperimentMenu = false;
-    if (!this.pointerInExperimentTestMenu){
+    if (!this.pointerInExperimentTestMenu) {
       this.hideExperimentTestMenu();
     }
   }
 
   checkToHideExperimentMenu() {
-    if (!this.pointerInHeaderMenu){
+    if (!this.pointerInHeaderMenu) {
       setTimeout(() => {
-        if (!this.pointerInExperimentTestMenu && !this.pointerInExperimentMenu){
+        if (!this.pointerInExperimentTestMenu && !this.pointerInExperimentMenu) {
           this.hideExperimentMenu();
         }
       }, 1800);
@@ -128,17 +134,17 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
   }
 
   checkIfDisplayExperimentTestMenu(experiment: Experiment) {
-    if (this.showExperimentMenu){
+    if (this.showExperimentMenu) {
       this.displayExperimentTestContainer(experiment);
     }
   }
 
   checkToHideExperimentTestMenu() {
     setTimeout(() => {
-      if (!this.pointerInExperimentMenu){
+      if (!this.pointerInExperimentMenu) {
         this.hideExperimentTestMenu();
       }
-      if (!this.pointerInExperimentMenu){
+      if (!this.pointerInExperimentMenu) {
         this.hideExperimentMenu();
       }
     }, 1800)
@@ -171,18 +177,21 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges{
 
   setCurrentRoute(route: string) {
     this.currentRoute = route;
-    if (route == "Einstellungen"){
+    if (route == "Einstellungen") {
       this.userBehaviour = this.loginService.increaseNumberClickedSettings(this.userBehaviour);
       this.updateUserBehaviour(this.userBehaviour);
-    }
-    else if (route == "Hilfe"){
+    } else if (route == "Hilfe") {
+      if (!this.userBehaviour.clickedOnSettingsAt){
+        this.userBehaviour.clickedOnSettingsAt = new Date();
+      }
       this.userBehaviour = this.loginService.increaseNumberClickedHelp(this.userBehaviour);
       this.updateUserBehaviour(this.userBehaviour);
     }
   }
+
   updateUserBehaviour(userBehaviour: UserBehaviour) {
-    this.loginService.updateUserBehaviour(userBehaviour).subscribe((user) => {
-      this.userBehaviour = userBehaviour;
+    this.loginService.updateUserBehaviour(userBehaviour).subscribe((behaviour) => {
+      this.userBehaviour = behaviour;
     });
   }
 }

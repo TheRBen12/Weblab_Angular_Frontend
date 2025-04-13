@@ -63,16 +63,17 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   basket: any[] = [];
   currentInstructionStep: number = 0;
   execution: { [key: string]: any } = {};
-  private firstClick: any|null = null;
-  private clickedRoutes: { [key: string]: string } = {};
-  private usedFilters : string[] = [];
-  private experimentTest?: ExperimentTest;
+  firstClick: any|null = null;
+  clickedRoutes: { [key: string]: string } = {};
+  usedFilters : string[] = [];
+  experimentTest?: ExperimentTest;
   loading: boolean = false;
   products: any[] = [];
-  private currentType?: ProductType;
-  private activatedRoute = inject(ActivatedRoute);
-  private experimentFinished: boolean = false;
+  currentType?: ProductType;
+  activatedRoute = inject(ActivatedRoute);
+  experimentFinished: boolean = false;
   timeToFirstClick: number = 0;
+  clicks: string[] = [];
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -222,6 +223,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     this.execution["finishedExecutionAt"] = new Date();
+    this.execution["clicks"] = JSON.stringify(this.clicks);
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
       this.experimentFinished = true;
@@ -241,6 +243,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   updateClickBehaviour(event: MouseEvent){
+    this.clicks.push((event.target as HTMLElement).innerHTML);
     if (!this.firstClick){
       this.firstClick = (event.target as HTMLElement).innerHTML;
       this.timeToFirstClick = this.timeService.getCurrentTime();

@@ -15,7 +15,7 @@
     </div>
     <div class="d-flex justify-content-end gap-5">
       <div>
-        <a [ngClass]="{'no-pointer-events': noPointerEvents}" class="header-menu-item" routerLink="/profile">{{loginService.currentUser()?.email}}</a>
+        <a (click)="setCurrentRoute('Profil')"  [ngClass]="{'no-pointer-events': noPointerEvents, 'active-link': currentRoute=='Profil'}" class="header-menu-item" routerLink="/profile">{{loginService.currentUser()?.email}}</a>
       </div>
       <div>
         <a [ngClass]="{'no-pointer-events': noPointerEvents}" class="header-menu-item" (click)="logout()">Abmelden</a>
@@ -37,7 +37,7 @@
         <div class="d-flex justify-content-center">
           <ul class="list-group list-group-flush">
             <div *ngFor="let test of experimentTests" class=" list-group-item">
-              <a [ngClass]="{'no-pointer-events': noPointerEvents}" routerLink="/tests/detail/{{test.id}}" class="active sub-menu-item">{{ test.name }}</a>
+              <a (click)="setCurrentRoute('')"  [ngClass]="{'no-pointer-events': noPointerEvents}" routerLink="/tests/detail/{{test.id}}" class="active sub-menu-item">{{ test.name }}</a>
             </div>
           </ul>
         </div>

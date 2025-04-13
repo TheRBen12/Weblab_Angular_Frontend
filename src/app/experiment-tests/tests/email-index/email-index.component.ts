@@ -186,4 +186,8 @@ export class EmailIndexComponent implements OnInit {
   disable(email: Email){
     return this.emailsToDisable.indexOf(email) != -1;
   }
+
+  selectEmail(emailId: number) {
+    this.selectedEmail = this.fetchedMails.find(email => email.id == emailId)??null;
+  }
 }

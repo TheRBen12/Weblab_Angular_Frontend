@@ -120,6 +120,7 @@ export class MainComponent implements OnInit {
           numberClickedOnSettings: 0,
           numberClickedOnHint: 0,
           lastUpdatedAt: new Date(),
+          clickedOnSettingsAfterHintDisplayed: false,
         };
         this.loginService.createUserBehaviour(userBehaviour).subscribe((userBehaviour) => {
           this.userBehaviour = userBehaviour;

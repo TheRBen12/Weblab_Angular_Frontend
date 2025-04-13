@@ -252,6 +252,7 @@ export class HicksLawComponent implements OnInit {
           firstClick: this.firstClick,
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
           usedFilters: JSON.stringify(this.usedFilters),
+          timeToFirstClick: this.timeToFirstClick,
         };
         this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {
           setTimeout(() => {
