@@ -42,20 +42,27 @@
         <div class="col-sm-auto">
           <app-product-off-canvas-menu (toggleEvent) = "increaseToggledMenu($event)" [toggleMenu]="showBasket" [currentRoute]="currentRoute"  [parentCategory]="parentCategory" [parentRoute]="parentRoute"   (routeEvent)="setCurrentRoute($event)"  [menuItems]="productCategories" [links]="categoryLinks"  ></app-product-off-canvas-menu>
         </div>
-        <div class="col-sm-7 mt-2">
+        <div class="col mt-2">
+
           <div (click)="updateBreadcrumbsBehaviour()" class="container" *ngIf="links.length > 0">
             <a routerLink="./" class="header-link">Home</a> <a routerLink="{{routerLinks[link]}}" class="header-link" *ngFor="let link of links"> > {{link}}</a>
           </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm scrollable-list">
+                <router-outlet></router-outlet>
+              </div>
+              <div *ngIf="showBasket" class="col-sm-4 container">
+                <div class="container">
+                  <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment($event)"  [basket] = basket></app-basket>
+                </div>
+              </div>
+            </div>
 
-          <div class="col-sm-auto scrollable-list">
-            <router-outlet></router-outlet>
           </div>
+
         </div>
-        <div *ngIf="showBasket" class="col-sm-2">
-          <div class="container-md">
-            <app-basket (hiddenEventEmitter)="toggleBasket()" (checkoutEventEmitter)="checkToFinishExperiment($event)"  [basket] = basket></app-basket>
-          </div>
-        </div>
+
       </div>
     </div>
 

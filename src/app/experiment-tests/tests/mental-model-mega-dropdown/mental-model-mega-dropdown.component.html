@@ -56,7 +56,7 @@
           <div class="col-lg-8">
             <router-outlet></router-outlet>
           </div>
-        <div *ngIf="!basketIsHidden" class="col-2 me-3">
+        <div *ngIf="!basketIsHidden" class="col-sm-3 me-3">
           <div >
             <app-basket (hiddenEventEmitter)="openBasket()" (checkoutEventEmitter)="checkToFinishExperiment()"
                         [basket]=basket></app-basket>

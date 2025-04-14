@@ -141,7 +141,10 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
-      this.basketIsHidden = false;
+      if (this.basket.length > 0){
+        this.basketIsHidden = false;
+      }
+
     });
     this.fetchParentProductTypes();
     this.fetchProducts();
