@@ -60,7 +60,7 @@ export class TimeService {
   }
 
   getAutoStartSubscription(): Observable<number>{
-    return interval(100);
+    return interval(1000);
   }
   getAutoStartCountDown(){
     return this.autoStartCountdown;

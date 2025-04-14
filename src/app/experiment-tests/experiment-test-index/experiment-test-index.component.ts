@@ -48,10 +48,10 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   finishedExecutions: ExperimentTestExecution[] = [];
   testCompletedKeyValues: { [key: number]: boolean } = {};
   navigationConfig: NavigationSetting | null = null;
-  countDownToStartNextTest: number = 3;
+  countDownToStartNextTest: number = 4;
   setting?: UserSetting
-  interval: number = 0;
   numberTests: number = 0;
+  private redirectTimeout: number = 0;
 
   constructor() {
 
@@ -70,10 +70,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
         if (this.router.url == "/") {
-          clearInterval(this.interval);
           this.countDownToStartNextTest = 3;
-        }
-        if (this.router.url.includes("/tests/")) {
           this.timeService.stopTimer();
         }
       });
@@ -142,15 +139,20 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
       if (setting.autoStartNextExperiment) {
         this.nextExperiment = this.findNextExperiment();
         if (this.nextExperiment) {
-          const subscription = this.timeService.getAutoStartSubscription().subscribe(() => {
+          // Countdown visualisieren (optional)
+          const interval = setInterval(() => {
             this.countDownToStartNextTest--;
             if (this.countDownToStartNextTest < 1) {
-              this.timeService.stopTimer();
-              this.router.navigateByUrl("/tests/detail/" + this.nextExperiment?.id);
-              this.countDownToStartNextTest = 3;
-              subscription.unsubscribe();
+              clearInterval(interval);
             }
-          });
+          }, 1000);
+
+          const testId = this.nextExperiment.id;
+          this.redirectTimeout = setTimeout(() => {
+            clearInterval(this.redirectTimeout);
+            this.saveTestSelectionTime(testId);
+            this.router.navigateByUrl("/tests/detail/" + this.nextExperiment?.id);
+          }, 3000);
         }
       }
       if (setting.progressiveVisualizationExperimentTest && this.experimentTests.length > 0) {
@@ -211,6 +213,8 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.countDownToStartNextTest = 3;
+    debugger;
+    clearInterval(this.redirectTimeout);
   }
 
   saveTestSelectionTime(testId: number) {
@@ -223,7 +227,6 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
       settingId: this.setting?.id,
     };
     this.experimentService.saveExperimentTestSelectionTime(experimentTestSelectionTime).subscribe((result) => {
-      console.log(result);
     });
   }
 }

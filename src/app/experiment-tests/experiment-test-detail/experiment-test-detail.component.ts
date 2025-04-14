@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {switchMap} from 'rxjs';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {filter, switchMap} from 'rxjs';
+import {ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink} from '@angular/router';
 import {ExperimentService} from '../../services/experiment.service';
 import {ExperimentTest} from '../../models/experiment-test';
 import {experimentTestRoutes} from '../routes';
@@ -10,7 +10,6 @@ import {SettingService} from '../../services/setting.service';
 import {UserSetting} from '../../models/user-setting';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 import {UserNavigationTime} from '../../models/user-navigation-time';
-import {D} from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-experiment-test-detail',
@@ -33,9 +32,21 @@ export class ExperimentTestDetailComponent implements OnInit {
   userSetting!: UserSetting;
   openedTestDescAt: Date = new Date();
   timeReadingDescription: number = 0;
+  router: Router = inject(Router);
 
   ngOnInit(): void {
     this.timeService.startTimer();
+
+
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationStart && event.navigationTrigger=="popstate")))
+      .subscribe((sub) => {
+        if (this.router.url.includes("/tests/detail")) {
+          this.timeService.stopTimer();
+        }
+      });
+
+
     this.openedTestDescAt = new Date();
     localStorage.removeItem("cart");
     this.route.paramMap.pipe(
@@ -61,7 +72,6 @@ export class ExperimentTestDetailComponent implements OnInit {
   }
 
   setLastStartedExperiment() {
-    //this.timeService.stopTimer();
     this.experimentService.setNextStartedExperimentTest({id: this.experimentTest?.id ?? 0, startedAt: new Date()});
     const lastFinishedExperiment = this.experimentService.getLastFinishedExperimentTest();
     const reachedSiteAt = localStorage.getItem('reachedSiteAt');
@@ -100,5 +110,9 @@ export class ExperimentTestDetailComponent implements OnInit {
     }
     this.experimentService.saveExperimentExecution(newExecution).subscribe((execution) => {
     });
+  }
+
+  stopTimer() {
+    this.timeService.stopTimer();
   }
 }
