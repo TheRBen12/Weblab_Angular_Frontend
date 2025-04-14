@@ -4,13 +4,12 @@
     <input [disabled]="disabled"  #filter (input)="filterResults(filter.value)"
             id="search-input-field" class="search-input-field form-control" type="search" placeholder="{{placeholder}}"
             aria-label="Search">
-    <i class="search-icon fa fa-search"></i>
+    <i (click)="filterResults(filter.value)"  class="search-icon fa fa-search"></i>
   </div>
 
   <ng-template #filterOnEnter>
-    <input [disabled]="disabled"  (keyup.enter)="filterResults(filter.value)" *ngIf="searchOnEnter" #filter
+    <input #searchInput [disabled]="disabled"  (keyup.enter)="filterResults(filter.value)" *ngIf="searchOnEnter" #filter
            class="search-input-field form-control" type="search"
            placeholder="{{placeholder}}" aria-label="Search"> <i class="search-icon fa fa-search"></i>
   </ng-template>
-
 </div>

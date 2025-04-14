@@ -121,6 +121,13 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     } else if (element.includes("megaDropDown") && (this.selectedInterFace.sideMenuLeft || this.selectedInterFace.sideMenuRight)) {
       return;
     }
+    else if (element.includes("sideMenuRight") && (this.selectedInterFace.menuTitle || this.selectedInterFace.menuToggleIcon)){
+      return;
+    }
+    else if (element.includes('sideMenuRight') && (this.selectedInterFace.menuToggleIcon || this.selectedInterFace.menuTitle)){
+      this.selectedInterFace.menuTitle = false;
+      this.selectedInterFace.menuToggleIcon = false;
+    }
     else if (element.includes("offCanvas") && this.selectedInterFace.sideMenuRight){
       return;
     }

@@ -44,6 +44,10 @@ a{
   color: white;
 }
 
+.no-pointer-events{
+  pointer-events: none;
+}
+
 .active-link{
   border-bottom: white solid 2px;
 }

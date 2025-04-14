@@ -12,12 +12,12 @@
       <div>
         <ul class="list-group list-group-flush">
           <div class="menu-item p-4">
-            <a (click)="setCurrentRoute('Experimente')"  [ngClass]="{'active-link': currentRoute == 'Experimente'}"  routerLink="/">Experimente</a></div>
+            <a (click)="setCurrentRoute('Experimente')"  [ngClass]="{'active-link': currentRoute == 'Experimente', 'no-pointer-events': !pointerEvents}"  routerLink="/">Experimente</a></div>
           <div class="menu-item p-4">
-            <a (click)="setCurrentRoute('Einstellungen')"  [ngClass]="{'active-link': currentRoute == 'Einstellungen'}"  routerLink="/settings">Einstellungen</a>
+            <a (click)="setCurrentRoute('Einstellungen')"  [ngClass]="{'active-link': currentRoute == 'Einstellungen', 'no-pointer-events': !pointerEvents}"  routerLink="/settings">Einstellungen</a>
           </div>
           <div class="menu-item p-4">
-            <a (click)="setCurrentRoute('Hilfe')"  [ngClass]="{'active-link': currentRoute == 'Hilfe'}"  routerLink="/help" class="nav-link active nav-item-robot">Hilfe</a>
+            <a (click)="setCurrentRoute('Hilfe')"  [ngClass]="{'active-link': currentRoute == 'Hilfe', 'no-pointer-events': !pointerEvents}"  routerLink="/help" class="nav-link active nav-item-robot">Hilfe</a>
           </div>
           <div class="menu-item p-4">Mein Fortschritt</div>
         </ul>
@@ -25,14 +25,12 @@
       <div class="border-bottom"></div>
       <div *ngIf="showLogoutAndProfile">
         <div class="mt-3 menu-item p-4">
-          <a (click)="setCurrentRoute('Profil')"  [ngClass]="{'active-link': currentRoute == 'Profil'}"  routerLink="/profile" *ngIf="currentUser?.email">{{currentUser?.email??'Profil'}}</a>
+          <a (click)="setCurrentRoute('Profil')"  [ngClass]="{'active-link': currentRoute == 'Profil', 'no-pointer-events': !pointerEvents}"  routerLink="/profile" *ngIf="currentUser?.email">{{currentUser?.email??'Profil'}}</a>
           <a *ngIf="!currentUser?.email">Profil</a>
         </div>
         <div (click)="logout()" class="menu-item p-4">
-          <a routerLink="/login" (click)="logout()" >Abmelden</a>
+          <a [ngClass]="{'no-pointer-events': !pointerEvents}" routerLink="/login" (click)="logout()" >Abmelden</a>
         </div>
-
-
       </div>
 
     </mat-drawer>

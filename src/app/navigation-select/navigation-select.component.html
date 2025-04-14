@@ -12,7 +12,7 @@
 
   <div class="mt-5 container d-block d-flex justify-content-center align-items-center h-100">
     <div>
-      <h4 >Wählen Sie eine Navigationstruktur aus</h4>
+      <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
       <mat-radio-group
         [(ngModel)]="navigationSelectionIndex"
         aria-labelledby="example-radio-group-label"
@@ -33,8 +33,8 @@
 
 
 <div [ngClass]="{'hidden': navigationSelectionIndex != 0 , 'visible d-flex flex-row': navigationSelectionIndex==0}" [@selectedState] = "navigationSelectionIndex==0 ? 'open' : 'closed' " >
-    <div class=" no-pointer-events col-2">
-      <app-side-navigation [showMenuContent] = "navigationSelectionIndex==0"></app-side-navigation>
+    <div class=" col-2">
+      <app-side-navigation [pointerEvents]="false" [showMenuContent] = "navigationSelectionIndex==0"></app-side-navigation>
     </div>
     <div class="col">
       <div class="top-header w-100 d-flex justify-content-center">
@@ -42,7 +42,7 @@
       </div>
       <div class="mt-5 d-block d-flex justify-content-center  h-100">
         <div>
-          <h4 >Wählen Sie eine Navigationstruktur aus</h4>
+          <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
           <mat-radio-group
             [(ngModel)]="navigationSelectionIndex"
             aria-labelledby="example-radio-group-label"
@@ -65,18 +65,18 @@
 
   <div [ngClass]="{'hidden': navigationSelectionIndex != 1 , 'visible': navigationSelectionIndex == 1}" [@selectedState] = "navigationSelectionIndex == 1 ? 'open' : 'closed' ">
     <div class="row">
-      <div class="col-2 no-pointer-events">
-        <app-side-navigation></app-side-navigation>
+      <div class="col-2">
+        <app-side-navigation [pointerEvents] = false></app-side-navigation>
       </div>
       <div class="col">
         <div class="mt-5 container d-block d-flex justify-content-center align-items-center">
           <div>
-            <h4 >Wählen Sie eine Navigationstruktur aus</h4>
+            <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
             <mat-radio-group
               [(ngModel)]="navigationSelectionIndex"
               aria-labelledby="example-radio-group-label"
               class="example-radio-group">
-              <mat-radio-button class="example-radio-button" [value]="0">Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="0"><p>Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</p></mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
@@ -105,7 +105,8 @@
     </div>
     <div class="mt-5 container d-block d-flex justify-content-center align-items-center h-100">
       <div>
-        <h4 >Wählen Sie eine Navigationstruktur aus</h4>
+        <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
+        <h5>Wenn Sie eine Navigation auswählen, dann wird Ihnen diese gezeigt</h5>
         <mat-radio-group
           [(ngModel)]="navigationSelectionIndex"
           aria-labelledby="example-radio-group-label"
@@ -126,8 +127,8 @@
 
 
   <div [ngClass]="{'hidden': navigationSelectionIndex != 3, 'visible d-flex': navigationSelectionIndex == 3 }"  [@selectedState] = "navigationSelectionIndex==3 ? 'open' : 'closed' ">
-      <div class="col-2 no-pointer-events">
-        <app-side-navigation [showLogoutAndProfile]="false"></app-side-navigation>
+      <div class="col-2 ">
+        <app-side-navigation [pointerEvents]="false" [showLogoutAndProfile]="false"></app-side-navigation>
       </div>
       <div class="col">
         <div class="main-header d-flex justify-content-end">
@@ -149,7 +150,7 @@
 
         <div class="mt-5 container d-block d-flex justify-content-center h-100">
           <div>
-            <h4 >Wählen Sie eine Navigationstruktur aus</h4>
+            <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
             <mat-radio-group
               [(ngModel)]="navigationSelectionIndex"
               aria-labelledby="example-radio-group-label"
@@ -169,8 +170,8 @@
 
 
   <div [ngClass]="{'hidden': navigationSelectionIndex != 3, 'visible d-flex': navigationSelectionIndex == 3 }" [@selectedState] = "navigationSelectionIndex==3 ? 'open' : 'closed' ">
-    <div class="col-2 no-pointer-events">
-      <app-side-navigation [showLogoutAndProfile]="false"></app-side-navigation>
+    <div class="col-2">
+      <app-side-navigation [pointerEvents]="false" [showLogoutAndProfile]="false"></app-side-navigation>
     </div>
     <div class="col">
       <div class="main-header d-flex justify-content-end">

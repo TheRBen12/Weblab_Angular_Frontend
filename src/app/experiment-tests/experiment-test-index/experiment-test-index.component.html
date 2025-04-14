@@ -1,6 +1,9 @@
 <div>
-  <div [ngClass]="navigationConfig?.sideNavigationSearchbarBottom ? 'bottom d-flex align-items-center justify-content-center': 'sub-navigation d-flex align-items-center justify-content-center'" class="sub-navigation">
-    <app-search-bar [disabled]="false" [placeholder]="'Versuche suchen'"  (inputTextEvent)="filterTestsAndMarkText($event)"
+  <div
+    [ngClass]="navigationConfig?.sideNavigationSearchbarBottom ? 'bottom d-flex align-items-center justify-content-center': 'sub-navigation d-flex align-items-center justify-content-center'"
+    class="sub-navigation">
+    <app-search-bar [disabled]="false" [placeholder]="'Versuche suchen'"
+                    (inputTextEvent)="filterTestsAndMarkText($event)"
                     [elements]="experimentTests"></app-search-bar>
   </div>
   <div class="container mt-3 ">
@@ -20,17 +23,22 @@
     <hr>
     <div>
       <div>
-        <p class="fw-bold">Total {{numberTests}} Versuche ({{experimentTests.length}} Versuche angezeigt)</p>
-        <h4>{{finishedExecutions.length}} Versuche von {{numberTests}} Versuchen abgeschlossen.</h4>
-        <p *ngIf="finishedExecutions.length == numberTests">Sie haben alle Experimente abgeschlossen, gehen Sie zurück zu den Experimenten.</p>
+        <p class="fw-bold">Total {{ numberTests }} Versuche ({{ experimentTests.length }} Versuche angezeigt)</p>
+        <h4>{{ finishedExecutions.length }} Versuche von {{ numberTests }} Versuchen abgeschlossen.</h4>
+        <p *ngIf="finishedExecutions.length == numberTests">Sie haben alle Experimente abgeschlossen, gehen Sie zurück
+          zu den Experimenten.</p>
       </div>
-      <div *ngIf="setting?.autoStartNextExperiment">
-        <p class="fw-bold">Das nächste Experiment wird ausgewählt in {{countDownToStartNextTest}} Sekunden</p>
+      <div *ngIf="setting?.autoStartNextExperiment && nextExperiment != null">
+        <p class="fw-bold">Das nächste Experiment wird ausgewählt in {{ countDownToStartNextTest }} Sekunden</p>
       </div>
       <div class="test-container">
         <div *ngIf="filteredExperimentTests " class=" flex-row row ">
           <div *ngFor="let test of filteredExperimentTests">
-            <app-experiment-test (experimentTestSelectionEventEmitter)="saveTestSelectionTime(test.id)" [isProgressiveVisualization]="setting?.progressiveVisualizationExperimentTest??false" [state] = "testCompletedKeyValues[test.id] ? 'Abgeschlossen' : 'Freigeschaltet'" [completed]="testCompletedKeyValues[test.id]" [markedText]="markedText" [test]="test"></app-experiment-test>
+            <app-experiment-test (experimentTestSelectionEventEmitter)="saveTestSelectionTime(test.id)"
+                                 [isProgressiveVisualization]="setting?.progressiveVisualizationExperimentTest??false"
+                                 [state]="testCompletedKeyValues[test.id] ? 'Abgeschlossen' : 'Freigeschaltet'"
+                                 [completed]="testCompletedKeyValues[test.id]" [markedText]="markedText"
+                                 [test]="test"></app-experiment-test>
           </div>
         </div>
       </div>

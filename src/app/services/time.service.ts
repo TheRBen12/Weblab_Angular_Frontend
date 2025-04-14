@@ -17,12 +17,13 @@ export class TimeService {
   time: number = 0;
   http: HttpClient = inject(HttpClient);
   private timerSubscription!: Subscription;
+  private autoStartSubscription!: Subscription
+  autoStartCountdown: number = 3;
 
   startWelcomeModalTimer() {
     this.welcomeModalTimer = setInterval(() => {
       this.timeToReadWelcomeModal++;
     }, 1000);
-
   }
 
   stopTimer() {
@@ -56,7 +57,17 @@ export class TimeService {
         this.time++;
         console.log(this.time);
       });
-
   }
 
+  getAutoStartSubscription(): Observable<number>{
+    return interval(100);
+  }
+  getAutoStartCountDown(){
+    return this.autoStartCountdown;
+  }
+
+  stopAutoStartTimer() {
+    this.autoStartSubscription.unsubscribe();
+    this.autoStartCountdown = 3;
+  }
 }

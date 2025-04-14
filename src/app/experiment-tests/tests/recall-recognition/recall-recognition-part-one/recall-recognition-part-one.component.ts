@@ -120,15 +120,13 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
       if (updateMenu) {
         this.fetchProductTypes("Home");
         this.currentRoute = "Home";
-        this.currentInstructionStep++;
+        this.currentInstructionStep = 4;
         this.cdRef.detectChanges();
       }
     });
 
-
     let oldRoute = this.routerService.rebuildCurrentRoute(this.router.url.split("/"));
     this.rebuildRoute(oldRoute);
-
 
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))

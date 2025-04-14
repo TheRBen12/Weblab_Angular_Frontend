@@ -41,6 +41,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
 
   experimentId: number = 0;
   experimentTests: ExperimentTest[] = [];
+  nextExperiment?: ExperimentTest | null
   filteredExperimentTests: ExperimentTest[] = [];
   experiment: Experiment | null = null;
   markedText: string = "";
@@ -72,8 +73,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
           clearInterval(this.interval);
           this.countDownToStartNextTest = 3;
         }
-        if (this.router.url.includes("tests/")) {
-
+        if (this.router.url.includes("/tests/")) {
           this.timeService.stopTimer();
         }
       });
@@ -140,16 +140,17 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     this.settingService.fetchLastSetting(userId).subscribe((setting) => {
       this.setting = setting;
       if (setting.autoStartNextExperiment) {
-        const nextExperiment: ExperimentTest | null = this.findNextExperiment();
-        if (nextExperiment) {
-          this.interval = setInterval(() => {
+        this.nextExperiment = this.findNextExperiment();
+        if (this.nextExperiment) {
+          const subscription = this.timeService.getAutoStartSubscription().subscribe(() => {
             this.countDownToStartNextTest--;
             if (this.countDownToStartNextTest < 1) {
-              this.router.navigateByUrl("/tests/detail/" + nextExperiment?.id);
+              this.timeService.stopTimer();
+              this.router.navigateByUrl("/tests/detail/" + this.nextExperiment?.id);
               this.countDownToStartNextTest = 3;
-              clearInterval(this.interval);
+              subscription.unsubscribe();
             }
-          }, 1000);
+          });
         }
       }
       if (setting.progressiveVisualizationExperimentTest && this.experimentTests.length > 0) {

@@ -45,6 +45,7 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
   routerService: RouterService = inject(RouterService);
   currentRoute = "Experimente";
   userBehaviour!: UserBehaviour
+  @Input() pointerEvents: boolean = true
 
   constructor() {
     effect(() => {

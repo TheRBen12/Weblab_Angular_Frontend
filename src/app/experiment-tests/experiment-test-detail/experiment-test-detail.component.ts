@@ -61,7 +61,7 @@ export class ExperimentTestDetailComponent implements OnInit {
   }
 
   setLastStartedExperiment() {
-    this.timeService.stopTimer();
+    //this.timeService.stopTimer();
     this.experimentService.setNextStartedExperimentTest({id: this.experimentTest?.id ?? 0, startedAt: new Date()});
     const lastFinishedExperiment = this.experimentService.getLastFinishedExperimentTest();
     const reachedSiteAt = localStorage.getItem('reachedSiteAt');
@@ -89,6 +89,7 @@ export class ExperimentTestDetailComponent implements OnInit {
 
   private saveExperimentExecution() {
     this.timeReadingDescription = this.timeService.getCurrentTime();
+    this.timeService.stopTimer();
     const newExecution: ExperimentTestExecution = {
       timeReadingDescription: this.timeReadingDescription,
       openedDescAt: this.openedTestDescAt,

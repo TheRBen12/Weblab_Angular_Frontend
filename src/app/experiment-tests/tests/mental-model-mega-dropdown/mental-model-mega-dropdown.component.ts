@@ -79,13 +79,14 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   parentCategory: string | null = null;
   routes = routerLinks
   showSubNavMenu = false;
-  private clickedRoutes: { [key: string]: string } = {};
+  clickedRoutes: { [key: string]: string } = {};
   showHelpInstructions: boolean = false;
   loading: boolean = false;
   usedFilters: string[] = [];
-  private experimentTest?: ExperimentTest;
+  experimentTest?: ExperimentTest;
   firstClick?: string|null = null;
   experimentFinished: boolean = false;
+  clicks: string[] = [];
   execution: {
     [key: string]: any
   } = {
@@ -104,8 +105,8 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     "timeToClickShoppingCart": null,
     "numberToggledMenu": 0,
     "timeFirstClick": 0,
-    "timeToClickSearchBar": 0
-
+    "timeToClickSearchBar": 0,
+    "clicks": ""
   };
 
 
@@ -139,7 +140,8 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
-    })
+      this.basketIsHidden = false;
+    });
     this.fetchParentProductTypes();
     this.fetchProducts();
     this.fetchProductTypes(this.currentRoute);
@@ -163,6 +165,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
 
   finishExperiment() {
     this.execution["finishedExecutionAt"] = new Date();
+    this.execution["clicks"] = JSON.stringify(this.clicks);
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     const userId = this.loginService.currentUser()?.id;
@@ -209,7 +212,6 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.filterService.dispatchFilterText(text);
   }
 
-
   fetchProducts() {
     this.productService.getAllProducts().subscribe((products) => {
       this.products = products;
@@ -247,6 +249,8 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     }
     this.execution['numberClicks'] = this.execution['numberClicks'] + 1;
     this.saveExecutionTemporarily(this.execution);
+    this.clicks.push((event.target as HTMLElement).innerHTML);
+
   }
 
   saveExecutionTemporarily(execution: any) {

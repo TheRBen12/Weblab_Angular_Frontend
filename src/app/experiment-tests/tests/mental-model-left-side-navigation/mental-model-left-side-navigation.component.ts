@@ -99,7 +99,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.timeService.startTimer();
     this.productService.getAllProducts().subscribe((products) => {
       this.products = products;
-    })
+    });
     this.fetchExperimentTest();
     this.execution['usedFilter'] = false;
     this.execution['numberClicks'] = 0;
