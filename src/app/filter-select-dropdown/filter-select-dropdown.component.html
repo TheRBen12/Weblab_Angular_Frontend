@@ -22,7 +22,8 @@
             <input value="0" matSliderStartThumb #sliderMin>
             <input value="2600" matSliderEndThumb #sliderMax>
           </mat-slider>
+          <button (click)="filterByPrice(sliderMin.value, sliderMax.value)"  class="btn btn-primary">Preis Übernehmen</button>
+
         </div>
-        <button (click)="filterByPrice(sliderMin.value, sliderMax.value)"  class="btn btn-primary">Übernehmen</button>
 </ng-template>
 

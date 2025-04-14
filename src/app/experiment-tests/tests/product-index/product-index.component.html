@@ -11,7 +11,16 @@
       <div class="mt-2 mb-2">
 
         <mat-chip-set aria-label="Fish selection">
-          <mat-chip *ngFor="let filter of activeFilters" >{{filter}}</mat-chip>
+          <mat-chip *ngFor="let filter of activeFilters" >
+            <div class="d-flex justify-content-center align-items-center">
+              <span>{{filter}}</span>
+              <div (click)="removeActiveFilter(filter)"  class="h-100 d-flex align-items-center">
+                <mat-icon>close</mat-icon>
+              </div>
+
+            </div>
+
+          </mat-chip>
         </mat-chip-set>
 
       </div>

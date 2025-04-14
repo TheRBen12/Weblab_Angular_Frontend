@@ -9,6 +9,7 @@ import {FilterSelectDropdownComponent} from '../../../filter-select-dropdown/fil
 import {ExperimentService} from '../../../services/experiment.service';
 import {MatCard} from '@angular/material/card';
 import {MatChip, MatChipSet} from '@angular/material/chips';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-product-index',
@@ -21,6 +22,7 @@ import {MatChip, MatChipSet} from '@angular/material/chips';
     NgClass,
     MatChipSet,
     MatChip,
+    MatIcon,
   ],
   templateUrl: './product-index.component.html',
   standalone: true,
@@ -40,10 +42,10 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   productProperties = ["Marke", "Kategorie"];
   filterConfig: boolean = true;
   activeFilters: string[] = [];
-
   filterSubscription: Subscription = new Subscription();
   @Input() category: string = "";
   filterDisabled: boolean = false;
+  selectedValue: string | null =null;
 
   constructor(private route: ActivatedRoute, private cdRf: ChangeDetectorRef) {
     this.title = this.route.snapshot.title;
@@ -51,9 +53,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.productService.getFilterConfiguredByUserSubscription().subscribe((config) => {
-     if (config != null){
-       this.filterConfig = config.filter;
-     }
+      if (config != null) {
+        this.filterConfig = config.filter;
+      }
 
     })
     this.fetchAllProducts().subscribe((products) => {
@@ -78,7 +80,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
       } else {
         this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
         this.showFilterResultTitle = this.filteredProducts.length > 0;
-        if (filterText != ""){
+        if (filterText != "") {
           this.jumpToProductList();
         }
 
@@ -98,7 +100,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
         if (this.category == "pc-und-notebooks") {
           this.category = "PC und Notebooks"
         }
-        if (this.category == "pc"){
+        if (this.category == "pc") {
           this.category = "PC";
         }
 
@@ -146,9 +148,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
     this.specifications = this.filteredProducts.flatMap(product =>
       product.specifications.map((spec: any) =>
         spec.propertyName));
-
     this.specifications = Array.from(new Set(this.specifications));
-
 
   }
 
@@ -191,8 +191,11 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   }
 
 
-  addFilter(filterName: string, value: string){
-    this.activeFilters.push(filterName +": " + value);
+  addFilter(filterName: string, value: string) {
+    if (this.activeFilters.indexOf(filterName + ": " + value) == -1) {
+      this.activeFilters.push(filterName + ": " + value);
+    }
+
   }
 
   filterProductsBySpecifications(propertyName: string, value: string) {
@@ -223,7 +226,40 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   private jumpToProductList() {
     const element = document.getElementById('productList');
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
+  }
+
+  filterProductsByActiveFilter() {
+    this.filteredProducts = this.products;
+    if (this.activeFilters.length == 0) {
+      this.fetchProductsByCategory();
+    }
+    this.activeFilters.forEach((filter) => {
+      const nameValuePair = filter.split(":");
+      const name = nameValuePair[0];
+      const value = nameValuePair[1].replace(" ", "");
+      if (name == "Marke" || name == "Kategorie") {
+        this.filteredProducts = this.filteredProducts.filter(product => product.trademark == value || product.type == value);
+      } else {
+        this.filteredProducts = this.filteredProducts.filter((product) => {
+          const specification = product.specifications.find((spec: any) => spec.propertyName == name);
+          if (specification) {
+            return specification.value == value;
+          }
+          return false;
+        });
+      }
+    });
+
+
+  }
+
+  removeActiveFilter(activeFilter: string) {
+    this.activeFilters = this.activeFilters.filter((filter) => {
+      return filter != activeFilter;
+    });
+    this.filterProductsByActiveFilter();
+
   }
 }
