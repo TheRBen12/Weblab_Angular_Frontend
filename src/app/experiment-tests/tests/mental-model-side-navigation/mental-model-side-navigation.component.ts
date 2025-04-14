@@ -134,6 +134,9 @@ export class MentalModelSideNavigationComponent implements OnInit {
       this.basket = basket;
       if (this.basket.length > 0) {
         this.showBasket = true;
+        if (this.basket[0].type != "PC"){
+          this.increaseFailedClicks();
+        }
       }
     });
     this.productService.getFilterUsedSubscription().subscribe((filter) => {

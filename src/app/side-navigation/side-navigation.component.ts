@@ -66,6 +66,7 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
+        this.currentRoute = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
         if (this.router.url == "/"){
           this.currentRoute = "Experimente";
         }
