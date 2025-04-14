@@ -1,11 +1,12 @@
 import {Component, effect, inject, Input, numberAttribute, OnInit, signal} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
+import {NavigationEnd, Router, RouterLink} from '@angular/router';
 import {LoginService} from '../../services/login.service';
 import {User} from '../../models/user';
 import {NgClass, NgIf} from '@angular/common';
 import {UserBehaviour} from '../../models/user-behaviour';
 import {RouterService} from '../../services/router.service';
 import {TimeService} from '../../services/time.service';
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -22,7 +23,7 @@ export class NavigationComponent implements OnInit {
   loginService = inject(LoginService);
   router = inject(Router);
   currentUser: User | null
-  currentLink: string = "Experimente"
+  currentLink: string = "Experimente";
   userBehaviour!: UserBehaviour | null;
   routerService: RouterService = inject(RouterService);
   timeService: TimeService = inject(TimeService);
@@ -102,6 +103,13 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+          this.currentLink = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
+      });
+
     this.currentLink = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
     this.router.url;
     this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {

@@ -87,8 +87,8 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   filterProducts(filterText: string) {
+    this.execution["searchParameters"] += filterText + " ";
     this.filterService.dispatchFilterText(filterText)
-
   }
   increaseFailedClicks(){
       this.execution['failedClicks'] =  this.execution['failedClicks'] + 1;

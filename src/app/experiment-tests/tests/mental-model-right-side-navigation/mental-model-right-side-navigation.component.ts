@@ -90,6 +90,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     "timeToFirstClick": 0,
     "timeToClickSearchBar": 0,
     "clicks": "",
+    "searchParameters": ""
   };
 
 
@@ -116,6 +117,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   }
 
   filterProducts(filterText: string) {
+    this.execution["searchParameters"] += filterText + " ";
     this.filterService.dispatchFilterText(filterText)
     this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1
     localStorage.setItem("numberUsedSearchBar", this.execution["numberUsedSearchBar"]);

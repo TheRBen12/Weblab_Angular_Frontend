@@ -98,8 +98,11 @@ export class RouterService {
     }else if (url=="/profile"){
       return "Profil";
     }
-    else{
+    else if (url == "/"){
       return "Experimente";
+    }
+    else{
+      return "";
     }
   }
 }

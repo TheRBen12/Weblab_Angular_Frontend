@@ -253,7 +253,6 @@ export class MentalModelSideNavigationComponent implements OnInit {
       this.execution["searchParameters"] += " ";
     }
     this.execution["searchParameters"] += filterText;
-    debugger;
     this.filterService.dispatchFilterText(filterText)
   }
 

@@ -122,7 +122,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     "usedBreadcrumbs": false,
     "numberToggledMenu": 0,
     "timeToFirstClick": 0,
-    "clicks": ""
+    "clicks": "",
+    "searchParameters": ""
   };
   product: any;
 
@@ -271,6 +272,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   }
 
   filterProducts(filterText: string) {
+    this.execution["searchParameters"] += filterText + " ";
+
     this.filterService.dispatchFilterText(filterText)
     this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1;
     if ( this.execution["numberUsedSearchBar"] > 1){
@@ -317,7 +320,6 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
 
   increaseUsedSearchBar() {
     this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1;
-
   }
 
   increaseFailedClicks() {

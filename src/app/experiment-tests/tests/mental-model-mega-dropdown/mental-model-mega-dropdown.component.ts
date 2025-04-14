@@ -106,7 +106,8 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     "numberToggledMenu": 0,
     "timeFirstClick": 0,
     "timeToClickSearchBar": 0,
-    "clicks": ""
+    "clicks": "",
+    "searchParameters": ""
   };
 
 
@@ -210,6 +211,8 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.execution['numberUsedSearchBar'] = this.execution['numberUsedSearchBar'] + 1;
     this.saveExecutionTemporarily(this.execution);
     this.filterService.dispatchFilterText(text);
+    this.execution["searchParameters"] += text + " ";
+
   }
 
   fetchProducts() {
