@@ -149,7 +149,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
       this.timeService.stopTimer();
     }
 
-    this.clickedRoutes[$event] = new Date().toDateString();
+    this.clickedRoutes[$event] = new Date().toISOString();
     localStorage.setItem('clickedRoutes', JSON.stringify(this.clickedRoutes));
 
     this.currentRoute = $event;
