@@ -64,6 +64,8 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    localStorage.removeItem("cart");
+
     this.timeService.startTimer();
 
     this.router.events

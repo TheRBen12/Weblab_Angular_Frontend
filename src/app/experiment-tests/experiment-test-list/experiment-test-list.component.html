@@ -1,0 +1,32 @@
+<div *ngIf="!serverError; else errorMessage">
+  <div [ngClass]="{'bottom': navigationSetting?.sideNavigationSearchbarBottom, 'sub-navigation d-flex align-items-center justify-content-center': !navigationSetting?.sideNavigationSearchbarBottom}">
+    <app-search-bar [placeholder]="'Versuchsexperimente suchen'" (click)="updateUserBehaviour()"  [disabled]="false" (inputTextEvent)="filterExperimentTests($event)" [elements]="experimentTests" ></app-search-bar>
+  </div>
+  <div class="mb-2 container mt-3 ">
+    <div class="p-1 d-flex justify-content-between">
+      <h1>{{ title }}</h1>
+      <div *ngIf="finishedExperimentTests">
+        <p *ngIf="finishedExecutions.length == 0">
+          Sie haben noch keine Experiment abgeschlossen
+        </p>
+        <p *ngIf="finishedExperimentTests.length > 0">Sie haben {{finishedExperimentTests.length}} Experiment abgeschlossen</p>
+      </div>
+    </div>
+    <h5 class="p-1 mt-2 ">{{filteredExperimentTests.length}} Experimente angezeigt</h5>
+    <p class="p-1" *ngIf="filteredExperimentTests.length > 0">Führen Sie die unten aufgelisteten Experiment durch.</p>
+    <div class="row row-cols-3 mb-2">
+      <app-experiment-test (experimentTestSelectionEventEmitter)="saveExperimentTestSelectionTime($event)"  class="mb-2" [isProgressiveVisualization]="currentUserSetting?.progressiveVisualizationExperiment ?? false" [test]="test" *ngFor="let test of filteredExperimentTests"></app-experiment-test>
+    </div>
+    <div *ngIf="filteredExperimentTests.length == 0">
+      <p>Ihre Suche ergab leider keine Treffer</p>
+    </div>
+  </div>
+
+</div>
+<ng-template #errorMessage>
+  <div class="alert-danger alert">Der Server konnte nicht erreicht werden.</div>
+</ng-template>
+
+
+
+

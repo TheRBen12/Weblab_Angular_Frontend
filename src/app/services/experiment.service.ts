@@ -143,4 +143,9 @@ export class ExperimentService {
     return this.http.post<ExperimentTestSelectionTime>('https://localhost:7147/api/experimentTest/selection-time/new', experimentTestSelectionTime);
 
   }
+
+  getExperimentTests(): Observable<ExperimentTest[]> {
+    return this.http.get<ExperimentTest[]>('https://localhost:7147/api/experimentTest/all');
+
+  }
 }
