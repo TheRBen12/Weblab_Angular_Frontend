@@ -26,7 +26,7 @@
       </div>
       <div class="row">
         <div class="d-flex flex-row gap-4 mb-2 ">
-          <app-filter-select-dropdown (onFilterEventEmitter)="filterProductsByProperty($event.propertyName, $event.value)" [values]="getPropertyValues(property)" *ngFor="let property of productProperties" [title]="property" ></app-filter-select-dropdown>
+          <app-filter-select-dropdown [ngClass]="{'disabled': (filterDisabled || !filterConfig)}" (onFilterEventEmitter)="filterProductsByProperty($event.propertyName, $event.value)" [values]="getPropertyValues(property)" *ngFor="let property of productProperties" [title]="property" ></app-filter-select-dropdown>
         </div>
       </div>
       <div *ngIf="specifications.length > 0" class="row row-cols-3" >

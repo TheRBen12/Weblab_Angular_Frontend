@@ -95,7 +95,7 @@ export class EmailIndexComponent implements OnInit {
       this.openRandomSnackbar()
       this.disableMail(deletedMail);
     } else {
-      this.openSnackBar(7000, "Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
+      this.openSnackBar(8000, "Gelöscht", "Rückgängig", this.horizontalPosition, this.verticalPosition);
     }
 
   }

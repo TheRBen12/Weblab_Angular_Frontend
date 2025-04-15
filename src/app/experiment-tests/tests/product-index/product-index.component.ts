@@ -45,7 +45,6 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   filterSubscription: Subscription = new Subscription();
   @Input() category: string = "";
   filterDisabled: boolean = false;
-  selectedValue: string | null =null;
 
   constructor(private route: ActivatedRoute, private cdRf: ChangeDetectorRef) {
     this.title = this.route.snapshot.title;
