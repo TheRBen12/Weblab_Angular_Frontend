@@ -50,6 +50,7 @@ import {ExperimentTestFeedbackComponent} from './experiment-test-feedback/experi
 import {
   MentalModelSideNavigationComponent
 } from './experiment-tests/tests/mental-model-side-navigation/mental-model-side-navigation.component';
+import {ExperimentTestListComponent} from './experiment-tests/experiment-test-list/experiment-test-list.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +59,8 @@ export const routes: Routes = [
       {path: 'help', component: HelpDescriptionComponent},
       {path: 'settings', component: SettingsComponent},
       {path: 'profile', component: ProfileComponent},
+
+      {path: 'tests/index', component: ExperimentTestListComponent},
       {
         path: 'tests/:expId', component: ExperimentTestIndexComponent,
       },

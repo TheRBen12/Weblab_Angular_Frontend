@@ -7,13 +7,15 @@ import {UserBehaviour} from '../../models/user-behaviour';
 import {RouterService} from '../../services/router.service';
 import {TimeService} from '../../services/time.service';
 import {filter} from 'rxjs';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-navigation',
   imports: [
     RouterLink,
     NgIf,
-    NgClass
+    NgClass,
+    MatIcon
   ],
   templateUrl: './navigation.component.html',
   standalone: true,

@@ -6,9 +6,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item ">
-          <a [ngClass]="{'active-link': currentLink == 'Experimente'}" (click)="setCurrentLink('Experimente')" routerLink="/" class="nav-link active nav-item-robot">Experimente</a>
+
+
+        <li class="nav-item dropdown active">
+          <div class="d-flex justify-content-center align-items-center">
+            <a [ngClass]="{'active-link': currentLink == 'Experimente'}" (click)="setCurrentLink('Experimene')" class="nav-link active nav-item-robot" routerLink="/">
+              Experimente
+            </a>
+            <mat-icon style="color: white" fontIcon="expand_more" aria-expanded="false" role="button" data-bs-toggle="dropdown" class="fw-bold active"></mat-icon>
+            <ul class="dropdown-menu">
+              <li><a [ngClass]="{'active-link': currentLink == 'Versuchsexperimente'}" (click)="setCurrentLink('Versuchsexperimente')" routerLink="/tests/index" class="dropdown-item">Versuchsexperimente</a></li>
+            </ul>
+          </div>
         </li>
+
+
+
         <li class="nav-item ms-3">
           <a [ngClass]="{'active-link': currentLink == 'Einstellungen'}" (click)="updateUserSettingBehaviour()" routerLink="/settings" class="nav-link active nav-item-robot ">Einstellungen</a>
         </li>

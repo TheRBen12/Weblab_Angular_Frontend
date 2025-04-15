@@ -100,8 +100,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   links: string[] = [];
   showSubNavMenu: boolean = false;
   parentCategoryLinks: string[] = [];
-  private currentType?: ProductType;
-  private experimentFinished: boolean = false;
+  currentType?: ProductType;
+  experimentFinished: boolean = false;
   clicks: string[] = [];
   execution: {
     [key: string]: any
@@ -301,7 +301,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/tests/"+this.experimentTest.experiment.id);
+            this.router.navigateByUrl("/tests/"+this.experimentTest.experiment?.id);
             this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000)
         });
