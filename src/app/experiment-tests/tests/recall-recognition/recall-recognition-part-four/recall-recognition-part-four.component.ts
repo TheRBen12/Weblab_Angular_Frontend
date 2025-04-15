@@ -222,7 +222,8 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("tests/1");
+            this.router.navigateByUrl("/test/"+this.experimentTestId+"/feedback")
+
             this.toasterService.success("Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
         });

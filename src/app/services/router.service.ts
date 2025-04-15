@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {ProductType} from '../models/product-category';
 import {routerLinks} from '../experiment-tests/tests/routes';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {routes} from '../app.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -9,18 +10,25 @@ import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 export class RouterService {
   productCategoryLinks = routerLinks
   private lastKnownRoute: string = '../'; // Standard-Fallback
-
+  private currentRoute: string= "";
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        const index = event.url.lastIndexOf("/");
-        this.lastKnownRoute = event.url.slice(0, index);
+        this.lastKnownRoute = this.router.url;
+      }
+      if (event instanceof NavigationEnd){
+        console.log(event.url);
+        this.currentRoute = this.router.url;
       }
     });
   }
 
   getLastKnownRoute(): string {
     return this.lastKnownRoute;
+  }
+
+  getCurrentRoute(): string {
+    return this.currentRoute;
   }
 
 

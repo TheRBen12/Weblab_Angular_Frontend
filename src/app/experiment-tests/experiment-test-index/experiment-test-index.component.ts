@@ -1,5 +1,5 @@
 import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {filter, switchMap} from 'rxjs';
 import {ExperimentTest} from '../../models/experiment-test';
 import {ExperimentService} from '../../services/experiment.service';
@@ -71,6 +71,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
+
         if (this.router.url == "/") {
           this.countDownToStartNextTest = 3;
           this.timeService.stopTimer();

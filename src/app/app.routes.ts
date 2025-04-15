@@ -51,6 +51,7 @@ import {
   MentalModelSideNavigationComponent
 } from './experiment-tests/tests/mental-model-side-navigation/mental-model-side-navigation.component';
 import {ExperimentTestListComponent} from './experiment-tests/experiment-test-list/experiment-test-list.component';
+import {experimentTestFeedbackGuardGuard} from './guards/experiment-test-feedback-guard.guard';
 
 export const routes: Routes = [
   {
@@ -207,7 +208,7 @@ export const routes: Routes = [
 
         ]
       },
-      {path: "test/:id/feedback", component: ExperimentTestFeedbackComponent}
+      {path: "test/:id/feedback", component: ExperimentTestFeedbackComponent, canActivate: [experimentTestFeedbackGuardGuard]}
     ]
   },
   {

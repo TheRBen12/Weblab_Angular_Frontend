@@ -88,6 +88,7 @@ export class ExperimentTestFeedbackComponent implements OnInit {
       this.feedback.experimentTestId = this.experimentTest.id;
       this.experimentService.submitFeedback(this.feedback).subscribe((feedback) => {
         setTimeout(() => {
+          localStorage.setItem("recentlySubmittedFeedbackForm", "true");
           this.loading = false;
           this.router.navigateByUrl("tests/" + this.experimentTest?.experiment?.id);
         }, 1500);
