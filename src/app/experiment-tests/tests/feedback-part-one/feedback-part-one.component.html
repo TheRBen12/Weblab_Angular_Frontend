@@ -41,6 +41,12 @@
             Das Abreisedatum muss nach dem Ankunftsdatum liegen!
           </div>
         </div>
+        <div *ngIf="form.errors?.['arrivalDateOrderInvalid']">
+          <div class="form-error-message">
+            Das Abreisedatum kann frühstens morgen sein.
+          </div>
+        </div>
+
 
         <div class="mt-3">
           <div class="col-3">
@@ -132,7 +138,7 @@
 
           <div *ngIf="plz?.invalid && ( plz?.touched) " class="mb-3 ">
             <div class="form-error-message" *ngIf="plz?.errors?.['minlength']">Die PLZ muss mind. 4 Ziffern enthalten</div>
-            <div class="form-error-message" *ngIf="plz?.errors?.['maxlength']">Die PLZ darf max. 4 Ziffern enthalten</div>
+            <div class="form-error-message" *ngIf="plz?.errors?.['maxlength']">Die PLZ darf max. 5 Ziffern enthalten</div>
             <div class="form-error-message" *ngIf="plz?.errors?.['required']">Bitte Geben Sie eine PLZ ein</div>
           </div>
         </div>

@@ -67,9 +67,9 @@ export class FeedbackPartOneComponent implements OnInit {
 
   constructor() {
     this.instructions = ["Geben sie für das Reiseziel ein: Berlin", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
-      "Geben Sie Ihre Kontaktdaten an", "Geben Sie für Strasse und Hausnummer ein: Müllereckstrasse",
-      "Geben Sie Ihren Wohnort an", "Geben sie für das Land ein: CH", "Geben Sie für die PLZ ein: 30654",
-      "Korrigieren Sie all Fehleingaben, Entscheiden Sie selbst, wie Sie die EIngaben korrigieren"];
+      "Geben Sie Ihre Kontaktdaten (E-Mail, Vorname und Name) an", "Geben Sie für die Strasse ein: Dubystrasse",
+      "Geben Sie für den Ort Bern ein.", "Geben sie für das Land ein: CH", "Geben Sie für die PLZ ein: 30655",
+      "Korrigieren Sie all Fehleingaben, Entscheiden Sie selbst, wie Sie die Eingaben korrigieren"];
   }
 
 
@@ -120,7 +120,7 @@ export class FeedbackPartOneComponent implements OnInit {
     plz: new FormControl("", {
       validators: [
         Validators.required,
-        Validators.maxLength(4),
+        Validators.maxLength(5),
         Validators.minLength(4),
         Validators.pattern('^[0-9]{4}$')
       ], updateOn: "submit"
