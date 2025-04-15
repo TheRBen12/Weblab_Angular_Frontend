@@ -32,7 +32,7 @@
       <div *ngIf="specifications.length > 0" class="row row-cols-3" >
         <ng-container *ngFor="let spec of specifications">
           <div class="col-sm-auto">
-            <app-filter-select-dropdown
+            <app-filter-select-dropdown [ngClass]="{'disabled': (filterDisabled || !filterConfig)}"
               (onFilterEventEmitter)="filterProductsBySpecifications($event.propertyName, $event.value)"
               [values]="getSpecificationValues(spec)"
               [title]="spec">
