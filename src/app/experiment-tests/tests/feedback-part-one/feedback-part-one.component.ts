@@ -259,7 +259,7 @@ export class FeedbackPartOneComponent implements OnInit {
         this.experimentService.saveFormFeedbackExperiment(this.execution).subscribe()
         setTimeout(() => {
           this.loading = false;
-          this.router.navigateByUrl("/test/" + this.experimentTest.id + "/feedback");
+          this.router.navigateByUrl("/tests/" + this.experimentTest.experiment?.id);
         }, 2000)
       });
     }

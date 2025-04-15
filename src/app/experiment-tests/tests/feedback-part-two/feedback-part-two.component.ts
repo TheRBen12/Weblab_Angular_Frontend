@@ -148,7 +148,7 @@ export class FeedbackPartTwoComponent implements OnInit {
       validators: [
         Validators.required,
         Validators.minLength(3),
-        Validators.pattern('^[a-zA-ZäöüÄÖÜß ]+$')
+        //Validators.pattern('^[a-zA-ZäöüÄÖÜß ]+$')
       ]
     }),
 
@@ -263,7 +263,7 @@ export class FeedbackPartTwoComponent implements OnInit {
         setTimeout(() => {
           this.toasterService.success("Vielen Dank, Sie haben das Experiment erfolgreich abgeschlossen")
           this.loading = false;
-          this.router.navigateByUrl("/test/"+this.experimentTest.id+"/feedback");
+          this.router.navigateByUrl("/tests/"+this.experimentTest.experiment?.id);
         }, 2000)
       });
     }
