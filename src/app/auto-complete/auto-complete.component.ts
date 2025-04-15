@@ -39,7 +39,6 @@ export class AutoCompleteComponent implements OnInit {
   emitFilterText(text: string, event: Event) {
     event.preventDefault();
     this.textToMark = text;
-    debugger;
     this.onInputEventEmitter.emit(text);
   }
   setTextToMark(text: string){

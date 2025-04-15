@@ -215,7 +215,6 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.countDownToStartNextTest = 3;
-    debugger;
     clearInterval(this.redirectTimeout);
   }
 
