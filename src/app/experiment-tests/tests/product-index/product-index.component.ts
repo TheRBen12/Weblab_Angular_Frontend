@@ -62,8 +62,10 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
     });
 
     const urlSegments = this.router.url.split("/");
-    const index = urlSegments.indexOf("hicks-law")
-
+    let index = urlSegments.indexOf("hicks-law");
+    if (index == -1){
+      index = urlSegments.indexOf("recall-recognition");
+    }
     const expId = Number(urlSegments[index + 1]);
     if (expId) {
       this.fetchExperimentTest(expId);
