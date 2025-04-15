@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {ProductComponent} from '../product/product.component';
 import {ActivatedRoute, NavigationEnd, Router, RouterOutlet, RouterStateSnapshot, Routes} from '@angular/router';
 import {ProductService} from '../../../services/product.service';
-import {DatePipe, NgForOf} from '@angular/common';
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {filter, take} from 'rxjs';
 import Popper from 'popper.js';
 import Data = Popper.Data;
@@ -16,7 +16,8 @@ import {RouterService} from '../../../services/router.service';
     ProductComponent,
     RouterOutlet,
     DatePipe,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './shop-index.component.html',
   standalone: true,
@@ -54,4 +55,7 @@ export class ShopIndexComponent implements OnInit{
     });
   }
 
+  jumpToProductList() {
+    this.productService.scrollToProductList();
+  }
 }

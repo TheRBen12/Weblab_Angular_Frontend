@@ -15,6 +15,8 @@ export class ProductService {
   filterConfiguredByUserSubscription: BehaviorSubject<MentalModelShopConfiguration|null> = new BehaviorSubject<MentalModelShopConfiguration|null>(null);
   private productLimitSubscription: BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null);
   private filterUsedSubscription: BehaviorSubject<string> = new BehaviorSubject("");
+  scrollSubscription: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
 
 
   constructor(private toastr: ToastrService) {
@@ -104,5 +106,12 @@ export class ProductService {
 
   updateFilterConfiguredByUser(configuration: MentalModelShopConfiguration) {
     this.filterConfiguredByUserSubscription.next(configuration)
+  }
+
+  scrollToProductList(){
+    this.scrollSubscription.next(true);
+  }
+  getScrollSubscription() {
+    return this.scrollSubscription.asObservable();
   }
 }

@@ -51,6 +51,13 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.productService.getScrollSubscription().subscribe((scroll) => {
+      if (scroll){
+        this.jumpToProductList();
+      }
+    })
+
     this.productService.getFilterConfiguredByUserSubscription().subscribe((config) => {
       if (config != null) {
         this.filterConfig = config.filter;
