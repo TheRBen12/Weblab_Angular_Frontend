@@ -1,8 +1,11 @@
-<div [ngClass]="{'completed-test': completed, 'border-blue': isProgressiveVisualization && !completed}" class="card p-3 mt-3">
+<div [ngClass]="{'completed-test': completed, 'border-blue': isProgressiveVisualization && !completed}" class="card p-3 mt-3 d-flex h-100 w-100">
   <div class="container">
     <div class="test-header d-flex flex-column">
       <div class="d-flex justify-content-between">
-        <h3 #textAttribute>{{test.position + 1}}. Versuch</h3>
+
+        <h3 *ngIf="!position" #textAttribute>{{test.position + 1}}. Versuch</h3>
+        <h3 *ngIf="position" #textAttribute>{{position}}. Versuch</h3>
+
         <span class="check-icon">
           <mat-icon  *ngIf="completed">check</mat-icon>
         </span>

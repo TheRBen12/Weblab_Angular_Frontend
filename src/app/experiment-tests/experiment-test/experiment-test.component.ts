@@ -12,7 +12,7 @@ import {
 import {ExperimentTest} from '../../models/experiment-test';
 import {NgClass, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 
 @Component({
@@ -29,6 +29,7 @@ import {MatIcon} from '@angular/material/icon';
   styleUrl: './experiment-test.component.css'
 })
 export class ExperimentTestComponent implements OnChanges, OnInit {
+  router: Router = inject(Router);
   @Input() test: ExperimentTest = {
     position: 1, name: "", description: "",
     estimatedExecutionTime: 0, state: "", experiment: null,
@@ -42,6 +43,7 @@ export class ExperimentTestComponent implements OnChanges, OnInit {
   @Input() state: string = 'Freigeschaltet';
   @Input() isProgressiveVisualization: boolean = false;
   @Output() experimentTestSelectionEventEmitter: EventEmitter<ExperimentTest> = new EventEmitter<ExperimentTest>();
+  @Input() position?: number|null = null;
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,6 +80,11 @@ export class ExperimentTestComponent implements OnChanges, OnInit {
 
   emitSelection(){
     this.experimentTestSelectionEventEmitter.emit(this.test);
+  }
+
+  isCompleted(): boolean{
+    const isCompleted = false;
+    return false
   }
 
 

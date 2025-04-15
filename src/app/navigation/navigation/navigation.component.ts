@@ -50,6 +50,9 @@ export class NavigationComponent implements OnInit {
 
   setCurrentLink(link: string) {
     this.currentLink = link;
+    let routes = localStorage.getItem("usedRoutes")??"";
+    routes+= link + " ";
+    localStorage.setItem("usedRoutes", routes);
   }
 
   updateUserHelpBehaviour() {
@@ -119,7 +122,5 @@ export class NavigationComponent implements OnInit {
         this.userBehaviour = userBehaviour;
       }
     });
-
   }
-
 }

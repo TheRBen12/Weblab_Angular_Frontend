@@ -64,7 +64,6 @@ export class ExperimentTestDetailComponent implements OnInit {
     this.fetchCurrentUserSetting();
   }
 
-
   fetchCurrentUserSetting() {
     this.settingService.fetchLastSetting(this.userService.currentUser()?.id).subscribe((setting) => {
       this.userSetting = setting;
@@ -83,6 +82,8 @@ export class ExperimentTestDetailComponent implements OnInit {
     if (savedNumberClicks) {
       numberClicks = Number(savedNumberClicks);
     }
+    let usedRoutes = localStorage.getItem("usedRoutes")??"";
+    usedRoutes += "/tests/detail/"+this.experimentTest?.id + " ";
     const navigationTime: UserNavigationTime = {
       userId: this.userSetting.userID,
       finishedNavigation: new Date(),
@@ -90,11 +91,14 @@ export class ExperimentTestDetailComponent implements OnInit {
       toExperimentId: this.experimentTest?.id ?? -1,
       userSettingId: this.userSetting.id,
       fromExperimentId: lastFinishedExperimentTestId,
-      numberClicks: numberClicks
+      numberClicks: numberClicks,
+      usedRoutes: usedRoutes,
     };
     localStorage.setItem('numberNavigationClicks', String(0));
+    localStorage.removeItem("usedRoutes");
     this.timeService.saveNavigationTime(navigationTime).subscribe();
     this.saveExperimentExecution();
+
   }
 
   private saveExperimentExecution() {
@@ -113,6 +117,12 @@ export class ExperimentTestDetailComponent implements OnInit {
   }
 
   stopTimer() {
+
+  }
+
+  navigateBack() {
     this.timeService.stopTimer();
+    const route = localStorage.getItem("lastTestRoute")??"/";
+    this.router.navigateByUrl(route);
   }
 }

@@ -9,12 +9,11 @@ import {LoginService} from '../../services/login.service';
 import {UserSetting} from '../../models/user-setting';
 import {filter, switchMap} from 'rxjs';
 import {FilterService} from '../../services/filter.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {ExperimentTestExecution} from '../../models/experiment-test-execution';
 import {NavigationSetting} from '../../models/navigation-setting';
 import {TimeService} from '../../services/time.service';
 import {ExperimentSelectionTime} from '../../models/experiment-selection-time';
-import {WelcomeHelpModalComponent} from '../../welcome-help-modal/welcome-help-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {SettingHintDialogComponent} from '../../setting-hint-dialog/setting-hint-dialog.component';
 
@@ -62,6 +61,13 @@ export class ExperimentIndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+        if (this.router.url == "/tests/index") {
+          this.timeService.stopTimer();
+        }
+      });
     localStorage.setItem('numberNavigationClicks', "0");
     if (!localStorage.getItem('reachedSiteAt')) {
       localStorage.setItem("reachedSiteAt", String(new Date()));
@@ -70,11 +76,9 @@ export class ExperimentIndexComponent implements OnInit {
     this.fetchCurrentUserSetting();
     this.timeService.stopTimer();
     this.timeService.startTimer();
+
   }
 
-
-  updateUserBehaviour() {
-  }
 
   fetchExperiments() {
     this.experimentService.getExperiments().subscribe((experiments) => {
@@ -181,5 +185,9 @@ export class ExperimentIndexComponent implements OnInit {
         disableClose: true,
       }
     );
+  }
+
+  updateUserBehaviour() {
+    localStorage.setItem("used_search_bar_for_tests", "true");
   }
 }

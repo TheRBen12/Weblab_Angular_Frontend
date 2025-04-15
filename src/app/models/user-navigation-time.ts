@@ -10,4 +10,5 @@ export interface UserNavigationTime {
   userSettingId: number
   userId: number;
   numberClicks: number;
+  usedRoutes?: string
 }

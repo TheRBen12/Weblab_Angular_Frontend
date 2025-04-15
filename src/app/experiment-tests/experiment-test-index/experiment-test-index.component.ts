@@ -228,7 +228,13 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
       userId: this.loginService.currentUser()?.id,
       settingId: this.setting?.id,
     };
+    localStorage.setItem("lastTestRoute", this.router.url);
     this.experimentService.saveExperimentTestSelectionTime(experimentTestSelectionTime).subscribe((result) => {
+     let routes = localStorage.getItem("usedRoutes")??"";
+     routes += "/tests/"+this.experiment?.id + " ";
+     localStorage.setItem("usedRoutes", routes);
+     // this.router.navigateByUrl("/tests/detail/"+testId);
     });
+
   }
 }
