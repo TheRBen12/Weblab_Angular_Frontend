@@ -74,6 +74,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
   private numberClicks: number = 0;
   private timeToClickSearchBar?: number|null = null;
   searchParameters: string = "";
+  private firstClick: string|null = null;
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -185,6 +186,7 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
           timeToClickSearchBar: this.timeToClickSearchBar??0,
           usedBreadcrumbs: false,
           searchParameters: this.searchParameters,
+          firstClick: this.firstClick??"",
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -209,7 +211,10 @@ export class RecallRecognitionPartTwoComponent implements OnInit, OnDestroy {
     }
   }
 
-  increaseClicks() {
+  increaseClicks(event: MouseEvent) {
+    if (!this.firstClick){
+      this.firstClick = (event.target as HTMLElement).innerHTML
+    }
     this.numberClicks++;
     localStorage.setItem('clicks', String(this.numberClicks));
   }

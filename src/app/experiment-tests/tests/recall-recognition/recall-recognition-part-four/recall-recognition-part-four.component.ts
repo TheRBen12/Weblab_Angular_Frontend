@@ -74,8 +74,9 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   clickedOnSearchBar: boolean = false;
   loading: boolean = false;
   numberClicks: number = 0;
-  private usedBreadcrumbs: boolean = false;
+  usedBreadcrumbs: boolean = false;
   timeToClickFirstCategoryLink?: number|null = null;
+  firstClick: string|null = null;
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie Lebensmittel",
@@ -221,6 +222,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
           clickedOnSearchBar: this.clickedOnSearchBar,
           usedBreadcrumbs: this.usedBreadcrumbs,
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink??0,
+          firstClick: this.firstClick??"",
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -243,7 +245,10 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
 
   }
 
-  increaseClicks() {
+  increaseClicks(event: MouseEvent) {
+    if (!this.firstClick){
+      this.firstClick = (event.target as HTMLElement).innerHTML
+    }
     this.numberClicks ++;
     localStorage.setItem('numberClicks', String(this.numberClicks));
 

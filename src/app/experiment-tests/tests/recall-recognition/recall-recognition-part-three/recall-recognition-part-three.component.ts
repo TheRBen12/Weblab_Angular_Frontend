@@ -73,6 +73,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   timeToClickSearchBar?: number|null = null;
   experimentFinished: boolean = false;
   searchParameters: string = "";
+  private firstClick: string|null = null;
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
     this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden " +
@@ -155,6 +156,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
           timeToClickSearchBar: this.timeToClickSearchBar??0,
           usedBreadcrumbs: false,
           searchParameters: this.searchParameters,
+          firstClick: this.firstClick??"",
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -180,7 +182,10 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
   }
 
-  increaseNumberClicks() {
+  increaseNumberClicks(event: MouseEvent) {
+    if (!this.firstClick){
+      this.firstClick = (event.target as HTMLElement).innerHTML
+    }
     this.numberClicks++;
   }
 

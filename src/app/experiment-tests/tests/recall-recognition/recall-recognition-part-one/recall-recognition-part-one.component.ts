@@ -84,6 +84,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   timeToClickFirstCategoryLink: number = 0;
   links: string[] = [];
   usedBreadCrumbs: boolean = false;
+  firstClick: string|null = null;
 
   constructor(private cdRef: ChangeDetectorRef, private toastrService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
@@ -256,6 +257,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
           clickedOnSearchBar: this.clickedOnSearchBar,
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
           usedBreadcrumbs: this.usedBreadCrumbs,
+          firstClick: this.firstClick??"",
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
@@ -279,7 +281,10 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
 
   }
 
-  increaseClicks() {
+  increaseClicks(event: MouseEvent) {
+    if (!this.firstClick){
+      this.firstClick = (event.target as HTMLElement).innerHTML
+    }
     this.numberClicks++;
 
     localStorage.setItem('numberClicks', String(this.numberClicks));
