@@ -75,6 +75,9 @@ export class ExperimentComponent {
   }
 
   emitExperimentSelection() {
+    //let navigationClicks = Number(localStorage.getItem("numberNavigationClicks"));
+    //navigationClicks = navigationClicks + 1;
+    //localStorage.setItem("numberNavigationClicks", String(navigationClicks));
     this.experimentSelectEventEmitter.emit(this.experiment);
   }
 }

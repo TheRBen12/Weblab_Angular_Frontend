@@ -78,7 +78,6 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
         }
       });
 
-    localStorage.setItem('numberNavigationClicks', "0");
     localStorage.removeItem("cart");
     this.route.paramMap.pipe(
       switchMap(params => {
@@ -220,6 +219,9 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   }
 
   saveTestSelectionTime(testId: number) {
+    //let navigationClicks = Number(localStorage.getItem("numberNavigationClicks"));
+    //navigationClicks = navigationClicks + 1;
+    // localStorage.setItem("numberNavigationClicks", String(navigationClicks));
     clearInterval(this.redirectTimeout);
     const time = this.timeService.getCurrentTime();
     this.timeService.stopTimer();

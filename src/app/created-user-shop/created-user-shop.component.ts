@@ -286,6 +286,7 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   }
 
   finishExperiment() {
+    this.routerService.clearNumberNavigationClicks();
     this.execution['finishedExecutionAt'] = new Date();
     this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);

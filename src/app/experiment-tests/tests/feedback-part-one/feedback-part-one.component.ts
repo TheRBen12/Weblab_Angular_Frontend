@@ -245,6 +245,7 @@ export class FeedbackPartOneComponent implements OnInit {
   }
 
   private finishExperiment() {
+    this.routerService.clearNumberNavigationClicks();
     this.execution["executionTime"] = this.timeService.getCurrentTime();
     this.execution["finishedExecutionAt"] = new Date();
     this.timeService.stopTimer();

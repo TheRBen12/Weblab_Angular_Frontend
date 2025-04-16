@@ -118,6 +118,7 @@ export class FittsLawComponent implements OnInit {
   }
 
   finishExperiment() {
+    this.routerService.clearNumberNavigationClicks();
     this.execution["clickReactionTimes"] = JSON.stringify(this.reactions);
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["tasks"] = JSON.stringify(this.tasks);

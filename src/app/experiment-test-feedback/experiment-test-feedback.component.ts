@@ -10,6 +10,7 @@ import {FormsModule} from '@angular/forms';
 import {LoginService} from '../services/login.service';
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {RouterService} from '../services/router.service';
 
 @Component({
   selector: 'app-experiment-test-feedback',
@@ -64,6 +65,7 @@ export class ExperimentTestFeedbackComponent implements OnInit {
   };
 
   identifier = ["cognitiveStress", "mentalModel", "understandable", "learnability", "consistency"];
+  private routerService: RouterService = inject(RouterService);
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
@@ -81,6 +83,7 @@ export class ExperimentTestFeedbackComponent implements OnInit {
   }
 
   submitFeedback() {
+    this.routerService.clearNumberNavigationClicks();
     const userId = this.loginService.currentUser()?.id;
     if (userId) {
       this.loading = true;

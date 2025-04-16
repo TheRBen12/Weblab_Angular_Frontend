@@ -16,6 +16,7 @@ import {TimeService} from '../../../services/time.service';
 import {LoginService} from '../../../services/login.service';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {ToastrService} from 'ngx-toastr';
+import {RouterService} from '../../../services/router.service';
 
 @Component({
   selector: 'app-feedback-part-two',
@@ -67,6 +68,7 @@ export class FeedbackPartTwoComponent implements OnInit {
   instructions = ["Geben sie für den Zielort ein: Madrid", "Geben Sie ein Ankunftsdatum und Abreisedatum ein",
     "Geben Sie Ihre Kontaktdaten an", "Geben Sie für die Strasse und Hausnummer ein: Engestrasse",
     "Geben Sie Ihren Wohnort an", "Geben sie für das Land ein: CH", "Geben Sie für die PLZ ein: 3011", "Treffen Sie eine Auswahl für die Persoen, welche mitreisen."];
+  private routerService: RouterService = inject(RouterService);
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -248,6 +250,7 @@ export class FeedbackPartTwoComponent implements OnInit {
   }
 
   private finishExperiment() {
+    this.routerService.clearNumberNavigationClicks();
     this.execution["executionTime"] = this.timeService.getCurrentTime();
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["numberErrors"] = this.numberErrors;

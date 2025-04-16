@@ -236,6 +236,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
 
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
+    this.routerService.clearNumberNavigationClicks();
     if (id) {
       this.timeService.stopTimer();
       this.experimentFinished = true;

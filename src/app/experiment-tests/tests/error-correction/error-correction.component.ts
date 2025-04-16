@@ -115,6 +115,7 @@ export class ErrorCorrectionComponent implements OnInit {
   }
 
   finishExperiment() {
+    localStorage.setItem("numberNavigationClicks", String(0));
     this.execution['taskSuccess'] = (this.execution['clickedOnUndo'] && this.execution['correctInput']);
     this.execution['finishedExecutionAt'] = new Date();
     const id = this.userService.currentUser()?.id

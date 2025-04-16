@@ -14,13 +14,19 @@ export class RouterService {
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.lastKnownRoute = this.router.url;
+        if (this.router.url.includes("/tests/detail")){
+          //localStorage.setItem("numberNavigationClicks", String(0));
+        }
       }
       if (event instanceof NavigationEnd){
         console.log(event.url);
         this.currentRoute = this.router.url;
       }
     });
+  }
+
+  clearNumberNavigationClicks(){
+    localStorage.setItem("numberNavigationClicks", String(-1));
   }
 
   getLastKnownRoute(): string {

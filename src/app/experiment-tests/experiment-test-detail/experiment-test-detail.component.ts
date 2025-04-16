@@ -80,7 +80,7 @@ export class ExperimentTestDetailComponent implements OnInit {
     let savedNumberClicks = localStorage.getItem('numberNavigationClicks');
     let numberClicks = 0;
     if (savedNumberClicks) {
-      numberClicks = Number(savedNumberClicks);
+      numberClicks = Number(savedNumberClicks) + 1;
     }
     let usedRoutes = localStorage.getItem("usedRoutes")??"";
     usedRoutes += "/tests/detail/"+this.experimentTest?.id + " ";

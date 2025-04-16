@@ -168,6 +168,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   }
 
   finishExperiment() {
+    this.routerService.clearNumberNavigationClicks();
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["clicks"] = JSON.stringify(this.clicks);
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);

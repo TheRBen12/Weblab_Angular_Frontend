@@ -251,6 +251,7 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["clicks"] = JSON.stringify(this.clicks);
     const userId = this.loginService.currentUser()?.id;
+    this.routerService.clearNumberNavigationClicks();
     if (userId && this.experimentTest) {
       this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
       this.timeService.stopTimer();

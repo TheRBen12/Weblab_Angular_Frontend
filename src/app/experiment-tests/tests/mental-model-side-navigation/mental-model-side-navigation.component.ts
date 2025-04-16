@@ -198,7 +198,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.filters);
     this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
-
+    this.routerService.clearNumberNavigationClicks();
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest) {
       this.experimentFinished = true;

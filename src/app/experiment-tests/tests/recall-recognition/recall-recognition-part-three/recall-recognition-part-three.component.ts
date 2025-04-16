@@ -22,6 +22,7 @@ import {ToastrService} from 'ngx-toastr';
 import {ExperimentTest} from '../../../../models/experiment-test';
 import {TimeService} from '../../../../services/time.service';
 import {MatFabButton} from "@angular/material/button";
+import {RouterService} from '../../../../services/router.service';
 
 @Component({
   selector: 'app-recall-recognition-part-three',
@@ -52,6 +53,8 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   currentInstructionStep: number = 0;
   products: any[] = [];
   filterService = inject(FilterService);
+  private routerService: RouterService = inject(RouterService);
+
   timeService: TimeService = inject(TimeService);
   productService = inject(ProductService);
   router = inject(Router);
@@ -132,6 +135,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   finishExperiment($event: number) {
     const id = this.userService.currentUser()?.id
     if (id) {
+      this.routerService.clearNumberNavigationClicks();
       this.experimentFinished = true;
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId);
       this.loading = true;

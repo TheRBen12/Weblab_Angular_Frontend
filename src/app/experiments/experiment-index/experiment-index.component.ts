@@ -68,7 +68,6 @@ export class ExperimentIndexComponent implements OnInit {
           this.timeService.stopTimer();
         }
       });
-    localStorage.setItem('numberNavigationClicks', "0");
     if (!localStorage.getItem('reachedSiteAt')) {
       localStorage.setItem("reachedSiteAt", String(new Date()));
     }

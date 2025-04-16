@@ -51,6 +51,7 @@ export class HicksLawComponent implements OnInit {
   router = inject(Router);
   userService: LoginService = inject(LoginService);
   timerService = inject(TimeService);
+
   currentInstructionStep: number = 0;
   instructions: string[] = [];
   currentRoute: string = "Home";
@@ -233,6 +234,7 @@ export class HicksLawComponent implements OnInit {
   finishExperiment(productNumberInBasket: number) {
     const id = this.userService.currentUser()?.id
     if (productNumberInBasket >= 3 && id) {
+      this.routerService.clearNumberNavigationClicks();
       this.experimentFinished = true;
       this.timerService.stopTimer();
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId)

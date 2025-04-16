@@ -14,6 +14,7 @@ import {TimeService} from '../../../services/time.service';
 import {LoginService} from '../../../services/login.service';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {RouterService} from '../../../services/router.service';
 
 const emails: Email[] = [
   {
@@ -110,6 +111,7 @@ export class RestorffEffectComponent implements OnInit {
   lastAddedEmailIndex: number = 0;
 
   instructions: string[] = [];
+  private routerService: RouterService = inject(RouterService);
   emailService = inject(EmailService);
   timeService: TimeService = inject(TimeService);
   experimentService = inject(ExperimentService);
@@ -221,6 +223,7 @@ export class RestorffEffectComponent implements OnInit {
   }
 
   private finishExperiment() {
+    this.routerService.clearNumberNavigationClicks();
     setTimeout(() => {
       this.execution["executionTime"] = this.timeService.getCurrentTime();
       this.timeService.stopTimer();

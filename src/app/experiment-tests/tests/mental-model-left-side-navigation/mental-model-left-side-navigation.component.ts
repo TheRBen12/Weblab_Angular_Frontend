@@ -220,6 +220,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
 
   private finishExperiment() {
     this.loading = true;
+    this.routerService.clearNumberNavigationClicks();
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     this.execution["finishedExecutionAt"] = new Date();

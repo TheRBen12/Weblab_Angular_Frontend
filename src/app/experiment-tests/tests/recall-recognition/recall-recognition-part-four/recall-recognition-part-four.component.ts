@@ -49,6 +49,8 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   categoryLinks: string[] = [];
   currentRoute: string = "Home";
   experimentService = inject(ExperimentService);
+  private routerService: RouterService = inject(RouterService);
+
   router = inject(Router);
   userService: LoginService = inject(LoginService);
   productService = inject(ProductService);
@@ -200,6 +202,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   }
 
   finishExperiment($event: number) {
+  this.routerService.clearNumberNavigationClicks();
     const id = this.userService.currentUser()?.id
     if (id) {
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId)
