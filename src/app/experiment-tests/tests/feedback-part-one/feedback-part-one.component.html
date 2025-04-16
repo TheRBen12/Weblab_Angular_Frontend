@@ -127,9 +127,9 @@
           <input formControlName="country" type="text" class="form-control" id="country">
         </div>
         <div *ngIf="city?.invalid && (city?.touched)">
-          <div class="form-error-message" *ngIf="city?.errors?.['pattern']">Ungültiges Format</div>
-          <div class="form-error-message" *ngIf="city?.errors?.['required']"> Geben Sie Ihr Land ein</div>
-          <div class="form-error-message" *ngIf="city?.errors?.['minlength']">Bitte geben Sie den vollständigen Namen Ihres Landes ein</div>
+          <div class="form-error-message" *ngIf="country?.errors?.['pattern']">Ungültiges Format</div>
+          <div class="form-error-message" *ngIf="country?.errors?.['required']"> Geben Sie Ihr Land ein</div>
+          <div class="form-error-message" *ngIf="country?.errors?.['minlength']">Bitte geben Sie den vollständigen Namen Ihres Landes ein</div>
         </div>
 
         <div class="mb-3 mt-3">

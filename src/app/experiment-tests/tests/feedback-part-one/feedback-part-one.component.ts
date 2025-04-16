@@ -122,7 +122,6 @@ export class FeedbackPartOneComponent implements OnInit {
         Validators.required,
         Validators.maxLength(5),
         Validators.minLength(4),
-        Validators.pattern('^[0-9]{4}$')
       ], updateOn: "submit"
     }),
 
