@@ -22,6 +22,7 @@ import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {TimeService} from '../../../services/time.service';
 import {MatFabButton} from '@angular/material/button';
+import {ExperimentTest} from '../../../models/experiment-test';
 
 @Component({
   selector: 'app-hicks-law',
@@ -80,6 +81,7 @@ export class HicksLawComponent implements OnInit {
   showBasket: boolean = false;
   usedFilters: string[] = [];
   private experimentFinished: boolean = false;
+  private experimentTest!: ExperimentTest;
 
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
@@ -257,7 +259,7 @@ export class HicksLawComponent implements OnInit {
         this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/")
+            this.router.navigateByUrl("/tests/"+this.experimentTest.experiment?.id);
             this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
         });
@@ -266,9 +268,12 @@ export class HicksLawComponent implements OnInit {
     }
   }
 
+
+
   private fetchExperimentTest(experimentId: number) {
     this.experimentService.getExperimentTest(experimentId).subscribe((experiment) => {
       this.targetInstruction = experiment.goalInstruction;
+      this.experimentTest = experiment;
       this.productLimit = Number(JSON.parse(experiment.configuration)['productLimit']);
       this.productService.updateProductLimit(this.productLimit);
       this.categoryLimit = Number(JSON.parse(experiment.configuration)['categoryLimit']);
