@@ -43,6 +43,7 @@ export class ErrorCorrectionComponent implements OnInit {
   deletedMail: Email | null = null;
   execution: { [key: string]: any } = {};
   loading: boolean = false;
+  targetSubject: string|null = null;
   private experimentId!: number;
   private firstClick: string|null = null;
   private deletedPos: number = -2;
@@ -93,10 +94,10 @@ export class ErrorCorrectionComponent implements OnInit {
   }
 
   private fetchExperimentTest(experimentId: number) {
-
     this.experimentService.getExperimentTest(experimentId).subscribe((experimentTest) => {
       this.targetInstruction = experimentTest.goalInstruction
       const config = JSON.parse(experimentTest.configuration);
+      this.targetSubject = config["targetSubject"];
       this.execution['undoSnackBarPosition'] = config["horizontalPosition"] + " " + config["verticalPosition"];
     });
   }

@@ -44,6 +44,14 @@ import {RouterService} from '../../../../services/router.service';
   styleUrl: './recall-recognition-part-three.component.css'
 })
 export class RecallRecognitionPartThreeComponent implements OnInit {
+  filterService = inject(FilterService);
+  routerService: RouterService = inject(RouterService);
+  timeService: TimeService = inject(TimeService);
+  productService = inject(ProductService);
+  router = inject(Router);
+  userService: LoginService = inject(LoginService);
+  experimentService: ExperimentService = inject(ExperimentService);
+
   instructions: string[];
   productCategories: ProductType[] = [];
   categoryLinks: string[] = [];
@@ -52,14 +60,6 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   parentRoute: string | null = null;
   currentInstructionStep: number = 0;
   products: any[] = [];
-  filterService = inject(FilterService);
-  private routerService: RouterService = inject(RouterService);
-
-  timeService: TimeService = inject(TimeService);
-  productService = inject(ProductService);
-  router = inject(Router);
-  userService: LoginService = inject(LoginService);
-  experimentService: ExperimentService = inject(ExperimentService);
   basketIsHidden: boolean = true;
   basket: any[] = [];
   loading: boolean = false;
@@ -76,12 +76,12 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
     this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden " +
-    "(Tastaturen haben den Typ Keypad)."];
+    "(Tipp: Benutzen Sie das Suchwort 'Tastatur')."];
 
   }
   canDeactivate() {
     if (!this.experimentFinished) {
-      return confirm("Achtung Sie sind, dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren.")
+      return confirm("Achtung, Sie sind dabei das Experiment zu verlassen. All Ihre Änderungen werden nicht gespeichert. Wollen Sie fortfahren?")
     } else {
 
       return true;

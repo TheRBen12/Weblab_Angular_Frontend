@@ -8,8 +8,8 @@
   <mat-menu (closed)="toggleMenu()" class="menu-list w-100" #emailMenu="matMenu">
     <div class="p-2">
       <button [ngClass]="{'active': currentItems=='mails'}"  (click)="emitOnDeletedItemsSelected('mails')" routerLink="./" mat-menu-item><p class="text-center email-menu-item fw-bold">Posteingang</p></button>
-      <button [ngClass]="{'active': currentItems=='deletedItems'}" (click)="emitOnDeletedItemsSelected('sentItems')" routerLink="./sentItems" mat-menu-item><p class="text-center email-menu-item fw-bold">Gesendete Elemente</p></button>
-      <button [ngClass]="{'active': currentItems=='sentItems'}" (click)="emitOnDeletedItemsSelected('deletedItems')"  routerLink="./deletedItems" mat-menu-item><p class=" text-center email-menu-item fw-bold">Gelöschte Elemente</p></button>
+      <button [ngClass]="{'active': currentItems=='sentItems'}" (click)="emitOnDeletedItemsSelected('sentItems')" routerLink="./sentItems" mat-menu-item><p class="text-center email-menu-item fw-bold">Gesendete Elemente</p></button>
+      <button [ngClass]="{'active': currentItems=='deletedItems'}" (click)="emitOnDeletedItemsSelected('deletedItems')"  routerLink="./deletedItems" mat-menu-item><p class=" text-center email-menu-item fw-bold">Gelöschte Elemente</p></button>
       <button mat-menu-item><p class="text-center fw-bold email-menu-item">Archiv</p></button>
       <button mat-menu-item><p class="text-center fw-bold email-menu-item">Spam</p></button>
     </div>

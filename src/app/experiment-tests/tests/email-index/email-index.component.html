@@ -9,7 +9,7 @@
         <h5>Keine Elemente vorhanden</h5>
       </div>
 
-      <a [ngClass]="{'disabled': disable(email), 'active': selectedEmail?.id==email.id}" routerLink="./email/{{email.id}}"
+      <a [ngClass]="{'disabled': disable(email), 'active': selectedEmail?.id==email.id}"
 
          *ngFor="let email of fetchedMails; index as i" class="list-group-item list-group-item-action">
 

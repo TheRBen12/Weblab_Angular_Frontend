@@ -1,17 +1,27 @@
 <div class="d-flex flex-row">
-    <div class="col-3">
-      <app-experiment-test-instruction [target]="targetInstruction" [currentInstructionStep]="currentInstructionStep"
-                                       [instructions]="instructions"></app-experiment-test-instruction>
-      <div *ngIf="mailWasDeleted" class="mt-3 me-3 ms-3 ">
-        <input autofocus #input (input)="checkInput(input.value)"  class="form-control" placeholder="Wann wurde die gelöschte E-Mail erhalten?">
+  <div class="col-sm-4">
+    <app-experiment-test-instruction [target]="targetInstruction" [currentInstructionStep]="currentInstructionStep"
+                                     [instructions]="instructions"></app-experiment-test-instruction>
+    <div *ngIf="mailWasDeleted" class="mt-3 me-3 ms-3 ">
+
+      <div *ngIf="targetSubject == 'subject'">
+        <input class="form-control" placeholder="Was war schon wieder der betreff der gelöschten E-Mail?">
+        <span class="fw-bold">Bitte geben Sie den Betreff der E-Mail an, die Sie gelöscht haben.</span>
+      </div>
+
+      <div *ngIf="targetSubject == 'date'">
+        <input autofocus #input (input)="checkInput(input.value)" class="form-control"
+               placeholder="Wann wurde die gelöschte E-Mail erhalten?">
         <span>Bitte geben Sie eine Datum im Format <strong>yyyy-mm-dd</strong> an</span>
       </div>
+
     </div>
-  <div (click)="increaseNumberClicks($event)" >
+  </div>
+  <div (click)="increaseNumberClicks($event)">
     <div class=" w-100">
       <div class="d-flex flex-row ">
         <div class="col-sm-5">
-          <app-email-menu (onMenuItemSelected) = updateClickBehaviour($event) ></app-email-menu>
+          <app-email-menu (onMenuItemSelected)=updateClickBehaviour($event)></app-email-menu>
         </div>
         <div class="col-9">
           <router-outlet></router-outlet>
