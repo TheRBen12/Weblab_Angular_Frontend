@@ -63,7 +63,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   basket: any[] = [];
   currentInstructionStep: number = 0;
   execution: { [key: string]: any } = {};
-  firstClick: any|null = null;
+  firstClick: string|null = null;
   clickedRoutes: { [key: string]: string } = {};
   usedFilters : string[] = [];
   experimentTest?: ExperimentTest;
@@ -224,6 +224,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["clicks"] = JSON.stringify(this.clicks);
+    this.execution["firstClick"] = this.firstClick;
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
       this.experimentFinished = true;
