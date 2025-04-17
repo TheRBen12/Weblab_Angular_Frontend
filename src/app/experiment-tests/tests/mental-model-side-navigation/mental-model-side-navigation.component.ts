@@ -5,7 +5,7 @@ import {
 import {ProductOffCanvasMenuComponent} from '../../../product-off-canvas-menu/product-off-canvas-menu.component';
 import {ProductType} from '../../../models/product-category';
 import {ProductService} from '../../../services/product.service';
-import {filter} from 'rxjs';
+import {filter, Subscription} from 'rxjs';
 import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {RouterService} from '../../../services/router.service';
 import {MatFabButton} from '@angular/material/button';

@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit{
 
     this.filterSubscription = this.filterService.getSubject().subscribe((filterText) => {
       this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
-      this.jumpToProductList();
+      //this.jumpToProductList();
     });
   }
 

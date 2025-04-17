@@ -78,6 +78,7 @@ export class ErrorCorrectionComponent implements OnInit {
     this.instructions = ["Löschen Sie die " + this.emailToDelete + ". " + "E-Mail", "Geben Sie in das Eingabefeld ein, wann die gelöschte E-Mail erhalten worden ist. " +
     "Tipp: Das Datum wann die E-Mail erhalten wurde befindet sich am rechten Rand der E-Mails"];
 
+
     const urlSegments = this.router.url.split("/");
     const index = urlSegments.indexOf("error-correction") + 1
     this.experimentId = Number(urlSegments[index]);
@@ -98,11 +99,15 @@ export class ErrorCorrectionComponent implements OnInit {
       this.targetInstruction = experimentTest.goalInstruction
       const config = JSON.parse(experimentTest.configuration);
       this.targetSubject = config["targetSubject"];
+      if (this.targetSubject == "subject"){
+        this.instructions.pop();
+        this.instructions.push("Geben Sie in das Eingabefeld den Betreff (subject) der gelöschten E-Mail an");
+      }
       this.execution['undoSnackBarPosition'] = config["horizontalPosition"] + " " + config["verticalPosition"];
     });
   }
 
-  checkInput(value: string) {
+  checkDateInput(value: string) {
 
     const regex = /^(20[0-9]{2})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
     if (regex.test(value)) {
@@ -113,6 +118,18 @@ export class ErrorCorrectionComponent implements OnInit {
       }
       this.finishExperiment();
     }
+  }
+
+  checkSubjectInput(value: string){
+    if (this.deletedMail && value.length >= this.deletedMail?.subject.length){
+      if (this.deletedMail.subject == value){
+        this.execution['correctInput'] = true;
+      }else{
+        this.execution['correctInput'] = false;
+      }
+      this.finishExperiment();
+    }
+
   }
 
   finishExperiment() {
