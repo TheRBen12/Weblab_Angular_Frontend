@@ -60,7 +60,9 @@ export class LoginService {
     const finishedAt = new Date();
     const user = this.currentUser();
     if (user) {
-      user.finishedUserExperienceAt = finishedAt;
+      if (!user.finishedUserExperienceAt){
+        user.finishedUserExperienceAt = finishedAt;
+      }
       this.updateUser(user).subscribe();
     }
     this.currentUser.set(null);

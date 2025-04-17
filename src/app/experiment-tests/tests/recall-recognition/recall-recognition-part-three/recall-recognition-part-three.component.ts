@@ -74,6 +74,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   experimentFinished: boolean = false;
   searchParameters: string = "";
   private firstClick: string|null = null;
+  private lastSearchParameter: string = "";
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
     this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden " +
@@ -91,11 +92,15 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
 
   filterProducts(text: string) {
-    if (text.split("").length > 1){
+
+    if (text.split(" ").length > 1){
       this.searchParameters += " ";
     }
+
     this.searchParameters += text;
-    this.filterService.dispatchFilterText(text);
+    this.lastSearchParameter = text;
+
+    //this.filterService.dispatchFilterText(text);
   }
 
   fetchAllProducts() {

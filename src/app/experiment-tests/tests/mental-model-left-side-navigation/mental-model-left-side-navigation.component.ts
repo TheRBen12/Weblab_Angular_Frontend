@@ -74,6 +74,11 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   experimentFinished: boolean = false;
   timeToFirstClick: number = 0;
   clicks: string[] = [];
+  searchParameters: string[] = [];
+  lastSearchParameter: string = "";
+
+
+
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -87,8 +92,16 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   filterProducts(filterText: string) {
-    this.execution["searchParameters"] += filterText + " ";
+    if (filterText.length < this.lastSearchParameter.length){
+      this.searchParameters.push(this.lastSearchParameter);
+    }
+    this.lastSearchParameter = filterText;
+    if (filterText.split(" ").length > 1){
+      this.searchParameters.push(filterText)
+    }
+
     this.filterService.dispatchFilterText(filterText)
+
   }
   increaseFailedClicks(){
       this.execution['failedClicks'] =  this.execution['failedClicks'] + 1;
@@ -104,6 +117,10 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution['usedFilter'] = false;
     this.execution['numberClicks'] = 0;
     this.execution["usedBreadcrumbs"] = false;
+    this.execution["numberUsedSearchBar"] = 0;
+    this.execution["searchParameters"] = "";
+
+
 
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
       if (filter != "" && filter != undefined){
@@ -226,6 +243,9 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["clicks"] = JSON.stringify(this.clicks);
     this.execution["firstClick"] = this.firstClick;
+    this.execution["searchParameters"] =JSON.stringify(this.searchParameters);
+
+    debugger;
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
       this.experimentFinished = true;
@@ -261,15 +281,10 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     localStorage.setItem('numberClicks', this.execution['numberClicks']);
   }
   updateSearchBarBehaviour(id: number|null) {
-    if (!this.execution["timeToClickSearchBar"]){
-      this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
-    }
-    this.execution['clickedOnSearchBar'] = true;
+    this.searchParameters.push(this.lastSearchParameter);
+
     localStorage.setItem("numberUsedSearchBar", this.execution["numberUsedSearchBar"]);
-    const n = this.execution["numberUsedSearchBar"];
-    if (n >=1){
-      this.increaseFailedClicks();
-    }
+
     if(id){
       this.execution["numberUsedSearchBar"] = this.execution["numberUsedSearchBar"] + 1
       const childRoute = this.activatedRoute.firstChild;
@@ -297,5 +312,21 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
       this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
     }
     this.showBasket = !this.showBasket;
+  }
+
+  updateClickedOnSearchBar() {
+    if (!this.execution["timeToClickSearchBar"]){
+      this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
+    }
+    this.execution['clickedOnSearchBar'] = true;
+    this.execution["numberUsedSearchBar"] =  this.execution["numberUsedSearchBar"] + 1;
+    const n = this.execution["numberUsedSearchBar"];
+    this.execution["numberUsedSearchBar"] =  this.execution["numberUsedSearchBar"] + 1;
+
+
+    if (n >=1){
+      this.increaseFailedClicks();
+    }
+
   }
 }
