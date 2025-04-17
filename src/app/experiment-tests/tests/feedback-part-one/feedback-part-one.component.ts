@@ -53,7 +53,7 @@ export class FeedbackPartOneComponent implements OnInit {
   splitForm: boolean = true;
   loading: boolean = false;
   numberErrors: number = 0;
-  validationDates: {[key: number]: Date} = {};
+  validationDates: { [key: number]: Date } = {};
   execution: {
     [key: string]: any
   } = {
@@ -63,7 +63,7 @@ export class FeedbackPartOneComponent implements OnInit {
     'numberFormValidations': 0,
     "executionTime": 0,
     "numberErrors": 0,
-    "validationDates":null
+    "validationDates": null
   };
   private experimentFinished: boolean = false;
 
@@ -241,6 +241,7 @@ export class FeedbackPartOneComponent implements OnInit {
 
 
   }
+
 
   ngOnInit(): void {
     this.timeService.startTimer();
