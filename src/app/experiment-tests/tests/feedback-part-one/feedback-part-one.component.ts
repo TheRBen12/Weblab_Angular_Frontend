@@ -251,7 +251,7 @@ export class FeedbackPartOneComponent implements OnInit {
     this.routerService.clearNumberNavigationClicks();
     this.execution["executionTime"] = this.timeService.getCurrentTime();
     this.execution["finishedExecutionAt"] = new Date();
-    this.execution["validations"] = JSON.stringify(this.validationDates);
+    this.execution["validationDates"] = JSON.stringify(this.validationDates);
     this.timeService.stopTimer();
     const userId = this.loginService.currentUser()?.id;
     if (userId) {
