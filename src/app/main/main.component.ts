@@ -89,10 +89,15 @@ export class MainComponent implements OnInit {
     }
 
 
+    if (user?.group == "C"){
+      sessionStorage.setItem("closedModal", "closed");
+    }
+
     if ((sessionStorage.getItem("closedModal") == "" || sessionStorage.getItem('closedModal') == null) && user?.group != "C") {
       this.openWelcomeHelpModal("Bevor Sie loslegen, hier einige Tipps", true)
       this.timeService.startWelcomeModalTimer();
     }
+
 
   }
 
