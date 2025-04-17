@@ -14,19 +14,21 @@ import {RestorffExperiment} from '../models/restorff-experiment';
 import {ExperimentFeedback} from '../models/experiment-feedback';
 import {ExperimentSelectionTime} from '../models/experiment-selection-time';
 import {ExperimentTestSelectionTime} from '../models/experiment-test-selection-time';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExperimentService {
   http = inject(HttpClient);
+  baseUrl = environment.apiUrl;
 
 
   constructor() {
   }
 
   public getExperiments(): Observable<Experiment[]> {
-    return this.http.get<Experiment[]>('https://localhost:7147/api/experiment');
+    return this.http.get<Experiment[]>(this.baseUrl + "experiment");
   }
 
   public getExperimentTestsByExperiment(experimentId: number): Observable<ExperimentTest[]> {

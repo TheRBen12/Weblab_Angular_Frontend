@@ -1,8 +1,8 @@
-import {inject, Injectable, signal, Signal} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Email} from '../models/email';
-import {User} from '../models/user';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,8 @@ import {User} from '../models/user';
 export class EmailService {
   http: HttpClient = inject(HttpClient);
   deletedMailSubscription = new BehaviorSubject<{mail: Email, position: number} | null>(null);
-  undoEventSubscription: BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null)
+  undoEventSubscription: BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null);
+  baseUrl = environment.apiUrl;
 
   constructor() {
   }
