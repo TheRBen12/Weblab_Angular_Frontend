@@ -80,8 +80,6 @@ const emails: Email[] = [
     body: "Hallo Peter, wir aktualisieren ",
     user: 0
   }
-
-
 ];
 
 
@@ -111,7 +109,7 @@ export class RestorffEffectComponent implements OnInit {
   lastAddedEmailIndex: number = 0;
 
   instructions: string[] = [];
-  private routerService: RouterService = inject(RouterService);
+  routerService: RouterService = inject(RouterService);
   emailService = inject(EmailService);
   timeService: TimeService = inject(TimeService);
   experimentService = inject(ExperimentService);
@@ -139,7 +137,8 @@ export class RestorffEffectComponent implements OnInit {
   private startTime: number = 0;
 
   constructor() {
-
+    this.instructions = ["Behalten Sie die Liste der Mails im Auge und die Anweisung daneben. " +
+    "(Tipp: Die Mails können oben oder unten der Liste hinzugefügt werden.)"]
   }
 
   fetchExperimentTest() {
@@ -159,36 +158,40 @@ export class RestorffEffectComponent implements OnInit {
     this.emailData = emails;
     this.fetchExperimentTest();
     this.fetchEmails();
-    const intervall = setInterval(() => {
-      if (emails.length == 0) {
-        clearInterval(intervall);
-      }
-      const mail = emails.at(this.currentEmailIndex);
 
-      if (mail) {
-        if (Math.random() < 0.5) {
-          this.mails.push(mail)
-          this.startTime = performance.now();
-          this.lastAddedEmailIndex = this.mails.length - 1;
-
-        } else {
-          this.startTime = performance.now();
-          this.mails.unshift(mail);
-          this.lastAddedEmailIndex = 0;
+    setTimeout(() => {
+      const intervall = setInterval(() => {
+        if (emails.length == 0) {
+          clearInterval(intervall);
         }
-      }
+        const mail = emails.at(this.currentEmailIndex);
 
-      this.tasks[this.currentEmailIndex] = false;
-      this.currentEmailIndex++;
-      if (this.currentEmailIndex >= this.emailData.length) {
-        clearInterval(intervall);
-        this.currentInstructionStep++;
-        this.finishExperiment();
-      }
-    }, 5000);
+        if (mail) {
+          if (Math.random() < 0.5) {
+            this.mails.push(mail)
+            this.startTime = performance.now();
+            this.lastAddedEmailIndex = this.mails.length - 1;
+
+          } else {
+            this.startTime = performance.now();
+            this.mails.unshift(mail);
+            this.lastAddedEmailIndex = 0;
+          }
+        }
+
+        this.tasks[this.currentEmailIndex] = false;
+        this.currentEmailIndex++;
+        if (this.currentEmailIndex >= this.emailData.length) {
+          clearInterval(intervall);
+          this.currentInstructionStep++;
+          this.finishExperiment();
+        }
+      }, 5000);
+    }, 6000);
 
 
   }
+
 
   private fetchEmails() {
     this.emailService.getMails().subscribe((mails) => {

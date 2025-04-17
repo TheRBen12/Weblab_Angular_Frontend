@@ -282,7 +282,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
   updateSearchBarBehaviour(id: number|null) {
     this.searchParameters.push(this.lastSearchParameter);
-
+    this.increaseNumberUsedSearchBar();
     localStorage.setItem("numberUsedSearchBar", this.execution["numberUsedSearchBar"]);
 
     if(id){
@@ -319,14 +319,15 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
       this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
     }
     this.execution['clickedOnSearchBar'] = true;
+
+  }
+
+
+  increaseNumberUsedSearchBar(){
     this.execution["numberUsedSearchBar"] =  this.execution["numberUsedSearchBar"] + 1;
     const n = this.execution["numberUsedSearchBar"];
-    this.execution["numberUsedSearchBar"] =  this.execution["numberUsedSearchBar"] + 1;
-
-
     if (n >=1){
       this.increaseFailedClicks();
     }
-
   }
 }
