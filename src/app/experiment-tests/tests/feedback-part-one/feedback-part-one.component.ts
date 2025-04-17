@@ -230,12 +230,15 @@ export class FeedbackPartOneComponent implements OnInit {
     });
     this.execution["numberErrors"] = this.numberErrors;
     this.currentInstructionStep++;
+
+    this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
+    this.validationDates[this.execution["numberFormValidations"]] = new Date();
+
     if (this.form.valid) {
       this.finishExperiment();
     }
 
-    this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
-    this.validationDates[this.execution["numberValidations"]] = new Date();
+
   }
 
   ngOnInit(): void {

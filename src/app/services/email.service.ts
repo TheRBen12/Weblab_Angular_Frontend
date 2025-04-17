@@ -17,7 +17,7 @@ export class EmailService {
   }
 
   saveDeletedEmail(email: Email): Observable<Email> {
-    return this.http.post<Email>("https://localhost:7147/api/email/new", email)
+    return this.http.post<Email>(this.baseUrl + "email/new", email)
   }
 
 

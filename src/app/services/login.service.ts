@@ -5,6 +5,7 @@ import {User} from '../models/user';
 import {UserBehaviour} from '../models/user-behaviour';
 import {D} from '@angular/cdk/keycodes';
 import {TimeService} from './time.service';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,14 @@ export class LoginService {
   userBehaviourSubscription: BehaviorSubject<UserBehaviour | null> = new BehaviorSubject<UserBehaviour | null>(null);
   user$ = this.userSource.asObservable()
   private timeService: TimeService = inject(TimeService);
+  baseUrl = environment.apiUrl;
+
 
   constructor() {
   }
 
   login(email: string): Observable<User> {
-    return this.http.get<User>("https://localhost:7147/api/account/login", {params: {email: email}});
+    return this.http.get<User>(this.baseUrl + "account/login", {params: {email: email}});
   }
 
   setUser(user: User) {
@@ -30,7 +33,7 @@ export class LoginService {
   }
 
   refreshUser(email: any) {
-    return this.http.get<User>("https://localhost:7147/api/account/login", {params: {email: email}}).subscribe(
+    return this.http.get<User>(this.baseUrl + "account/login", {params: {email: email}}).subscribe(
       user => {
         if (user) {
           this.setUser(user);
