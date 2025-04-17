@@ -235,7 +235,7 @@ export class FeedbackPartOneComponent implements OnInit {
     }
 
     this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
-    this.validationDates[this.execution["numberValidations"]] = new Date();
+    this.validationDates[this.execution["numberFormValidations"]] = new Date();
   }
 
   ngOnInit(): void {

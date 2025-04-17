@@ -53,6 +53,8 @@ export class FeedbackPartTwoComponent implements OnInit {
   offset = 0;
   loading: boolean = false;
   numberErrors: number = 0;
+  validationDates: {[key: number]: Date} = {};
+
   execution: {
     [key: string]: any
   } = {
@@ -61,7 +63,8 @@ export class FeedbackPartTwoComponent implements OnInit {
     'finishedExecutionAt': null,
     'numberFormValidations': 0,
     "executionTime": 0,
-    "numberErrors": 0
+    "numberErrors": 0,
+    "validationDates": "",
   };
   experimentFinished: boolean = false;
 
@@ -254,6 +257,7 @@ export class FeedbackPartTwoComponent implements OnInit {
     this.execution["executionTime"] = this.timeService.getCurrentTime();
     this.execution["finishedExecutionAt"] = new Date();
     this.execution["numberErrors"] = this.numberErrors;
+    this.execution["validationDates"] = JSON.stringify(this.validationDates);
     this.timeService.stopTimer();
     const userId = this.loginService.currentUser()?.id;
     if (userId){
@@ -319,8 +323,10 @@ export class FeedbackPartTwoComponent implements OnInit {
       }
     });
     this.clearErrors();
+    this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
+    this.validationDates[this.execution["numberFormValidations"]] = new Date();
+
     if (increaseFormStep) {
-      this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
       this.formStep++;
       if (this.formStep == 2){
         this.currentInstructionStep = 6
