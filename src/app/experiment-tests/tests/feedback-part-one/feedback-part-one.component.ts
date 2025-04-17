@@ -53,6 +53,7 @@ export class FeedbackPartOneComponent implements OnInit {
   splitForm: boolean = true;
   loading: boolean = false;
   numberErrors: number = 0;
+  validationDates: {[key: number]: Date} = {};
   execution: {
     [key: string]: any
   } = {
@@ -61,7 +62,8 @@ export class FeedbackPartOneComponent implements OnInit {
     'finishedExecutionAt': null,
     'numberFormValidations': 0,
     "executionTime": 0,
-    "numberErrors": 0
+    "numberErrors": 0,
+    "validationDates":null
   };
   private experimentFinished: boolean = false;
 
@@ -231,8 +233,9 @@ export class FeedbackPartOneComponent implements OnInit {
     if (this.form.valid) {
       this.finishExperiment();
     }
-    this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
 
+    this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
+    this.validationDates[this.execution["numberValidations"]] = new Date();
   }
 
   ngOnInit(): void {
@@ -248,6 +251,7 @@ export class FeedbackPartOneComponent implements OnInit {
     this.routerService.clearNumberNavigationClicks();
     this.execution["executionTime"] = this.timeService.getCurrentTime();
     this.execution["finishedExecutionAt"] = new Date();
+    this.execution["validations"] = JSON.stringify(this.validationDates);
     this.timeService.stopTimer();
     const userId = this.loginService.currentUser()?.id;
     if (userId) {
