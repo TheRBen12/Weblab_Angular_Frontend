@@ -173,11 +173,13 @@ export class HicksLawComponent implements OnInit {
     this.parentRoute = parentRouteData.parentRoute;
   }
 
-
   setCurrentRoute(route: string) {
+    if (this.targetRoutes.indexOf(route) == -1){
+      this.failedClicks = this.failedClicks + 1;
+      this.currentInstructionStep = 0;
+    }
     if (Object.values(this.clickedRoutes).length == 0) {
       this.timeToClickFirstCategoryLink = this.timerService.getCurrentTime();
-      this.timerService.stopTimer();
     }
     if (this.clickedRoutes[route]) {
       this.clickedRoutes[route] += " " + new Date().toISOString();
@@ -299,6 +301,7 @@ export class HicksLawComponent implements OnInit {
   }
 
   increaseNumberClicks(event: MouseEvent) {
+    debugger;
     if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
       this.timeToFirstClick = this.timerService.getCurrentTime();

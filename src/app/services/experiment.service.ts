@@ -32,7 +32,7 @@ export class ExperimentService {
   }
 
   public getExperimentTestsByExperiment(experimentId: number): Observable<ExperimentTest[]> {
-    return this.http.get<ExperimentTest[]>('https://localhost:7147/api/ExperimentTest', {params: {experimentId: experimentId}});
+    return this.http.get<ExperimentTest[]>(this.baseUrl + 'ExperimentTest', {params: {experimentId: experimentId}});
   }
 
   getExperiment(experimentId: number): Observable<Experiment> {
