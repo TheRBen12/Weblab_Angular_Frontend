@@ -46,6 +46,7 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
   currentRoute = "Experimente";
   userBehaviour!: UserBehaviour
   @Input() pointerEvents: boolean = true
+  isSideNavOpened: boolean = false;
 
   constructor() {
     effect(() => {
@@ -59,6 +60,15 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      if (this.isSideNavOpened){
+        this.drawer.close().then(r => {
+          this.isSideNavOpened = false;
+        });
+      }
+    });
     //this.drawer.open(); // Öffnet den Drawer nach der Initialisierung
   }
 
@@ -102,5 +112,12 @@ export class SideNavigationComponent implements OnInit, AfterViewInit{
     this.loginService.updateUserBehaviour(userBehaviour).subscribe((user) => {
       this.userBehaviour = userBehaviour;
     });
+  }
+
+  toggleMenu() {
+    this.drawer.toggle();
+    if (!this.isSideNavOpened){
+      this.isSideNavOpened = true;
+    }
   }
 }

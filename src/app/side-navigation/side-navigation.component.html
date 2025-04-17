@@ -1,13 +1,13 @@
 <div class="side-menu-container">
   <div class=" ms-3 d-flex flex-row gap-3">
-    <button class="mt-1" (click)="drawer.toggle()" mat-fab>
+    <button class="mt-1" (click)="toggleMenu()" mat-fab>
       <mat-icon class="menu-icon">menu</mat-icon>
     </button>
     <h2 class="p-3">Weblab</h2>
   </div>
 
   <mat-drawer-container class="h-100 draw-container">
-    <mat-drawer #drawer class="mt-3 side-menu" mode="side">
+    <mat-drawer [opened]="isSideNavOpened" #drawer class="mt-3 side-menu" mode="side">
 
       <div>
         <ul class="list-group list-group-flush">
