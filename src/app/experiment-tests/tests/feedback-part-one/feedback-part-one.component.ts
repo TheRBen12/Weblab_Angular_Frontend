@@ -229,10 +229,11 @@ export class FeedbackPartOneComponent implements OnInit {
       }
     });
     this.execution["numberErrors"] = this.numberErrors;
-    this.currentInstructionStep++;
 
     this.execution["numberFormValidations"] = this.execution["numberFormValidations"] + 1;
     this.validationDates[this.execution["numberFormValidations"]] = new Date();
+
+    this.currentInstructionStep++;
 
     if (this.form.valid) {
       this.finishExperiment();
