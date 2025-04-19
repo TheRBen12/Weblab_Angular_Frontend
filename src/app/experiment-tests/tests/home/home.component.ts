@@ -1,10 +1,11 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../../../services/product.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {ProductComponent} from '../product/product.component';
 import {FilterService} from '../../../services/filter.service';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
+import {document} from 'ngx-bootstrap/utils';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ import {Router} from '@angular/router';
   standalone: true,
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, OnDestroy{
   productService = inject(ProductService);
   filterService = inject(FilterService);
   topSales: any[] = [];
@@ -44,5 +45,9 @@ export class HomeComponent implements OnInit{
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.filterSubscription.unsubscribe();
   }
 }

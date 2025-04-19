@@ -82,7 +82,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
     if (urlSegments.indexOf("hicks-law") != -1) {
       isHicksLawExperiment = true;
     }
-    this.filterService.getSubject().subscribe((filterText) => {
+    this.filterSubscription = this.filterService.getSubject().subscribe((filterText) => {
       if (isHicksLawExperiment && filterText == "") {
         this.filteredProducts = this.products;
       } else {
