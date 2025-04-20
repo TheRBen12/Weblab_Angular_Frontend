@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy{
 
     this.filterSubscription = this.filterService.getSubject().subscribe((filterText) => {
       this.filteredProducts = this.filterService.filterProducts(filterText, this.products);
-      //this.jumpToProductList();
+      this.jumpToProductList();
     });
   }
 

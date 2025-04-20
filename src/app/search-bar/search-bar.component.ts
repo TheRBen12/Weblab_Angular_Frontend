@@ -1,10 +1,13 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgIf} from '@angular/common';
+import {filter} from 'rxjs';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-search-bar',
   imports: [
-    NgIf
+    NgIf,
+    FormsModule
   ],
   standalone: true,
   templateUrl: './search-bar.component.html',
@@ -23,4 +26,7 @@ export class SearchBarComponent {
   filterResults(text: string) {
     this.inputTextEvent.emit(text);
   }
+
+  protected readonly filter = filter;
+  filterText: string = "";
 }

@@ -84,7 +84,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   loading: boolean = false;
   usedFilters: string[] = [];
   experimentTest?: ExperimentTest;
-  firstClick?: string|null = null;
+  firstClick?: string | null = null;
   experimentFinished: boolean = false;
   clicks: string[] = [];
   execution: {
@@ -127,21 +127,21 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   ngOnInit(): void {
     this.timeService.startTimer();
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
-      if (filter != ""){
+      if (filter != "") {
         this.execution['usedFilters'] = true;
         this.usedFilters.push(filter);
-        this.execution['usedFilters'] = this.execution['usedFilters'] +" " + JSON.stringify(this.usedFilters);
+        this.execution['usedFilters'] = this.execution['usedFilters'] + " " + JSON.stringify(this.usedFilters);
         this.saveExecutionTemporarily(this.execution);
       }
     })
     const exec = localStorage.getItem('exec');
-    if (exec){
+    if (exec) {
       this.execution = JSON.parse(exec);
     }
     this.productService.getBasket();
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
-      if (this.basket.length > 0){
+      if (this.basket.length > 0) {
         this.basketIsHidden = false;
       }
 
@@ -161,7 +161,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   }
 
   openBasket() {
-    if (!this.execution["timeToClickShoppingCart"]){
+    if (!this.execution["timeToClickShoppingCart"]) {
       this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
     }
     this.basketIsHidden = !this.basketIsHidden;
@@ -174,7 +174,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.usedFilters);
     const userId = this.loginService.currentUser()?.id;
-    if (userId && this.experimentTest){
+    if (userId && this.experimentTest) {
       this.experimentFinished = true;
       this.experimentService.getExperimentExecutionByStateAndTest(userId, this.experimentTest.id, 'INPROCESS').subscribe((exec) => {
         this.execution["experimentTestExecutionId"] = exec.id;
@@ -182,7 +182,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
         this.experimentService.saveMentalModelExperimentExecution(this.execution).subscribe(() => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/test/"+this.experimentTest?.id+"/feedback")
+            this.router.navigateByUrl("/test/" + this.experimentTest?.id + "/feedback")
             this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen.")
           }, 2000);
         })
@@ -191,7 +191,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   }
 
   setCurrentRoute(route: string) {
-    if (Object.values(this.clickedRoutes).length == 0){
+    if (Object.values(this.clickedRoutes).length == 0) {
       this.execution["timeToClickFirstCategoroy"] = this.timeService.getCurrentTime();
       this.timeService.stopTimer();
     }
@@ -204,13 +204,14 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.execution['clickedRoutes'] = JSON.stringify(this.clickedRoutes);
     this.saveExecutionTemporarily(this.execution);
     this.currentRoute = route;
+    this.filterService.dispatchFilterText("");
 
   }
 
   filterProducts(text: string) {
-    const n =   this.execution['numberUsedSearchBar'];
-    if (n >= 1){
-      this.execution['failedClicks'] =  this.execution['failedClicks'] + 1;
+    const n = this.execution['numberUsedSearchBar'];
+    if (n >= 1) {
+      this.execution['failedClicks'] = this.execution['failedClicks'] + 1;
     }
     this.execution['numberUsedSearchBar'] = this.execution['numberUsedSearchBar'] + 1;
     this.saveExecutionTemporarily(this.execution);
@@ -246,10 +247,13 @@ export class MentalModelMegaDropdownComponent implements OnInit {
 
   hideSubMenu() {
     this.showSubNavMenu = false;
+    this.currentRoute = "";
   }
 
+
+
   updateClickBehaviour(event: MouseEvent) {
-    if (!this.firstClick){
+    if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
       this.execution['firstClick'] = this.firstClick;
       this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
@@ -272,5 +276,11 @@ export class MentalModelMegaDropdownComponent implements OnInit {
 
   updateSearchBarClickBehaviour() {
     this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
+  }
+
+
+  hideMenu() {
+    this.showSubNavMenu = false;
+
   }
 }

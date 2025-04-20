@@ -30,11 +30,11 @@
         </div>
       </div>
       <div  class="row">
-        <nav (mouseleave)="hideSubMenu()"  class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav (mouseleave)="hideMenu()"  class="navbar navbar-expand-lg bg-body-tertiary">
           <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul  class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li (mouseenter)="showSubMenu(category.name)"  class="nav-item" *ngFor="let category of parentProductCategories; index as i">
+                <li  (mouseenter)="showSubMenu(category.name)"  class="nav-item" *ngFor="let category of parentProductCategories; index as i">
                   <a (click)="setCurrentRoute(category.name)"
                      class=" link-offset-2 link-offset-3-hover fw-bold
                       link-underline link-underline-opacity-0 link-underline-opacity-75-hover nav-link"

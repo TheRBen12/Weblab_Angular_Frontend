@@ -51,9 +51,8 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.productService.getScrollSubscription().subscribe((scroll) => {
-      if (scroll){
+      if (scroll) {
         this.jumpToProductList();
       }
     })
@@ -70,7 +69,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
 
     const urlSegments = this.router.url.split("/");
     let index = urlSegments.indexOf("hicks-law");
-    if (index == -1){
+    if (index == -1) {
       index = urlSegments.indexOf("recall-recognition");
     }
     const expId = Number(urlSegments[index + 1]);

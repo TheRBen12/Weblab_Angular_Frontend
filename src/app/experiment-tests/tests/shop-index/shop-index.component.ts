@@ -7,6 +7,7 @@ import {filter, take} from 'rxjs';
 import Popper from 'popper.js';
 import Data = Popper.Data;
 import {RouterService} from '../../../services/router.service';
+import {document} from 'ngx-bootstrap/utils';
 
 
 
@@ -56,6 +57,9 @@ export class ShopIndexComponent implements OnInit{
   }
 
   jumpToProductList() {
-    this.productService.scrollToProductList();
+    const element = document.getElementById('list');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
