@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
+import { Router, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {
@@ -23,7 +23,6 @@ import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {NgIf} from '@angular/common';
 import {TimeService} from '../../../../services/time.service';
-import {ifStmt} from '@angular/compiler';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
