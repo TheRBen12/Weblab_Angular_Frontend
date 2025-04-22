@@ -194,9 +194,6 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   setCurrentRoute($event: string) {
     if (Object.values(this.clickedRoutes).length == 0) {
       this.timeToClickFirstCategoryLink = this.timeService.getCurrentTime();
-      //
-      //
-      // this.timeService.stopTimer();
     }
     if (this.targetRoutes.indexOf($event) == -1) {
       this.failedClicks++;
