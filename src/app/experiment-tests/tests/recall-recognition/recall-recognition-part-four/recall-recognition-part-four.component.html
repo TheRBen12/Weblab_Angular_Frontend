@@ -52,7 +52,7 @@
         </div>
         <div *ngIf="!basketIsHidden" class="col-sm-3 ">
           <div class="container-md">
-            <app-basket (hiddenEventEmitter)="basketIsHidden = !basketIsHidden" (checkoutEventEmitter)="finishExperiment($event)"
+            <app-basket (hiddenEventEmitter)="basketIsHidden = !basketIsHidden" (checkoutEventEmitter)="checkToFinishExperiment()"
                         [basket]=basket></app-basket>
           </div>
         </div>

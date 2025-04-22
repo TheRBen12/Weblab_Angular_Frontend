@@ -230,7 +230,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   checkToFinishExperiment() {
-    if (this.basket.length == 1 && this.basket[0].type == "Notebook"){
+    if (this.basket.length == 1){
       this.finishExperiment();
     }
   }

@@ -23,6 +23,7 @@ import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {NgIf} from '@angular/common';
 import {TimeService} from '../../../../services/time.service';
+import {ifStmt} from '@angular/compiler';
 
 @Component({
   selector: 'app-recall-recognition-part-one',
@@ -202,7 +203,15 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
     localStorage.removeItem('failedClicks');
   }
 
-  finishExperiment($event: number) {
+  checkToFinishExperiment(){
+    if (this.basket.length > 0 && this.basket[0].type == "Gemuese"){
+      this.finishExperiment()
+    }
+    this.toasterService.info("Beachten Sie die Versuchsanleitung. Ihr ausgewähltes Produkt ist nicht von der richtigen Kategorie");
+    return;
+  }
+
+  finishExperiment() {
   this.routerService.clearNumberNavigationClicks();
     const id = this.userService.currentUser()?.id
     if (id) {

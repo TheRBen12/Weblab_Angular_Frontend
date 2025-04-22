@@ -269,7 +269,7 @@ export class MentalModelMegaDropdownComponent implements OnInit {
   }
 
   checkToFinishExperiment() {
-    if (this.basket.length == 1 && this.basket[0].type == "PC") {
+    if (this.basket.length == 1) {
       this.finishExperiment();
     }
   }

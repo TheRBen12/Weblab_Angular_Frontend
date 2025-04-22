@@ -189,7 +189,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
   }
 
   checkToFinishExperiment($event: number) {
-    if ($event == 1 && this.basket.length == 1 && this.basket[0].type == "PC") {
+    if (this.basket.length == 1) {
       this.finishExperiment();
     }
   }
