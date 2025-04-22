@@ -36,11 +36,40 @@
   z-index: 1000; ;
 }
 
+
+.basket-number-text{
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  top: -6px;
+  right: 0;
+  background-color: #407D9C;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+
+.cart-icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+.basket-container {
+    position: relative;
+    display: inline-block;
+}
+
 .progress-title{
   color: white;
 }
 .header-link{
   color: #297BE7;
+}
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
 }
 
 

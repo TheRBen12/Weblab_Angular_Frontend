@@ -17,3 +17,8 @@
 .daily-product-container{
   max-height: 600px;
 }
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+}

@@ -18,4 +18,5 @@ export interface RecallRecognitionExperimentExecution {
   usedBreadcrumbs: boolean;
   searchParameters?: string;
   firstClick: string
+  timeToClickShoppingCart?: number
 }

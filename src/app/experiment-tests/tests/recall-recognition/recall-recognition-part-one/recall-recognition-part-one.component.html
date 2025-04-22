@@ -19,14 +19,14 @@
               <button class="btn btn-primary">Anmelden</button>
             </li>
           </ul>
-          <div class="d-flex" role="search">
+          <div class="basket-container d-flex" role="search">
             <button (click)="openBasket()"  mat-fab class="me-4 d-flex justify-content-center align-items-center">
               <mat-icon class="shopping-card-icon" aria-hidden="false" aria-label="Example home icon"
                         fontIcon="shopping_cart">
 
               </mat-icon>
             </button>
-
+            <span *ngIf="basket.length > 0" class="basket-number-text">{{basket.length}}</span>
           </div>
         </div>
       </div>
@@ -47,7 +47,10 @@
           <div (click)="updateBreadcrumbsBehaviour()" class="container" *ngIf="links.length > 0">
             <a routerLink="./" class="header-link">Home</a> <a routerLink="{{routerLinks[link]}}" class="header-link" *ngFor="let link of links"> > {{link}}</a>
           </div>
-          <router-outlet></router-outlet>
+          <div class="scrollable-list">
+            <router-outlet></router-outlet>
+          </div>
+
         </div>
         <div class="col-sm-3 ">
           <div *ngIf="!basketIsHidden" class="container-md">

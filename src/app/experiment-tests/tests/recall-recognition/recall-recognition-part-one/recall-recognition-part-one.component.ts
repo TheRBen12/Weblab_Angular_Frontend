@@ -85,6 +85,8 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
   links: string[] = [];
   usedBreadCrumbs: boolean = false;
   firstClick: string|null = null;
+  timeToClickShoppingCart: number = 0;
+  startTime: any = 0;
 
   constructor(private cdRef: ChangeDetectorRef, private toastrService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie IT und Multimedia",
@@ -111,7 +113,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0) {
-        this.basketIsHidden = false;
+        this.startTime = performance.now();
         this.currentInstructionStep = this.instructions.length - 1;
       } else {
         this.currentInstructionStep = this.currentInstructionStep <= 0 ? 0 : this.currentInstructionStep - 1;
@@ -184,12 +186,17 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
 
   openBasket() {
     this.basketIsHidden = !this.basketIsHidden;
+    // this.timeToClickShoppingCart = this.timeService.getCurrentTime();
+    const endTime= performance.now();
+    this.timeToClickShoppingCart = Math.round(endTime - this.startTime)
   }
 
   setCurrentRoute($event: string) {
     if (Object.values(this.clickedRoutes).length == 0) {
       this.timeToClickFirstCategoryLink = this.timeService.getCurrentTime();
-      this.timeService.stopTimer();
+      //
+      //
+      // this.timeService.stopTimer();
     }
     if (this.targetRoutes.indexOf($event) == -1) {
       this.failedClicks++;
@@ -258,6 +265,7 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
           timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink,
           usedBreadcrumbs: this.usedBreadCrumbs,
           firstClick: this.firstClick??"",
+          timeToClickShoppingCart: this.timeToClickShoppingCart,
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
