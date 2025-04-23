@@ -6,6 +6,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {SideMenuService} from '../../../services/side-menu.service';
 import {ExperimentService} from '../../../services/experiment.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-detail',
@@ -26,11 +27,9 @@ export class ProductDetailComponent implements OnInit {
   product: any
   specifications: any[] = [];
   experimentService = inject(ExperimentService);
-  targetProperties: {[key: string]: any } = {};
 
 
-
-  constructor(private cdRef: ChangeDetectorRef) {
+  constructor(private cdRef: ChangeDetectorRef, private readonly toasterService: ToastrService) {
   }
 
   ngOnInit() {
@@ -49,7 +48,8 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addProductToBasket(){
-   this.productService.addToBasket(this.product);
+    this.toasterService.success("Das Produkt wurde dem Warenkorb hinzugefügt");
+    this.productService.addToBasket(this.product);
   }
 
 }

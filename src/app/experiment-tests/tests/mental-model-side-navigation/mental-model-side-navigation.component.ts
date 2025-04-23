@@ -134,6 +134,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0) {
+
         this.startTime = performance.now();
         if (this.basket[0].type != "PC"){
           this.increaseFailedClicks();
