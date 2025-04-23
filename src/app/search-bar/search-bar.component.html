@@ -2,17 +2,30 @@
 
   <div *ngIf="!searchOnEnter" class="p-2 input-container">
 
-    <i (click)="filterResults(filter.value)"  class="search-icon fa fa-search"></i>
-    <input [disabled]="disabled"  #filter (input)="filterResults(filter.value)"
+
+    <div class="d-flex flex-row gap-2 align-items-center">
+      <button (click)="filterResults(filter.value)" mat-fab>
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <input [disabled]="disabled"  #filter (input)="filterResults(filter.value)"
              class="search-input-field form-control" type="search" placeholder="{{placeholder}}" aria-label="Search">
+    </div>
+
   </div>
 
 
-  <div *ngIf="searchOnEnter" class="input-container">
-    <i (click)="filterResults(filterText)"  class=" fa fa-search"></i>
-    <input [(ngModel)]="filterText"  #searchInput [disabled]="disabled"  (keyup.enter)="filterResults(searchInput.value)" *ngIf="searchOnEnter"
-           class="search-input-field form-control me-2" type="search"
-           placeholder="{{placeholder}}" aria-label="Search">
+  <div *ngIf="searchOnEnter" class="p-2 input-container">
+
+    <div class="d-flex flex-row gap-2">
+      <button (click)="filterResults(filterText)" mat-fab>
+        <mat-icon>search</mat-icon>
+      </button>
+      <input [(ngModel)]="filterText"  #searchInput [disabled]="disabled"  (keyup.enter)="filterResults(searchInput.value)" *ngIf="searchOnEnter"
+             class="search-input-field form-control" type="search"
+             placeholder="{{placeholder}}" aria-label="Search">
+    </div>
+
   </div>
 
 </div>
