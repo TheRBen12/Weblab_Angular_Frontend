@@ -138,15 +138,14 @@ export class FeedbackPartOneComponent implements OnInit {
     numberAdults: new FormControl("", {
       validators: [
         Validators.required,
+        Validators.max(12),
         Validators.pattern('^[0-9]{1}$'),
         Validators.min(1),
       ], updateOn: "submit"
     }),
 
     numberChildren: new FormControl("", {
-      validators: [
-        Validators.pattern('^[0-9]{1}$')
-      ], updateOn: "submit"
+      updateOn: "submit"
     }),
 
     arrival: new FormControl("", {
