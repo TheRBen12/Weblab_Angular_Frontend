@@ -20,7 +20,7 @@
         <div *ngIf="navigationConfig?.searchBarTop" class="w-50 ms-3 me-4">
 
           <div>
-            <app-search-bar [disabled]="false"
+            <app-search-bar (inputTextEvent)="filterProducts($event)"  [searchOnEnter]="true" [disabled]="false"
                             [placeholder]="'Produkte suchen'"></app-search-bar>
           </div>
         </div>

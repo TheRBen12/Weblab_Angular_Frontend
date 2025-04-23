@@ -99,8 +99,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
     this.searchParameters += text;
     this.lastSearchParameter = text;
-
-    //this.filterService.dispatchFilterText(text);
+    this.filterService.dispatchFilterText(text);
   }
 
   fetchAllProducts() {
