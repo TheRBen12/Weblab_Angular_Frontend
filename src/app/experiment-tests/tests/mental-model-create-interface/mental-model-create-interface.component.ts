@@ -22,6 +22,7 @@ import {LoginService} from '../../../services/login.service';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MentalModelShopConfiguration} from '../../../models/mental-model-shop-configuration';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-mental-model-create-interface',
@@ -40,6 +41,7 @@ import {MentalModelShopConfiguration} from '../../../models/mental-model-shop-co
     MatCard,
     MatCardContent,
     MatProgressSpinner,
+    MatTooltip,
   ],
   templateUrl: './mental-model-create-interface.component.html',
   standalone: true,

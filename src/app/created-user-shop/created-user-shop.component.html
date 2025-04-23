@@ -17,10 +17,12 @@
       <div *ngIf="navigationConfig?.navBarTop" class="d-flex align-items-center shadow nav navbar-expand-md navbar">
         <h2 class="ms-2 shop-title p-2">Weblab Shop</h2>
 
-        <div *ngIf="navigationConfig?.searchBarTop">
-          <app-search-bar (click)="updateTimeToClickSearchBar()" (inputTextEvent)="filterProducts($event)"
-                          [searchOnEnter]="true"
-                          [placeholder]="'Produkt suchen'" [disabled]="false"></app-search-bar>
+        <div *ngIf="navigationConfig?.searchBarTop" class="w-50 ms-3 me-4">
+
+          <div>
+            <app-search-bar [disabled]="false"
+                            [placeholder]="'Produkte suchen'"></app-search-bar>
+          </div>
         </div>
 
         <div *ngIf="navigationConfig?.autoCompleteTop" class="ms-3 me-4 w-75">
@@ -105,7 +107,7 @@
 
         </div>
 
-        <div class="col-sm-6 scrollable-list">
+        <div [ngClass]="{'col-sm-8': navigationConfig.megaDropDown}"  class="col-sm-6 scrollable-list">
           <div (click)="updateBreadcrumbsClickBehaviour()"  class="container"
                *ngIf="links.length > 0 && navigationConfig.breadcrumbs && !navigationConfig.megaDropDown">
             <a routerLink="./" class="ms-2 header-link">Home</a><a routerLink="{{routerLinks[link]}}"

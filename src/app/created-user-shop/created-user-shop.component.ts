@@ -28,6 +28,7 @@ import {LoginService} from '../services/login.service';
 import {ToastrService} from 'ngx-toastr';
 import {routerLinks} from '../experiment-tests/tests/routes';
 import {ProductOffCanvasMenuComponent} from '../product-off-canvas-menu/product-off-canvas-menu.component';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
   animations: [
@@ -57,7 +58,8 @@ import {ProductOffCanvasMenuComponent} from '../product-off-canvas-menu/product-
     NgForOf,
     RouterLink,
     NgClass,
-    ProductOffCanvasMenuComponent
+    ProductOffCanvasMenuComponent,
+    MatTooltip
   ],
   templateUrl: './created-user-shop.component.html',
   standalone: true,

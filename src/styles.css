@@ -27,8 +27,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .sub-navigation{
   background-color: #DBDBDB;
+  min-height: 30px;
 }
 
 .shop-title{
   color: #157EAB;
+}
+
+
+.basket-number-text{
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  top: -6px;
+  right: 0;
+  background-color: #407D9C;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+
+.basket-container {
+  position: relative;
+  display: inline-block;
 }

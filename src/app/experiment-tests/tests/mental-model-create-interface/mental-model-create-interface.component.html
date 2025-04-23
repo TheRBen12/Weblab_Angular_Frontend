@@ -13,30 +13,28 @@
     <div class="container-fluid">
       <div class="row">
         <div [ngClass]="{'disabled': (!isSelected('navBarTop') && !selectedInterFace?.navBarTop), 'selected': (isSelected('navBarTop') || selectedInterFace?.navBarTop)}"
-          (click)="selectElement('navBarTop', $event)" class="  nav navbar navbar-expand-md shadow w-100">
+          (click)="selectElement('navBarTop', $event)" class=" nav navbar navbar-expand-md shadow w-100 d-flex flex-row justify-content-around">
           <h2 class="shop-title col-sm-2 p-2">Weblab Shop</h2>
+          <div class="container d-flex flex-row">
+              <div matTooltip="Standardsuchfunktion"
+                (click)="selectElement('searchBarTop', $event)"
+                   [ngClass]="{'disabled': (!isSelected('searchBarTop') && !selectedInterFace?.searchBarTop), 'selected': (isSelected('searchBarTop') || selectedInterFace?.searchBarTop )}"
+                   class="disabled">
+                <app-search-bar [disabled]="false" (click)="selectElement('searchBarTop', $event)"
+                                [placeholder]="'Standardsuchfunktion'"></app-search-bar>
+              </div>
 
-          <div class="container d-flex justify-content-between">
-            <div (click)="selectElement('searchBarTop', $event)"
-                 [ngClass]="{'disabled': (!isSelected('searchBarTop') && !selectedInterFace?.searchBarTop), 'selected': (isSelected('searchBarTop') || selectedInterFace?.searchBarTop )}"
-                 class="disabled">
-              <app-search-bar (click)="selectElement('searchBarTop', $event)"
-                              [placeholder]="'Standardsuchfunktion'"></app-search-bar>
-            </div>
+              <div (click)="selectElement('autoCompleteTop', $event)"
+                   [ngClass]="{'disabled': (!isSelected('autoCompleteTop') && !selectedInterFace?.autoCompleteTop), 'selected':(isSelected('autoCompleteTop') || selectedInterFace?.autoCompleteTop)}"
+                   class="ms-3 me-4 w-50" matTooltip="Suchfunktion mit Autovervollständigung">
+                <app-auto-complete [products]="products" class="products"
+                                   [placeholder]="'Suchfunktion mit Autovervollständigung'">
 
-            <div (click)="selectElement('autoCompleteTop', $event)"
-                 [ngClass]="{'disabled': (!isSelected('autoCompleteTop') && !selectedInterFace?.autoCompleteTop), 'selected':(isSelected('autoCompleteTop') || selectedInterFace?.autoCompleteTop)}"
-                 class="ms-3 me-4 w-75">
-              <app-auto-complete [products]="products" class="products"
-                                 [placeholder]="'Suchfunktion mit Autovervollständigung'">
+                </app-auto-complete>
+              </div>
 
-              </app-auto-complete>
-            </div>
           </div>
 
-          <div class="me-3 ms-3">
-            <button class=" btn btn-primary">Anmelden</button>
-          </div>
           <div (click)="selectElement('shoppingCartTopLeft', $event)"
                [ngClass]="{'disabled': (!isSelected('shoppingCartTopLeft') && !selectedInterFace?.shoppingCartTopLeft), 'selected':( isSelected('shoppingCartTopLeft') || selectedInterFace?.shoppingCartTopLeft)}"
                class="ms-3">
@@ -47,7 +45,7 @@
             </button>
           </div>
 
-          <div class="w-100 me-3 d-flex justify-content-end ">
+          <div class="w-75 me-3 d-flex justify-content-end ">
             <div (click)="selectElement('shoppingCartTopRight', $event)"
                  [ngClass]="{'disabled': (!isSelected('shoppingCartTopRight') && !selectedInterFace?.shoppingCartTopRight), 'selected':( isSelected('shoppingCartTopRight') || selectedInterFace?.shoppingCartTopRight) }">
               <button mat-fab>
@@ -182,14 +180,14 @@
         <div class="container d-flex flex-row ">
           <div (click)="selectElement('searchBarBottom', $event)"
                [ngClass]="{'disabled': (!isSelected('searchBarBottom') && !selectedInterFace.searchBarBottom), 'selected': (isSelected('searchBarBottom') || selectedInterFace.searchBarBottom) }"
-               class="disabled">
-            <app-search-bar (click)="selectElement('searchBarBottom', $event)"
+               class="disabled" matTooltip="Standardsuchfunktion">
+            <app-search-bar [disabled]="false" (click)="selectElement('searchBarBottom', $event)"
                             [placeholder]="'Standardsuchfunktion'"></app-search-bar>
           </div>
 
           <div (click)="selectElement('autoCompleteBottom', $event)"
                [ngClass]="{'disabled': (!isSelected('autoCompleteBottom') && !selectedInterFace.autoCompleteBottom), 'selected': (isSelected('autoCompleteBottom') || selectedInterFace.autoCompleteBottom)}"
-               class="ms-3 me-4 w-75">
+               class="ms-3 me-4 w-50" matTooltip="Suchfunktion mit Autovervollständigung">
             <app-auto-complete [products]="products" class="products"
                                [placeholder]="'Suchfunktion mit Autovervollständigung'">
 
@@ -197,9 +195,6 @@
           </div>
         </div>
 
-        <div class="me-3 ms-3">
-          <button class=" btn btn-primary">Anmelden</button>
-        </div>
         <div (click)="selectElement('shoppingCartBottomLeft', $event)"
              [ngClass]="{'disabled': (!isSelected('shoppingCartBottomLeft') && selectedInterFace.shoppingCartTopLeft), 'selected': (isSelected('shoppingCartBottomLeft') || selectedInterFace.shoppingCartBottomLeft) }"
              class="ms-3">

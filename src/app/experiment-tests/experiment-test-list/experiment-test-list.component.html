@@ -1,6 +1,6 @@
 <div *ngIf="!serverError; else errorMessage">
   <div [ngClass]="{'bottom': navigationSetting?.sideNavigationSearchbarBottom, 'sub-navigation d-flex align-items-center justify-content-center': !navigationSetting?.sideNavigationSearchbarBottom}">
-    <app-search-bar [placeholder]="'Versuchsexperimente suchen'" (click)="updateUserBehaviour()"  [disabled]="false" (inputTextEvent)="filterExperimentTests($event)" [elements]="experimentTests" ></app-search-bar>
+    <app-search-bar [placeholder]="'Versuche suchen'" (click)="updateUserBehaviour()"  [disabled]="false" (inputTextEvent)="filterExperimentTests($event)" [elements]="experimentTests" ></app-search-bar>
   </div>
   <div class="mb-2 container mt-3 ">
     <div class="p-1 d-flex justify-content-between">
@@ -9,7 +9,7 @@
         <p *ngIf="finishedExecutions.length == 0">
           Sie haben noch keine Experiment abgeschlossen
         </p>
-        <p *ngIf="finishedExperimentTests.length > 0">Sie haben {{finishedExperimentTests.length}} Experiment abgeschlossen</p>
+        <p *ngIf="finishedExperimentTests.length > 0">Sie haben {{finishedExperimentTests.length}} Experimente abgeschlossen</p>
       </div>
     </div>
     <h5 class="p-1 mt-2 ">{{filteredExperimentTests.length}} Experimente angezeigt</h5>

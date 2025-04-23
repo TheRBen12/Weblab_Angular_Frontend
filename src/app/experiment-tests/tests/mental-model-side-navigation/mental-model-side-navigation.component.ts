@@ -72,8 +72,9 @@ export class MentalModelSideNavigationComponent implements OnInit {
   parentRoute: string = "./";
   parentCategory?: string;
   filters: string[] = [];
-  protected loading: boolean = false;
-  private experimentFinished: boolean = false;
+  loading: boolean = false;
+  experimentFinished: boolean = false;
+  startTime: number = 0;
 
   execution: {
     [key: string]: any
@@ -112,7 +113,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
   ngOnInit(): void {
     this.productService.getAllProducts().subscribe((products) => {
       this.products = products;
-    })
+    });
     this.timeService.startTimer();
     this.fetchExperimentTest();
 
@@ -133,7 +134,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.productService.getBasketSubscription().subscribe((basket) => {
       this.basket = basket;
       if (this.basket.length > 0) {
-        this.showBasket = true;
+        this.startTime = performance.now();
         if (this.basket[0].type != "PC"){
           this.increaseFailedClicks();
         }
@@ -170,7 +171,8 @@ export class MentalModelSideNavigationComponent implements OnInit {
   }
 
   toggleBasket() {
-    this.execution["timeToClickShoppingCart"] = this.timeService.getCurrentTime();
+    const endTime = performance.now();
+    this.execution["timeToClickShoppingCart"] = Math.round(endTime - this.startTime);
     this.showBasket = !this.showBasket;
   }
 

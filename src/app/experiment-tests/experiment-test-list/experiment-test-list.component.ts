@@ -107,7 +107,6 @@ export class ExperimentTestListComponent implements OnInit {
     };
     localStorage.setItem("lastTestRoute", this.router.url);
     this.experimentService.saveExperimentTestSelectionTime(experimentTestSelectionTime).subscribe((result) => {
-      //this.router.navigateByUrl("/tests/detail/"+testId)
     });
 
   }
