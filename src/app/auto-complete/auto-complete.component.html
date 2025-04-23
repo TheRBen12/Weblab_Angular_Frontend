@@ -2,7 +2,7 @@
   <div class="p-2 autocomplete-form search-bar-container">
     <mat-form-field appearance="outline" class="auto-complete-input">
       <mat-label>{{ placeholder }}</mat-label>
-      <input #input (input)="emitFilterText(input.value, $event)"  (keydown.enter)="emitFilterText(input.value, $event)" type="text"
+      <input #input (keydown.enter)="emitFilterText(input.value, $event)" type="text"
              placeholder="{{placeholder}}"
              matInput
              [formControl]="myControl"
