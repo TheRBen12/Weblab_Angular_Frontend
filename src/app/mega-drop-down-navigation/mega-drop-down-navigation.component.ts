@@ -1,6 +1,6 @@
 import {Component, effect, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {NgClass, NgForOf} from '@angular/common';
-import {Router, RouterLink} from '@angular/router';
+import {NavigationEnd, Router, RouterLink} from '@angular/router';
 import {ExperimentService} from '../services/experiment.service';
 import {Experiment} from '../models/experiment';
 import {animate, state, style, transition, trigger} from '@angular/animations';
@@ -8,6 +8,7 @@ import {ExperimentTest} from '../models/experiment-test';
 import {LoginService} from '../services/login.service';
 import {UserBehaviour} from '../models/user-behaviour';
 import {RouterService} from '../services/router.service';
+import {filter} from 'rxjs';
 
 @Component({
 
@@ -63,6 +64,13 @@ export class MegaDropDownNavigationComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+        if (this.router.url.includes("/tests/")) {
+          this.currentRoute = "";
+        }
+      });
     this.currentRoute = this.routerService.rebuildCurrentNavigationRoute(this.router.url);
 
     this.loginService.getUserBehaviourSubscription().subscribe((userBehaviour) => {
