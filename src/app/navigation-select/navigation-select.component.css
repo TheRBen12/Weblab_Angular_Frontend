@@ -56,3 +56,14 @@
 .example-radio-button{
   font-size: 18px;
 }
+
+.scrollable-list {
+  max-height: 100vh; /* Maximale Höhe setzen */
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  padding: 10px;
+}
+
+.main{
+  max-height: 100vh;
+}
+

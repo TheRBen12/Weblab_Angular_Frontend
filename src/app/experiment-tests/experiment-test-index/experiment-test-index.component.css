@@ -9,3 +9,11 @@
   flex-flow: row wrap;
 }
 
+.scrollable-list {
+  max-height: 90vh; /* Maximale Höhe setzen */
+  height: 100%;
+  margin-bottom: 20px;
+  overflow-y: auto; /* Scrollbar nur anzeigen, wenn nötig */
+  overflow-x:hidden ;
+  padding: 10px;
+}

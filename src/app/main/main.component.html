@@ -20,11 +20,25 @@
     <div class="col-sm-auto" style="min-height: 100vh;">
       <app-side-navigation></app-side-navigation>
     </div>
+    <div class="scrollable-list w-100 h-75">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="navigationSetting?.leftSideNavigation">
+  <div class="d-flex flex-row-reverse w-100">
+    <div class="col-sm-auto" style="min-height: 100vh;">
+      <app-side-navigation></app-side-navigation>
+    </div>
     <div class="scrollable-list w-100">
       <router-outlet></router-outlet>
     </div>
   </div>
 </div>
+
 
 
 <div (click)="increaseNumberNavigationClicks()"  *ngIf="navigationSetting?.sideNavigationUserInformationTop">
@@ -53,7 +67,10 @@
 
 <div (click)="increaseNumberNavigationClicks()"  *ngIf="navigationSetting?.megaDropDown">
   <app-mega-drop-down-navigation [noPointerEvents]="false"></app-mega-drop-down-navigation>
-  <router-outlet></router-outlet>
+  <div class="scrollable-list h-100">
+    <router-outlet></router-outlet>
+  </div>
+
 </div>
 
 

@@ -2,7 +2,7 @@
   <div [ngClass]="{'bottom': navigationSetting?.sideNavigationSearchbarBottom, 'sub-navigation d-flex align-items-center justify-content-center': !navigationSetting?.sideNavigationSearchbarBottom}">
     <app-search-bar [placeholder]="'Experiment suchen'" (click)="updateUserBehaviour()"  [disabled]="false" (inputTextEvent)="filterExperiment($event)" [elements]="experiments" ></app-search-bar>
   </div>
-  <div class="mb-2 container mt-3 ">
+  <div [ngClass]="{'small-list': navigationSetting?.sideNavigationSearchbarBottom||navigationSetting?.sideNavigationUserInformationTop}" class="mb-2 container mt-3">
     <div class="p-1 d-flex justify-content-between">
       <h1>{{ title }}</h1>
       <div *ngIf="finishedExperiments">

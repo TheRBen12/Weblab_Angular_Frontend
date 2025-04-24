@@ -54,6 +54,7 @@ export class NavigationSelectComponent implements OnInit {
   }
 
   saveNavigationSelection() {
+    debugger;
     this.loading = true;
     const navigationSetting: NavigationSetting = {
       horizontalNavigation: this.navigationSelectionIndex == 2,
@@ -61,6 +62,7 @@ export class NavigationSelectComponent implements OnInit {
       sideNavigationSearchBarTop: this.navigationSelectionIndex == 0,
       sideNavigationUserInformationTop: this.navigationSelectionIndex == 3,
       megaDropDown: this.navigationSelectionIndex == 4,
+      leftSideNavigation: this.navigationSelectionIndex == 5,
       userId: history.state.userId,
     };
     this.settingService.saveNavigationSettings(navigationSetting).subscribe((settings) => {

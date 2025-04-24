@@ -6,7 +6,7 @@
                     (inputTextEvent)="filterTestsAndMarkText($event)"
                     [elements]="experimentTests"></app-search-bar>
   </div>
-  <div class="container mt-3 ">
+  <div [ngClass]="{'small-list': navigationConfig?.sideNavigationSearchbarBottom||navigationConfig?.sideNavigationUserInformationTop }" class="container mt-3 ">
     <div class="body-header d-flex justify-content-between">
       <div class="d-flex align-items-center">
         <div>

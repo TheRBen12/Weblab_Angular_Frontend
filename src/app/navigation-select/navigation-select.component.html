@@ -1,6 +1,4 @@
 
-
-
 <div [ngClass]="{'hidden': navigationSelectionIndex != 4 , 'visible': navigationSelectionIndex == 4}" [@selectedState] = "navigationSelectionIndex == 4 ? 'open' : 'closed' ">
   <div>
     <app-mega-drop-down-navigation [showMenu]="true" [noPointerEvents]="true" ></app-mega-drop-down-navigation>
@@ -10,18 +8,22 @@
     <app-search-bar [placeholder]="'Experiment suchen'" [disabled]="false"></app-search-bar>
   </div>
 
-  <div class="mt-5 container d-block d-flex justify-content-center align-items-center h-100">
+  <div class="mt-5 container d-block d-flex justify-content-center align-items-center">
     <div>
       <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
+      <h5>Wenn Sie eine Navigation auswählen, dann wird Ihnen diese gezeigt</h5>
+
       <mat-radio-group
         [(ngModel)]="navigationSelectionIndex"
         aria-labelledby="example-radio-group-label"
         class="example-radio-group">
-        <mat-radio-button class="example-radio-button" [value]="0">Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="0">Rechte Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
         <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
         <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
         <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
         <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="5">Seitennavigation an der linken Seite</mat-radio-button>
+
       </mat-radio-group>
       <p class="fw-bold">Bewegen Sie die Maus auf den Eintrag "Experimente", um zu sehen, wie diese Navigationsstruktur funktioniert.</p>
       <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
@@ -31,8 +33,7 @@
 
 
 
-
-<div [ngClass]="{'hidden': navigationSelectionIndex != 0 , 'visible d-flex flex-row': navigationSelectionIndex==0}" [@selectedState] = "navigationSelectionIndex==0 ? 'open' : 'closed' " >
+<div class="main" [ngClass]="{'hidden': navigationSelectionIndex != 0 , 'visible d-flex flex-row': navigationSelectionIndex==0}" [@selectedState] = "navigationSelectionIndex==0 ? 'open' : 'closed' " >
     <div class=" col-2">
       <app-side-navigation [pointerEvents]="false" [showMenuContent] = "navigationSelectionIndex==0"></app-side-navigation>
     </div>
@@ -40,18 +41,56 @@
       <div class="top-header w-100 d-flex justify-content-center">
         <app-search-bar [placeholder]="'Experiment suchen'" [disabled]="false"></app-search-bar>
       </div>
-      <div class="mt-5 d-block d-flex justify-content-center  h-100">
+      <div class="mt-5 d-block d-flex justify-content-center ">
         <div>
           <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
+          <h5>Wenn Sie eine Navigation auswählen, dann wird Ihnen diese gezeigt</h5>
+
           <mat-radio-group
             [(ngModel)]="navigationSelectionIndex"
             aria-labelledby="example-radio-group-label"
             class="example-radio-group">
-            <mat-radio-button class="example-radio-button" [value]="0">Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="0">Rechte Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
             <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
             <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
             <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
             <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="5">Seitennavigation an der linken Seite</mat-radio-button>
+          </mat-radio-group>
+          <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+<div [ngClass]="{'hidden': navigationSelectionIndex != 5 , 'visible d-flex flex-row': navigationSelectionIndex==5}" [@selectedState] = "navigationSelectionIndex==5 ? 'open' : 'closed' " >
+  <div class="d-flex flex-row-reverse w-100">
+    <div class=" col-2">
+      <app-side-navigation [pointerEvents]="false" [showMenuContent] = "navigationSelectionIndex==0"></app-side-navigation>
+    </div>
+    <div class="col">
+      <div class="top-header w-100 d-flex justify-content-center">
+        <app-search-bar [placeholder]="'Experiment suchen'" [disabled]="false"></app-search-bar>
+      </div>
+      <div class="mt-5 d-block d-flex justify-content-center">
+        <div class="scrollable-list container p-4 ms-3 h-75">
+          <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
+          <h5>Wenn Sie eine Navigation auswählen, dann wird Ihnen diese gezeigt</h5>
+
+          <mat-radio-group
+            [(ngModel)]="navigationSelectionIndex"
+            aria-labelledby="example-radio-group-label"
+            class="example-radio-group">
+            <mat-radio-button class="example-radio-button" [value]="0">Rechte Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="5">Linke Seitennavigation</mat-radio-button>
+
 
           </mat-radio-group>
           <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
@@ -60,6 +99,11 @@
       </div>
     </div>
   </div>
+
+
+
+
+</div>
 
 
 
@@ -72,16 +116,18 @@
         <div class="mt-5 container d-block d-flex justify-content-center align-items-center">
           <div>
             <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
+            <h5>Wenn Sie eine Navigation auswählen, dann wird Ihnen diese gezeigt</h5>
+
             <mat-radio-group
               [(ngModel)]="navigationSelectionIndex"
               aria-labelledby="example-radio-group-label"
               class="example-radio-group">
-              <mat-radio-button class="example-radio-button" [value]="0"><p>Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</p></mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="0">Rechte Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
-
+              <mat-radio-button class="example-radio-button" [value]="5">Seitennavigation an der linken Seite</mat-radio-button>
             </mat-radio-group>
             <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
           </div>
@@ -103,7 +149,7 @@
     <div class="top-header w-100 d-flex justify-content-center">
       <app-search-bar [placeholder]="'Experiment suchen'" [disabled]="false"></app-search-bar>
     </div>
-    <div class="mt-5 container d-block d-flex justify-content-center align-items-center h-100">
+    <div class="mt-5 container d-block d-flex justify-content-center align-items-center">
       <div>
         <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
         <h5>Wenn Sie eine Navigation auswählen, dann wird Ihnen diese gezeigt</h5>
@@ -111,12 +157,12 @@
           [(ngModel)]="navigationSelectionIndex"
           aria-labelledby="example-radio-group-label"
           class="example-radio-group">
-          <mat-radio-button class="example-radio-button" [value]="0">Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
+          <mat-radio-button class="example-radio-button" [value]="0">Rechte Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
           <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
           <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
           <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
           <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
-
+          <mat-radio-button class="example-radio-button" [value]="5">Seitennavigation an der linken Seite</mat-radio-button>
         </mat-radio-group>
         <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
       </div>
@@ -151,15 +197,17 @@
         <div class="mt-5 container d-block d-flex justify-content-center h-100">
           <div>
             <h4 >Wählen Sie eine Navigationstruktur aus und bestätigen Sie dann die Auswahl mit dem grünen Button</h4>
+            <h5>Wenn Sie eine Navigation auswählen, dann wird Ihnen diese gezeigt</h5>
             <mat-radio-group
               [(ngModel)]="navigationSelectionIndex"
               aria-labelledby="example-radio-group-label"
               class="example-radio-group">
-              <mat-radio-button class="example-radio-button" [value]="0">Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="0">Rechte Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="5">Seitennavigation an der linken Seite</mat-radio-button>
             </mat-radio-group>
             <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
           </div>
@@ -168,53 +216,9 @@
   </div>
 
 
-
-  <div [ngClass]="{'hidden': navigationSelectionIndex != 3, 'visible d-flex': navigationSelectionIndex == 3 }" [@selectedState] = "navigationSelectionIndex==3 ? 'open' : 'closed' ">
-    <div class="col-2">
-      <app-side-navigation [pointerEvents]="false" [showLogoutAndProfile]="false"></app-side-navigation>
-    </div>
-    <div class="col">
-      <div class="main-header d-flex justify-content-end">
-        <div class="d-flex justify-content-end align-items-center gap-3 w-100 me-3">
-          <div class="p-3 right-side-header-item fw-bold">
-            <a class="ms-2">Abmelden</a>
-          </div>
-          <div class="p-3 right-side-header-item fw-bold ">
-            <a class="">Benutzer</a>
-          </div>
-        </div>
-      </div>
-      <div class="top-header w-100 d-flex justify-content-center">
-        <div class="d-flex justify-content-center w-100">
-          <app-search-bar [placeholder]="'Experiment suchen'" [disabled]="false"></app-search-bar>
-        </div>
-
-      </div>
-
-      <div class="mt-5 container d-block d-flex justify-content-center h-100">
-        <div>
-          <h4 >Wählen Sie eine Navigationstruktur aus</h4>
-          <mat-radio-group
-            [(ngModel)]="navigationSelectionIndex"
-            aria-labelledby="example-radio-group-label"
-            class="example-radio-group">
-            <mat-radio-button class="example-radio-button" [value]="0">Seitennavigation mit einer Suchfunktion am oberen Bildschirmbereich</mat-radio-button>
-            <mat-radio-button class="example-radio-button" [value]="1">Seitennavigation mit einer Suchfunktion am unteren Bildschirmbereich</mat-radio-button>
-            <mat-radio-button class="example-radio-button" [value]="2">Horizontale Navigation mit einer Suchfunktion am oberen Bildschirmbereich.</mat-radio-button>
-            <mat-radio-button class="example-radio-button" [value]="3">Seitennavigation mit einer Suchfunktion und Benutzerinformationen am oberen Bildschirmbereich</mat-radio-button>
-            <mat-radio-button class="example-radio-button" [value]="4">Mega Drop Down Menu</mat-radio-button>
-          </mat-radio-group>
-          <button (click)="saveNavigationSelection()"  class="mt-3 btn btn-lg btn-success">Auswahl speichern</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
   <mat-card *ngIf="loading" class="progress-bar-circle">
     <mat-card-content>
-      <h3 class="progress-title fw-bold">Bitte haben Sie einen Moment Geduld, Ihre Schnittstelle wird für Sie eingerichtet...</h3>
+      <h3 class="progress-title fw-bold">Bitte haben Sie einen Moment Geduld, Ihre Navigationstruktur wird für Sie eingerichtet...</h3>
       <mat-progress-spinner
         class="m-auto"
         [mode]="'indeterminate'"

@@ -53,6 +53,7 @@ export class MainComponent implements OnInit {
         })
         this.settingService.fetchNavigationSetting(userId).subscribe((setting) => {
           this.navigationSetting = setting;
+          console.log(this.navigationSetting);
         }, (error) => {
           if (error) {
             console.log(error)
