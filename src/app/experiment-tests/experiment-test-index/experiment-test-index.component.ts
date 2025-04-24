@@ -85,6 +85,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
             targetUrl: '/',
             time: this.timeService.getCurrentTime(),
             userId: this.loginService.currentUser()?.id,
+            numberFinishedTests: this.finishedExecutions.length
           }
           this.timeService.stopTimer();
           if (this.save){

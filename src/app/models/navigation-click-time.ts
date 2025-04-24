@@ -3,4 +3,5 @@ export interface NavigationClickTime {
   time: number;
   sourceUrl: string;
   targetUrl: string;
+  numberFinishedTests: number
 }
