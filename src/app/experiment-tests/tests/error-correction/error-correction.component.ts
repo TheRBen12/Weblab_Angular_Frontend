@@ -172,7 +172,7 @@ export class ErrorCorrectionComponent implements OnInit {
     if (!this.firstClick){
       this.execution["firstClick"] =  (event.target as HTMLElement).innerHTML;
     }
-    this.execution["numberClicks"] = this.execution["numberClicks"]++;
+    this.execution["numberClicks"] = this.execution["numberClicks"] + 1;
   }
 
   increaseFailedClicks() {
