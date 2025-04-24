@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
-import { Router, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../../search-bar/search-bar.component';
 import {MatIcon} from '@angular/material/icon';
 import {
@@ -9,7 +9,7 @@ import {SideMenuComponent} from '../../side-menu/side-menu.component';
 import {ProductService} from '../../../../services/product.service';
 import {ProductType} from '../../../../models/product-category';
 import {routerLinks} from '../../routes';
-import {Subscription} from 'rxjs';
+import {filter, Subscription} from 'rxjs';
 import {SideMenuService} from '../../../../services/side-menu.service';
 import {RouterService} from '../../../../services/router.service';
 import {BasketComponent} from '../../../../basket/basket.component';
@@ -75,8 +75,8 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   numberClicks: number = 0;
   usedBreadcrumbs: boolean = false;
-  timeToClickFirstCategoryLink?: number|null = null;
-  firstClick: string|null = null;
+  timeToClickFirstCategoryLink?: number | null = null;
+  firstClick: string | null = null;
 
   constructor(private cdRef: ChangeDetectorRef, private toasterService: ToastrService) {
     this.instructions = ["Finden Sie die Produktkategorie Lebensmittel",
@@ -87,6 +87,23 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.router.events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe((sub) => {
+        if (this.router.url.includes("show/product/")){
+          this.currentInstructionStep = 3;
+        }
+
+        else if (this.currentRoute == "Lebensmittel"){
+          this.currentInstructionStep = 1;
+        }else if (this.currentRoute == "Gemuese"){
+          this.currentInstructionStep = 2;
+        }
+
+      });
+
+
     this.timeService.startTimer();
     this.experimentTestId = Number(this.router.url.split("/")[this.router.url.split("/").indexOf("recall-recognition") + 1])
 
@@ -100,14 +117,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
         this.currentInstructionStep = this.currentInstructionStep <= 0 ? 0 : this.currentInstructionStep - 1;
       }
     });
-    this.updateMenuSubscription = this.menuService.getSubject().subscribe((updateMenu) => {
-      if (updateMenu) {
-        this.fetchProductTypes("Home");
-        this.currentRoute = "Home";
-        this.currentInstructionStep++;
-        this.cdRef.detectChanges();
-      }
-    });
+
     this.currentRoute = this.productCategoryRouterLinksService.rebuildCurrentRoute(this.router.url.split("/"));
     if (this.currentRoute != "Home") {
       this.failedClicks++;
@@ -122,17 +132,17 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
 
 
     const clickedRoutes = localStorage.getItem('clickedRoutes')
-    if (clickedRoutes){
+    if (clickedRoutes) {
       this.clickedRoutes = JSON.parse(clickedRoutes);
     }
 
     const clicks = Number(localStorage.getItem('numberClicks'));
-    if (clicks){
+    if (clicks) {
       this.numberClicks = clicks;
     }
 
     const failedClicks = Number(localStorage.getItem('failedClicks'));
-    if (failedClicks){
+    if (failedClicks) {
       this.failedClicks = failedClicks;
     }
 
@@ -147,7 +157,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
       this.failedClicks++;
       localStorage.setItem('failedClicks', String(this.failedClicks));
     }
-    if (!this.timeToClickFirstCategoryLink){
+    if (!this.timeToClickFirstCategoryLink) {
       this.timeToClickFirstCategoryLink = this.timeService.getCurrentTime();
       this.timeService.stopTimer();
     }
@@ -173,6 +183,9 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   }
 
   updateInstructions(targetRoute: string) {
+    if (this.currentRoute == "Lebensmittel"){
+      this.currentInstructionStep = 1;
+    }
     if (this.currentRoute == "Home") {
       this.currentInstructionStep = 0;
     } else if (this.currentType?.parentType && targetRoute == this.currentType?.parentType?.name &&
@@ -202,8 +215,8 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
     localStorage.removeItem('failedClicks');
   }
 
-  checkToFinishExperiment(){
-    if (this.basket.length > 0 && this.basket[0].type == "Gemuese"){
+  checkToFinishExperiment() {
+    if (this.basket.length > 0 && this.basket[0].type == "Gemuese") {
       this.finishExperiment()
     }
     this.toasterService.info("Beachten Sie die Versuchsanleitung. Ihr ausgewähltes Produkt ist nicht von der richtigen Kategorie");
@@ -211,7 +224,7 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   }
 
   finishExperiment() {
-  this.routerService.clearNumberNavigationClicks();
+    this.routerService.clearNumberNavigationClicks();
     const id = this.userService.currentUser()?.id
     if (id) {
       this.experimentService.setLastFinishedExperimentTest(this.experimentTestId)
@@ -229,13 +242,13 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
           numberClicks: this.numberClicks,
           clickedOnSearchBar: this.clickedOnSearchBar,
           usedBreadcrumbs: this.usedBreadcrumbs,
-          timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink??0,
-          firstClick: this.firstClick??"",
+          timeToClickFirstCategoryLink: this.timeToClickFirstCategoryLink ?? 0,
+          firstClick: this.firstClick ?? "",
         };
         this.experimentService.saveRecallRecognitionExecution(recallRecognitionExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/test/"+this.experimentTestId+"/feedback")
+            this.router.navigateByUrl("/test/" + this.experimentTestId + "/feedback")
 
             this.toasterService.success("Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
@@ -254,10 +267,10 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
   }
 
   increaseClicks(event: MouseEvent) {
-    if (!this.firstClick){
+    if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML
     }
-    this.numberClicks ++;
+    this.numberClicks++;
     localStorage.setItem('numberClicks', String(this.numberClicks));
 
   }
