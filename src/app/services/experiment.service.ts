@@ -148,6 +148,5 @@ export class ExperimentService {
 
   getExperimentTests(): Observable<ExperimentTest[]> {
     return this.http.get<ExperimentTest[]>('https://localhost:7147/api/experimentTest/all');
-
   }
 }

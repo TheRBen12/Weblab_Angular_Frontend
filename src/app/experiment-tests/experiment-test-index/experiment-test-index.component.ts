@@ -15,6 +15,9 @@ import {NavigationSetting} from '../../models/navigation-setting';
 import {UserSetting} from '../../models/user-setting';
 import {TimeService} from '../../services/time.service';
 import {ExperimentTestSelectionTime} from '../../models/experiment-test-selection-time';
+import {NavigationClickTime} from '../../models/navigation-click-time';
+import {RouterService} from '../../services/router.service';
+import {UserNavigationService} from '../../services/user-navigation.service';
 
 @Component({
   selector: 'app-experiment-test-index',
@@ -37,7 +40,9 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   settingService: SettingService = inject(SettingService);
   timeService: TimeService = inject(TimeService);
   router: Router = inject(Router);
+  routerService: RouterService = inject(RouterService);
   loginService: LoginService = inject(LoginService);
+  navigationService: UserNavigationService = inject(UserNavigationService);
 
   experimentId: number = 0;
   experimentTests: ExperimentTest[] = [];
@@ -52,6 +57,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   setting?: UserSetting
   numberTests: number = 0;
   private redirectTimeout: number = 0;
+  private save: boolean = true;
 
   constructor() {
 
@@ -64,6 +70,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.save = true;
     localStorage.removeItem("cart");
 
     this.timeService.startTimer();
@@ -71,10 +78,20 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
-
         if (this.router.url == "/") {
           this.countDownToStartNextTest = 3;
+          const navigationClickTime: NavigationClickTime = {
+            sourceUrl: this.routerService.getLastKnownRoute(),
+            targetUrl: '/',
+            time: this.timeService.getCurrentTime(),
+            userId: this.loginService.currentUser()?.id,
+          }
           this.timeService.stopTimer();
+          if (this.save){
+            this.navigationService.saveNavigationClickTime(navigationClickTime).subscribe()
+
+          }
+          this.save = false;
         }
       });
 

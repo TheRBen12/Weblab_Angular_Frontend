@@ -1,11 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {TimeInterval} from 'rxjs/internal/operators/timeInterval';
-import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
-import {D} from '@angular/cdk/keycodes';
+import {interval, Observable, Subscription} from 'rxjs';
 import {UserNavigationTime} from '../models/user-navigation-time';
 import {HttpClient} from '@angular/common/http';
-import {NavigationTime} from '../models/navigation-time';
-import {User} from '../models/user';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +14,11 @@ export class TimeService {
   time: number = 0;
   http: HttpClient = inject(HttpClient);
   private timerSubscription!: Subscription;
+  private navigationTimeSubscription!: Subscription;
+
   private autoStartSubscription!: Subscription
   autoStartCountdown: number = 3;
+  private navigationTime: number = 0;
 
   startWelcomeModalTimer() {
     this.welcomeModalTimer = setInterval(() => {
@@ -51,6 +51,19 @@ export class TimeService {
     return this.http.post<UserNavigationTime>("https://localhost:7147/api/userNavigation/new", timeData)
   }
 
+  startNavigationTimer(){
+    this.navigationTime = 0;
+    this.navigationTimeSubscription = interval(1000).subscribe(() => {
+      this.navigationTime++;
+      console.log(this.navigationTime);
+    });
+  }
+
+  getNavigationTime(){
+    return this.navigationTime;
+  }
+
+
   startTimer() {
     this.time = 0;
       this.timerSubscription = interval(1000).subscribe(() => {
@@ -59,15 +72,11 @@ export class TimeService {
       });
   }
 
-  getAutoStartSubscription(): Observable<number>{
-    return interval(1000);
-  }
-  getAutoStartCountDown(){
-    return this.autoStartCountdown;
-  }
+  stopNavigationTimer() {
+    if (this.navigationTimeSubscription){
+      this.navigationTimeSubscription.unsubscribe();
+    }
 
-  stopAutoStartTimer() {
-    this.autoStartSubscription.unsubscribe();
-    this.autoStartCountdown = 3;
+    this.navigationTime = 0;
   }
 }

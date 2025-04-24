@@ -2,25 +2,21 @@ import {inject, Injectable} from '@angular/core';
 import {ProductType} from '../models/product-category';
 import {routerLinks} from '../experiment-tests/tests/routes';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {routes} from '../app.routes';
+import {TimeService} from './time.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouterService {
   productCategoryLinks = routerLinks
-  private lastKnownRoute: string = '../'; // Standard-Fallback
-  private currentRoute: string= "";
+  private sourceRoute: string = ""; // Standard-Fallback
+  private targetRoute: string= "";
+  timeService: TimeService = inject(TimeService);
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        if (this.router.url.includes("/tests/detail")){
-          //localStorage.setItem("numberNavigationClicks", String(0));
-        }
-      }
-      if (event instanceof NavigationEnd){
-        console.log(event.url);
-        this.currentRoute = this.router.url;
+          this.sourceRoute = this.router.url;
       }
     });
   }
@@ -30,11 +26,7 @@ export class RouterService {
   }
 
   getLastKnownRoute(): string {
-    return this.lastKnownRoute;
-  }
-
-  getCurrentRoute(): string {
-    return this.currentRoute;
+    return this.sourceRoute;
   }
 
 

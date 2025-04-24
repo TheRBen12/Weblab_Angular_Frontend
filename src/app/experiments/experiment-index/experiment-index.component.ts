@@ -68,6 +68,8 @@ export class ExperimentIndexComponent implements OnInit {
           this.timeService.stopTimer();
         }
       });
+
+
     if (!localStorage.getItem('reachedSiteAt')) {
       localStorage.setItem("reachedSiteAt", String(new Date()));
     }
