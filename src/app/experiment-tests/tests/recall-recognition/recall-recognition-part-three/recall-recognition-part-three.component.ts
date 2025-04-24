@@ -77,8 +77,7 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
   private lastSearchParameter: string = "";
 
   constructor(private toasterService: ToastrService, private activatedRoute: ActivatedRoute) {
-    this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden " +
-    "(Tipp: Benutzen Sie das Suchwort 'Tastatur')."];
+    this.instructions = ["Benutzen Sie das Suchfeld, um die gewünschte Tastatur zu finden. Achten Sie auf für Sie passende technische Spezifikationen" ];
 
   }
   canDeactivate() {
@@ -92,7 +91,6 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
 
 
   filterProducts(text: string) {
-
     if (text.split(" ").length > 1){
       this.searchParameters += " ";
     }
@@ -166,7 +164,6 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
           setTimeout(() => {
             this.loading = false;
             this.router.navigateByUrl("/test/"+this.experimentTest?.id+"/feedback")
-
             this.toasterService.success("Vielen Dank! Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
 
@@ -183,7 +180,6 @@ export class RecallRecognitionPartThreeComponent implements OnInit {
     const childRoute = this.activatedRoute.firstChild;
     this.numberUsedSearchBar++;
     this.router.navigate(['./show/product/' + $event], {relativeTo: childRoute});
-
   }
 
   increaseNumberClicks(event: MouseEvent) {

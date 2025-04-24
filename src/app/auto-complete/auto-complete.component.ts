@@ -41,9 +41,6 @@ export class AutoCompleteComponent implements OnInit {
     this.textToMark = text;
     this.onInputEventEmitter.emit(text);
   }
-  setTextToMark(text: string){
-    this.textToMark = text;
-  }
 
   ngOnInit(): void {
     this.myControl.valueChanges.pipe(

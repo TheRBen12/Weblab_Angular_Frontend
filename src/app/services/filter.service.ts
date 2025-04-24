@@ -67,6 +67,26 @@ export class FilterService {
     });
   }
 
+  filterStrictByAllSpecification(products: any[], textInputs: string[]) {
+    return products.filter((product) => {
+      const productSpecifications = product.specifications;
+      return textInputs.every(text => {
+        if (text == "OS") {
+          return this.splitAndFilterBySpecification(productSpecifications, text);
+        }else {
+          return productSpecifications.every((specification: any) =>
+            String(specification.value)
+              .replaceAll(" ", "")
+              .toLowerCase()
+              .includes(text.replaceAll(" ", "").toLowerCase())
+          );
+        }
+      });
+    });
+  }
+
+
+
 
   filterByAllProperty(products: any[], textInputs: string[]) {
     return products.filter((product) => {
@@ -95,6 +115,10 @@ export class FilterService {
     });
   }
 
+
+
+
+
   filterBySomeProperty(products: any[], textInputs: string[]) {
     const layouts = ["CH", "DE", "EN", "US"];
     return products.filter((product) => {
@@ -121,25 +145,7 @@ export class FilterService {
     let textInputs = text.split(" ");
     let nameProperties: string[] = [];
 
-    let filteredProductsByProperties = this.filterByAllProperty(products, textInputs);
-    if (filteredProductsByProperties.length > 0) {
-      filteredProducts = this.filterByAllSpecification(filteredProductsByProperties, textInputs);
-      if (filteredProducts.length > 0) {
-        return filteredProducts;
-      } else {
-        filteredProducts = this.filterBySpecification(filteredProductsByProperties, textInputs);
-        if (filteredProducts.length > 0) {
-          return filteredProducts
-        } else {
-          return filteredProductsByProperties;
-        }
-      }
-    }
 
-    if (filteredProductsByProperties.length == 0) {
-      filteredProductsByProperties = this.filterBySomeProperty(products, textInputs);
-
-    }
 
     let properties: any[] = []
     products.forEach((product) => {
@@ -163,6 +169,33 @@ export class FilterService {
         });
       })
     });
+
+
+    let filteredProductsByProperties = this.filterByAllProperty(products, textInputs);
+    if (filteredProductsByProperties.length > 0) {
+      textInputs = textInputs.filter((text) => {
+        return properties.indexOf(text) == -1;
+      });
+
+      filteredProducts = this.filterByAllSpecification(filteredProductsByProperties, textInputs);
+      if (filteredProducts.length > 0) {
+        return filteredProducts;
+      } else {
+        filteredProducts = this.filterBySpecification(filteredProductsByProperties, textInputs);
+        if (filteredProducts.length > 0) {
+          return filteredProducts
+        } else {
+          return filteredProductsByProperties;
+        }
+      }
+    }
+
+    if (filteredProductsByProperties.length == 0) {
+      filteredProductsByProperties = this.filterBySomeProperty(products, textInputs);
+
+    }
+
+
 
 
     const idx = textInputs.indexOf("GB");
