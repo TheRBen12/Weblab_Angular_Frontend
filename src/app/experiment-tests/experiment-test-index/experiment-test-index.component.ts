@@ -88,7 +88,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
             numberFinishedExecutions: this.finishedExecutions.length
           }
           this.timeService.stopTimer();
-          if (this.save){
+          if (this.timeService.getCurrentTime() > 0){
             this.navigationService.saveNavigationClickTime(navigationClickTime).subscribe()
 
           }
