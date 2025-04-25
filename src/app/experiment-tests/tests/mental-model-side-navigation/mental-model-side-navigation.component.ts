@@ -247,8 +247,9 @@ export class MentalModelSideNavigationComponent implements OnInit {
 
   increaseNumberClicks($event: MouseEvent) {
     if (!this.firstClick) {
+      this.firstClick = ($event.target as HTMLElement).innerHTML;
       this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
-      this.execution["firstClick"] = ($event.target as HTMLElement).innerHTML;
+      this.execution["firstClick"] = this.firstClick;
     }
     this.clicks.push(($event.target as HTMLElement).innerHTML);
     this.execution['numberClicks'] = this.execution['numberClicks'] + 1;

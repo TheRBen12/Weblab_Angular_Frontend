@@ -104,7 +104,6 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    debugger;
     if (this.selectedInterFace[element]) {
       this.selectedInterFace[element] = false;
       return;

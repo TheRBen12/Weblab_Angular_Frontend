@@ -251,6 +251,7 @@ export class MentalModelLeftSideNavigationOffCanvasComponent implements OnInit{
     if (!this.firstClick) {
       this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
       this.execution["firstClick"] = ($event.target as HTMLElement).innerHTML;
+      this.firstClick = ($event.target as HTMLElement).innerHTML;
     }
     this.clicks.push(($event.target as HTMLElement).innerHTML);
     this.execution['numberClicks'] = this.execution['numberClicks'] + 1;

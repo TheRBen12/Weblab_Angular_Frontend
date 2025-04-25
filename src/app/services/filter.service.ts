@@ -171,7 +171,6 @@ export class FilterService {
       textInputs = textInputs.filter((text) => {
         return properties.indexOf(text) == -1;
       });
-      debugger;
 
       filteredProducts = this.filterByAllSpecification(filteredProductsByProperties, textInputs);
       if (filteredProducts.length > 0) {

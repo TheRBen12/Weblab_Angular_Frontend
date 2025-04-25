@@ -54,7 +54,6 @@ export class NavigationSelectComponent implements OnInit {
   }
 
   saveNavigationSelection() {
-    debugger;
     this.loading = true;
     const navigationSetting: NavigationSetting = {
       horizontalNavigation: this.navigationSelectionIndex == 2,
