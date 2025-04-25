@@ -21,6 +21,7 @@ import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {NgIf} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
+import {routerLinks} from '../routes';
 
 @Component({
   selector: 'app-mental-model-right-side-navigation',
@@ -292,6 +293,13 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
     this.experimentService.getExperimentTest(experimentId).subscribe((test) => {
       this.experimentTest = test;
     })
+  }
+
+  updateErrorClickBehaviour($event: MouseEvent ) {
+    const click =  ($event.target as HTMLElement).innerHTML;
+    if (!routerLinks[click]){
+      this.increaseFailedClicks();
+    }
   }
 
   ngOnDestroy(): void {

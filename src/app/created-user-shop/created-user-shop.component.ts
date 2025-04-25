@@ -366,6 +366,13 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     this.execution["usedBreadcrumbs"] = true;
   }
 
+  updateErrorClickBehaviour($event: MouseEvent ) {
+    const click =  ($event.target as HTMLElement).innerHTML;
+    if (!routerLinks[click]){
+      this.execution['failedClicks'] = this.execution['failedClicks'] + 1;
+    }
+  }
+
   increaseToggledMenu($event: number) {
     if ($event > 1){
       this.increaseFailedClicks();

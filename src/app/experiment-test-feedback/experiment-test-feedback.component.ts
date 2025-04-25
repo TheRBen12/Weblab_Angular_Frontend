@@ -47,9 +47,9 @@ export class ExperimentTestFeedbackComponent implements OnInit {
     userId: 0,
   }
 
-  questions: string[] = ["Erforderte das Durchführen des Experimentes viel Mühe, Anstrengung oder Konzentration?",
-    "Entsprach die Schnittstelle Ihrem mentalen Modell, d.h. funktionierte die Schnittstelle so, wie Sie dies erwartet haben und so, wie Sie dies von anderen Schnittstellen her bereits kennen?",
-    "War die Funktionsweise der Schnittstelle klar und verständlich?", "War die Funktionsweise der Schnittstelle einfach erkennbar, einprägsam und erlernabar?",
+  questions: string[] = ["Erforderte das Durchführen des Experimentes viel Mühe, Anstrengung, Aufmerksamkeit oder Konzentration?",
+    "Entsprach die grafische Oberfläche, welche Sie gerade eben benutzten Ihrem mentalen Modell, d.h. funktionierte die Oberfläche so, wie Sie dies erwartet haben und so, wie Sie dies von anderen Webseiten her bereits kennen?",
+    "War die Funktionsweise der grafischen Oberfläche klar und verständlich?", "War die Funktionsweise der Schnittstelle einfach erkennbar, einprägsam und erlernabar?",
     "Waren der Aufbau, Abfolgen und die Funktionsweise der Schnittstelle konsistent, d.h. befolgte die Schnittstelle Muster und wurden diese Muster über die gesamte Interaktion hinweg beigehalten?"];
 
 

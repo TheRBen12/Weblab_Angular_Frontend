@@ -272,4 +272,11 @@ export class MentalModelSideNavigationComponent implements OnInit {
       this.increaseFailedClicks();
     }
   }
+
+  updateErrorClickBehaviour($event: MouseEvent ) {
+   const click =  ($event.target as HTMLElement).innerHTML;
+   if (!routerLinks[click]){
+     this.increaseFailedClicks();
+   }
+  }
 }

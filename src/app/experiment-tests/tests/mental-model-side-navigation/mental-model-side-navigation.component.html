@@ -39,7 +39,7 @@
 
     <div class="main mb-3">
       <div class="row">
-        <div class="col-sm-auto">
+        <div (click)="updateErrorClickBehaviour($event)"  class="col-sm-auto">
           <app-product-off-canvas-menu (toggleEvent) = "increaseToggledMenu($event)" [toggleMenu]="showBasket" [currentRoute]="currentRoute"  [parentCategory]="parentCategory" [parentRoute]="parentRoute"   (routeEvent)="setCurrentRoute($event)"  [menuItems]="productCategories" [links]="categoryLinks"  ></app-product-off-canvas-menu>
         </div>
         <div class="col mt-2">

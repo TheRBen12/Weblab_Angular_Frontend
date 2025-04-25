@@ -11,7 +11,7 @@
             <router-outlet></router-outlet>
           </div>
       </div>
-      <div class="col-2">
+      <div (click)="updateErrorClickBehaviour($event)"  class="col-2">
         <app-side-menu (routeEvent)="updateInstructions($event)" [categoryLinks]=categoryLinks
                        [productCategories]="productCategories"
                        [currentRoute]="currentRoute"

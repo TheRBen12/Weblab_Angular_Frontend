@@ -250,7 +250,12 @@ export class MentalModelMegaDropdownComponent implements OnInit {
     this.currentRoute = "";
   }
 
-
+  updateErrorClickBehaviour($event: MouseEvent ) {
+    const click =  ($event.target as HTMLElement).innerHTML;
+    if (!routerLinks[click]){
+      this.execution['failedClicks'] = this.execution['failedClicks'] + 1;
+    }
+  }
 
   updateClickBehaviour(event: MouseEvent) {
     if (!this.firstClick) {

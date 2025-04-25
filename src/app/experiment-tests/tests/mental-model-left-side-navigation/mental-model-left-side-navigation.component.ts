@@ -21,6 +21,7 @@ import {ToastrService} from 'ngx-toastr';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {NgIf} from '@angular/common';
+import {routerLinks} from '../routes';
 
 
 @Component({
@@ -119,7 +120,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution["usedBreadcrumbs"] = false;
     this.execution["numberUsedSearchBar"] = 0;
     this.execution["searchParameters"] = "";
-
+    this.execution["failedClicks"] = 0;
 
 
     this.productService.getFilterUsedSubscription().subscribe((filter) => {
@@ -131,7 +132,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     })
 
     this.execution["numberClicks"] = localStorage.getItem('numberClicks')??0;
-    this.execution["failedClicks"] = localStorage.getItem('failedClicks') ?? 0;
+
     this.execution["numberUsedSearchBar"] = Number(localStorage.getItem('numberUsedSearchBar'))??0
     const clickedRoutes = localStorage.getItem("clickedRoutes");
     if (clickedRoutes){
@@ -319,7 +320,13 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
       this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
     }
     this.execution['clickedOnSearchBar'] = true;
+  }
 
+  updateErrorClickBehaviour($event: MouseEvent ) {
+    const click =  ($event.target as HTMLElement).innerHTML;
+    if (!routerLinks[click]){
+      this.execution['failedClicks'] = this.execution['failedClicks'] + 1;
+    }
   }
 
 

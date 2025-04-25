@@ -35,7 +35,7 @@
 
     <div class="main mb-3">
       <div class="row">
-        <div class="col-sm-auto">
+        <div (click)="updateErrorClickBehaviour($event)"  class="col-sm-auto">
           <app-side-menu (routeEvent)="updateInstructions($event)"
             [categoryLinks]=categoryLinks
                          [productCategories]="productCategories"

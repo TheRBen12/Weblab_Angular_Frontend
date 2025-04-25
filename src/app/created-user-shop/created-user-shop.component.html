@@ -26,7 +26,7 @@
         </div>
 
         <div *ngIf="navigationConfig?.autoCompleteTop" class="ms-3 me-4 w-75">
-          <app-auto-complete (click)="updateTimeToClickSearchBar()" (onSelectEventEmitter)="increaseUsedSearchBar()"
+          <app-auto-complete (onInputEventEmitter)="filterProducts($event)"  (click)="updateTimeToClickSearchBar()" (onSelectEventEmitter)="increaseUsedSearchBar()"
                              [products]="products" class="products"
                              [placeholder]="'Produkte Suchen'">
 
@@ -75,7 +75,7 @@
           </div>
         </div>
       </nav>
-      <div class="w-100 navbar submenu"
+      <div (click)="updateErrorClickBehaviour($event)"  class="w-100 navbar submenu"
            [ngClass]="{'menu-open': showSubNavMenu, 'no-pointer-events d-none': !showSubNavMenu}"
            (mouseenter)="showSubMenu(currentRoute)"
            (mouseleave)="hideSubMenu()" [@hoverState]="showSubNavMenu ? 'open' : 'closed' ">
@@ -96,13 +96,16 @@
             <div *ngIf="navigationConfig.menuTitle" class="mt-1 ms-3 d-flex flex-row gap-3">
               <h3 class="menu-title p-3">Menu</h3>
             </div>
-            <app-side-menu (routeEvent)="setCurrentRoute($event)"
-                           [categoryLinks]=categoryLinks
-                           [productCategories]="productCategories"
-                           [currentRoute]="currentRoute"
-                           [parentRoute]="parentRoute"
-                           [parentCategory]="parentCategory">
-            </app-side-menu>
+            <div (click)="updateErrorClickBehaviour($event)" >
+              <app-side-menu (routeEvent)="setCurrentRoute($event)"
+                             [categoryLinks]=categoryLinks
+                             [productCategories]="productCategories"
+                             [currentRoute]="currentRoute"
+                             [parentRoute]="parentRoute"
+                             [parentCategory]="parentCategory">
+              </app-side-menu>
+            </div>
+
           </div>
 
         </div>
@@ -123,7 +126,7 @@
                       [basket]="basket"></app-basket>
         </div>
 
-        <div class="col-sm-2" *ngIf="navigationConfig?.sideMenuRight">
+        <div (click)="updateErrorClickBehaviour($event)"  class="col-sm-2" *ngIf="navigationConfig?.sideMenuRight">
           <app-side-menu (routeEvent)="setCurrentRoute($event)" [categoryLinks]=categoryLinks
                          [productCategories]="productCategories"
                          [currentRoute]="currentRoute"
