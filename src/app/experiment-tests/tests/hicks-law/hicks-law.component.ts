@@ -261,7 +261,7 @@ export class HicksLawComponent implements OnInit {
         this.experimentService.saveHicksLawExperimentExecution(hicksLawExecution).subscribe((exec) => {
           setTimeout(() => {
             this.loading = false;
-            this.router.navigateByUrl("/tests/"+this.experimentTest.experiment?.id);
+            this.router.navigateByUrl("/test/" + this.experimentTest?.id + "/feedback")
             this.toasterService.success("Vielen Dank. Sie haben das Experiment erfolgreich abgeschlossen");
           }, 2000);
         });

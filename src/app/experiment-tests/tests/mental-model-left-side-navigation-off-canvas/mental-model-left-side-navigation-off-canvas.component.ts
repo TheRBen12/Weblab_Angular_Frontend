@@ -1,50 +1,52 @@
 import {Component, inject, OnInit} from '@angular/core';
+import {AutoCompleteComponent} from '../../../auto-complete/auto-complete.component';
+import {BasketComponent} from '../../../basket/basket.component';
 import {
   ExperimentTestInstructionComponent
 } from '../../experiment-test-instruction/experiment-test-instruction.component';
-import {ProductOffCanvasMenuComponent} from '../../../product-off-canvas-menu/product-off-canvas-menu.component';
-import {ProductType} from '../../../models/product-category';
-import {ProductService} from '../../../services/product.service';
-import {filter} from 'rxjs';
-import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
-import {RouterService} from '../../../services/router.service';
+import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {routerLinks} from '../routes';
-import {BasketComponent} from '../../../basket/basket.component';
-import {NgForOf, NgIf} from '@angular/common';
-import {ExperimentTest} from '../../../models/experiment-test';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {NgIf} from '@angular/common';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {SideMenuComponent} from '../side-menu/side-menu.component';
+import {ProductOffCanvasMenuComponent} from '../../../product-off-canvas-menu/product-off-canvas-menu.component';
+import {RouterService} from '../../../services/router.service';
+import {ProductService} from '../../../services/product.service';
 import {ExperimentService} from '../../../services/experiment.service';
-import {AutoCompleteComponent} from '../../../auto-complete/auto-complete.component';
 import {FilterService} from '../../../services/filter.service';
 import {TimeService} from '../../../services/time.service';
 import {LoginService} from '../../../services/login.service';
+import {ProductType} from '../../../models/product-category';
+import {ExperimentTest} from '../../../models/experiment-test';
 import {ToastrService} from 'ngx-toastr';
-import {MatCard, MatCardContent} from '@angular/material/card';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {filter} from 'rxjs';
+import {routerLinks} from '../routes';
+
 
 @Component({
-  selector: 'app-mental-model-side-navigation',
+  selector: 'app-mental-model-left-side-navigation-off-canvas',
   imports: [
-    ExperimentTestInstructionComponent,
-    ProductOffCanvasMenuComponent,
-    MatFabButton,
-    MatIcon,
-    BasketComponent,
-    NgForOf,
-    NgIf,
-    RouterLink,
-    RouterOutlet,
     AutoCompleteComponent,
+    BasketComponent,
+    ExperimentTestInstructionComponent,
     MatCard,
     MatCardContent,
-    MatProgressSpinner
+    MatFabButton,
+    MatIcon,
+    MatProgressSpinner,
+    NgIf,
+    RouterOutlet,
+    SideMenuComponent,
+    ProductOffCanvasMenuComponent
   ],
-  templateUrl: './mental-model-side-navigation.component.html',
+  templateUrl: './mental-model-left-side-navigation-off-canvas.component.html',
   standalone: true,
-  styleUrl: './mental-model-side-navigation.component.css'
+  styleUrl: './mental-model-left-side-navigation-off-canvas.component.css'
 })
-export class MentalModelSideNavigationComponent implements OnInit {
+export class MentalModelLeftSideNavigationOffCanvasComponent implements OnInit{
+
   router: Router = inject(Router);
 
   routerService: RouterService = inject(RouterService);
@@ -56,7 +58,9 @@ export class MentalModelSideNavigationComponent implements OnInit {
 
   basket: any[] = [];
   links: string[] = [];
-  targetRoutes = ["IT und Multimedia", "PC und Notebooks", "PC"];
+  targetRoutes = ["IT und Multimedia", "Smartphone und Tablets", "Smartphone"];
+  helpInstructions = ["Sie befinden sich in der falschen Produktkategorie. Finden Sie die passende Kategorie."]
+
   instructions: string[] = ["Es ist Ihnen überlassen, wie Sie das Produkt finden. (Mögliche Vorgehensweise: Finden Sie die korrekte Kategorie)"];
   currentInstructionStep: number = 0;
   productCategories: ProductType[] = [];
@@ -99,7 +103,8 @@ export class MentalModelSideNavigationComponent implements OnInit {
     "clicks": ""
   };
   products: any[] = [];
-  clicks: string[] = [];
+  showHelpInstructions: boolean = false;
+  private clicks: string[] = [];
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -168,10 +173,6 @@ export class MentalModelSideNavigationComponent implements OnInit {
     console.log(this.parentRoute, this.parentCategory);
   }
 
-  setClickedOnSearchBar() {
-    this.execution["clickedOnSearchBar"] = true;
-    this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
-  }
 
   toggleBasket() {
     const endTime = performance.now();
@@ -203,6 +204,7 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["usedFilters"] = JSON.stringify(this.filters);
     this.execution["clicks"] = JSON.stringify(this.clicks);
+
     this.routerService.clearNumberNavigationClicks();
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest) {
@@ -258,6 +260,19 @@ export class MentalModelSideNavigationComponent implements OnInit {
     this.execution['failedClicks'] = this.execution['failedClicks'] + 1;
   }
 
+  increaseNumberUsedSearchBar(){
+    this.execution["numberUsedSearchBar"] =  this.execution["numberUsedSearchBar"] + 1;
+    const n = this.execution["numberUsedSearchBar"];
+    if (n >=1){
+      this.increaseFailedClicks();
+    }
+  }
+  setClickedOnSearchBar() {
+    this.execution["clickedOnSearchBar"] = true;
+    this.execution["timeToClickSearchBar"] = this.timeService.getCurrentTime();
+  }
+
+
   findProducts(filterText: string) {
     if (filterText.split(" ").length > 1){
       this.execution["searchParameters"] += " ";
@@ -278,9 +293,10 @@ export class MentalModelSideNavigationComponent implements OnInit {
   }
 
   updateErrorClickBehaviour($event: MouseEvent ) {
-   const click =  ($event.target as HTMLElement).innerHTML;
-   if (!routerLinks[click]){
-     this.increaseFailedClicks();
-   }
+    const click =  ($event.target as HTMLElement).innerHTML;
+    if (!routerLinks[click]){
+      this.increaseFailedClicks();
+    }
   }
+
 }

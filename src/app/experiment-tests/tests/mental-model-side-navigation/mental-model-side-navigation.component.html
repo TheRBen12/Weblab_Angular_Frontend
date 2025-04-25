@@ -43,7 +43,6 @@
           <app-product-off-canvas-menu (toggleEvent) = "increaseToggledMenu($event)" [toggleMenu]="showBasket" [currentRoute]="currentRoute"  [parentCategory]="parentCategory" [parentRoute]="parentRoute"   (routeEvent)="setCurrentRoute($event)"  [menuItems]="productCategories" [links]="categoryLinks"  ></app-product-off-canvas-menu>
         </div>
         <div class="col mt-2">
-
           <div (click)="updateBreadcrumbsBehaviour()" class="container" *ngIf="links.length > 0">
             <a routerLink="./" class="header-link">Home</a> <a routerLink="{{routerLinks[link]}}" class="header-link" *ngFor="let link of links"> > {{link}}</a>
           </div>
