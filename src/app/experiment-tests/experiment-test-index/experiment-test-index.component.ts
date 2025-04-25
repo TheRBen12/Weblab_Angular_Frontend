@@ -78,7 +78,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
-        if (this.router.url == "/" || this.router.url == "/tests/index/") {
+        if (this.router.url == "/" || this.router.url == "/tests/index") {
           this.countDownToStartNextTest = 3;
           const navigationClickTime: NavigationClickTime = {
             sourceUrl: this.routerService.getLastKnownRoute(),

@@ -64,7 +64,7 @@ export class ExperimentIndexComponent implements OnInit {
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
-        if (this.router.url == "/tests/index"|| this.router.url.includes("/tests/detail")) {
+        if ( this.router.url.includes("/tests/detail")) {
           this.timeService.stopTimer();
         }
       });
