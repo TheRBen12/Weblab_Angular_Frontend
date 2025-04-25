@@ -86,9 +86,12 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
             targetUrl: this.router.url,
             time: this.timeService.getCurrentTime(),
             userId: this.loginService.currentUser()?.id,
-            numberFinishedExecutions: this.numberFinishedExecutions;
+            numberFinishedExecutions: this.numberFinishedExecutions,
           }
-          this.timeService.stopTimer();
+          if (navigationClickTime.numberFinishedExecutions > 0){
+            this.timeService.stopTimer();
+          }
+
           if (navigationClickTime.time > 0) {
             this.navigationService.saveNavigationClickTime(navigationClickTime).subscribe()
 
