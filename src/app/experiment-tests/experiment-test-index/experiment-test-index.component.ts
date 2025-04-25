@@ -58,6 +58,12 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   numberTests: number = 0;
   private redirectTimeout: number = 0;
   private save: boolean = true;
+  navigationClickTime: NavigationClickTime = {
+    numberFinishedExecutions: 0,
+    sourceUrl: "",
+    targetUrl: "",
+    time: 0
+  }
 
   constructor() {
 
@@ -79,20 +85,15 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
         if (this.router.url == "/" || this.router.url == "/tests/index") {
-          this.countDownToStartNextTest = 3;
-          const navigationClickTime: NavigationClickTime = {
-            sourceUrl: this.routerService.getLastKnownRoute(),
-            targetUrl: this.router.url,
-            time: this.timeService.getCurrentTime(),
-            userId: this.loginService.currentUser()?.id,
-            numberFinishedExecutions: this.finishedExecutions.length
+          if (this.timeService.getCurrentTime() > 0){
+            this.countDownToStartNextTest = 3;
+            this.navigationClickTime.targetUrl == this.router.url;
+            this.navigationClickTime.sourceUrl = this.routerService.getLastKnownRoute();
+            this.navigationClickTime.userId = this.loginService.currentUser()?.id;
+            this.navigationClickTime.time = this.timeService.getCurrentTime();
           }
-          this.timeService.stopTimer();
-          if (navigationClickTime.time > 0){
-            this.navigationService.saveNavigationClickTime(navigationClickTime).subscribe()
 
-          }
-          this.save = false;
+          this.timeService.stopTimer();
         }
       });
 
@@ -120,6 +121,8 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   fetchExecutions(userId: number) {
     this.experimentService.getExperimentExecutionByState(userId, "FINISHED").subscribe((executions) => {
       this.finishedExecutions = executions;
+      this.navigationClickTime.numberFinishedExecutions = executions.length;
+      this.navigationService.saveNavigationClickTime(this.navigationClickTime);
       this.finishedExecutions = this.finishedExecutions.filter((exec, index) => {
         const ids = this.finishedExecutions.map(exec => exec.experimentTest?.id);
         return ids.indexOf(exec.experimentTest?.id) == index && exec.experimentTest?.experiment?.id == this.experiment?.id;
@@ -251,10 +254,10 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     };
     localStorage.setItem("lastTestRoute", this.router.url);
     this.experimentService.saveExperimentTestSelectionTime(experimentTestSelectionTime).subscribe((result) => {
-     let routes = localStorage.getItem("usedRoutes")??"";
-     routes += "/tests/"+this.experiment?.id + " ";
-     localStorage.setItem("usedRoutes", routes);
-     // this.router.navigateByUrl("/tests/detail/"+testId);
+      let routes = localStorage.getItem("usedRoutes") ?? "";
+      routes += "/tests/" + this.experiment?.id + " ";
+      localStorage.setItem("usedRoutes", routes);
+      // this.router.navigateByUrl("/tests/detail/"+testId);
     });
 
   }
