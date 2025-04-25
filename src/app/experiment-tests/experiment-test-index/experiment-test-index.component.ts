@@ -78,11 +78,11 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
-        if (this.router.url == "/") {
+        if (this.router.url == "/" || this.router.url == "/tests/index/") {
           this.countDownToStartNextTest = 3;
           const navigationClickTime: NavigationClickTime = {
             sourceUrl: this.routerService.getLastKnownRoute(),
-            targetUrl: '/',
+            targetUrl: this.router.url,
             time: this.timeService.getCurrentTime(),
             userId: this.loginService.currentUser()?.id,
             numberFinishedExecutions: this.finishedExecutions.length
