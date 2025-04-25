@@ -305,4 +305,11 @@ export class RecallRecognitionPartOneComponent implements OnInit, OnDestroy {
     this.usedBreadCrumbs = true;
     this.failedClicks++;
   }
+
+  updateErrorClickBehaviour($event: MouseEvent) {
+    const click = ($event.target as HTMLElement).innerHTML
+    if (!routerLinks[click]){
+      this.failedClicks++;
+    }
+  }
 }

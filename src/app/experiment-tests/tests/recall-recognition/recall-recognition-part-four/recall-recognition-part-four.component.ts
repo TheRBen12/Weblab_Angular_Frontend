@@ -275,6 +275,13 @@ export class RecallRecognitionPartFourComponent implements OnInit, OnDestroy {
 
   }
 
+  updateErrorClickBehaviour($event: MouseEvent) {
+    const click = ($event.target as HTMLElement).innerHTML
+    if (!routerLinks[click]){
+      this.failedClicks++;
+    }
+  }
+
 
   setClickedOnSearchBar() {
     this.clickedOnSearchBar = true;
