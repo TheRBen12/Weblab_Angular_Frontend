@@ -91,9 +91,15 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
             this.timeService.stopTimer();
 
           if (navigationClickTime.time > 0) {
-            this.navigationService.saveNavigationClickTime(navigationClickTime).subscribe()
 
-          }
+            this.experimentService.getExperimentExecutionByState(navigationClickTime.userId??0, "FINISHED").subscribe((executions) => {
+              navigationClickTime.numberFinishedExecutions = executions.length;
+              this.navigationService.saveNavigationClickTime(navigationClickTime).subscribe()
+
+            });
+
+
+            }
           this.save = false;
         }
       });
