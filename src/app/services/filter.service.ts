@@ -115,10 +115,6 @@ export class FilterService {
     });
   }
 
-
-
-
-
   filterBySomeProperty(products: any[], textInputs: string[]) {
     const layouts = ["CH", "DE", "EN", "US"];
     return products.filter((product) => {
@@ -158,11 +154,10 @@ export class FilterService {
             if (productPropertyKeyNames[index] == "name" && toAdd && text.length > 1) {
               nameProperties.push(text)
             }else{
-              if (toAdd) {
+              if (toAdd && text != "CH" && text!= "DE" && text != "EN" && text != "US") {
                 properties.push(text);
               }
             }
-
             return toAdd;
           }
           return false;
@@ -176,6 +171,7 @@ export class FilterService {
       textInputs = textInputs.filter((text) => {
         return properties.indexOf(text) == -1;
       });
+      debugger;
 
       filteredProducts = this.filterByAllSpecification(filteredProductsByProperties, textInputs);
       if (filteredProducts.length > 0) {
@@ -192,11 +188,7 @@ export class FilterService {
 
     if (filteredProductsByProperties.length == 0) {
       filteredProductsByProperties = this.filterBySomeProperty(products, textInputs);
-
     }
-
-
-
 
     const idx = textInputs.indexOf("GB");
     if (idx != -1) {
