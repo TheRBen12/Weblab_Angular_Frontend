@@ -57,7 +57,6 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   setting?: UserSetting
   numberTests: number = 0;
   private redirectTimeout: number = 0;
-  private save: boolean = true;
   numberFinishedExecutions: number = 0;
 
   constructor() {
@@ -71,7 +70,6 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.save = true;
     localStorage.removeItem("cart");
 
     this.timeService.startTimer();
@@ -88,19 +86,15 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
             userId: this.loginService.currentUser()?.id,
             numberFinishedExecutions: this.numberFinishedExecutions,
           }
-            this.timeService.stopTimer();
+          this.timeService.stopTimer();
 
           if (navigationClickTime.time > 0) {
 
-            this.experimentService.getExperimentExecutionByState(navigationClickTime.userId??0, "FINISHED").subscribe((executions) => {
+            this.experimentService.getExperimentExecutionByState(navigationClickTime.userId ?? 0, "FINISHED").subscribe((executions) => {
               navigationClickTime.numberFinishedExecutions = executions.length;
               this.navigationService.saveNavigationClickTime(navigationClickTime).subscribe()
-
             });
-
-
-            }
-          this.save = false;
+          }
         }
       });
 

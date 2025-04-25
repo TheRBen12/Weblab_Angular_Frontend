@@ -77,9 +77,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   clicks: string[] = [];
   searchParameters: string[] = [];
   lastSearchParameter: string = "";
-
-
-
+  timeToClickFirstCategoryLink: number = 0;
 
   constructor(private readonly toasterService: ToastrService) {
   }
@@ -210,6 +208,9 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
   }
 
   updateInstructions(route: string) {
+    if (Object.values(this.clickedRoutes).length == 0){
+      this.timeToClickFirstCategoryLink = this.timeService.getCurrentTime();
+    }
     if (this.targetRoutes.indexOf(route) == -1) {
       this.showHelpInstructions = true;
       this.execution['failedClicks'] = this.execution['failedClicks'] +1;
@@ -245,8 +246,7 @@ export class MentalModelLeftSideNavigationComponent implements OnInit, OnDestroy
     this.execution["clicks"] = JSON.stringify(this.clicks);
     this.execution["firstClick"] = this.firstClick;
     this.execution["searchParameters"] =JSON.stringify(this.searchParameters);
-
-    debugger;
+    this.execution["timeToClickFirstCategory"] = this.timeToClickFirstCategoryLink;
     const userId = this.loginService.currentUser()?.id;
     if (userId && this.experimentTest){
       this.experimentFinished = true;
