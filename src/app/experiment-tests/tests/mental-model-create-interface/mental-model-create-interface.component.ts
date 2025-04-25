@@ -104,6 +104,7 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     event.preventDefault();
     event.stopImmediatePropagation();
 
+    debugger;
     if (this.selectedInterFace[element]) {
       this.selectedInterFace[element] = false;
       return;
@@ -121,6 +122,9 @@ export class MentalModelCreateInterfaceComponent implements OnInit {
     } else if (element.includes('sideMenuLeft') && this.selectedInterFace.sideMenuRight) {
       return;
     } else if (element.includes("megaDropDown") && (this.selectedInterFace.sideMenuLeft || this.selectedInterFace.sideMenuRight)) {
+      return;
+    }
+    else if ((element.includes("menuTitle") || element.includes("menuToggleIcon")) && (this.selectedInterFace.sideMenuRight)){
       return;
     }
     else if (element.includes("sideMenuRight") && (this.selectedInterFace.menuTitle || this.selectedInterFace.menuToggleIcon)){
