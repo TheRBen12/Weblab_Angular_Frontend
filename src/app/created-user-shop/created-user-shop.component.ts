@@ -290,7 +290,6 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
   finishExperiment() {
     this.routerService.clearNumberNavigationClicks();
     this.execution['finishedExecutionAt'] = new Date();
-    this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
     this.execution["clickedRoutes"] = JSON.stringify(this.clickedRoutes);
     this.execution["clicks"] = JSON.stringify(this.clicks);
     this.experimentService.setLastFinishedExperimentTest(this.experimentTest.id);
@@ -316,6 +315,8 @@ export class CreatedUserShopComponent implements OnInit, OnDestroy {
     if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
       this.execution["firstClick"] = this.firstClick;
+      this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
+
     }
     this.execution["numberClicks"] = this.execution["numberClicks"] + 1;
     this.clicks.push((event.target as HTMLElement).innerHTML )

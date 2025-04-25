@@ -274,6 +274,8 @@ export class MentalModelRightSideNavigationComponent implements OnInit, OnDestro
   updateClickBehaviour(event: MouseEvent) {
     if (!this.firstClick) {
       this.firstClick = (event.target as HTMLElement).innerHTML;
+      this.execution["timeToFirstClick"] = this.timeService.getCurrentTime();
+
     }
     this.clicks.push((event.target as HTMLElement).innerHTML);
     this.execution['numberClicks'] = this.execution['numberClicks']+1;

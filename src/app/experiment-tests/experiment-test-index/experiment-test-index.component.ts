@@ -56,11 +56,9 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
   countDownToStartNextTest: number = 4;
   setting?: UserSetting
   numberTests: number = 0;
-  private redirectTimeout: number = 0;
+  redirectTimeout: any = 0;
   numberFinishedExecutions: number = 0;
-
   constructor() {
-
     effect(() => {
       const userId = this.userService.currentUser()?.id;
       if (userId) {
@@ -71,9 +69,7 @@ export class ExperimentTestIndexComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     localStorage.removeItem("cart");
-
     this.timeService.startTimer();
-
     this.router.events
       .pipe(filter(event => (event instanceof NavigationEnd)))
       .subscribe((sub) => {
